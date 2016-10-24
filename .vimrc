@@ -21,8 +21,7 @@ Plugin 'VundleVim/Vundle.vim'
 " plugin from http://vim-scripts.org/vim/scripts.html
 "Plugin 'L9'
 " Git plugin not hosted on GitHub
-"Plugin 'git://git.wincent.com/command-t.git'
-" git repos on your local machine (i.e. when working on your own plugin)
+"Plugin 'git://git.wincent.com/command-t.git' " git repos on your local machine (i.e. when working on your own plugin)
 "Plugin 'file:///home/gmarik/path/to/plugin'
 " The sparkup vim script is in a subdirectory of this repo called vim.
 " Pass the path to set the runtimepath properly.
@@ -42,6 +41,7 @@ Plugin 'morhetz/gruvbox'
 
 Plugin 'python.vim'
 
+Plugin 'scrooloose/syntastic'
 "Plugin 'vim-xkbswitch'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -58,14 +58,21 @@ filetype plugin indent on    " required
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
 "filetype plugin on syntax enable
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
 
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
 " ===================================Generic=================================
 "indentation details (may be overriden by ftplugin)
 set tabstop=8
 set shiftwidth=8
 set noexpandtab
 
-"make vim use "" register for system clipboard
+" make vim use "" register for system clipboard
 set clipboard^=unnamedplus,unnamed
 
 " show line numbers on left
@@ -80,8 +87,19 @@ set lcs=eol:¬,tab:\ \ ,trail:⎵
 " highlight in file what is typed in search
 set incsearch
 
-"set leader key to space
+" set leader key to space
 let mapleader=" "
+
+" set aliases for lnext lprevious in same manner as cn cp
+cnoremap ln lnext
+cnoremap lp lprevious
+cnoremap lo lopen
+cnoremap lc lclose
+
+" syntax checking
+let g:syntastic_python_checkers = ['pylint']
+let g:syntastic_cpp_checkers = ['gcc']
+let g:syntastic_cpp_compiler_options = ' -std=c++11'
 " ===================================Files=================================
 " swap files
 
