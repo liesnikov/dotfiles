@@ -25,4 +25,4 @@ fi
 xprop -root -f _NET_DESKTOP_LAYOUT 32cccc -set _NET_DESKTOP_LAYOUT 0,3,3,0
 
 #map caps to addtitional escape
-setxkbmap -option caps:swapescape
+setxkbmap -option ctrl:nocaps

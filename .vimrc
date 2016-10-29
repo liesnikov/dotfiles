@@ -58,14 +58,6 @@ filetype plugin indent on    " required
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
 "filetype plugin on syntax enable
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
 " ===================================Generic=================================
 "indentation details (may be overriden by ftplugin)
 set tabstop=8
@@ -91,18 +83,27 @@ set incsearch
 let mapleader=" "
 
 " set aliases for lnext lprevious in same manner as cn cp
-cnoremap ln lnext
-cnoremap lp lprevious
-cnoremap lo lopen
-cnoremap lc lclose
+"cnoremap ln lnext
+"cnoremap lp lprevious
+"cnoremap lo lopen
+"cnoremap lc lclose
 
-" syntax checking
+" ===================================Syntactics=================================
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+"let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+" syntax checkers definition
 let g:syntastic_python_checkers = ['pylint']
 let g:syntastic_cpp_checkers = ['gcc']
 let g:syntastic_cpp_compiler_options = ' -std=c++11'
+" disable automatic check
+let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [],'passive_filetypes': [] }
 " ===================================Files=================================
-" swap files
-
 " swap files (.swp) in a common location
 " // means use the file's full path
 set dir=~/.vim/_swap//
@@ -115,7 +116,11 @@ set backupdir=~/.vim/_backup/,~/tmp,.
 set undofile
 set undodir=~/.vim/_undo/
 
-
+" restore previous cursor position
+au BufReadPost *
+    \ if line("'\"") > 0 && line("'\"") <= line("$") && &filetype != "gitcommit" |
+        \ execute("normal `\"") |
+    \ endif
 " ===================================Visual=================================
 "colorscheme settings
 colorscheme gruvbox
