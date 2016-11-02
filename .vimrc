@@ -1,6 +1,3 @@
-"call pathogen#infect()
-"call pathogen#helptags()
-
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
@@ -58,6 +55,7 @@ filetype plugin indent on    " required
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
 "filetype plugin on syntax enable
+
 " ===================================Generic=================================
 "indentation details (may be overriden by ftplugin)
 set tabstop=8
@@ -82,12 +80,6 @@ set incsearch
 " set leader key to space
 let mapleader=" "
 
-" set aliases for lnext lprevious in same manner as cn cp
-"cnoremap ln lnext
-"cnoremap lp lprevious
-"cnoremap lo lopen
-"cnoremap lc lclose
-
 " ===================================Syntactics=================================
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
@@ -103,6 +95,7 @@ let g:syntastic_cpp_checkers = ['gcc']
 let g:syntastic_cpp_compiler_options = ' -std=c++11'
 " disable automatic check
 let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [],'passive_filetypes': [] }
+
 " ===================================Files=================================
 " swap files (.swp) in a common location
 " // means use the file's full path
@@ -121,6 +114,7 @@ au BufReadPost *
     \ if line("'\"") > 0 && line("'\"") <= line("$") && &filetype != "gitcommit" |
         \ execute("normal `\"") |
     \ endif
+
 " ===================================Visual=================================
 "colorscheme settings
 colorscheme gruvbox
@@ -143,6 +137,25 @@ let g:netrw_winsize = 20
 "highlight ColorColumn ctermbg=fg ctermfg=bg
 "call matchadd('ColorColumn', '\%81v', 100)
 
+"add support for changing cursor in different modes in xfce-terminal
+if has("autocmd")
+  au InsertEnter * silent execute "!sed -i.bak -e 's/TERMINAL_CURSOR_SHAPE_BLOCK/TERMINAL_CURSOR_SHAPE_UNDERLINE/' ~/.config/xfce4/terminal/terminalrc"
+  au InsertLeave * silent execute "!sed -i.bak -e 's/TERMINAL_CURSOR_SHAPE_UNDERLINE/TERMINAL_CURSOR_SHAPE_BLOCK/' ~/.config/xfce4/terminal/terminalrc"
+  au VimLeave * silent execute "!sed -i.bak -e 's/TERMINAL_CURSOR_SHAPE_UNDERLINE/TERMINAL_CURSOR_SHAPE_BLOCK/' ~/.config/xfce4/terminal/terminalrc"
+endif
+
+" change cursor shape from
+if &term =~ '^xterm\\|rxvt'
+  " solid underscore
+  let &t_SI .= "\<Esc>[1 q"
+  " solid block
+  let &t_EI .= "\<Esc>[2 q"
+  " 1 or 0 -> blinking block
+  " 3 -> blinking underscore
+  " Recent versions of xterm (282 or above) also support
+  " 5 -> blinking vertical bar
+  " 6 -> solid vertical bar
+endif
 
 "GUI settings to set font
 if has("gui_running")
