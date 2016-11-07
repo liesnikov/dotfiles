@@ -4,7 +4,7 @@ body {
 }
 
 div[class^="books"], div [class*="books"] {
-	/*font-family: "hlv" !important;*/
+	font-family: "hlv" !important;
 	font-size: 95% !important;
 }
 
@@ -47,7 +47,6 @@ div.books {
 	text-align: left !important;
 	padding-left: 0px;
 	display: table;
-	height: 14px !important;
 
 	position: absolute;
 	left: 0px;
@@ -60,8 +59,7 @@ div.books2 {
 	color: #eeeeee;
 	float: right;
 	display: table;
- height: 14px !important;
- 
+
 	position: absolute;
 	right: 0px;
 	top: 30%;
