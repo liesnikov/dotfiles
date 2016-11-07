@@ -3,9 +3,10 @@ body {
 	color: #a06e6e !important;
 }
 
-div[class^="books"], div [class*="books"] {
+div[class^="books"] {
 	font-family: "hlv" !important;
-	font-size: 95% !important;
+	font-size: 100% !important;
+	line-height: 100%;
 }
 
 a, a:link {
@@ -71,11 +72,4 @@ ul li#books2 {
 
 ul li#books2:after {
 	content: "" !important;
-}
-
-.mascot {
-	width: 30%;
-	position: absolute;
-	right: 0px;
-	bottom: 0px;
 }
