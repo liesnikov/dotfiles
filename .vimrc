@@ -80,10 +80,13 @@ set incsearch
 " set leader key to space
 let mapleader=" "
 
+" map q: to :q in normal mode, first opens command history, second is usual
+" quit
+nnoremap q: :q
 " ===================================Syntactics=================================
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%*
 
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
@@ -112,7 +115,7 @@ set undodir=~/.vim/_undo/
 " restore previous cursor position
 au BufReadPost *
     \ if line("'\"") > 0 && line("'\"") <= line("$") && &filetype != "gitcommit" |
-        \ execute("normal `\"") |
+	\ execute("normal `\"") |
     \ endif
 
 " ===================================Visual=================================
