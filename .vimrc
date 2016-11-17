@@ -140,25 +140,25 @@ let g:netrw_winsize = 20
 "highlight ColorColumn ctermbg=fg ctermfg=bg
 "call matchadd('ColorColumn', '\%81v', 100)
 
-"add support for changing cursor in different modes in xfce-terminal
-if has("autocmd")
-  au InsertEnter * silent execute "!sed -i.bak -e 's/TERMINAL_CURSOR_SHAPE_BLOCK/TERMINAL_CURSOR_SHAPE_UNDERLINE/' ~/.config/xfce4/terminal/terminalrc"
-  au InsertLeave * silent execute "!sed -i.bak -e 's/TERMINAL_CURSOR_SHAPE_UNDERLINE/TERMINAL_CURSOR_SHAPE_BLOCK/' ~/.config/xfce4/terminal/terminalrc"
-  au VimLeave * silent execute "!sed -i.bak -e 's/TERMINAL_CURSOR_SHAPE_UNDERLINE/TERMINAL_CURSOR_SHAPE_BLOCK/' ~/.config/xfce4/terminal/terminalrc"
-endif
+""add support for changing cursor in different modes in xfce-terminal
+"if has("autocmd")
+  "au InsertEnter * silent execute "!sed -i.bak -e 's/TERMINAL_CURSOR_SHAPE_BLOCK/TERMINAL_CURSOR_SHAPE_UNDERLINE/' ~/.config/xfce4/terminal/terminalrc"
+  "au InsertLeave * silent execute "!sed -i.bak -e 's/TERMINAL_CURSOR_SHAPE_UNDERLINE/TERMINAL_CURSOR_SHAPE_BLOCK/' ~/.config/xfce4/terminal/terminalrc"
+  "au VimLeave * silent execute "!sed -i.bak -e 's/TERMINAL_CURSOR_SHAPE_UNDERLINE/TERMINAL_CURSOR_SHAPE_BLOCK/' ~/.config/xfce4/terminal/terminalrc"
+"endif
 
-" change cursor shape from
-if &term =~ '^xterm\\|rxvt'
-  " solid underscore
-  let &t_SI .= "\<Esc>[1 q"
-  " solid block
-  let &t_EI .= "\<Esc>[2 q"
-  " 1 or 0 -> blinking block
-  " 3 -> blinking underscore
-  " Recent versions of xterm (282 or above) also support
-  " 5 -> blinking vertical bar
-  " 6 -> solid vertical bar
-endif
+"" change cursor shape from
+"if &term =~ '^xterm\\|rxvt'
+  "" solid underscore
+  "let &t_SI .= "\<Esc>[1 q"
+  "" solid block
+  "let &t_EI .= "\<Esc>[2 q"
+  "" 1 or 0 -> blinking block
+  "" 3 -> blinking underscore
+  "" Recent versions of xterm (282 or above) also support
+  "" 5 -> blinking vertical bar
+  "" 6 -> solid vertical bar
+"endif
 
 "GUI settings to set font
 if has("gui_running")
