@@ -134,9 +134,12 @@ export GIT_PS1_SHOWDIRTYSTATE=1
 # '\W' adds the name of the current directory
 export PS1="$green\u$green\$(__git_ps1)$blue \W $ $reset"
 
-
 #virtualenv for python wrapper
 export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
 export WORKON_HOME=/home/buzzer/.virtualenvs
 source ~/.local/bin/virtualenvwrapper.sh
 export PIP_VIRTUALENV_BASE=/home/buzzer/.virtualenvs
+
+# If not running interactively, do not do anything
+[[ $- != *i* ]] && return
+[[ -z "$TMUX" ]] && exec tmux -2

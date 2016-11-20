@@ -72,7 +72,7 @@ set number
 
 " end every line with eol; show tab as spaces; show trailing spaces
 set list
-set lcs=eol:¬,tab:\ \ ,trail:⎵
+set lcs=eol:¬,tab:🞂\ ,trail:⎵
 
 " highlight in file what is typed in search
 set incsearch
