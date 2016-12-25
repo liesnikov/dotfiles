@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Josefin+Slab');
+@import 'https://fonts.googleapis.com/css?family=Josefin+Slab';
 
 body {
 	background-color: #2c2c2c;
@@ -7,8 +7,8 @@ body {
 
 div[class^="books"] {
 	font-family: 'Josefin Slab';
-	font-size: 125% !important;
-	line-height: 100%;
+	font-size: 110% !important;
+	line-height: 110%;
 }
 
 a, a:link {
