@@ -66,7 +66,7 @@ fi
 source ~/.git-completion.bash
 
 # colors!
-export TERM=xterm-256color
+#export TERM=xterm-256color
 green="\[\033[1;32m\]"
 blue="\[\033[1;34m\]"
 purple="\[\033[0;35m\]"
@@ -88,7 +88,7 @@ export PIP_VIRTUALENV_BASE=/home/buzzer/.virtualenvs
 
 # If not running interactively, do not do anything otherwise start tmux
 [[ $- != *i* ]] && return
-[[ -z "$TMUX" ]] && exec tmux -2
+[[ -z "$TMUX" ]] && exec tmux
 
 #set vi mode for navigating and stuff
 set -o vi
