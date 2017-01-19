@@ -1,6 +1,5 @@
 set nocompatible              " be iMproved, required
 filetype off                  " required
-
 " ===================================Vundle=================================
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
@@ -39,6 +38,11 @@ Plugin 'morhetz/gruvbox'
 Plugin 'python.vim'
 
 Plugin 'scrooloose/syntastic'
+
+Plugin 'matchit.zip'
+
+Plugin 'ukrainian-enhanced.vim'
+"
 "Plugin 'vim-xkbswitch'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -58,12 +62,13 @@ filetype plugin indent on    " required
 
 " ===================================Generic=================================
 "indentation details (may be overriden by ftplugin)
-set tabstop=8
-set shiftwidth=8
-set noexpandtab
+set tabstop=2
+set shiftwidth=2
+set expandtab
+set smarttab
 
 " make vim use "" register for system clipboard
-set clipboard^=unnamedplus,unnamed
+"set clipboard^=unnamedplus,unnamed
 
 " show line numbers on left
 set ruler
@@ -115,8 +120,11 @@ set undodir=~/.vim/_undo/
 " restore previous cursor position
 au BufReadPost *
     \ if line("'\"") > 0 && line("'\"") <= line("$") && &filetype != "gitcommit" |
-	\ execute("normal `\"") |
+        \ execute("normal `\"") |
     \ endif
+
+" keymap for ukrainian support
+" setlocal keymap=ukrainian-enhanced
 
 " ===================================Visual=================================
 "colorscheme settings
@@ -132,13 +140,11 @@ let g:netrw_banner = 0
 let g:netrw_liststyle = 3
 "open files in previous window
 let g:netrw_browse_split = 4
-"let g:netrw_altv = 1
-"set widnow size to __
-let g:netrw_winsize = 20
 
 "GUI settings to set font
 if has("gui_running")
     set guifont=Source\ Code\ Pro\ 12
+    set go=aei
 endif
 
 " ===================================Language===============================
