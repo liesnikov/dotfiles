@@ -31,7 +31,9 @@ Plugin 'tpope/vim-fugitive'
 
 Plugin 'scrooloose/nerdcommenter'
 
-Plugin 'SuperTab'
+"Plugin 'ajh17/VimCompletesMe'
+"Plugin 'Shougo/neocomplete.vim'
+Plugin 'Valloric/YouCompleteMe'
 
 Plugin 'morhetz/gruvbox'
 
