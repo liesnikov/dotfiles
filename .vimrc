@@ -34,10 +34,11 @@ Plugin 'scrooloose/nerdcommenter'
 "Plugin 'ajh17/VimCompletesMe'
 "Plugin 'Shougo/neocomplete.vim'
 Plugin 'Valloric/YouCompleteMe'
+Plugin 'rdnetto/YCM-Generator'
 
 Plugin 'morhetz/gruvbox'
 
-Plugin 'python.vim'
+Plugin 'nathanaelkane/vim-indent-guides'
 
 Plugin 'scrooloose/syntastic'
 
@@ -142,6 +143,17 @@ let g:netrw_banner = 0
 let g:netrw_liststyle = 3
 "open files in previous window
 let g:netrw_browse_split = 4
+
+"indentaion guidelines (from vim-indent-guides)
+"enable at startup
+let g:indent_guides_enable_on_vim_startup = 1
+"set indent guides width to 1
+let g:indent_guides_guide_size = 1
+"disable default mapping to enable/disable
+let g:indent_guides_default_mapping = 0
+"specify colors
+hi IndentGuidesOdd  ctermbg=black
+hi IndentGuidesEven ctermbg=darkgrey
 
 "GUI settings to set font
 if has("gui_running")
