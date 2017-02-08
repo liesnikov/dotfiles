@@ -142,7 +142,7 @@ let g:netrw_banner = 0
 "display netrw in tree-like style
 let g:netrw_liststyle = 3
 "open files in previous window
-let g:netrw_browse_split = 4
+let g:netrw_browse_split = 2
 
 "indentaion guidelines (from vim-indent-guides)
 "enable at startup
@@ -152,13 +152,12 @@ let g:indent_guides_guide_size = 1
 "disable default mapping to enable/disable
 let g:indent_guides_default_mapping = 0
 "specify colors
-hi IndentGuidesOdd  ctermbg=black
-hi IndentGuidesEven ctermbg=darkgrey
 
 "GUI settings to set font
 if has("gui_running")
     set guifont=Source\ Code\ Pro\ 12
     set go=aei
+    set lines=60 columns=100
 endif
 
 " ===================================Language===============================
