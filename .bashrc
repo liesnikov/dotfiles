@@ -89,9 +89,9 @@ export WORKON_HOME=/home/buzzer/.virtualenvs
 source ~/.local/bin/virtualenvwrapper.sh
 export PIP_VIRTUALENV_BASE=/home/buzzer/.virtualenvs
 
+#set vi mode for navigating and stuff
+set -o vi
+
 # If not running interactively, do not do anything otherwise start tmux
 [[ $- != *i* ]] && return
 [[ -z "$TMUX" ]] && exec tmux
-
-#set vi mode for navigating and stuff
-set -o vi
