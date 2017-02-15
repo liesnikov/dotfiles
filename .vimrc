@@ -25,28 +25,42 @@ Plugin 'VundleVim/Vundle.vim'
 " Install L9 and avoid a Naming conflict if you've already installed a
 " different version somewhere else.
 "Plugin 'ascenator/L9', {'name': 'newL9'}
+
+" plugin to put matching brackets/symbols/tags
 Plugin 'Raimondi/delimitMate'
 
+" plugin to use git from vim
 Plugin 'tpope/vim-fugitive'
 
+" easy commenting
 Plugin 'scrooloose/nerdcommenter'
 
-"Plugin 'ajh17/VimCompletesMe'
-"Plugin 'Shougo/neocomplete.vim'
+" tab completer
 Plugin 'Valloric/YouCompleteMe'
+" config generator for YouCompleteMe
 Plugin 'rdnetto/YCM-Generator'
 
+" colorscheme
 Plugin 'morhetz/gruvbox'
 
+" as stated, indent guides
 Plugin 'nathanaelkane/vim-indent-guides'
 
+" syntax checker
 Plugin 'scrooloose/syntastic'
 
+" using % for more symbols/tags
 Plugin 'matchit.zip'
 
+" pretty statusline
+Plugin 'vim-airline/vim-airline'
+
+" virtualenv manipulations
+Plugin 'jmcantrell/vim-virtualenv'
+
+" installes windows-qwerty ukrainian keymap
 Plugin 'ukrainian-enhanced.vim'
 "
-"Plugin 'vim-xkbswitch'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -152,6 +166,39 @@ let g:indent_guides_guide_size = 1
 "disable default mapping to enable/disable
 let g:indent_guides_default_mapping = 0
 "specify colors
+
+" airline
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
+endif
+
+" unicode symbols
+let g:airline_symbols.crypt = '🔒'
+"let g:airline_symbols.maxlinenr = '☰'
+let g:airline_symbols.maxlinenr = ''
+"let g:airline_symbols.paste = 'ρ'
+"let g:airline_symbols.paste = 'Þ'
+let g:airline_symbols.paste = '∥'
+let g:airline_symbols.spell = 'Ꞩ'
+let g:airline_symbols.notexists = '∄'
+let g:airline_symbols.whitespace = 'Ξ'
+
+" powerline symbols
+let g:airline_left_sep = ''
+let g:airline_left_alt_sep = ''
+let g:airline_right_sep = ''
+let g:airline_right_alt_sep = ''
+let g:airline_symbols.branch = ''
+let g:airline_symbols.readonly = ''
+let g:airline_symbols.linenr = ''
+
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#left_sep = ''
+let g:airline#extensions#tabline#left_alt_sep = ''
+
+
+set laststatus=2
+set noshowmode
 
 "GUI settings to set font
 if has("gui_running")
