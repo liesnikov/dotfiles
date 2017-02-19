@@ -140,8 +140,6 @@ au BufReadPost *
         \ execute("normal `\"") |
     \ endif
 
-" keymap for ukrainian support
-" setlocal keymap=ukrainian-enhanced
 
 " ===================================Visual=================================
 "colorscheme settings
@@ -162,7 +160,7 @@ let g:netrw_browse_split = 2
 "enable at startup
 let g:indent_guides_enable_on_vim_startup = 1
 "set indent guides width to 1
-let g:indent_guides_guide_size = 1
+let g:indent_guides_guide_size = 0
 "disable default mapping to enable/disable
 let g:indent_guides_default_mapping = 0
 "specify colors
@@ -203,13 +201,11 @@ set noshowmode
 "GUI settings to set font
 if has("gui_running")
     set guifont=Source\ Code\ Pro\ 12
-    set go=aei
+    set go=i
     set lines=60 columns=100
 endif
 
 " ===================================Language===============================
 
-"let g:XkbSwitchEnabled = 1
-"set keymap=ukrainian-modfied
-"set iminsert=0
-"set imsearch=0
+"" keymap for ukrainian support
+"setlocal keymap=ukrainian-enhanced
