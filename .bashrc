@@ -68,20 +68,15 @@ fi
 # Enable tab completion
 source ~/.git-completion.bash
 
-# colors!
-#export TERM=xterm-256color
-green="\[\033[1;32m\]"
-blue="\[\033[1;34m\]"
-purple="\[\033[0;35m\]"
-reset="\[\033[0m\]"
-
 # Change command prompt
 source ~/.git-prompt.sh
 export GIT_PS1_SHOWDIRTYSTATE=1
+export GIT_PS1_SHOWUNTRACKEDFILES=1
 # '\u' adds the name of the current user to the prompt
 # '\$(__git_ps1)' adds git-related stuff
 # '\W' adds the name of the current directory
-export PS1="$green\u$green\$(__git_ps1)$blue \W $ $reset"
+# '\[\e[1m\]' opens bold, '\[\e[0m\]' closes
+export PS1='\[\e[1m\]$(__git_ps1 "(%s)") \W\[\e[0m\] ⯈ '
 
 #virtualenv for python wrapper
 export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
