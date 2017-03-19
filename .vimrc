@@ -99,11 +99,13 @@ set lcs=eol:¬,tab:🞂\ ,trail:⎵
 " highlight in file what is typed in search
 set incsearch
 
+" visual autocomplete for command menu
+set wildmenu
+
 " set leader key to space
 let mapleader=" "
 
-" map q: to :q in normal mode, first opens command history, second is usual
-" quit
+" map q: to :q in normal mode, first opens command history, second is usual quit
 nnoremap q: :q
 " ===================================Syntactics=================================
 "set statusline+=%#warningmsg#
@@ -144,6 +146,7 @@ au BufReadPost *
 " ===================================Visual=================================
 "colorscheme settings
 colorscheme gruvbox
+"set background=light
 set background=dark
 let g:gruvbox_contrast_dark="hard"
 let g:gruvbox_contrast_light="light"
