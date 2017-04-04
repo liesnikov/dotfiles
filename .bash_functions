@@ -22,3 +22,12 @@ themetime () {
       ;;
   esac
 }
+
+dockercmd () {
+/*
+ * usage:
+ * > dockercmd pdflatex example.tex
+ * > dockercmd /bin/sh -c "pdflatex example.tex && pdflatex example.tex"
+ */
+  exec docker run --rm -i --user="$(id -u):$(id -g)" -v $PWD:/data blang/latex "$@" &
+}
