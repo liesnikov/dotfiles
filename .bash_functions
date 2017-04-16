@@ -31,3 +31,23 @@ dockercmd () {
  */
   exec docker run --rm -i --user="$(id -u):$(id -g)" -v $PWD:/data blang/latex "$@" &
 }
+
+wifi () {
+  case "$1" in
+    off)
+      nmcli radio wifi off
+      ;;
+    on)
+      nmcli radio wifi on
+      ;;
+    reload)
+      sudo modprobe -r rtl8723be && sudo modprobe rtl8723be && sudo service network-manager restart
+      ;;
+    list)
+      nmcli device wifi list
+      ;;
+    connect)
+      nmcli device wifi connect $2 $3
+      ;;
+esac
+}
