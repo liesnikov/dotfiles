@@ -110,6 +110,15 @@ let mapleader=" "
 
 " map q: to :q in normal mode, first opens command history, second is usual quit
 nnoremap q: :q
+
+" don't write deleted by x into registy, blackhole it
+nmap X "_d
+nmap XX "_dd
+vmap X "_d
+vmap x "_d
+
+" have x (removes single character) not go into the default registry too
+nnoremap x "_x
 " ===================================Syntactics=================================
 "set statusline+=%#warningmsg#
 "set statusline+=%{SyntasticStatuslineFlag()}
