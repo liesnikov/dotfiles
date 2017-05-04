@@ -32,6 +32,9 @@ Plugin 'Raimondi/delimitMate'
 " plugin to use git from vim
 Plugin 'tpope/vim-fugitive'
 
+" code autoformatting
+Plugin 'Chiel92/vim-autoformat'
+
 " easy commenting
 Plugin 'scrooloose/nerdcommenter'
 
@@ -198,7 +201,9 @@ let g:airline#extensions#tabline#left_sep = ''
 let g:airline#extensions#tabline#left_alt_sep = ''
 
 
+" always show status line
 set laststatus=2
+" don't put message on the last line (don't know, what it means)
 set noshowmode
 
 "GUI settings to set font
