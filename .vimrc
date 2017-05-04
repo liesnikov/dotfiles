@@ -119,6 +119,12 @@ vmap x "_d
 
 " have x (removes single character) not go into the default registry too
 nnoremap x "_x
+
+" Make the dot command work as expected in visual mode (via https://www.reddit.com/r/vim/comments/3y2mgt/do_you_have_any_minor_customizationsmappings_that/cya0x04)
+vnoremap . :norm.<CR>
+
+" by default fold lines with same indent
+set foldmethod=indent
 " ===================================Syntactics=================================
 "set statusline+=%#warningmsg#
 "set statusline+=%{SyntasticStatuslineFlag()}
