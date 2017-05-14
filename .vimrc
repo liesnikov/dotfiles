@@ -90,10 +90,14 @@ set smarttab
 " make vim use "" register for system clipboard
 "set clipboard^=unnamedplus,unnamed
 
-" show line numbers on left
-set ruler
 " show line number, symbol number in status line
+set ruler
+" show relative line numbers
+set relativenumber
+" show line numbers on left
 set number
+" Keep the line number gutter narrow so three digits is cozy.
+set numberwidth=2
 
 " end every line with eol; show tab as spaces; show trailing spaces
 set list
@@ -162,7 +166,7 @@ au BufReadPost *
 
 
 " ===================================Visual=================================
-"colorscheme settings
+" colorscheme settings
 colorscheme gruvbox
 "set background=light
 set background=dark
@@ -170,12 +174,18 @@ let g:gruvbox_contrast_dark="hard"
 let g:gruvbox_contrast_light="light"
 set t_Co=256
 
-"don't display netrw header
+" don't display netrw header
 let g:netrw_banner = 0
-"display netrw in tree-like style
+" display netrw in tree-like style
 let g:netrw_liststyle = 3
-"open files in previous window
+" open files in previous window
 let g:netrw_browse_split = 2
+"" split to the right
+"let g:netrw_altv=1
+"" opened file takes 90% of the window
+"let g:netrw_winsize= 90
+"" netrw window is shrinked to 30
+"let g:netrw_wiw= 30
 
 "indentaion guidelines (from vim-indent-guides)
 "enable at startup

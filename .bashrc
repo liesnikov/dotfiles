@@ -40,9 +40,9 @@ force_color_prompt=yes
 
 if [ -n "$force_color_prompt" ]; then
     if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-	color_prompt=yes
+  color_prompt=yes
     else
-	color_prompt=
+  color_prompt=
     fi
 fi
 
@@ -57,11 +57,11 @@ fi
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
 if [ -f "$HOME"/.bash_aliases ]; then
-	. "$HOME"/.bash_aliases
+  . "$HOME"/.bash_aliases
 fi
 
 if [ -f "$HOME"/.bash_functions ]; then
-	. "$HOME"/.bash_functions
+  . "$HOME"/.bash_functions
 fi
 
 #added by git udacity course
