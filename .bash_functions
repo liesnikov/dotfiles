@@ -47,7 +47,7 @@ wifi () {
       nmcli device wifi list
       ;;
     connect)
-      nmcli device wifi connect $2 $3
+      nmcli device wifi connect $2 password $3
       ;;
 esac
 }

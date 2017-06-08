@@ -87,7 +87,7 @@ set shiftwidth=2
 set expandtab
 set smarttab
 
-" make vim use "" register for system clipboard
+"" make vim use "" register for system clipboard
 "set clipboard^=unnamedplus,unnamed
 
 " show line number, symbol number in status line
@@ -129,6 +129,8 @@ vnoremap . :norm.<CR>
 
 " by default fold lines with same indent
 set foldmethod=indent
+" remap :lnext to :ln instead of :lnoremap
+cmap ln lnext
 " ===================================Syntactics=================================
 "set statusline+=%#warningmsg#
 "set statusline+=%{SyntasticStatuslineFlag()}
