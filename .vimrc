@@ -86,6 +86,10 @@ set tabstop=2
 set shiftwidth=2
 set expandtab
 set smarttab
+" wrap will continue on the same indentation level
+set breakindent
+" symbols to show when breakindent is in use to wrap lines
+set showbreak=▻\ 
 
 "" make vim use "" register for system clipboard
 "set clipboard^=unnamedplus,unnamed
@@ -101,7 +105,7 @@ set numberwidth=2
 
 " end every line with eol; show tab as spaces; show trailing spaces
 set list
-set lcs=eol:¬,tab:🞂\ ,trail:⎵
+set lcs=eol:¬,tab:►\ ,trail:⎵
 
 " highlight in file what is typed in search
 set incsearch
@@ -131,6 +135,18 @@ vnoremap . :norm.<CR>
 set foldmethod=indent
 " remap :lnext to :ln instead of :lnoremap
 cmap ln lnext
+
+"" enable functional autosave and autoread
+""Autosave will automatically save to disk the currently edited buffer upon leaving insert mode as well as after a text edit has occurred.
+
+""Autoread will automatically update an open buffer if it has been changed outside the current edit session, usually by an external program.
+"set autoread
+
+"augroup autoSaveAndRead
+    "autocmd!
+    "autocmd TextChanged,InsertLeave,FocusLost * silent! wall
+    "autocmd CursorHold * silent! checktime
+"augroup END
 " ===================================Syntactics=================================
 "set statusline+=%#warningmsg#
 "set statusline+=%{SyntasticStatuslineFlag()}
