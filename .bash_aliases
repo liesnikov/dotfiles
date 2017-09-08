@@ -5,3 +5,5 @@ alias ycm-generate="~/.vim/bundle/YCM-Generator/config_gen.py"
 
 # docker aliases
 alias ghci-dock="docker run -it --rm haskell:8"
+
+alias keyboard-set="setxkbmap -option ctrl:nocaps ; xset r rate 200 30"

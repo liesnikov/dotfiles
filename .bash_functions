@@ -29,7 +29,7 @@ dockercmd () {
  * > dockercmd pdflatex example.tex
  * > dockercmd /bin/sh -c "pdflatex example.tex && pdflatex example.tex"
  */
-  exec docker run --rm -i --user="$(id -u):$(id -g)" -v $PWD:/data blang/latex "$@" &
+  docker run --rm -i --user="$(id -u):$(id -g)" -v $PWD:/data blang/latex "$@" &
 }
 
 wifi () {
@@ -40,6 +40,10 @@ wifi () {
     on)
       nmcli radio wifi on
       ;;
+    restart)
+      wifi off
+      wifi on
+      ;;
     reload)
       sudo modprobe -r rtl8723be && sudo modprobe rtl8723be && sudo service network-manager restart
       ;;
@@ -48,6 +52,15 @@ wifi () {
       ;;
     connect)
       nmcli device wifi connect $2 password $3
+      ;;
+    help)
+      echo possible commands: "on", "off", "restart", "reload", "list"
+      ;;
+    -h)
+      wifi help
+      ;;
+    --help)
+      wifi help
       ;;
 esac
 }
