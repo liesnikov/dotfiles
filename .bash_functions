@@ -15,10 +15,12 @@ themetime () {
     night)
       xfconf-query -c xfwm4 -p /general/theme -s $NIGHT_WM_THEME
       xfconf-query -c xsettings -p /Net/ThemeName -s $NIGHT_GTK_THEME
+      sed -i 's/set background=light/set background=dark/' ~/.vimrc
       ;;
     day)
       xfconf-query -c xfwm4 -p /general/theme -s $DAY_WM_THEME
       xfconf-query -c xsettings -p /Net/ThemeName -s $DAY_GTK_THEME
+      sed -i 's/set background=dark/set background=light/' ~/.vimrc
       ;;
   esac
 }
@@ -35,17 +37,19 @@ dockercmd () {
 wifi () {
   case "$1" in
     off)
+      echo "wifi turning off"
       nmcli radio wifi off
       ;;
     on)
+      echo "wifi turning on"
       nmcli radio wifi on
       ;;
     restart)
       wifi off
       wifi on
       ;;
-    reload)
-      sudo modprobe -r rtl8723be && sudo modprobe rtl8723be && sudo service network-manager restart
+    /*reload)*/
+      /*sudo modprobe -r rtl8723be && sudo modprobe rtl8723be && sudo service network-manager restart*/
       ;;
     list)
       nmcli device wifi list
@@ -62,5 +66,9 @@ wifi () {
     --help)
       wifi help
       ;;
+    *)
+      echo "no such command"
+      wifi help
+     ;;
 esac
 }
