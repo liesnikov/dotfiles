@@ -18,5 +18,7 @@ fi
 
 # set PATH so it includes user's private bin if it exists
 if [ -d "$HOME/bin" ] ; then
-    PATH="$HOME/bin:$PATH"
+    PATH="$HOME/.local/bin:$HOME/bin:$PATH"
 fi
+
+if [ -e /home/buzzer/.nix-profile/etc/profile.d/nix.sh ]; then . /home/buzzer/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer

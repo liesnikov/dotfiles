@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Home</title>
+
+    <style>
+      @import url('https://fonts.googleapis.com/css?family=Source+Code+Pro:300&subset=latin-ext');
+
+      body {
+        background-color: #2c2c2c;
+        color: #a06e6e !important;
+      }
+
+      div[class^="names"] {
+        font-family: 'Josefin Slab';
+        font-size: 130% !important;
+        line-height: 130%;
+      }
+
+      div[class^="links"] {
+        font-family: 'Josefin Slab';
+        font-size: 130% !important;
+        line-height: 130%;
+      }
+
+      a {
+        color: #9eb2cb !important;
+        text-decoration: none !important;
+      }
+
+      a:hover {
+        color: #cae5ff !important;
+        text-decoration: none !important;
+      }
+
+      li {
+        list-style: none;
+      }
+
+      ul {
+        text-align: left !important;
+        padding-left: 13px !important;
+      }
+
+      ul li {
+        list-style: none;
+        display: inline;
+        text-align: left;
+      }
+
+      ul li:after {
+        color: #a06e6e !important;
+        content: " //" !important;
+      }
+
+      ul li:last-child:after {
+        content: "" !important;
+      }
+
+    div.links {
+      margin-left: 30% !important;
+      text-align: left !important;
+      padding-left: 0px;
+      color: #eeeeee;
+      display: table;
+
+      position: absolute;
+      left: 0px;
+      top: 30%;
+    }
+
+    div.names {
+      margin-right: 70% !important;
+      text-align: right !important;
+      color: #eeeeee;
+      float: right;
+      display: table;
+
+      position: absolute;
+      right: 0px;
+      top: 30%;
+    }
+
+    ul li#names {
+      float: right !important;
+    }
+
+    ul li#names:after {
+      content: "" !important;
+    }
+    </style>
+
+  </head>
+
+  <body>
+    <div class="links">
+      <ul>
+        <li><a href="https://reddit.com">reddit</a></li>
+        <li><a href="https://feedly.com">feedly</a></li>
+      </ul>
+      <ul>
+        <li><a href="https://hckrnews.com">hn</a></li>
+        <li><a href="https://lobste.rs">lobster</a></li>
+        <li><a href="https://tweetdeck.twitter.com">twitter</a></li>
+      </ul>
+      <ul>
+        <li><a href="https://github.com">github</a></li>
+        <li><a href="https://gitlab.com">gitlab</a></li>
+        <li><a href="https://bitbucket.com">bitbucket</a></li>
+      </ul>
+      <ul>
+        <li><a href="https://coursera.org">coursera</a></li>
+        <li><a href="http://gen.lib.rus.ec">libgen</a></li>
+        <li><a href="http://80.82.77.84">sci-hub</a></li>
+      </ul>
+    </div>
+    <div class="names">
+      <ul><li id="names">news 📻 </li></ul><br>
+      <ul><li id="names">boards 🙰 forums </li></ul><br>
+      <ul><li id="names">code 🔥</li></ul><br>
+      <ul><li id="names">ed 🏫</li></ul><br>
+    </div>
+  </body>
+</html>

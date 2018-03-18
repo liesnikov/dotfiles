@@ -186,10 +186,9 @@ au BufReadPost *
 " ===================================Visual=================================
 " colorscheme settings
 colorscheme gruvbox
-"set background=light
-set background=dark
+set background=light
 let g:gruvbox_contrast_dark="hard"
-let g:gruvbox_contrast_light="light"
+let g:gruvbox_contrast_light="hard"
 set t_Co=256
 
 " don't display netrw header

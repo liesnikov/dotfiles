@@ -11,9 +11,15 @@ HISTCONTROL=ignoreboth
 # append to the history file, don't overwrite it
 shopt -s histappend
 
-# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
-HISTSIZE=10000
-HISTFILESIZE=20000
+# Eternal bash history. https://stackoverflow.com/a/19533853
+# Undocumented feature which sets the size to "unlimited".
+# http://stackoverflow.com/questions/9457233/unlimited-bash-history
+export HISTFILESIZE=-1
+export HISTSIZE=-1
+export HISTTIMEFORMAT="[%F %T] "
+# Change the file location because certain bash sessions truncate .bash_history file upon close.
+# http://superuser.com/questions/575479/bash-history-truncated-to-500-lines-on-each-login
+export HISTFILE=~/.bash_eternal_history
 
 # After each command, append to the history file and reread it
 PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND$'\n'}history -a; history -c; history -r"
@@ -64,7 +70,7 @@ if [ -f "$HOME"/.bash_functions ]; then
   . "$HOME"/.bash_functions
 fi
 
-#added by git udacity course
+# found on udacity git course
 # Enable tab completion
 source ~/.git-completion.bash
 
@@ -76,9 +82,9 @@ export GIT_PS1_SHOWUNTRACKEDFILES=1
 # '\$(__git_ps1)' adds git-related stuff
 # '\W' adds the name of the current directory
 # '\[\e[1m\]' opens bold, '\[\e[0m\]' closes
-export PS1='\[\e[1m\]$(__git_ps1 "(%s)") \W\[\e[0m\] ⯈ '
+export PS1='\[\e[1m\]$(__git_ps1 "(%s)")\W\[\e[0m\] ⊢ '
 
-#virtualenv for python wrapper
+# virtualenv for python wrapper
 export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
 export WORKON_HOME=/home/buzzer/.virtualenvs
 source ~/.local/bin/virtualenvwrapper.sh
