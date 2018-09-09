@@ -1,0 +1,25 @@
+[iface]
+label=
+instance=wlp4s0
+color=#00FFFF
+interval=10
+separator=true
+color=#adff00
+
+[key_layout]
+#label=
+interval=1
+command=xkb-switch
+separator=true
+
+# [battery]
+# command=/home/buzzer/.config/i3blocks/scripts/battery.py
+# markup=pango
+# interval=10
+# separator=true
+
+[time]
+command=date '+%d/%m %H:%M'
+label=
+interval=1
+separator=true

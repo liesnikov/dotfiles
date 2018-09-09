@@ -84,6 +84,7 @@ export GIT_PS1_SHOWUNTRACKEDFILES=1
 # '\[\e[1m\]' opens bold, '\[\e[0m\]' closes
 export PS1='\[\e[1m\]$(__git_ps1 "(%s)")\W\[\e[0m\] ⊢ '
 
+
 # virtualenv for python wrapper
 export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
 export WORKON_HOME=/home/buzzer/.virtualenvs
@@ -92,6 +93,8 @@ export PIP_VIRTUALENV_BASE=/home/buzzer/.virtualenvs
 
 #set vi mode for navigating and stuff
 set -o vi
+
+export LOCALE_ARCHIVE="/usr/lib/locale/locale-archive"
 
 # If not running interactively, do not do anything otherwise start tmux
 [[ $- != *i* ]] && return
