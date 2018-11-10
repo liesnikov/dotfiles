@@ -12,15 +12,20 @@
    [default default default italic underline success warning error])
  '(ansi-color-names-vector
    ["#242424" "#e5786d" "#95e454" "#cae682" "#8ac6f2" "#333366" "#ccaa8f" "#f6f3e8"])
+ '(auto-save-default nil)
  '(backup-directory-alist (quote (("." . "~/.emacs.d/.backup"))))
  '(custom-enabled-themes (quote (tsdh-dark)))
  '(global-whitespace-mode t)
  '(global-whitespace-newline-mode t)
  '(indent-tabs-mode nil)
  '(keyboard-coding-system (quote utf-8-unix))
+ '(org-format-latex-options
+   (quote
+    (:foreground default :background default :scale 1.2 :html-foreground "Black" :html-background "Transparent" :html-scale 1.0 :matchers
+                 ("begin" "$1" "$" "$$" "\\(" "\\["))))
  '(package-selected-packages
    (quote
-    (unicode-whitespace flycheck-mypy flycheck-pycheckers flycheck-pyflakes flycheck evil-org transpose-frame markdown-mode+ markdown-mode org ac-math auto-complete auto-complete-auctex color-theme-solarized evil haskell-mode nix-mode origami)))
+    (lsp-ui lsp-haskell lsp-mode flycheck-haskell unicode-whitespace flycheck-mypy flycheck-pycheckers flycheck-pyflakes flycheck evil-org transpose-frame markdown-mode+ markdown-mode org ac-math auto-complete auto-complete-auctex color-theme-solarized evil haskell-mode nix-mode origami)))
  '(selection-coding-system (quote utf-8))
  '(tab-always-indent t)
  '(tab-width 2))
