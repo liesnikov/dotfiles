@@ -15,18 +15,18 @@
  '(auto-save-default nil)
  '(backup-directory-alist (quote (("." . "~/.emacs.d/.backup"))))
  '(custom-enabled-themes (quote (tsdh-dark)))
- '(fill-column 90)
  '(global-whitespace-mode t)
  '(global-whitespace-newline-mode t)
  '(indent-tabs-mode nil)
  '(keyboard-coding-system (quote utf-8-unix))
+ '(org-cycle-include-plain-lists (quote integrate))
  '(org-format-latex-options
    (quote
     (:foreground default :background default :scale 1.2 :html-foreground "Black" :html-background "Transparent" :html-scale 1.0 :matchers
                  ("begin" "$1" "$" "$$" "\\(" "\\["))))
  '(package-selected-packages
    (quote
-    (evil-magit magit auctex lsp-ui lsp-haskell lsp-mode flycheck-haskell unicode-whitespace flycheck-mypy flycheck-pycheckers flycheck-pyflakes flycheck evil-org transpose-frame markdown-mode+ markdown-mode org ac-math auto-complete auto-complete-auctex color-theme-solarized evil haskell-mode nix-mode origami)))
+    (editorconfig pdf-tools tuareg sml-mode rmsbolt pandoc-mode evil-magit magit auctex lsp-ui lsp-haskell lsp-mode flycheck-haskell unicode-whitespace flycheck-mypy flycheck-pycheckers flycheck-pyflakes flycheck evil-org transpose-frame markdown-mode+ markdown-mode org ac-math auto-complete auto-complete-auctex color-theme-solarized evil haskell-mode nix-mode origami)))
  '(selection-coding-system (quote utf-8))
  '(tab-always-indent t)
  '(tab-width 2))
@@ -44,6 +44,13 @@
 (add-to-list 'auto-mode-alist '("\\.nix\\'" . nix-mode)) ;; activate nix-mode in .nix files
 (add-hook 'org-mode-hook 'org-indent-mode) ;; activate org-indent-mode on org-indent
 
+(defun my-inhibit-global-linum-mode ()
+  (add-hook 'after-change-major-mode-hook
+            (lambda () (linum-mode 0))
+            :append :local)) ;; Counter-act `global-linum-mode'
+(add-hook 'pdf-view-mode-hook 'my-inhibit-global-linum-mode) ;; disable linum (line numbers) when entering pdf-tools mode
+
+
 (setq inhibit-startup-screen t) ;; remove splash screen on start
 (setq scroll-step            1  ;; number of lines screen shifts when scrooling
       scroll-conservatively  10000)
@@ -59,5 +66,6 @@
 (global-linum-mode 1)
 (tool-bar-mode -1) ;; no toolbar
 (scroll-bar-mode -1) ;; no scrollbar
+(editorconfig-mode 1) ;; enable editorconfig, for respecting editorconfig files
 (provide '.emacs)
 ;;; .emacs ends here
