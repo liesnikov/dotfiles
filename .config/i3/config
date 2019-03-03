@@ -190,7 +190,8 @@ exec --no-startup-id nitrogen --restore
 exec --no-startup-id setxkbmap "us,ru,ua" -variant "altgr-intl,," -option "grp:shifts_toggle;ctrl:nocaps"
 exec --no-startup-id xset r rate 200 30
 exec --no-startup-id nm-applet
-exec --no-startup-id /home/buzzer/.config/autostart/custom-settings.desktop exec --no-startup-id reshift
+exec --no-startup-id /home/buzzer/.config/autostart/custom-settings.desktop
+exec --no-startup-id reshift
 
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
