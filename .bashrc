@@ -72,26 +72,29 @@ fi
 
 # found on udacity git course
 # Enable tab completion
-source ~/.git-completion.bash
+# source ~/.git-completion.bash
 
 # Change command prompt
-source ~/.git-prompt.sh
-export GIT_PS1_SHOWDIRTYSTATE=1
-export GIT_PS1_SHOWUNTRACKEDFILES=1
+# source ~/.git-prompt.sh
+# export GIT_PS1_SHOWDIRTYSTATE=1
+# export GIT_PS1_SHOWUNTRACKEDFILES=1
 # '\u' adds the name of the current user to the prompt
 # '\$(__git_ps1)' adds git-related stuff
 # '\W' adds the name of the current directory
 # '\[\e[1m\]' opens bold, '\[\e[0m\]' closes
-export PS1='\[\e[1m\]$(__git_ps1 "(%s)")\W\[\e[0m\] ⊢ '
-
+# export PS1='\[\e[1m\]$(__git_ps1 "(%s)")\W\[\e[0m\] ⊢ '
+export PS1='\[\e[1m\]\W\[\e[0m\] ⊢ '
 
 # virtualenv for python wrapper
 export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
 export WORKON_HOME=/home/buzzer/.virtualenvs
-source ~/.local/bin/virtualenvwrapper.sh
+if [ -z "$VIRTUALENVWRAPPER_PYTHON" ]
+then
+    source ~/.local/bin/virtualenvwrapper.sh
+fi
 export PIP_VIRTUALENV_BASE=/home/buzzer/.virtualenvs
 
-#set vi mode for navigating and stuff
+# set vi mode for navigating and stuff
 set -o vi
 
 export LOCALE_ARCHIVE="/usr/lib/locale/locale-archive"
