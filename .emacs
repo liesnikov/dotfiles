@@ -2,6 +2,7 @@
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 (package-initialize)
+
 ;;; Custom:
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -14,6 +15,8 @@
    ["#242424" "#e5786d" "#95e454" "#cae682" "#8ac6f2" "#333366" "#ccaa8f" "#f6f3e8"])
  '(auto-save-default nil)
  '(backup-directory-alist (quote (("." . "~/.emacs.d/.backup"))))
+ '(coq-maths-menu-enable t)
+ '(coq-unicode-tokens-enable nil)
  '(custom-enabled-themes (quote (tsdh-dark)))
  '(global-whitespace-mode t)
  '(global-whitespace-newline-mode t)
@@ -26,7 +29,8 @@
                  ("begin" "$1" "$" "$$" "\\(" "\\["))))
  '(package-selected-packages
    (quote
-    (editorconfig pdf-tools tuareg sml-mode rmsbolt pandoc-mode evil-magit magit auctex lsp-ui lsp-haskell lsp-mode flycheck-haskell unicode-whitespace flycheck-mypy flycheck-pycheckers flycheck-pyflakes flycheck evil-org transpose-frame markdown-mode+ markdown-mode org ac-math auto-complete auto-complete-auctex color-theme-solarized evil haskell-mode nix-mode origami)))
+    (company-coq proof-general org-download editorconfig pdf-tools tuareg sml-mode rmsbolt pandoc-mode evil-magit magit auctex lsp-ui lsp-haskell lsp-mode flycheck-haskell unicode-whitespace flycheck-mypy flycheck-pycheckers flycheck-pyflakes flycheck evil-org transpose-frame markdown-mode+ markdown-mode org ac-math auto-complete auto-complete-auctex color-theme-solarized evil haskell-mode nix-mode origami)))
+ '(proof-three-window-enable nil)
  '(selection-coding-system (quote utf-8))
  '(tab-always-indent t)
  '(tab-width 2))
@@ -43,6 +47,7 @@
 ;;; Code:
 (add-to-list 'auto-mode-alist '("\\.nix\\'" . nix-mode)) ;; activate nix-mode in .nix files
 (add-hook 'org-mode-hook 'org-indent-mode) ;; activate org-indent-mode on org-indent
+(add-hook 'coq-mode-hook #'company-coq-mode)
 
 (defun my-inhibit-global-linum-mode ()
   (add-hook 'after-change-major-mode-hook
@@ -55,13 +60,16 @@
 (setq scroll-step            1  ;; number of lines screen shifts when scrooling
       scroll-conservatively  10000)
 
+(when (fboundp 'windmove-default-keybindings)
+  (windmove-default-keybindings))
+
 (global-origami-mode 1) ;; add folds as in vim
 (unicode-whitespace-setup 'subdued-faces)
 (global-flycheck-mode)
-(evil-mode 1) ;; vi emulation
+(evil-mode 0) ;; vi emulation (0 -- disabled, 1 -- enabled)
 (ac-config-default)
 (global-auto-complete-mode t) ;; doesn't really work, enables auto-fill-mode globally
-(menu-bar-mode 1)
+(menu-bar-mode -1)
 (show-paren-mode 1)
 (global-linum-mode 1)
 (tool-bar-mode -1) ;; no toolbar
