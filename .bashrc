@@ -85,20 +85,26 @@ fi
 # export PS1='\[\e[1m\]$(__git_ps1 "(%s)")\W\[\e[0m\] ⊢ '
 export PS1='\[\e[1m\]\W\[\e[0m\] ⊢ '
 
+# exercism
+if [ -f ~/.config/exercism/exercism_completion.bash ]; then
+  source ~/.config/exercism/exercism_completion.bash
+fi
+
 # virtualenv for python wrapper
 export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
 export WORKON_HOME=/home/buzzer/.virtualenvs
-if [ -z "$VIRTUALENVWRAPPER_PYTHON" ]
-then
-    source ~/.local/bin/virtualenvwrapper.sh
-fi
+source ~/.local/bin/virtualenvwrapper.sh
 export PIP_VIRTUALENV_BASE=/home/buzzer/.virtualenvs
 
 # set vi mode for navigating and stuff
-set -o vi
+# set -o vi
+
+#so as not to be disturbed by Ctrl-S ctrl-Q in terminals:
+stty -ixon
 
 export LOCALE_ARCHIVE="/usr/lib/locale/locale-archive"
 
 # If not running interactively, do not do anything otherwise start tmux
 [[ $- != *i* ]] && return
 [[ -z "$TMUX" ]] && exec tmux
+

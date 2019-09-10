@@ -15,9 +15,10 @@
    ["#242424" "#e5786d" "#95e454" "#cae682" "#8ac6f2" "#333366" "#ccaa8f" "#f6f3e8"])
  '(auto-save-default nil)
  '(backup-directory-alist (quote (("." . "~/.emacs.d/.backup"))))
- '(coq-maths-menu-enable t)
+ '(coq-maths-menu-enable nil)
  '(coq-unicode-tokens-enable nil)
  '(custom-enabled-themes (quote (tsdh-dark)))
+ '(eshell-load-hook (quote ((lambda nil (setenv "PAGER" "")))))
  '(global-whitespace-mode t)
  '(global-whitespace-newline-mode t)
  '(indent-tabs-mode nil)
@@ -29,7 +30,7 @@
                  ("begin" "$1" "$" "$$" "\\(" "\\["))))
  '(package-selected-packages
    (quote
-    (company-coq proof-general org-download editorconfig pdf-tools tuareg sml-mode rmsbolt pandoc-mode evil-magit magit auctex lsp-ui lsp-haskell lsp-mode flycheck-haskell unicode-whitespace flycheck-mypy flycheck-pycheckers flycheck-pyflakes flycheck evil-org transpose-frame markdown-mode+ markdown-mode org ac-math auto-complete auto-complete-auctex color-theme-solarized evil haskell-mode nix-mode origami)))
+    (wc-mode company-coq proof-general org-download editorconfig pdf-tools tuareg sml-mode rmsbolt pandoc-mode evil-magit magit auctex lsp-ui lsp-haskell lsp-mode flycheck-haskell unicode-whitespace flycheck-mypy flycheck-pycheckers flycheck-pyflakes flycheck evil-org transpose-frame markdown-mode+ markdown-mode org ac-math auto-complete auto-complete-auctex color-theme-solarized evil haskell-mode nix-mode origami)))
  '(proof-three-window-enable nil)
  '(selection-coding-system (quote utf-8))
  '(tab-always-indent t)
@@ -75,5 +76,6 @@
 (tool-bar-mode -1) ;; no toolbar
 (scroll-bar-mode -1) ;; no scrollbar
 (editorconfig-mode 1) ;; enable editorconfig, for respecting editorconfig files
+(pdf-tools-install) ;; enable pdftools instead of docview
 (provide '.emacs)
 ;;; .emacs ends here

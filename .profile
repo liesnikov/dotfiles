@@ -20,5 +20,6 @@ fi
 if [ -d "$HOME/bin" ] ; then
     PATH="$HOME/.local/bin:$HOME/bin:$PATH"
 fi
+ . /home/buzzer/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true # by opam, ml package manager 
 
 if [ -e /home/buzzer/.nix-profile/etc/profile.d/nix.sh ]; then . /home/buzzer/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
