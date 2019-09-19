@@ -18,6 +18,8 @@
  '(coq-maths-menu-enable nil)
  '(coq-unicode-tokens-enable nil)
  '(custom-enabled-themes (quote (tsdh-dark)))
+ '(desktop-save-mode t)
+ '(dired-async-mode t)
  '(eshell-load-hook (quote ((lambda nil (setenv "PAGER" "")))))
  '(global-whitespace-mode t)
  '(global-whitespace-newline-mode t)
@@ -30,7 +32,7 @@
                  ("begin" "$1" "$" "$$" "\\(" "\\["))))
  '(package-selected-packages
    (quote
-    (wc-mode company-coq proof-general org-download editorconfig pdf-tools tuareg sml-mode rmsbolt pandoc-mode evil-magit magit auctex lsp-ui lsp-haskell lsp-mode flycheck-haskell unicode-whitespace flycheck-mypy flycheck-pycheckers flycheck-pyflakes flycheck evil-org transpose-frame markdown-mode+ markdown-mode org ac-math auto-complete auto-complete-auctex color-theme-solarized evil haskell-mode nix-mode origami)))
+    (merlin helm wc-mode company-coq proof-general org-download editorconfig pdf-tools tuareg sml-mode rmsbolt pandoc-mode evil-magit magit auctex lsp-ui lsp-haskell lsp-mode flycheck-haskell unicode-whitespace flycheck-mypy flycheck-pycheckers flycheck-pyflakes flycheck evil-org transpose-frame markdown-mode+ markdown-mode org ac-math auto-complete auto-complete-auctex color-theme-solarized evil haskell-mode nix-mode origami)))
  '(proof-three-window-enable nil)
  '(selection-coding-system (quote utf-8))
  '(tab-always-indent t)
