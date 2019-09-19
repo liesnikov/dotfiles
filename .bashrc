@@ -106,5 +106,4 @@ export LOCALE_ARCHIVE="/usr/lib/locale/locale-archive"
 
 # If not running interactively, do not do anything otherwise start tmux
 [[ $- != *i* ]] && return
-[[ -z "$TMUX" ]] && exec tmux
-
+[[ -z "$TMUX" ]] && [[ "$TERM" != "dumb" ]] && exec tmux
