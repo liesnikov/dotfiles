@@ -45,6 +45,10 @@
 
 ;;; Commentary:
 
+;;; Bindings:
+(global-set-key (kbd "C-x C-f") 'helm-find-files) ;; map C-x C-f to helm-find-files instead of default `find-file`
+(global-set-key (kbd "C-x C-b") 'ibuffer) ;; map C-x C-b to ibuffer instead of default `list-buffers`
+
 ;;; Code:
 (add-to-list 'auto-mode-alist '("\\.nix\\'" . nix-mode)) ;; activate nix-mode in .nix files
 (add-hook 'org-mode-hook 'org-indent-mode) ;; activate org-indent-mode on org-indent
@@ -77,5 +81,7 @@
 (scroll-bar-mode -1) ;; no scrollbar
 (editorconfig-mode 1) ;; enable editorconfig, for respecting editorconfig files
 (pdf-tools-install) ;; enable pdftools instead of docview
+(require 'helm-config) ;; enable helm config
+(helm-mode 1) ;; enable helm mode
 (provide '.emacs)
 ;;; .emacs ends here
