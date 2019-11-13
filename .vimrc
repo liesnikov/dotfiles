@@ -27,10 +27,10 @@ Plugin 'VundleVim/Vundle.vim'
 "Plugin 'ascenator/L9', {'name': 'newL9'}
 
 " plugin to put matching brackets/symbols/tags
-Plugin 'Raimondi/delimitMate'
+" Plugin 'Raimondi/delimitMate'
 
 " plugin to use git from vim
-Plugin 'tpope/vim-fugitive'
+" Plugin 'tpope/vim-fugitive'
 
 " code autoformatting
 Plugin 'Chiel92/vim-autoformat'
@@ -39,9 +39,9 @@ Plugin 'Chiel92/vim-autoformat'
 Plugin 'scrooloose/nerdcommenter'
 
 " tab completer
-Plugin 'Valloric/YouCompleteMe'
+" Plugin 'Valloric/YouCompleteMe'
 " config generator for YouCompleteMe
-Plugin 'rdnetto/YCM-Generator'
+" Plugin 'rdnetto/YCM-Generator'
 
 " colorscheme
 Plugin 'morhetz/gruvbox'
@@ -50,7 +50,7 @@ Plugin 'morhetz/gruvbox'
 Plugin 'nathanaelkane/vim-indent-guides'
 
 " syntax checker
-Plugin 'scrooloose/syntastic'
+" Plugin 'scrooloose/syntastic'
 
 " using % for more symbols/tags
 Plugin 'matchit.zip'
@@ -59,7 +59,7 @@ Plugin 'matchit.zip'
 Plugin 'vim-airline/vim-airline'
 
 " virtualenv manipulations
-Plugin 'jmcantrell/vim-virtualenv'
+" Plugin 'jmcantrell/vim-virtualenv'
 
 " installes windows-qwerty ukrainian keymap
 Plugin 'ukrainian-enhanced.vim'
@@ -186,7 +186,7 @@ au BufReadPost *
 " ===================================Visual=================================
 " colorscheme settings
 colorscheme gruvbox
-set background=light
+set background=dark
 let g:gruvbox_contrast_dark="hard"
 let g:gruvbox_contrast_light="hard"
 set t_Co=256
