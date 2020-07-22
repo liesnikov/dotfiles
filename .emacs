@@ -46,16 +46,33 @@
         (mode . idl-mode)
         (mode . lisp-mode)))))))
  '(indent-tabs-mode nil)
+ '(initial-buffer-choice t)
+ '(initial-scratch-message nil)
  '(keyboard-coding-system (quote utf-8-unix))
+ '(org-agenda-files nil)
  '(org-cycle-include-plain-lists (quote integrate))
  '(org-format-latex-options
    (quote
     (:foreground default :background default :scale 1.2 :html-foreground "Black" :html-background "Transparent" :html-scale 1.0 :matchers
                  ("begin" "$1" "$" "$$" "\\(" "\\["))))
+ '(org-modules
+   (quote
+    (org-bbdb org-bibtex org-docview org-eww org-gnus org-info org-irc org-mhe org-rmail org-tempo org-w3m)))
  '(package-selected-packages
    (quote
-    (ac-math auctex auto-complete auto-complete-auctex company-coq editorconfig flycheck flycheck-haskell flycheck-mypy flycheck-pycheckers flycheck-pyflakes gnu-elpa-keyring-update haskell-mode helm lsp-haskell lsp-mode lsp-ui magit markdown-mode markdown-mode+ merlin nix-mode org org-download pandoc pandoc-mode pdf-tools proof-general rmsbolt sml-mode transpose-frame tuareg unicode-whitespace wc-mode)))
+    (org-present color-moccur ibuffer-projectile helm-projectile projectile ac-math auctex auto-complete auto-complete-auctex company-coq editorconfig flycheck flycheck-haskell flycheck-mypy flycheck-pycheckers flycheck-pyflakes gnu-elpa-keyring-update haskell-mode helm lsp-haskell lsp-mode lsp-ui magit markdown-mode markdown-mode+ merlin nix-mode org org-download pandoc pandoc-mode pdf-tools proof-general rmsbolt sml-mode transpose-frame tuareg unicode-whitespace wc-mode)))
+ '(projectile-mode t nil (projectile))
+ '(proof-autosend-enable nil)
  '(proof-three-window-enable nil)
+ '(proof-toolbar-enable t)
+ '(safe-local-variable-values
+   (quote
+    ((eval
+      (lambda nil
+        (add-to-list
+         (quote auto-mode-alist)
+         (quote
+          ("\\.h\\'" . c++-mode))))))))
  '(selection-coding-system (quote utf-8))
  '(tab-always-indent t)
  '(tab-width 2))
@@ -78,6 +95,7 @@
 
 ;;; Bindings:
 (global-set-key (kbd "C-x C-f") 'helm-find-files) ;; map C-x C-f to helm-find-files instead of default `find-file`
+(global-set-key (kbd "C-x b") 'helm-mini) ;; map C-x C-f to helm-mini instead of default `switch-buffers`
 (global-set-key (kbd "C-x C-b") 'ibuffer) ;; map C-x C-b to ibuffer instead of default `list-buffers`
 (global-set-key (kbd "C-x g") 'magit-status) ;; magit open default window binding
 ;; new bindings to change widnow sizes
@@ -91,28 +109,61 @@
 ;; https://www.emacswiki.org/emacs/WindMove
 (when (fboundp 'windmove-default-keybindings)
   (windmove-default-keybindings))
+;; projectile binding
+
+
 
 ;;; Code:
 ;; agda2 mode, gets appended by `agda-mode setup`
 (load-file (let ((coding-system-for-read 'utf-8))
              (shell-command-to-string "agda-mode locate")))
 
-(add-to-list 'auto-mode-alist '("\\.nix\\'" . nix-mode)) ;; activate nix-mode in .nix files
-(add-to-list 'auto-mode-alist '("\\.ml4\\'" . tuareg-mode)) ;; activate tuareg (ocaml) mode in ml4 files (syntax extensions for coq)
-(add-hook 'org-mode-hook 'org-indent-mode) ;; activate org-indent-mode on org-indent
-(add-hook 'coq-mode-hook #'company-coq-mode) ;; company-coq is an addon on top of proofgeneral, enable it as we enter coq mode
+(add-hook
+ ;; from https://github.com/ocaml/merlin/wiki/emacs-from-scratch
+ 'tuareg-mode-hook 'merlin-mode)
+(add-to-list
+ ;; activate nix-mode in .nix files
+ 'auto-mode-alist '("\\.nix\\'" . nix-mode))
+(add-to-list
+ ;; activate tuareg (ocaml) mode in ml4 files
+ ;; (syntax extensions for coq)
+ 'auto-mode-alist '("\\.ml4\\'" . tuareg-mode))
+(add-hook
+  ;; activate org-indent-mode on org-indent
+ 'org-mode-hook 'org-indent-mode)
+(add-hook
+ ;; company-coq is an addon on top of proofgeneral,
+ ;; enable it as we enter coq mode
+ 'coq-mode-hook #'company-coq-mode)
+;;(add-to-list
+ ;; due to a weird bug, both tokens from PG and company-coq are used
+ ;; which results in "token undefined" errors when using PG ones
+;; 'coq-mode-hook (unicode-tokens-use-shortcuts nil))
+(add-hook 'ibuffer-hook
+    ;; ibuffer-projectile automatic sorting
+    (lambda ()
+      (ibuffer-projectile-set-filter-groups)
+      (unless (eq ibuffer-sorting-mode 'alphabetic)
+        (ibuffer-do-sort-by-alphabetic))))
+
 
 ;; Disable linum (line numbers) when entering pdf-tools mode.
 (defun my-inhibit-global-linum-mode ()
-  (add-hook 'after-change-major-mode-hook ; Counter-act `global-linum-mode'
-            (lambda () (linum-mode 0))
-            :append :local))
+  (add-hook
+   ;; Counter-act `global-linum-mode'
+   'after-change-major-mode-hook
+   (lambda () (linum-mode 0))
+   :append :local))
 (add-hook 'pdf-view-mode-hook 'my-inhibit-global-linum-mode)
 
 
 (setq inhibit-startup-screen t) ;; remove splash screen on start
 (setq scroll-step            1  ;; number of lines screen shifts when scrooling
       scroll-conservatively  10000)
+
+;; ## added by OPAM user-setup for emacs / base ## 56ab50dc8996d2bb95e7856a6eddb17b ## you can edit, but keep this line
+(require 'opam-user-setup "~/.emacs.d/opam-user-setup.el")
+;; ## end of OPAM user-setup addition for emacs / base ## keep this line
 
 (unicode-whitespace-setup 'subdued-faces)
 (global-flycheck-mode)
@@ -127,5 +178,8 @@
 (pdf-tools-install) ;; enable pdftools instead of docview
 (require 'helm-config) ;; enable helm config
 (helm-mode 1) ;; enable helm mode
+(projectile-mode +1) ;; enable projectile
+(define-key projectile-mode-map (kbd "C-x p") 'projectile-command-map)
+
 (provide '.emacs)
 ;;; .emacs ends here

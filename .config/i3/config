@@ -8,7 +8,6 @@
 # i3 config file (v4)
 #
 # Please see https://i3wm.org/docs/userguide.html for a complete reference!
-
 set $mod Mod4
 
 # Font for window titles. Will also be used by the bar unless a different font
@@ -189,7 +188,7 @@ exec --no-startup-id kdeconnect-indicator
 exec --no-startup-id kbdd
 exec --no-startup-id xfce4-power-manager
 exec --no-startup-id nitrogen --restore
-exec --no-startup-id setxkbmap "us,ru,ua" -variant "altgr-intl,," -option "grp:shifts_toggle;ctrl:nocaps"
+exec --no-startup-id setxkbmap "us,ua" -variant "altgr-intl,," -option "grp:shifts_toggle;ctrl:nocaps"
 exec --no-startup-id xset r rate 200 30
 exec --no-startup-id nm-applet
 exec --no-startup-id /home/buzzer/.config/autostart/custom-settings.desktop

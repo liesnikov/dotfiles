@@ -86,9 +86,9 @@ fi
 export PS1='\[\e[1m\]\W\[\e[0m\] ⊢ '
 
 # exercism
-if [ -f ~/.config/exercism/exercism_completion.bash ]; then
-  source ~/.config/exercism/exercism_completion.bash
-fi
+#if [ -f ~/.config/exercism/exercism_completion.bash ]; then
+#  source ~/.config/exercism/exercism_completion.bash
+#fi
 
 # virtualenv for python wrapper
 export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
