@@ -15,15 +15,19 @@
    ["#242424" "#e5786d" "#95e454" "#cae682" "#8ac6f2" "#333366" "#ccaa8f" "#f6f3e8"])
  '(auto-save-default nil)
  '(backup-directory-alist (quote (("." . "~/.emacs.d/.backup"))))
+ '(calendar-week-start-day 1)
+ '(coq-auto-adapt-printing-width t)
  '(coq-compile-auto-save (quote ask-coq))
  '(coq-compile-before-require nil)
  '(coq-compile-parallel-in-background t)
  '(coq-maths-menu-enable nil)
  '(coq-unicode-tokens-enable nil)
- '(custom-enabled-themes (quote (wombat)))
+ '(custom-enabled-themes (quote (tsdh-dark)))
  '(desktop-save-mode t)
  '(dired-async-mode t)
+ '(dired-listing-switches "-al")
  '(eshell-load-hook (quote ((lambda nil (setenv "PAGER" ""))))) ;; for eshell to dump outputs in terminal instead of starting pagers
+ '(gdb-many-windows t)
  '(global-whitespace-mode t)
  '(global-whitespace-newline-mode t)
  '(helm-completion-style (quote emacs))
@@ -51,6 +55,7 @@
  '(keyboard-coding-system (quote utf-8-unix))
  '(org-agenda-files nil)
  '(org-cycle-include-plain-lists (quote integrate))
+ '(org-export-backends (quote (ascii beamer html icalendar latex md odt)))
  '(org-format-latex-options
    (quote
     (:foreground default :background default :scale 1.2 :html-foreground "Black" :html-background "Transparent" :html-scale 1.0 :matchers
@@ -145,6 +150,19 @@
       (ibuffer-projectile-set-filter-groups)
       (unless (eq ibuffer-sorting-mode 'alphabetic)
         (ibuffer-do-sort-by-alphabetic))))
+
+;; detect xfce4 theme and switch emacs theme accordingly
+(defun set-system-theme ()
+  (interactive)
+  (let ((command "xfconf-query -c xsettings -p /Net/ThemeName")
+        (expected-value "Arc-Dark\n"))
+    (if
+        (string= (shell-command-to-string command)
+                 expected-value)
+      (load-theme 'tsdh-dark t)
+      (load-theme 'tsdh-light t))))
+(set-system-theme)
+
 
 
 ;; Disable linum (line numbers) when entering pdf-tools mode.
