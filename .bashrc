@@ -93,7 +93,7 @@ export PS1='\[\e[1m\]\W\[\e[0m\] ⊢ '
 # virtualenv for python wrapper
 export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
 export WORKON_HOME=/home/buzzer/.virtualenvs
-source ~/.local/bin/virtualenvwrapper.sh
+source ~/.local/bin/virtualenvwrapper_lazy.sh
 export PIP_VIRTUALENV_BASE=/home/buzzer/.virtualenvs
 
 # set vi mode for navigating and stuff
