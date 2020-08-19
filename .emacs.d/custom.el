@@ -28,6 +28,7 @@
  '(ibuffer-saved-filter-groups nil)
  '(ibuffer-saved-filters nil)
  '(indent-tabs-mode nil)
+ '(inhibit-startup-screen t)
  '(initial-buffer-choice t)
  '(initial-scratch-message nil)
  '(keyboard-coding-system (quote utf-8-unix))
@@ -52,8 +53,9 @@
    (quote
     ((eval let
            ((idris2-path
-             (replace-regexp-in-string "\n\\'" ""
-                                       (shell-command-to-string "which idris2"))))
+             (replace-regexp-in-string "
+\\'" ""
+(shell-command-to-string "which idris2"))))
            (unless
                (string= "" idris2-path)
              (setq idris-interpreter-path idris2-path)))
@@ -63,6 +65,8 @@
          (quote auto-mode-alist)
          (quote
           ("\\.h\\'" . c++-mode))))))))
+ '(scroll-conservatively 10000)
+ '(scroll-step 1)
  '(selection-coding-system (quote utf-8))
  '(tab-always-indent t)
  '(tab-width 2))

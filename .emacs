@@ -109,8 +109,6 @@
 ;; https://www.emacswiki.org/emacs/WindMove
 (when (fboundp 'windmove-default-keybindings)
   (windmove-default-keybindings))
-;; projectile binding
-
 
 
 ;;; Code:
@@ -159,7 +157,6 @@
 (set-system-theme)
 
 
-
 ;; Disable linum (line numbers) when entering pdf-tools mode.
 (defun my-inhibit-global-linum-mode ()
   (add-hook
@@ -168,11 +165,6 @@
    (lambda () (linum-mode 0))
    :append :local))
 (add-hook 'pdf-view-mode-hook 'my-inhibit-global-linum-mode)
-
-
-(setq inhibit-startup-screen t) ;; remove splash screen on start
-(setq scroll-step            1  ;; number of lines screen shifts when scrooling
-      scroll-conservatively  10000)
 
 ;; ## added by OPAM user-setup for emacs / base ## 56ab50dc8996d2bb95e7856a6eddb17b ## you can edit, but keep this line
 (require 'opam-user-setup "~/.emacs.d/opam-user-setup.el")
