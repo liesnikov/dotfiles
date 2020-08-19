@@ -3,6 +3,82 @@
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 (package-initialize)
 
+(eval-when-compile
+  ;; Following line is not needed if use-package.el is in ~/.emacs.d
+  (add-to-list 'load-path "/home/buzzer/.emacs.d/elpa/use-package-20200721.2156")
+  (require 'use-package))
+
+;;; Use-package
+;; General goodies
+(use-package auto-complete)
+(use-package auto-complete-auctex)
+
+(use-package color-moccur)
+(use-package transpose-frame)
+
+;; because elpa keys are expiring sometimes
+(use-package gnu-elpa-keyring-update)
+
+;; helm is buffer search
+(use-package helm)
+(use-package helm-projectile)
+
+;; projectile organizes buffers in projects
+(use-package projectile)
+(use-package ibuffer-projectile)
+
+;; view pdfs in emacs
+(use-package pdf-tools)
+
+;; highlight all whitespaces
+(use-package unicode-whitespace)
+
+;; Flycheck
+(use-package flycheck)
+(use-package flycheck-haskell)
+(use-package flycheck-mypy)
+(use-package flycheck-pyflakes)
+
+;; Language server protocol
+(use-package lsp-haskell)
+(use-package lsp-mode)
+(use-package lsp-ui)
+
+;; word processor and markup
+(use-package wc-mode)
+
+(use-package auctex)
+(use-package company-auctex)
+(use-package markdown-mode)
+(use-package markdown-mode+)
+(use-package pandoc)
+(use-package pandoc-mode)
+
+(use-package org)
+(use-package org-download)
+(use-package org-present)
+
+;; Programming
+(use-package magit)
+(use-package editorconfig)
+
+;; ocaml
+(use-package tuareg)
+(use-package sml-mode)
+(use-package merlin)
+
+;; haskell
+(use-package haskell-mode)
+
+;; nix
+(use-package nix-mode)
+
+;; proof assistants
+(use-package idris-mode)
+
+(use-package company-coq)
+(use-package proof-general)
+
 ;;; Custom:
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
