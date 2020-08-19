@@ -20,7 +20,10 @@
 (use-package gnu-elpa-keyring-update)
 
 ;; helm is buffer search
-(use-package helm)
+(use-package helm
+  :custom
+    '(helm-mode t)
+  )
 (use-package helm-projectile)
 
 ;; projectile organizes buffers in projects
@@ -60,7 +63,10 @@
 
 ;; Programming
 (use-package magit)
-(use-package editorconfig)
+(use-package editorconfig
+  :custom
+  (editorconfig-mode t)
+  )
 
 ;; ocaml
 (use-package tuareg)
@@ -113,6 +119,8 @@
 ;; https://www.emacswiki.org/emacs/WindMove
 (when (fboundp 'windmove-default-keybindings)
   (windmove-default-keybindings))
+
+(define-key projectile-mode-map (kbd "C-x p") 'projectile-command-map)
 
 
 ;;; Code:
@@ -178,17 +186,8 @@
 (global-flycheck-mode)
 (ac-config-default)
 (global-auto-complete-mode t) ;; doesn't really work, enables auto-fill-mode globally
-(menu-bar-mode -1) ;; no menubar (the thing w/ icons)
-(show-paren-mode 1)
-(global-linum-mode 1) ;; enable global linum (line numbers) mode
-(tool-bar-mode -1) ;; no toolbar
-(scroll-bar-mode -1) ;; no scrollbar
-(editorconfig-mode 1) ;; enable editorconfig, for respecting editorconfig files
 (pdf-tools-install) ;; enable pdftools instead of docview
 (require 'helm-config) ;; enable helm config
-(helm-mode 1) ;; enable helm mode
-(projectile-mode +1) ;; enable projectile
-(define-key projectile-mode-map (kbd "C-x p") 'projectile-command-map)
 
 (provide '.emacs)
 ;;; .emacs ends here

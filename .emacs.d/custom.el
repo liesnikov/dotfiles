@@ -20,8 +20,10 @@
  '(desktop-save-mode t)
  '(dired-async-mode t)
  '(dired-listing-switches "-al")
+ '(editorconfig-mode t)
  '(eshell-load-hook (quote ((lambda nil (setenv "PAGER" "")))))
  '(gdb-many-windows t)
+ '(global-linum-mode t)
  '(global-whitespace-mode t)
  '(global-whitespace-newline-mode t)
  '(helm-completion-style (quote emacs))
@@ -32,6 +34,7 @@
  '(initial-buffer-choice t)
  '(initial-scratch-message nil)
  '(keyboard-coding-system (quote utf-8-unix))
+ '(menu-bar-mode nil)
  '(org-agenda-files nil)
  '(org-cycle-include-plain-lists (quote integrate))
  '(org-export-backends (quote (ascii beamer html icalendar latex md odt)))
@@ -65,11 +68,14 @@
          (quote auto-mode-alist)
          (quote
           ("\\.h\\'" . c++-mode))))))))
+ '(scroll-bar-mode nil)
  '(scroll-conservatively 10000)
  '(scroll-step 1)
  '(selection-coding-system (quote utf-8))
+ '(show-paren-mode t)
  '(tab-always-indent t)
- '(tab-width 2))
+ '(tab-width 2)
+ '(tool-bar-mode nil))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
