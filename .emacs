@@ -94,10 +94,14 @@
 
 
 ;;; Bindings:
-(global-set-key (kbd "C-x C-f") 'helm-find-files) ;; map C-x C-f to helm-find-files instead of default `find-file`
-(global-set-key (kbd "C-x b") 'helm-mini) ;; map C-x C-f to helm-mini instead of default `switch-buffers`
-(global-set-key (kbd "C-x C-b") 'ibuffer) ;; map C-x C-b to ibuffer instead of default `list-buffers`
-(global-set-key (kbd "C-x g") 'magit-status) ;; magit open default window binding
+;; map C-x C-f to helm-find-files instead of default `find-file`
+(global-set-key (kbd "C-x C-f") 'helm-find-files)
+;; map C-x C-f to helm-mini instead of default `switch-buffers`
+(global-set-key (kbd "C-x b") 'helm-mini)
+;; map C-x C-b to ibuffer instead of default `list-buffers`
+(global-set-key (kbd "C-x C-b") 'ibuffer)
+;; magit open default window binding
+(global-set-key (kbd "C-x g") 'magit-status)
 ;; new bindings to change widnow sizes
 ;; similar bindings to windmove (see below), which has S-<arrow> as moving binding
 (global-set-key (kbd "S-C-<left>") 'shrink-window-horizontally)
