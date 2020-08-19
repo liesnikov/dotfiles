@@ -79,91 +79,10 @@
 (use-package company-coq)
 (use-package proof-general)
 
-;;; Custom:
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(ansi-color-faces-vector
-   [default default default italic underline success warning error])
- '(ansi-color-names-vector
-   ["#242424" "#e5786d" "#95e454" "#cae682" "#8ac6f2" "#333366" "#ccaa8f" "#f6f3e8"])
- '(auto-save-default nil)
- '(backup-directory-alist (quote (("." . "~/.emacs.d/.backup"))))
- '(calendar-week-start-day 1)
- '(coq-auto-adapt-printing-width t)
- '(coq-compile-auto-save (quote ask-coq))
- '(coq-compile-before-require nil)
- '(coq-compile-parallel-in-background t)
- '(coq-maths-menu-enable nil)
- '(coq-unicode-tokens-enable nil)
- '(custom-enabled-themes (quote (tsdh-dark)))
- '(desktop-save-mode t)
- '(dired-async-mode t)
- '(dired-listing-switches "-al")
- '(eshell-load-hook (quote ((lambda nil (setenv "PAGER" ""))))) ;; for eshell to dump outputs in terminal instead of starting pagers
- '(gdb-many-windows t)
- '(global-whitespace-mode t)
- '(global-whitespace-newline-mode t)
- '(helm-completion-style (quote emacs))
- '(ibuffer-saved-filter-groups nil)
- '(ibuffer-saved-filters
-   (quote
-    (("gnus"
-      ((or
-        (mode . message-mode)
-        (mode . mail-mode)
-        (mode . gnus-group-mode)
-        (mode . gnus-summary-mode)
-        (mode . gnus-article-mode))))
-     ("programming"
-      ((or
-        (mode . emacs-lisp-mode)
-        (mode . cperl-mode)
-        (mode . c-mode)
-        (mode . java-mode)
-        (mode . idl-mode)
-        (mode . lisp-mode)))))))
- '(indent-tabs-mode nil)
- '(initial-buffer-choice t)
- '(initial-scratch-message nil)
- '(keyboard-coding-system (quote utf-8-unix))
- '(org-agenda-files nil)
- '(org-cycle-include-plain-lists (quote integrate))
- '(org-export-backends (quote (ascii beamer html icalendar latex md odt)))
- '(org-format-latex-options
-   (quote
-    (:foreground default :background default :scale 1.2 :html-foreground "Black" :html-background "Transparent" :html-scale 1.0 :matchers
-                 ("begin" "$1" "$" "$$" "\\(" "\\["))))
- '(org-modules
-   (quote
-    (org-bbdb org-bibtex org-docview org-eww org-gnus org-info org-irc org-mhe org-rmail org-tempo org-w3m)))
- '(package-selected-packages
-   (quote
-    (org-present color-moccur ibuffer-projectile helm-projectile projectile ac-math auctex auto-complete auto-complete-auctex company-coq editorconfig flycheck flycheck-haskell flycheck-mypy flycheck-pycheckers flycheck-pyflakes gnu-elpa-keyring-update haskell-mode helm lsp-haskell lsp-mode lsp-ui magit markdown-mode markdown-mode+ merlin nix-mode org org-download pandoc pandoc-mode pdf-tools proof-general rmsbolt sml-mode transpose-frame tuareg unicode-whitespace wc-mode)))
- '(projectile-mode t nil (projectile))
- '(proof-autosend-enable nil)
- '(proof-three-window-enable nil)
- '(proof-toolbar-enable t)
- '(safe-local-variable-values
-   (quote
-    ((eval
-      (lambda nil
-        (add-to-list
-         (quote auto-mode-alist)
-         (quote
-          ("\\.h\\'" . c++-mode))))))))
- '(selection-coding-system (quote utf-8))
- '(tab-always-indent t)
- '(tab-width 2))
 
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:height 130 :width condensed :foundry "ADBO" :family "Source Code Pro")))))
+;;; Custom:
+(setq custom-file "~/.emacs.d/custom.el")
+(load custom-file)
 
 ;;; Commentary:
 
