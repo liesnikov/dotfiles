@@ -22,12 +22,14 @@
 ;; helm is buffer search
 (use-package helm
   :custom
-    '(helm-mode t)
-  )
+  (helm-mode t)
+  (helm-completion-style (quote emacs)))
 (use-package helm-projectile)
 
 ;; projectile organizes buffers in projects
-(use-package projectile)
+(use-package projectile
+  :custom
+  (projectile-mode t nil (projectile)))
 (use-package ibuffer-projectile)
 
 ;; view pdfs in emacs
@@ -57,7 +59,19 @@
 (use-package pandoc)
 (use-package pandoc-mode)
 
-(use-package org)
+(use-package org
+  :custom
+  (org-agenda-files nil)
+  (org-cycle-include-plain-lists (quote integrate))
+  (org-export-backends (quote (ascii beamer html icalendar latex md odt)))
+  (org-format-latex-options
+   (quote
+    (:foreground default :background default :scale 1.2 :html-foreground "Black" :html-background "Transparent" :html-scale 1.0 :matchers
+                 ("begin" "$1" "$" "$$" "\\(" "\\["))))
+  (org-modules
+   (quote
+    (org-bbdb org-bibtex org-docview org-eww org-gnus
+     org-info org-irc org-mhe org-rmail org-tempo org-w3m))))
 (use-package org-download)
 (use-package org-present)
 
@@ -65,8 +79,7 @@
 (use-package magit)
 (use-package editorconfig
   :custom
-  (editorconfig-mode t)
-  )
+  (editorconfig-mode t))
 
 ;; ocaml
 (use-package tuareg)
@@ -83,8 +96,17 @@
 (use-package idris-mode)
 
 (use-package company-coq)
-(use-package proof-general)
-
+(use-package proof-general
+  :custom
+ (coq-auto-adapt-printing-width t)
+ (coq-compile-auto-save (quote ask-coq))
+ (coq-compile-before-require nil)
+ (coq-compile-parallel-in-background t)
+ (coq-maths-menu-enable nil)
+ (coq-unicode-tokens-enable nil)
+ (proof-autosend-enable nil)
+ (proof-three-window-enable nil)
+ (proof-toolbar-enable t))
 
 ;;; Custom:
 (setq custom-file "~/.emacs.d/custom.el")

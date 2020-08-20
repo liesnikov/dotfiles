@@ -10,23 +10,15 @@
  '(auto-save-default nil)
  '(backup-directory-alist (quote (("." . "~/.emacs.d/.backup"))))
  '(calendar-week-start-day 1)
- '(coq-auto-adapt-printing-width t)
- '(coq-compile-auto-save (quote ask-coq))
- '(coq-compile-before-require nil)
- '(coq-compile-parallel-in-background t)
- '(coq-maths-menu-enable nil)
- '(coq-unicode-tokens-enable nil)
  '(custom-enabled-themes (quote (tsdh-dark)))
  '(desktop-save-mode t)
  '(dired-async-mode t)
  '(dired-listing-switches "-al")
- '(editorconfig-mode t)
  '(eshell-load-hook (quote ((lambda nil (setenv "PAGER" "")))))
  '(gdb-many-windows t)
  '(global-linum-mode t)
  '(global-whitespace-mode t)
  '(global-whitespace-newline-mode t)
- '(helm-completion-style (quote emacs))
  '(ibuffer-saved-filter-groups nil)
  '(ibuffer-saved-filters nil)
  '(indent-tabs-mode nil)
@@ -35,23 +27,9 @@
  '(initial-scratch-message nil)
  '(keyboard-coding-system (quote utf-8-unix))
  '(menu-bar-mode nil)
- '(org-agenda-files nil)
- '(org-cycle-include-plain-lists (quote integrate))
- '(org-export-backends (quote (ascii beamer html icalendar latex md odt)))
- '(org-format-latex-options
-   (quote
-    (:foreground default :background default :scale 1.2 :html-foreground "Black" :html-background "Transparent" :html-scale 1.0 :matchers
-                 ("begin" "$1" "$" "$$" "\\(" "\\["))))
- '(org-modules
-   (quote
-    (org-bbdb org-bibtex org-docview org-eww org-gnus org-info org-irc org-mhe org-rmail org-tempo org-w3m)))
  '(package-selected-packages
    (quote
     (company-auctex editorconfig company-coq ibuffer-projectile use-package idris-mode org-present color-moccur helm-projectile projectile ac-math auctex auto-complete auto-complete-auctex flycheck flycheck-haskell flycheck-mypy flycheck-pyflakes gnu-elpa-keyring-update haskell-mode helm lsp-haskell lsp-mode lsp-ui magit markdown-mode markdown-mode+ merlin nix-mode org org-download pandoc pandoc-mode pdf-tools proof-general sml-mode transpose-frame tuareg unicode-whitespace wc-mode)))
- '(projectile-mode t nil (projectile))
- '(proof-autosend-enable nil)
- '(proof-three-window-enable nil)
- '(proof-toolbar-enable t)
  '(safe-local-variable-values
    (quote
     ((eval let
