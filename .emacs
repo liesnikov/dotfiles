@@ -82,7 +82,10 @@
   (editorconfig-mode t))
 
 ;; ocaml
-(use-package tuareg)
+(use-package tuareg
+  ;; activate tuareg (ocaml) mode in ml4 files
+   ;; (syntax extensions for coq)
+  :mode "\\.ml4\\'")
 (use-package sml-mode)
 (use-package merlin)
 
@@ -90,7 +93,9 @@
 (use-package haskell-mode)
 
 ;; nix
-(use-package nix-mode)
+(use-package nix-mode
+  :mode "\\.nix\\'" ;; activate nix-mode in .nix files
+  )
 
 ;; proof assistants
 (use-package idris-mode)
@@ -153,13 +158,7 @@
 (add-hook
  ;; from https://github.com/ocaml/merlin/wiki/emacs-from-scratch
  'tuareg-mode-hook 'merlin-mode)
-(add-to-list
- ;; activate nix-mode in .nix files
- 'auto-mode-alist '("\\.nix\\'" . nix-mode))
-(add-to-list
- ;; activate tuareg (ocaml) mode in ml4 files
- ;; (syntax extensions for coq)
- 'auto-mode-alist '("\\.ml4\\'" . tuareg-mode))
+
 (add-hook
   ;; activate org-indent-mode on org-indent
  'org-mode-hook 'org-indent-mode)
