@@ -1,6 +1,8 @@
 ;;; package -- summary
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+(add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
+
 (package-initialize)
 
 (eval-when-compile
@@ -23,7 +25,7 @@
 (use-package helm
   :custom
   (helm-mode t)
-  (helm-completion-style (quote emacs)))
+  (helm-completion-style (quote helm-fuzzy)))
 (use-package helm-projectile)
 
 ;; projectile organizes buffers in projects
@@ -52,7 +54,10 @@
 ;; word processor and markup
 (use-package wc-mode)
 
-(use-package auctex)
+;; loading auctex directly doesn't work for some reason
+;; https://github.com/jwiegley/use-package/issues/379
+(use-package tex-mode
+  :ensure auctex)
 (use-package company-auctex)
 (use-package markdown-mode)
 (use-package markdown-mode+)
@@ -84,7 +89,7 @@
 ;; ocaml
 (use-package tuareg
   ;; activate tuareg (ocaml) mode in ml4 files
-   ;; (syntax extensions for coq)
+  ;; (syntax extensions for coq)
   :mode "\\.ml4\\'")
 (use-package sml-mode)
 (use-package merlin)
@@ -181,12 +186,14 @@
 (defun set-system-theme ()
   (interactive)
   (let ((command "xfconf-query -c xsettings -p /Net/ThemeName")
-        (expected-value "Arc-Dark\n"))
+        (expected-value "Arc-Dark\n")
+        (dark-theme 'wombat)
+        (light-theme 'tsdh-light))
     (if
         (string= (shell-command-to-string command)
                  expected-value)
-      (load-theme 'tsdh-dark t)
-      (load-theme 'tsdh-light t))))
+      (load-theme dark-theme t)
+      (load-theme light-theme t))))
 (set-system-theme)
 
 

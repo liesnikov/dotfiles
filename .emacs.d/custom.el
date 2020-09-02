@@ -10,7 +10,7 @@
  '(auto-save-default nil)
  '(backup-directory-alist (quote (("." . "~/.emacs.d/.backup"))))
  '(calendar-week-start-day 1)
- '(custom-enabled-themes (quote (tsdh-dark)))
+ '(custom-enabled-themes (quote (tsdh-light)))
  '(desktop-save-mode t)
  '(dired-async-mode t)
  '(dired-listing-switches "-al")

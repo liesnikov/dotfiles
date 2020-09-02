@@ -11,6 +11,6 @@ done
 sleep 1
 xset r rate 200 30
 # map caps to addtitional ctrl
-setxkbmap "us,ua" -variant "altgr-intl,," -option "grp:shifts_toggle;ctrl:nocaps"
+setxkbmap "us,ua" -variant "altgr-intl,," -option "ctrl:nocaps"
 
 #eval `ssh-agent -s`
