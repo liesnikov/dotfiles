@@ -9,6 +9,7 @@ do
 done
 
 sleep 1
+kbdd
 xset r rate 200 30
 # map caps to addtitional ctrl
 setxkbmap "us,ua" -variant "altgr-intl,," -option "ctrl:nocaps"
