@@ -105,7 +105,6 @@
 ;; proof assistants
 (use-package idris-mode)
 
-(use-package company-coq)
 (use-package proof-general
   :custom
  (coq-auto-adapt-printing-width t)
@@ -117,6 +116,7 @@
  (proof-autosend-enable nil)
  (proof-three-window-enable nil)
  (proof-toolbar-enable t))
+(use-package company-coq)
 
 ;;; Custom:
 (setq custom-file "~/.emacs.d/custom.el")
@@ -192,8 +192,10 @@
     (if
         (string= (shell-command-to-string command)
                  expected-value)
-      (load-theme dark-theme t)
-      (load-theme light-theme t))))
+        (progn (load-theme dark-theme t)
+               (disable-theme light-theme))
+        (progn (load-theme light-theme t)
+               (disable-theme dark-theme)))))
 (set-system-theme)
 
 
