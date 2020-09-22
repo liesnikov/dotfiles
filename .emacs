@@ -14,6 +14,7 @@
 ;; General goodies
 (use-package auto-complete)
 (use-package auto-complete-auctex)
+(use-package ac-math)
 
 (use-package color-moccur)
 (use-package transpose-frame)
@@ -47,9 +48,9 @@
 (use-package flycheck-pyflakes)
 
 ;; Language server protocol
-(use-package lsp-haskell)
 (use-package lsp-mode)
 (use-package lsp-ui)
+(use-package lsp-haskell)
 
 ;; word processor and markup
 (use-package wc-mode)
@@ -59,8 +60,10 @@
 (use-package tex-mode
   :ensure auctex)
 (use-package company-auctex)
+
 (use-package markdown-mode)
 (use-package markdown-mode+)
+
 (use-package pandoc)
 (use-package pandoc-mode)
 
@@ -91,7 +94,6 @@
   ;; activate tuareg (ocaml) mode in ml4 files
   ;; (syntax extensions for coq)
   :mode "\\.ml4\\'")
-(use-package sml-mode)
 (use-package merlin)
 
 ;; haskell
@@ -99,23 +101,23 @@
 
 ;; nix
 (use-package nix-mode
-  :mode "\\.nix\\'" ;; activate nix-mode in .nix files
-  )
+  ;; activate nix-mode in .nix files
+  :mode "\\.nix\\'")
 
 ;; proof assistants
 (use-package idris-mode)
 
 (use-package proof-general
   :custom
- (coq-auto-adapt-printing-width t)
- (coq-compile-auto-save (quote ask-coq))
- (coq-compile-before-require nil)
- (coq-compile-parallel-in-background t)
- (coq-maths-menu-enable nil)
- (coq-unicode-tokens-enable nil)
- (proof-autosend-enable nil)
- (proof-three-window-enable nil)
- (proof-toolbar-enable t))
+    (coq-auto-adapt-printing-width t)
+    (coq-compile-auto-save (quote ask-coq))
+    (coq-compile-before-require nil)
+    (coq-compile-parallel-in-background t)
+    (coq-maths-menu-enable nil)
+    (coq-unicode-tokens-enable nil)
+    (proof-autosend-enable nil)
+    (proof-three-window-enable nil)
+    (proof-toolbar-enable t))
 (use-package company-coq)
 
 ;;; Custom:
@@ -182,25 +184,25 @@
       (unless (eq ibuffer-sorting-mode 'alphabetic)
         (ibuffer-do-sort-by-alphabetic))))
 
-;; detect xfce4 theme and switch emacs theme accordingly
 (defun set-system-theme ()
+  "Detect xfce4 system theme and switch Emacs theme accordingly."
   (interactive)
   (let ((command "xfconf-query -c xsettings -p /Net/ThemeName")
-        (expected-value "Arc-Dark\n")
-        (dark-theme 'wombat)
+        (expected-value "Arc\n")
+        (dark-theme 'tsdh-dark)
         (light-theme 'tsdh-light))
     (if
         (string= (shell-command-to-string command)
                  expected-value)
-        (progn (load-theme dark-theme t)
-               (disable-theme light-theme))
         (progn (load-theme light-theme t)
-               (disable-theme dark-theme)))))
+               (disable-theme dark-theme))
+        (progn (load-theme dark-theme t)
+               (disable-theme light-theme)))))
 (set-system-theme)
 
 
-;; Disable linum (line numbers) when entering pdf-tools mode.
 (defun my-inhibit-global-linum-mode ()
+  "Disable linum (line numbers) when entering pdf-tools mode."
   (add-hook
    ;; Counter-act `global-linum-mode'
    'after-change-major-mode-hook

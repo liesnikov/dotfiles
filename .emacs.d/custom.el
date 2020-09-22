@@ -10,7 +10,8 @@
  '(auto-save-default nil)
  '(backup-directory-alist (quote (("." . "~/.emacs.d/.backup"))))
  '(calendar-week-start-day 1)
- '(custom-enabled-themes (quote (tsdh-light)))
+ '(custom-enabled-themes (quote (tsdh-dark)))
+ '(custom-theme-allow-multiple-selections nil)
  '(desktop-save-mode t)
  '(dired-async-mode t)
  '(dired-listing-switches "-al")
@@ -29,7 +30,7 @@
  '(menu-bar-mode nil)
  '(package-selected-packages
    (quote
-    (company-auctex editorconfig company-coq ibuffer-projectile use-package idris-mode org-present color-moccur helm-projectile projectile ac-math auctex auto-complete auto-complete-auctex flycheck flycheck-haskell flycheck-mypy flycheck-pyflakes gnu-elpa-keyring-update haskell-mode helm lsp-haskell lsp-mode lsp-ui magit markdown-mode markdown-mode+ merlin nix-mode org org-download pandoc pandoc-mode pdf-tools proof-general sml-mode transpose-frame tuareg unicode-whitespace wc-mode)))
+    (company-auctex editorconfig company-coq ibuffer-projectile use-package idris-mode org-present color-moccur helm-projectile projectile ac-math auctex auto-complete auto-complete-auctex flycheck flycheck-haskell flycheck-mypy flycheck-pyflakes gnu-elpa-keyring-update haskell-mode helm lsp-haskell lsp-mode lsp-ui magit markdown-mode markdown-mode+ merlin nix-mode org org-download pandoc pandoc-mode pdf-tools proof-general transpose-frame tuareg unicode-whitespace wc-mode)))
  '(safe-local-variable-values
    (quote
     ((eval let
