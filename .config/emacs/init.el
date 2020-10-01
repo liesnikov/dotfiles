@@ -5,6 +5,10 @@
 (require 'use-package)
 
 ;;; Use-package
+;; The :ensure-system-package keyword allows you to ensure system binaries exist alongside your package declarations.
+(use-package use-package-ensure-system-package
+  :ensure t)
+
 ;; General goodies
 (use-package auto-complete
   :config
@@ -28,12 +32,15 @@
 ;; projectile organizes buffers in projects
 (use-package projectile
   :bind (:map projectile-mode-map
-         ("C-x p". projectile-command-map))
+         ("C-x p". projectile-command-map)
+         ("C-x p f" . helm-projectile-find-file))
   :custom
-  (projectile-mode t nil (projectile)))
-(use-package ibuffer-projectile)
+  (projectile-mode t nil (projectile))
+  :config
+  (use-package ibuffer-projectile))
 
-(use-package rg)
+(use-package rg
+  :ensure-system-package (rg . ripgrep))
 
 ;; helm is an autocompletion framework
 (use-package helm
@@ -47,7 +54,7 @@
          ("<tab>" . helm-execute-persistent-action)
          ("M-x" . helm-select-action)
          :map helm-find-files-map
-         ("<tab>" . helm-ff-TAB)
+         ("<tab>" . helm-execute-persistent-action)
          ("M-x" . helm-select-action))
   :config
   (helm-mode 1)
