@@ -1,7 +1,7 @@
 ;;; package -- summary
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
-(add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
+;;(add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
 
 (package-initialize)
 
@@ -82,8 +82,7 @@
   (global-flycheck-mode)
   (use-package flycheck-haskell)
   (use-package flycheck-mypy)
-  (use-package flycheck-pyflakes)
-  )
+  (use-package flycheck-pyflakes))
 
 ;; Language server protocol
 (use-package lsp-mode
@@ -172,7 +171,7 @@
 (use-package company-coq)
 
 ;;; Custom:
-(setq custom-file "~/.emacs.d/custom.el")
+(setq custom-file "~/.config/emacs/custom.el")
 (load custom-file)
 
 ;;; Commentary:
@@ -253,7 +252,7 @@
 (add-hook 'pdf-view-mode-hook 'my-inhibit-global-linum-mode)
 
 ;; ## added by OPAM user-setup for emacs / base ## 56ab50dc8996d2bb95e7856a6eddb17b ## you can edit, but keep this line
-(require 'opam-user-setup "~/.emacs.d/opam-user-setup.el")
+(require 'opam-user-setup "~/.config/emacs/opam-user-setup.el")
 ;; ## end of OPAM user-setup addition for emacs / base ## keep this line
 
 (provide '.emacs)
