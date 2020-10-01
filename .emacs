@@ -12,45 +12,84 @@
 
 ;;; Use-package
 ;; General goodies
-(use-package auto-complete)
-(use-package auto-complete-auctex)
-(use-package ac-math)
+(use-package auto-complete
+  :config
+  (ac-config-default)
+  ;; doesn't really work, enables auto-fill-mode globally)
+  (global-auto-complete-mode t)
+  (use-package auto-complete-auctex)
+  (use-package ac-math))
 
-(use-package color-moccur)
+(use-package which-key
+  :config
+  (which-key-mode))
+
+(use-package color-moccur
+  :bind (("M-s O" . moccur)))
 (use-package transpose-frame)
 
 ;; because elpa keys are expiring sometimes
 (use-package gnu-elpa-keyring-update)
 
-;; helm is buffer search
-(use-package helm
-  :custom
-  (helm-mode t)
-  (helm-completion-style (quote helm-fuzzy)))
-(use-package helm-projectile)
-
 ;; projectile organizes buffers in projects
 (use-package projectile
+  :bind (:map projectile-mode-map
+         ("C-x p". projectile-command-map))
   :custom
   (projectile-mode t nil (projectile)))
 (use-package ibuffer-projectile)
 
+(use-package rg)
+
+;; helm is an autocompletion framework
+(use-package helm
+  :custom
+  (helm-mode t)
+  (helm-completion-style (quote helm-fuzzy))
+  :bind (("M-x" . helm-M-x)
+         ("C-x C-f" . helm-find-files)
+         ("C-x b" . helm-mini)
+         :map helm-map
+         ("<tab>" . helm-execute-persistent-action)
+         ("M-x" . helm-select-action)
+         :map helm-find-files-map
+         ("<tab>" . helm-ff-TAB)
+         ("M-x" . helm-select-action))
+  :config
+  (helm-mode 1)
+  (require 'helm-config)
+  (use-package helm-projectile)
+  (use-package helm-rg)
+)
+
 ;; view pdfs in emacs
-(use-package pdf-tools)
+(use-package pdf-tools
+  :config
+  ;; enable pdftools instead of docview
+  (pdf-tools-install))
 
 ;; highlight all whitespaces
-(use-package unicode-whitespace)
+(use-package unicode-whitespace
+  :custom
+  (global-whitespace-mode t)
+  (global-whitespace-newline-mode t)
+  :config
+  (unicode-whitespace-setup 'subdued-faces))
 
 ;; Flycheck
-(use-package flycheck)
-(use-package flycheck-haskell)
-(use-package flycheck-mypy)
-(use-package flycheck-pyflakes)
+(use-package flycheck
+  :config
+  (global-flycheck-mode)
+  (use-package flycheck-haskell)
+  (use-package flycheck-mypy)
+  (use-package flycheck-pyflakes)
+  )
 
 ;; Language server protocol
-(use-package lsp-mode)
-(use-package lsp-ui)
-(use-package lsp-haskell)
+(use-package lsp-mode
+  :config
+  (use-package lsp-ui)
+  (use-package lsp-haskell))
 
 ;; word processor and markup
 (use-package wc-mode)
@@ -58,8 +97,16 @@
 ;; loading auctex directly doesn't work for some reason
 ;; https://github.com/jwiegley/use-package/issues/379
 (use-package tex-mode
-  :ensure auctex)
+  :ensure auctex
+  :config
+  (add-hook 'LaTeX-mode-hook '(flyspell-mode t)))
 (use-package company-auctex)
+;; package for writing mode, introduces margins
+(use-package olivetti
+  :custom
+  (olivetti-body-width 90)
+  )
+
 
 (use-package markdown-mode)
 (use-package markdown-mode+)
@@ -79,12 +126,16 @@
   (org-modules
    (quote
     (org-bbdb org-bibtex org-docview org-eww org-gnus
-     org-info org-irc org-mhe org-rmail org-tempo org-w3m))))
-(use-package org-download)
-(use-package org-present)
+     org-info org-irc org-mhe org-rmail org-tempo org-w3m)))
+  :config
+  (use-package org-download)
+  (use-package org-present))
+
 
 ;; Programming
-(use-package magit)
+(use-package magit
+  :bind (;; magit open default window binding
+         ("C-x g".  magit-status)))
 (use-package editorconfig
   :custom
   (editorconfig-mode t))
@@ -134,14 +185,8 @@
 
 
 ;;; Bindings:
-;; map C-x C-f to helm-find-files instead of default `find-file`
-(global-set-key (kbd "C-x C-f") 'helm-find-files)
-;; map C-x C-f to helm-mini instead of default `switch-buffers`
-(global-set-key (kbd "C-x b") 'helm-mini)
 ;; map C-x C-b to ibuffer instead of default `list-buffers`
 (global-set-key (kbd "C-x C-b") 'ibuffer)
-;; magit open default window binding
-(global-set-key (kbd "C-x g") 'magit-status)
 ;; new bindings to change widnow sizes
 ;; similar bindings to windmove (see below), which has S-<arrow> as moving binding
 (global-set-key (kbd "S-C-<left>") 'shrink-window-horizontally)
@@ -153,9 +198,6 @@
 ;; https://www.emacswiki.org/emacs/WindMove
 (when (fboundp 'windmove-default-keybindings)
   (windmove-default-keybindings))
-
-(define-key projectile-mode-map (kbd "C-x p") 'projectile-command-map)
-
 
 ;;; Code:
 ;; agda2 mode, gets appended by `agda-mode setup`
@@ -189,8 +231,8 @@
   (interactive)
   (let ((command "xfconf-query -c xsettings -p /Net/ThemeName")
         (expected-value "Arc\n")
-        (dark-theme 'tsdh-dark)
-        (light-theme 'tsdh-light))
+        (dark-theme 'wombat)
+        (light-theme 'leuven))
     (if
         (string= (shell-command-to-string command)
                  expected-value)
@@ -213,13 +255,6 @@
 ;; ## added by OPAM user-setup for emacs / base ## 56ab50dc8996d2bb95e7856a6eddb17b ## you can edit, but keep this line
 (require 'opam-user-setup "~/.emacs.d/opam-user-setup.el")
 ;; ## end of OPAM user-setup addition for emacs / base ## keep this line
-
-(unicode-whitespace-setup 'subdued-faces)
-(global-flycheck-mode)
-(ac-config-default)
-(global-auto-complete-mode t) ;; doesn't really work, enables auto-fill-mode globally
-(pdf-tools-install) ;; enable pdftools instead of docview
-(require 'helm-config) ;; enable helm config
 
 (provide '.emacs)
 ;;; .emacs ends here

@@ -10,7 +10,7 @@
  '(auto-save-default nil)
  '(backup-directory-alist (quote (("." . "~/.emacs.d/.backup"))))
  '(calendar-week-start-day 1)
- '(custom-enabled-themes (quote (tsdh-dark)))
+ '(custom-enabled-themes (quote (leuven)))
  '(custom-theme-allow-multiple-selections nil)
  '(desktop-save-mode t)
  '(dired-async-mode t)
@@ -18,8 +18,6 @@
  '(eshell-load-hook (quote ((lambda nil (setenv "PAGER" "")))))
  '(gdb-many-windows t)
  '(global-linum-mode t)
- '(global-whitespace-mode t)
- '(global-whitespace-newline-mode t)
  '(ibuffer-saved-filter-groups nil)
  '(ibuffer-saved-filters nil)
  '(indent-tabs-mode nil)
@@ -30,23 +28,8 @@
  '(menu-bar-mode nil)
  '(package-selected-packages
    (quote
-    (company-auctex editorconfig company-coq ibuffer-projectile use-package idris-mode org-present color-moccur helm-projectile projectile ac-math auctex auto-complete auto-complete-auctex flycheck flycheck-haskell flycheck-mypy flycheck-pyflakes gnu-elpa-keyring-update haskell-mode helm lsp-haskell lsp-mode lsp-ui magit markdown-mode markdown-mode+ merlin nix-mode org org-download pandoc pandoc-mode pdf-tools proof-general transpose-frame tuareg unicode-whitespace wc-mode)))
- '(safe-local-variable-values
-   (quote
-    ((eval let
-           ((idris2-path
-             (replace-regexp-in-string "
-\\'" ""
-(shell-command-to-string "which idris2"))))
-           (unless
-               (string= "" idris2-path)
-             (setq idris-interpreter-path idris2-path)))
-     (eval
-      (lambda nil
-        (add-to-list
-         (quote auto-mode-alist)
-         (quote
-          ("\\.h\\'" . c++-mode))))))))
+    (ac-math auctex auto-complete auto-complete-auctex color-moccur company-auctex company-coq editorconfig flycheck flycheck-haskell flycheck-mypy flycheck-pyflakes gnu-elpa-keyring-update haskell-mode helm helm-projectile helm-rg ibuffer-projectile idris-mode lsp-haskell lsp-mode lsp-ui magit markdown-mode markdown-mode+ merlin nix-mode olivetti org org-download org-present pandoc pandoc-mode pdf-tools projectile proof-general rg transpose-frame tuareg unicode-whitespace use-package wc-mode which-key)))
+ '(safe-local-variable-values nil)
  '(scroll-bar-mode nil)
  '(scroll-conservatively 10000)
  '(scroll-step 1)
