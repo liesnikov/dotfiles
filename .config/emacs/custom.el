@@ -8,6 +8,7 @@
  '(ansi-color-names-vector
    ["#242424" "#e5786d" "#95e454" "#cae682" "#8ac6f2" "#333366" "#ccaa8f" "#f6f3e8"])
  '(auto-save-default nil)
+ '(auto-save-file-name-transforms '((".*" "~/.cache/emacs/autosave" t)))
  '(backup-directory-alist '(("." . "~/.cache/emacs/backup")))
  '(calendar-week-start-day 1)
  '(custom-enabled-themes '(leuven))

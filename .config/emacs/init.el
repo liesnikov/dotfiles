@@ -1,14 +1,8 @@
 ;;; package -- summary
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
-;;(add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
-
 (package-initialize)
-
-(eval-when-compile
-  ;; Following line is not needed if use-package.el is in ~/.emacs.d
-  (add-to-list 'load-path "/home/buzzer/.emacs.d/elpa/use-package-20200721.2156")
-  (require 'use-package))
+(require 'use-package)
 
 ;;; Use-package
 ;; General goodies
@@ -59,8 +53,7 @@
   (helm-mode 1)
   (require 'helm-config)
   (use-package helm-projectile)
-  (use-package helm-rg)
-)
+  (use-package helm-rg))
 
 ;; view pdfs in emacs
 (use-package pdf-tools
@@ -103,8 +96,7 @@
 ;; package for writing mode, introduces margins
 (use-package olivetti
   :custom
-  (olivetti-body-width 90)
-  )
+  (olivetti-body-width 90))
 
 
 (use-package markdown-mode)
