@@ -32,8 +32,7 @@
 ;; projectile organizes buffers in projects
 (use-package projectile
   :bind (:map projectile-mode-map
-         ("C-x p". projectile-command-map)
-         ("C-x p f" . helm-projectile-find-file))
+         ("C-x p". projectile-command-map))
   :custom
   (projectile-mode t nil (projectile))
   :config
@@ -59,7 +58,9 @@
   :config
   (helm-mode 1)
   (require 'helm-config)
-  (use-package helm-projectile)
+  (use-package helm-projectile
+    :config
+    (helm-projectile-on))
   (use-package helm-rg))
 
 ;; view pdfs in emacs
