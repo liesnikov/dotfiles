@@ -99,8 +99,8 @@
 (use-package tex-mode
   :ensure auctex
   :config
-  (add-hook 'LaTeX-mode-hook '(flyspell-mode t)))
-(use-package company-auctex)
+  (add-hook 'TeX-mode-hook '(flyspell-mode t))
+  (use-package company-auctex))
 ;; package for writing mode, introduces margins
 (use-package olivetti
   :custom
