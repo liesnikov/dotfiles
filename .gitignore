@@ -1,6 +1,0 @@
-.vim/.*
-.vim/bundle
-.vim/_swap
-.vim/_undo
-.vim/_backup
-.vim/submodules.installed
