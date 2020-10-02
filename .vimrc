@@ -250,7 +250,7 @@ set noshowmode
 
 "GUI settings to set font
 if has("gui_running")
-    set guifont=Source\ Code\ Pro\ 12
+    set guifont=Source\ Code\ Pro\ 13
     set go=i
     set lines=60 columns=100
 endif
