@@ -99,8 +99,8 @@
 (use-package tex-mode
   :ensure auctex
   :config
-  (add-hook 'TeX-mode-hook '(flyspell-mode t))
-  (use-package company-auctex))
+  (use-package company-auctex)
+  (add-hook 'TeX-mode-hook '(flyspell-mode t)))
 ;; package for writing mode, introduces margins
 (use-package olivetti
   :custom
@@ -128,7 +128,9 @@
      org-info org-irc org-mhe org-rmail org-tempo org-w3m)))
   :config
   (use-package org-download)
-  (use-package org-present))
+  (use-package org-present)
+  ;; activate org-indent-mode on org-indent
+  (add-hook 'org-mode-hook 'org-indent-mode))
 
 
 ;; Programming
@@ -144,7 +146,9 @@
   ;; activate tuareg (ocaml) mode in ml4 files
   ;; (syntax extensions for coq)
   :mode "\\.ml4\\'")
-(use-package merlin)
+(use-package merlin
+  ;; from https://github.com/ocaml/merlin/wiki/emacs-from-scratch
+  (add-hook 'tuareg-mode-hook 'merlin-mode))
 
 ;; haskell
 (use-package haskell-mode)
@@ -168,7 +172,12 @@
     (proof-autosend-enable nil)
     (proof-three-window-enable nil)
     (proof-toolbar-enable t))
-(use-package company-coq)
+(use-package company-coq
+  :init
+  ;; company-coq is an addon on top of proofgeneral,
+  ;; enable it as we enter coq mode
+  (add-hook 'coq-mode-hook #'company-coq-mode))
+
 
 ;;; Custom:
 (setq custom-file "~/.config/emacs/custom.el")
@@ -203,17 +212,6 @@
 (load-file (let ((coding-system-for-read 'utf-8))
              (shell-command-to-string "agda-mode locate")))
 
-(add-hook
- ;; from https://github.com/ocaml/merlin/wiki/emacs-from-scratch
- 'tuareg-mode-hook 'merlin-mode)
-
-(add-hook
-  ;; activate org-indent-mode on org-indent
- 'org-mode-hook 'org-indent-mode)
-(add-hook
- ;; company-coq is an addon on top of proofgeneral,
- ;; enable it as we enter coq mode
- 'coq-mode-hook #'company-coq-mode)
 ;;(add-to-list
  ;; due to a weird bug, both tokens from PG and company-coq are used
  ;; which results in "token undefined" errors when using PG ones
@@ -241,7 +239,6 @@
                (disable-theme light-theme)))))
 (set-system-theme)
 
-
 (defun my-inhibit-global-linum-mode ()
   "Disable linum (line numbers) when entering pdf-tools mode."
   (add-hook
@@ -255,5 +252,5 @@
 (require 'opam-user-setup "~/.config/emacs/opam-user-setup.el")
 ;; ## end of OPAM user-setup addition for emacs / base ## keep this line
 
-(provide '.emacs)
-;;; .emacs ends here
+(provide 'init.el)
+;;; init.el ends here
