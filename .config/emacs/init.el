@@ -2,13 +2,49 @@
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 (package-initialize)
-(require 'use-package)
+(eval-when-compile
+  (require 'use-package))
 
 ;;; Use-package
+;;; Built-in packages, for neatness
 ;; The :ensure-system-package keyword allows you to ensure system binaries exist alongside your package declarations.
 (use-package use-package-ensure-system-package
   :ensure t)
 
+(use-package windmove
+  :bind (;; new bindings to change widnow sizes
+         ;; similar bindings to windmove (see below),
+         ;; which has S-<arrow> as moving binding
+         ("S-C-<left>" . shrink-window-horizontally)
+         ("S-C-<right>".  enlarge-window-horizontally)
+         ("S-C-<down>" . shrink-window)
+         ("S-C-<up>" . enlarge-window))
+  :init
+  ;; Windmove is a library built into GnuEmacs starting with version 21.
+  ;; It lets you move point from window to window using Shift and the arrow keys.
+  ;; https://www.emacswiki.org/emacs/WindMove
+  (when (fboundp 'windmove-default-keybindings)
+    (windmove-default-keybindings)))
+
+(use-package desktop
+  :custom
+  (desktop-path '("~/.cache/emacs/desktop"))
+  :config
+  (add-hook 'after-make-frame-functions
+    (lambda (frame)
+        (with-selected-frame frame
+            (unless desktop-save-mode
+                (desktop-save-mode 1)
+                (desktop-read))))))
+
+(use-package ibuffer
+  :custom
+  (ibuffer-saved-filter-groups nil)
+  (ibuffer-saved-filters nil)
+  :bind (;; map C-x C-b to ibuffer instead of default `list-buffers`
+         ("C-x C-b" . ibuffer)))
+
+;;; Installed packages
 ;; General goodies
 (use-package auto-complete
   :config
@@ -36,7 +72,14 @@
   :custom
   (projectile-mode t nil (projectile))
   :config
-  (use-package ibuffer-projectile))
+  (use-package ibuffer-projectile
+    :config
+    (add-hook 'ibuffer-hook
+    ;; ibuffer-projectile automatic sorting
+    (lambda ()
+      (ibuffer-projectile-set-filter-groups)
+      (unless (eq ibuffer-sorting-mode 'alphabetic)
+        (ibuffer-do-sort-by-alphabetic))))))
 
 (use-package rg
   :ensure-system-package (rg . ripgrep))
@@ -66,6 +109,14 @@
 ;; view pdfs in emacs
 (use-package pdf-tools
   :config
+  (defun my-inhibit-global-linum-mode ()
+    "Disable linum (line numbers) when entering pdf-tools mode."
+    (add-hook
+     ;; Counter-act `global-linum-mode'
+     'after-change-major-mode-hook
+     (lambda () (linum-mode 0))
+     :append :local))
+  (add-hook 'pdf-view-mode-hook 'my-inhibit-global-linum-mode)
   ;; enable pdftools instead of docview
   (pdf-tools-install))
 
@@ -184,7 +235,6 @@
 (load custom-file)
 
 ;;; Commentary:
-
 ;; NB:
 ;; - copy current buffer's file path to kill-ring
 ;;   (kill-new buffer-file-name)
@@ -193,35 +243,12 @@
 
 
 ;;; Bindings:
-;; map C-x C-b to ibuffer instead of default `list-buffers`
-(global-set-key (kbd "C-x C-b") 'ibuffer)
-;; new bindings to change widnow sizes
-;; similar bindings to windmove (see below), which has S-<arrow> as moving binding
-(global-set-key (kbd "S-C-<left>") 'shrink-window-horizontally)
-(global-set-key (kbd "S-C-<right>") 'enlarge-window-horizontally)
-(global-set-key (kbd "S-C-<down>") 'shrink-window)
-(global-set-key (kbd "S-C-<up>") 'enlarge-window)
-;; Windmove is a library built into GnuEmacs starting with version 21.
-;; It lets you move point from window to window using Shift and the arrow keys.
-;; https://www.emacswiki.org/emacs/WindMove
-(when (fboundp 'windmove-default-keybindings)
-  (windmove-default-keybindings))
 
 ;;; Code:
-;; agda2 mode, gets appended by `agda-mode setup`
-(load-file (let ((coding-system-for-read 'utf-8))
-             (shell-command-to-string "agda-mode locate")))
-
 ;;(add-to-list
- ;; due to a weird bug, both tokens from PG and company-coq are used
- ;; which results in "token undefined" errors when using PG ones
+;; due to a weird bug, both tokens from PG and company-coq are used
+;; which results in "token undefined" errors when using PG ones
 ;; 'coq-mode-hook (unicode-tokens-use-shortcuts nil))
-(add-hook 'ibuffer-hook
-    ;; ibuffer-projectile automatic sorting
-    (lambda ()
-      (ibuffer-projectile-set-filter-groups)
-      (unless (eq ibuffer-sorting-mode 'alphabetic)
-        (ibuffer-do-sort-by-alphabetic))))
 
 (defun set-system-theme ()
   "Detect xfce4 system theme and switch Emacs theme accordingly."
@@ -239,14 +266,21 @@
                (disable-theme light-theme)))))
 (set-system-theme)
 
-(defun my-inhibit-global-linum-mode ()
-  "Disable linum (line numbers) when entering pdf-tools mode."
-  (add-hook
-   ;; Counter-act `global-linum-mode'
-   'after-change-major-mode-hook
-   (lambda () (linum-mode 0))
-   :append :local))
-(add-hook 'pdf-view-mode-hook 'my-inhibit-global-linum-mode)
+(defun screenshot-svg ()
+  "Save a screenshot of the current frame as an SVG image.
+Saves to a temp file and puts the filename in the kill ring.
+Source: https://old.reddit.com/r/emacs/comments/idz35e/emacs_27_can_take_svg_screenshots_of_itself/"
+  (interactive)
+  (let* ((filename (make-temp-file "Emacs" nil ".svg"))
+         (data (x-export-frames nil 'svg)))
+    (with-temp-file filename
+      (insert data))
+    (kill-new filename)
+    (message filename)))
+
+;; agda2 mode, gets appended by `agda-mode setup`
+(load-file (let ((coding-system-for-read 'utf-8))
+             (shell-command-to-string "agda-mode locate")))
 
 ;; ## added by OPAM user-setup for emacs / base ## 56ab50dc8996d2bb95e7856a6eddb17b ## you can edit, but keep this line
 (require 'opam-user-setup "~/.config/emacs/opam-user-setup.el")
