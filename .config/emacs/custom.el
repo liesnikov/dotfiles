@@ -11,7 +11,7 @@
  '(auto-save-file-name-transforms '((".*" "~/.cache/emacs/autosave" t)))
  '(backup-directory-alist '(("." . "~/.cache/emacs/backup")))
  '(calendar-week-start-day 1)
- '(custom-enabled-themes '(leuven))
+ '(custom-enabled-themes '(doom-one))
  '(custom-theme-allow-multiple-selections nil)
  '(dired-async-mode t)
  '(dired-listing-switches "-al")
@@ -25,7 +25,7 @@
  '(keyboard-coding-system 'utf-8-unix)
  '(menu-bar-mode nil)
  '(package-selected-packages
-   '(ac-math auctex auto-complete auto-complete-auctex color-moccur company-auctex company-coq editorconfig flycheck flycheck-haskell flycheck-mypy flycheck-pyflakes gnu-elpa-keyring-update haskell-mode helm helm-projectile helm-rg ibuffer-projectile idris-mode lsp-haskell lsp-mode lsp-ui magit markdown-mode markdown-mode+ merlin nix-mode olivetti org org-download org-present pandoc pandoc-mode pdf-tools projectile proof-general rg transpose-frame tuareg unicode-whitespace use-package wc-mode which-key))
+   '(doom-themes ac-math auctex auto-complete auto-complete-auctex color-moccur company-auctex company-coq editorconfig flycheck flycheck-haskell flycheck-mypy flycheck-pyflakes gnu-elpa-keyring-update haskell-mode helm helm-projectile helm-rg ibuffer-projectile idris-mode lsp-haskell lsp-mode lsp-ui magit markdown-mode markdown-mode+ merlin nix-mode olivetti org org-download org-present pandoc pandoc-mode pdf-tools projectile proof-general rg transpose-frame tuareg unicode-whitespace use-package wc-mode which-key))
  '(safe-local-variable-values nil)
  '(scroll-bar-mode nil)
  '(scroll-conservatively 10000)

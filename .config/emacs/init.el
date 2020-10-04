@@ -46,6 +46,17 @@
 
 ;;; Installed packages
 ;; General goodies
+(use-package doom-themes
+  :config
+  ;; Global settings (defaults)
+  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+        doom-themes-enable-italic t) ; if nil, italics is universally disabled
+  (load-theme 'doom-one t)
+  ;; Enable flashing mode-line on errors
+  (doom-themes-visual-bell-config)
+  ;; Corrects (and improves) org-mode's native fontification.
+  (doom-themes-org-config))
+
 (use-package auto-complete
   :config
   (ac-config-default)
@@ -255,8 +266,8 @@
   (interactive)
   (let ((command "xfconf-query -c xsettings -p /Net/ThemeName")
         (expected-value "Arc\n")
-        (dark-theme 'wombat)
-        (light-theme 'leuven))
+        (dark-theme 'doom-one)
+        (light-theme 'doom-one-light))
     (if
         (string= (shell-command-to-string command)
                  expected-value)
