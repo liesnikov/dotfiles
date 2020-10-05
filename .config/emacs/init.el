@@ -1,8 +1,7 @@
 ;;; package -- summary
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
-(when (< emacs-major-version 27)
-  (package-initialize))
+(when (< emacs-major-version 27) (package-initialize))
 (eval-when-compile
   (require 'use-package))
 
@@ -220,8 +219,7 @@
   ;; (syntax extensions for coq)
   :mode "\\.ml4\\'")
 (use-package merlin
-  :config
-  ;; from https://github.com/ocaml/merlin/wiki/emacs-from-scratch
+  :config ;; from https://github.com/ocaml/merlin/wiki/emacs-from-scratch
   (add-hook 'tuareg-mode-hook 'merlin-mode))
 
 ;; haskell
