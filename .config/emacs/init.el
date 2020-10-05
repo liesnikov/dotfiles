@@ -1,7 +1,8 @@
 ;;; package -- summary
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
-(package-initialize)
+(when (< emacs-major-version 27)
+  (package-initialize))
 (eval-when-compile
   (require 'use-package))
 
@@ -164,8 +165,15 @@
 (use-package tex-mode
   :ensure auctex
   :config
-  (use-package company-auctex)
-  (add-hook 'TeX-mode-hook '(flyspell-mode t)))
+  (use-package company-auctex
+    :config
+    (company-auctex-init))
+  (add-hook 'TeX-mode-hook (lambda () (flyspell-mode t)))
+  (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
+  (add-hook 'LaTeX-mode-hook
+          (lambda () (set (make-variable-buffer-local 'TeX-electric-math)
+                  (cons "\\(" "\\)")))))
+
 ;; package for writing mode, introduces margins
 (use-package olivetti
   :custom
@@ -212,6 +220,7 @@
   ;; (syntax extensions for coq)
   :mode "\\.ml4\\'")
 (use-package merlin
+  :config
   ;; from https://github.com/ocaml/merlin/wiki/emacs-from-scratch
   (add-hook 'tuareg-mode-hook 'merlin-mode))
 
@@ -263,6 +272,23 @@
 ;; due to a weird bug, both tokens from PG and company-coq are used
 ;; which results in "token undefined" errors when using PG ones
 ;; 'coq-mode-hook (unicode-tokens-use-shortcuts nil))
+
+(defun bury-compile-buffer-if-successful (buffer string)
+  "Bury a compilation BUFFER if succeeded without warnings (check STRING).
+Source: https://stackoverflow.com/questions/11043004/emacs-compile-buffer-auto-close"
+  (if (and
+       (string-match "compilation" (buffer-name buffer))
+       (string-match "finished" string)
+       (not
+        (with-current-buffer buffer
+          (goto-char 1)
+          (search-forward "warning" nil t))))
+      (run-with-timer 1 nil
+                      (lambda (buf)
+                        (bury-buffer buf)
+                        (delete-window (get-buffer-window buf)))
+                      buffer)))
+(add-hook 'compilation-finish-functions 'bury-compile-buffer-if-successful)
 
 (defun set-system-theme ()
   "Detect xfce4 system theme and switch Emacs theme accordingly."
