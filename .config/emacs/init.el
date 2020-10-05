@@ -28,7 +28,10 @@
 
 (use-package desktop
   :custom
+  (desktop-base-lock-name "lock")
   (desktop-path '("~/.cache/emacs/desktop"))
+  (desktop-auto-save-timeout 30)
+  (desktop-save 0)
   :config
   (add-hook 'after-make-frame-functions
     (lambda (frame)
