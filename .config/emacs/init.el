@@ -11,7 +11,12 @@
 (use-package use-package-ensure-system-package
   :ensure t)
 
+;; ensure all packages -- installs them
+;; (require 'use-package-ensure)
+;; (setq use-package-always-ensure t)
+
 (use-package windmove
+  :ensure nil
   :bind (;; new bindings to change widnow sizes
          ;; similar bindings to windmove (see below),
          ;; which has S-<arrow> as moving binding
@@ -27,6 +32,7 @@
     (windmove-default-keybindings)))
 
 (use-package desktop
+  :ensure nil
   :custom
   (desktop-base-lock-name "lock")
   (desktop-path '("~/.cache/emacs/desktop"))
@@ -41,6 +47,7 @@
                 (desktop-read))))))
 
 (use-package ibuffer
+  :ensure nil
   :custom
   (ibuffer-saved-filter-groups nil)
   (ibuffer-saved-filters nil)
