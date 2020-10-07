@@ -133,14 +133,13 @@
 ;; view pdfs in emacs
 (use-package pdf-tools
   :config
-  (defun my-inhibit-global-linum-mode ()
-    "Disable linum (line numbers) when entering pdf-tools mode."
-    (add-hook
-     ;; Counter-act `global-linum-mode'
-     'after-change-major-mode-hook
-     (lambda () (linum-mode 0))
-     :append :local))
-  (add-hook 'pdf-view-mode-hook 'my-inhibit-global-linum-mode)
+  (add-hook 'pdf-view-mode-hook
+            (lambda ()
+              ; Disable linum (line numbers) when entering pdf-tools mode.
+              ; from https://stackoverflow.com/a/6839968
+              (add-hook 'after-change-major-mode-hook
+                        (lambda () (linum-mode 0))
+                        :append :local)))
   ;; enable pdftools instead of docview
   (pdf-tools-install))
 
@@ -286,12 +285,12 @@
 Source: https://stackoverflow.com/questions/11043004/emacs-compile-buffer-auto-close"
   (if (and
        (string-match "compilation" (buffer-name buffer))
-       (string-match "finished" string)
-       (not
-        (with-current-buffer buffer
-          (goto-char 1)
-          (search-forward "warning" nil t))))
-      (run-with-timer 1 nil
+       (string-match "finished" string))
+       ; (not
+       ;  (with-current-buffer buffer
+       ;    (goto-char 1)
+       ;    (search-forward "warning" nil t))))
+      (run-with-timer 0.5 nil
                       (lambda (buf)
                         (bury-buffer buf)
                         (delete-window (get-buffer-window buf)))
