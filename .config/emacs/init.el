@@ -90,8 +90,10 @@
 (use-package projectile
   :bind (:map projectile-mode-map
          ("C-x p". projectile-command-map))
+
   :custom
   (projectile-mode t nil (projectile))
+
   :config
   (use-package ibuffer-projectile
     :config
@@ -110,6 +112,7 @@
   :custom
   (helm-mode t)
   (helm-completion-style (quote helm-fuzzy))
+
   :bind (("M-x" . helm-M-x)
          ("C-x C-f" . helm-find-files)
          ("C-x b" . helm-mini)
@@ -119,13 +122,13 @@
          :map helm-find-files-map
          ("<tab>" . helm-execute-persistent-action)
          ("M-x" . helm-select-action))
+
   :config
-  (helm-mode 1)
-  (require 'helm-config)
   (use-package helm-projectile
-    :config
-    (helm-projectile-on))
-  (use-package helm-rg))
+    :config (helm-projectile-on))
+  (use-package helm-rg)
+  (use-package helm-make)
+  (helm-mode 1))
 
 ;; view pdfs in emacs
 (use-package pdf-tools
