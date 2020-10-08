@@ -127,7 +127,6 @@
   (use-package helm-projectile
     :config (helm-projectile-on))
   (use-package helm-rg)
-  (use-package helm-make)
   (helm-mode 1))
 
 ;; view pdfs in emacs
