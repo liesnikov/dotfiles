@@ -1,7 +1,17 @@
 ;;; package -- summary
 (require 'package)
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+(unless (assoc-default "melpa" package-archives)
+  (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t))
+(unless (assoc-default "org" package-archives)
+  (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t))
 (when (< emacs-major-version 27) (package-initialize))
+
+;;; Custom:
+(setq custom-file "~/.config/emacs/custom.el")
+(load custom-file)
+
+(unless (package-installed-p 'use-package)
+  (package-install 'use-package))
 (eval-when-compile
   (require 'use-package))
 
@@ -55,7 +65,7 @@
          ("C-x C-b" . ibuffer)))
 
 ;;; Installed packages
-;; General goodies
+;; Visual things
 (use-package doom-themes
   :config
   ;; Global settings (defaults)
@@ -67,6 +77,7 @@
   ;; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config))
 
+;; General goodies
 (use-package auto-complete
   :config
   (ac-config-default)
@@ -171,6 +182,8 @@
 ;; https://github.com/jwiegley/use-package/issues/379
 (use-package tex-mode
   :ensure auctex
+  :custom
+  (reftex-plug-into-AUCTeX t)
   :config
   (use-package company-auctex
     :config
@@ -179,7 +192,11 @@
   (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
   (add-hook 'LaTeX-mode-hook
           (lambda () (set (make-variable-buffer-local 'TeX-electric-math)
-                  (cons "\\(" "\\)")))))
+                          (cons "\\(" "\\)"))))
+  ;; Turn on RefTeX with AUCTeX LaTeX mode
+  (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
+  ;; with Emacs latex mode
+  (add-hook 'latex-mode-hook 'turn-on-reftex))
 
 ;; package for writing mode, introduces margins
 (use-package olivetti
@@ -257,11 +274,6 @@
   ;; company-coq is an addon on top of proofgeneral,
   ;; enable it as we enter coq mode
   (add-hook 'coq-mode-hook #'company-coq-mode))
-
-
-;;; Custom:
-(setq custom-file "~/.config/emacs/custom.el")
-(load custom-file)
 
 ;;; Commentary:
 ;; NB:
