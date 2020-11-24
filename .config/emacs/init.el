@@ -156,8 +156,8 @@
 ;; highlight all whitespaces
 (use-package unicode-whitespace
   :custom
-  (global-whitespace-mode t)
-  (global-whitespace-newline-mode t)
+  (global-whitespace-mode 1)
+  (global-whitespace-newline-mode 1)
   :config
   (unicode-whitespace-setup 'subdued-faces))
 
@@ -232,8 +232,12 @@
 
 ;; Programming
 (use-package magit
+  :custom
+  ;; highlight word-differences in diffs
+  (magit-diff-refine-hunk (quote all))
   :bind (;; magit open default window binding
          ("C-x g".  magit-status)))
+
 (use-package editorconfig
   :custom
   (editorconfig-mode t))
@@ -335,6 +339,23 @@ Source: https://old.reddit.com/r/emacs/comments/idz35e/emacs_27_can_take_svg_scr
       (insert data))
     (kill-new filename)
     (message filename)))
+
+;; "Compile on save" in Emacs
+;; from https://rtime.ciirc.cvut.cz/~sojka/blog/compile-on-save/
+(defun compile-on-save-start ()
+  (let ((buffer (compilation-find-buffer)))
+    (unless (get-buffer-process buffer)
+      (recompile))))
+
+(define-minor-mode compile-on-save-mode
+  "Minor mode to automatically call `recompile' whenever the
+current buffer is saved. When there is ongoing compilation,
+nothing happens."
+  :lighter " CoS"
+    (if compile-on-save-mode
+    (progn  (make-local-variable 'after-save-hook)
+        (add-hook 'after-save-hook 'compile-on-save-start nil t))
+      (kill-local-variable 'after-save-hook)))
 
 ;; agda2 mode, gets appended by `agda-mode setup`
 (load-file (let ((coding-system-for-read 'utf-8))
