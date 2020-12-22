@@ -173,7 +173,10 @@
 (use-package lsp-mode
   :config
   (use-package lsp-ui)
-  (use-package lsp-haskell))
+  (use-package lsp-haskell
+    :config
+    (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
+    (add-hook 'haskell-mode-hook 'haskell-doc-mode)))
 
 ;; word processor and markup
 (use-package wc-mode)
@@ -205,10 +208,6 @@
 
 
 (use-package markdown-mode)
-(use-package markdown-mode+)
-
-(use-package pandoc)
-(use-package pandoc-mode)
 
 (use-package org
   :custom
