@@ -56,6 +56,16 @@
                 (desktop-save-mode 1)
                 (desktop-read))))))
 
+(use-package auto-complete
+  :ensure nil
+  :custom
+  (ac-comphist-file "/home/buzzer/.cache/emacs/ac-comphist.dat"))
+
+(use-package recentf
+  :ensure nil
+  :custom
+  (recentf-save-file "~/.cache/emacs/recentf"))
+
 (use-package ibuffer
   :ensure nil
   :custom
@@ -104,6 +114,7 @@
 
   :custom
   (projectile-mode t nil (projectile))
+  (projectile-cache-file "/home/buzzer/.cache/emacs/projectile.cache")
 
   :config
   (use-package ibuffer-projectile
