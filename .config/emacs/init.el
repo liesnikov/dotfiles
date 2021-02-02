@@ -97,7 +97,7 @@
   ;; Global settings (defaults)
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
         doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (load-theme 'doom-one t)
+  ;; (load-theme 'doom-one t)
   ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config)
   ;; Corrects (and improves) org-mode's native fontification.
@@ -338,21 +338,43 @@ Source: https://stackoverflow.com/questions/11043004/emacs-compile-buffer-auto-c
                       buffer)))
 (add-hook 'compilation-finish-functions 'bury-compile-buffer-if-successful)
 
-(defun set-system-theme ()
+;; Automatically switch themes
+
+(defun set-theme (&optional name)
   "Detect xfce4 system theme and switch Emacs theme accordingly."
   (interactive)
-  (let ((command "xfconf-query -c xsettings -p /Net/ThemeName")
-        (expected-value "Arc\n")
-        (dark-theme 'doom-one)
-        (light-theme 'doom-one-light))
+  (let* ((command "xfconf-query -c xsettings -p /Net/ThemeName")
+         (newtheme (or (concat name "\n")
+                       (shell-command-to-string command)))
+         (expected-value "Arc\n")
+         (dark-theme 'doom-one)
+         (light-theme 'doom-one-light))
     (if
-        (string= (shell-command-to-string command)
+        (string= newtheme
                  expected-value)
         (progn (load-theme light-theme t)
                (disable-theme dark-theme))
         (progn (load-theme dark-theme t)
                (disable-theme light-theme)))))
-(set-system-theme)
+
+(defun detect-and-switch-theme (servname setpath themename)
+  (if
+      (string= setpath
+               "/Net/ThemeName")
+      (set-theme (car themename))))
+
+(dbus-register-signal
+ :session
+ nil ;; service name, nil is a wildcard
+ "/org/xfce/Xfconf" ;; path
+ "org.xfce.Xfconf" ;; interface
+ "PropertyChanged" ;; message
+ #'detect-and-switch-theme)
+
+(set-theme)
+
+
+;; Screenshot to svg
 
 (defun screenshot-svg ()
   "Save a screenshot of the current frame as an SVG image.
