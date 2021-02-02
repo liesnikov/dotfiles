@@ -186,6 +186,7 @@
   (global-whitespace-mode 1)
   (global-whitespace-newline-mode 1)
   :config
+  (setq whitespace-global-modes '(not agda2-mode))
   (unicode-whitespace-setup 'subdued-faces))
 
 ;; Flycheck
@@ -336,6 +337,7 @@ Source: https://stackoverflow.com/questions/11043004/emacs-compile-buffer-auto-c
                         (bury-buffer buf)
                         (delete-window (get-buffer-window buf)))
                       buffer)))
+
 (add-hook 'compilation-finish-functions 'bury-compile-buffer-if-successful)
 
 ;; Automatically switch themes
