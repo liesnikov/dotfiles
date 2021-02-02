@@ -16,7 +16,7 @@
   (require 'use-package))
 
 ;;; Use-package
-;;; Built-in packages, for neatness
+
 ;; The :ensure-system-package keyword allows you to ensure system binaries exist alongside your package declarations.
 (use-package use-package-ensure-system-package
   :ensure t)
@@ -24,6 +24,8 @@
 ;; ensure all packages -- installs them
 ;; (require 'use-package-ensure)
 ;; (setq use-package-always-ensure t)
+
+;;; Built-in packages, for neatness
 
 (use-package windmove
   :ensure nil
@@ -73,6 +75,20 @@
   (ibuffer-saved-filters nil)
   :bind (;; map C-x C-b to ibuffer instead of default `list-buffers`
          ("C-x C-b" . ibuffer)))
+
+
+(use-package dired
+  :ensure nil
+  :config
+  (defun dired-open-file ()
+    "In dired, open the file named on this line."
+    (interactive)
+    (let* ((file (dired-get-filename nil t)))
+      (call-process "xdg-open" nil 0 nil file)))
+  :bind
+  (:map dired-mode-map
+    ("C-c o" . dired-open-file)))
+
 
 ;;; Installed packages
 ;; Visual things
