@@ -27,21 +27,10 @@
 
 ;;; Built-in packages, for neatness
 
-(use-package windmove
+(use-package auto-complete
   :ensure nil
-  :bind (;; new bindings to change widnow sizes
-         ;; similar bindings to windmove (see below),
-         ;; which has S-<arrow> as moving binding
-         ("S-C-<left>" . shrink-window-horizontally)
-         ("S-C-<right>".  enlarge-window-horizontally)
-         ("S-C-<down>" . shrink-window)
-         ("S-C-<up>" . enlarge-window))
-  :init
-  ;; Windmove is a library built into GnuEmacs starting with version 21.
-  ;; It lets you move point from window to window using Shift and the arrow keys.
-  ;; https://www.emacswiki.org/emacs/WindMove
-  (when (fboundp 'windmove-default-keybindings)
-    (windmove-default-keybindings)))
+  :custom
+  (ac-comphist-file "/home/buzzer/.cache/emacs/ac-comphist.dat"))
 
 (use-package desktop
   :ensure nil
@@ -58,27 +47,11 @@
                 (desktop-save-mode 1)
                 (desktop-read))))))
 
-(use-package auto-complete
-  :ensure nil
-  :custom
-  (ac-comphist-file "/home/buzzer/.cache/emacs/ac-comphist.dat"))
-
-(use-package recentf
-  :ensure nil
-  :custom
-  (recentf-save-file "~/.cache/emacs/recentf"))
-
-(use-package ibuffer
-  :ensure nil
-  :custom
-  (ibuffer-saved-filter-groups nil)
-  (ibuffer-saved-filters nil)
-  :bind (;; map C-x C-b to ibuffer instead of default `list-buffers`
-         ("C-x C-b" . ibuffer)))
-
-
 (use-package dired
   :ensure nil
+  :custom
+  (dired-async-mode t)
+  (dired-listing-switches "-al")
   :config
   (defun dired-open-file ()
     "In dired, open the file named on this line."
@@ -89,6 +62,38 @@
   (:map dired-mode-map
     ("C-c o" . dired-open-file)))
 
+(use-package linum
+  :custom
+  (global-linum-mode t))
+
+(use-package ibuffer
+  :ensure nil
+  :custom
+  (ibuffer-saved-filter-groups nil)
+  (ibuffer-saved-filters nil)
+  :bind (;; map C-x C-b to ibuffer instead of default `list-buffers`
+         ("C-x C-b" . ibuffer)))
+
+(use-package recentf
+  :ensure nil
+  :custom
+  (recentf-save-file "~/.cache/emacs/recentf"))
+
+(use-package windmove
+  :ensure nil
+  :bind (;; new bindings to change widnow sizes
+         ;; similar bindings to windmove (see below),
+         ;; which has S-<arrow> as moving binding
+         ("S-C-<left>" . shrink-window-horizontally)
+         ("S-C-<right>".  enlarge-window-horizontally)
+         ("S-C-<down>" . shrink-window)
+         ("S-C-<up>" . enlarge-window))
+  :init
+  ;; Windmove is a library built into GnuEmacs starting with version 21.
+  ;; It lets you move point from window to window using Shift and the arrow keys.
+  ;; https://www.emacswiki.org/emacs/WindMove
+  (when (fboundp 'windmove-default-keybindings)
+    (windmove-default-keybindings)))
 
 ;;; Installed packages
 ;; Visual things
