@@ -8,8 +8,6 @@
  '(ansi-color-names-vector
    ["#242424" "#e5786d" "#95e454" "#cae682" "#8ac6f2" "#333366" "#ccaa8f" "#f6f3e8"])
  '(auto-save-default nil)
- '(auto-save-file-name-transforms '((".*" "~/.cache/emacs/autosave" t)))
- '(backup-directory-alist '(("." . "~/.cache/emacs/backup")))
  '(calendar-week-start-day 1)
  '(custom-enabled-themes '(doom-one))
  '(custom-theme-allow-multiple-selections nil)
@@ -22,7 +20,7 @@
  '(keyboard-coding-system 'utf-8-unix)
  '(menu-bar-mode nil)
  '(package-selected-packages
-   '(ac-math auctex auto-complete auto-complete-auctex color-moccur company-auctex company-coq doom-themes editorconfig flycheck flycheck-haskell flycheck-mypy flycheck-pyflakes gnu-elpa-keyring-update haskell-mode helm helm-projectile helm-rg ibuffer-projectile idris-mode lsp-haskell lsp-mode lsp-ui magit markdown-mode merlin nix-haskell-mode nix-mode olivetti org org-download org-present pdf-tools projectile proof-general rg transpose-frame tuareg unicode-whitespace use-package wc-mode which-key))
+   '(ac-math auctex auto-complete auto-complete-auctex color-moccur company-auctex company-coq doom-themes editorconfig flycheck flycheck-haskell flycheck-mypy flycheck-pyflakes gnu-elpa-keyring-update haskell-mode helm helm-projectile helm-rg ibuffer-projectile idris-mode lsp-haskell lsp-mode lsp-ui magit markdown-mode merlin nix-haskell-mode nix-mode no-littering olivetti org org-download org-present pdf-tools projectile proof-general rg transpose-frame tuareg unicode-whitespace use-package wc-mode which-key))
  '(safe-local-variable-values nil)
  '(scroll-bar-mode nil)
  '(scroll-conservatively 10000)

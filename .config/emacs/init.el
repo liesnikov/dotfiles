@@ -21,6 +21,22 @@
 (use-package use-package-ensure-system-package
   :ensure t)
 
+
+;; not a system package, but we have to change paths before anything else kicks in
+(use-package no-littering
+  :ensure t
+  :init
+  (setq no-littering-etc-directory
+        (expand-file-name "etc/" "~/.config/emacs"))
+  (setq no-littering-var-directory
+        "~/.cache/emacs/")
+  (setq auto-save-list-file-prefix
+      "~/.cache/emacs/auto-save-list/.saves-")
+  (setq auto-save-file-name-transforms
+        `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
+  (setq backup-directory-alist
+        '(("." . "~/.cache/emacs/backup"))))
+
 ;; ensure all packages -- installs them
 ;; (require 'use-package-ensure)
 ;; (setq use-package-always-ensure t)
