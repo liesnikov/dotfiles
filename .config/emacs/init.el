@@ -85,6 +85,8 @@
 
 (use-package linum
   :custom
+  (global-linum-mode t)
+  :config
   (global-linum-mode t))
 
 (use-package ibuffer
