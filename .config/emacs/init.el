@@ -27,15 +27,20 @@
   :ensure t
   :init
   (setq no-littering-etc-directory
-        (expand-file-name "etc/" "~/.config/emacs"))
-  (setq no-littering-var-directory
-        "~/.cache/emacs/")
-  (setq auto-save-list-file-prefix
-      "~/.cache/emacs/auto-save-list/.saves-")
-  (setq auto-save-file-name-transforms
-        `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
-  (setq backup-directory-alist
-        '(("." . "~/.cache/emacs/backup"))))
+          (expand-file-name "etc/" "~/.config/emacs")
+        no-littering-var-directory
+          (expand-file-name "~/.cache/emacs/")
+
+        auto-save-file-name-transforms
+          `((".*" ,(no-littering-expand-var-file-name "auto-save/") t))
+        auto-save-list-file-prefix
+          (no-littering-expand-var-file-name "auto-save-list/.saves-")
+        backup-directory-alist
+          `(("." . ,(no-littering-expand-var-file-name "backup")))
+        eshell-directory-name
+          (no-littering-expand-var-file-name "eshell")
+        transient-history-file
+          (no-littering-expand-var-file-name "transient/history.el")))
 
 ;; ensure all packages -- installs them
 ;; (require 'use-package-ensure)
@@ -367,7 +372,7 @@ Source: https://stackoverflow.com/questions/11043004/emacs-compile-buffer-auto-c
   "Detect xfce4 system theme and switch Emacs theme accordingly."
   (interactive)
   (let* ((command "xfconf-query -c xsettings -p /Net/ThemeName")
-         (newtheme (or (concat name "\n")
+         (newtheme (or (if name (concat name "\n"))
                        (shell-command-to-string command)))
          (expected-value "Arc\n")
          (dark-theme 'doom-one)
