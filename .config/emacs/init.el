@@ -305,7 +305,10 @@
   (add-hook 'tuareg-mode-hook 'merlin-mode))
 
 ;; haskell
-(use-package haskell-mode)
+(use-package haskell-mode
+  :custom
+  (haskell-process-args-cabal-repl '("--ghc-options=-ferror-spans +RTS -M2G -RTS"))
+  (haskell-process-args-ghci '("-ferror-spans" "+RTS -M2G -RTS")))
 
 ;; nix
 (use-package nix-mode
