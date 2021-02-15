@@ -394,8 +394,10 @@ Source: https://stackoverflow.com/questions/11043004/emacs-compile-buffer-auto-c
 ;; Automatically switch themes
 
 (defun set-theme (&optional name)
-  "Detect xfce4 system theme and switch Emacs theme accordingly."
-  (interactive)
+  "Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
+  (interactive (list (if current-prefix-arg
+                         (read-from-minibuffer "System theme: ")
+                       nil)))
   (let* ((command "xfconf-query -c xsettings -p /Net/ThemeName")
          (newtheme (or (if name (concat name "\n"))
                        (shell-command-to-string command)))
