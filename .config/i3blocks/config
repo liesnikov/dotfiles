@@ -13,7 +13,7 @@ command=xkb-switch
 separator=true
 
 # [battery]
-# command=/home/buzzer/.config/i3blocks/scripts/battery.py
+# command=~/.config/i3blocks/scripts/battery.py
 # markup=pango
 # interval=10
 # separator=true
