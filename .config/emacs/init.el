@@ -261,7 +261,32 @@
   (olivetti-body-width 90))
 
 
-(use-package markdown-mode)
+(use-package markdown-mode
+  :config
+  ;; from https://gist.github.com/kleinschmidt/5ab0d3c423a7ee013a2c01b3919b009a
+  ;; define markdown citation formats
+  (defvar markdown-cite-format)
+  (setq markdown-cite-format
+        '(
+          (?\C-m . "[@%l]")
+          (?p . "[@%l]")
+          (?t . "@%l")
+          )
+        )
+
+  ;; wrap reftex-citation with local variables for markdown format
+  (defun markdown-reftex-citation ()
+    (interactive)
+    (let ((reftex-cite-format markdown-cite-format)
+          (reftex-cite-key-separator "; @"))
+      (reftex-citation)))
+
+  ;; bind modified reftex-citation to C-c[, without enabling reftex-mode
+  ;; https://www.gnu.org/software/auctex/manual/reftex/Citations-Outside-LaTeX.html#SEC31
+  (add-hook
+   'markdown-mode-hook
+   (lambda ()
+     (define-key markdown-mode-map "\C-c[" 'markdown-reftex-citation))))
 
 (use-package org
   :custom
