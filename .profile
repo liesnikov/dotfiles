@@ -18,8 +18,17 @@ fi
 
 # set PATH so it includes user's private bin if it exists
 if [ -d "$HOME/bin" ] ; then
-    PATH="$HOME/.local/bin:$HOME/bin:$PATH"
+    PATH="$HOME/bin:$PATH"
 fi
+
+if [ -d "$HOME/.local/bin" ] ; then
+    PATH="$HOME/.local/bin::$PATH"
+fi
+
+if [ -d "$HOME/.cabal/bin" ] ; then
+    PATH="$HOME/.cabal/bin:$PATH"
+fi
+
  . /home/buzzer/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true # by opam, ml package manager
 
 if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then . ~/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
@@ -28,4 +37,5 @@ if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then . ~/.nix-profile/etc/profile
 # https://github.com/keepassxreboot/keepassxc/issues/1931
 # works with qt5-style-plugins
 export QT_QPA_PLATFORMTHEME=gtk2
-export QT_AUTO_SCREEN_SCALE_FACTOR=1
+#export QT_AUTO_SCREEN_SCALE_FACTOR=1
+export GHCUP_USE_XDG_DIRS=1
