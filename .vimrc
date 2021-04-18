@@ -142,6 +142,8 @@ cmap ln lnext
 ""Autoread will automatically update an open buffer if it has been changed outside the current edit session, usually by an external program.
 "set autoread
 
+
+
 "augroup autoSaveAndRead
     "autocmd!
     "autocmd TextChanged,InsertLeave,FocusLost * silent! wall
@@ -166,11 +168,16 @@ let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [],'passive_
 " ===================================Files=================================
 " swap files (.swp) in a common location
 " // means use the file's full path
-set dir=~/.vim/_swap//
+set dir=~/.cache/vim/swap//
 
 " backup files (~) in a common location if possible
 set backup
-set backupdir=~/.vim/_backup/,~/tmp,.
+set backupdir=~/.cache/vim/backup/,~/tmp,.
+
+" https://stackoverflow.com/questions/607435/why-does-vim-save-files-with-a-extension
+" move backup and swap files to respective dirs
+set backupdir=~/.cache/vim/backup//,.
+set directory=~/.cache/vim/swap//,.
 
 " turn on undo files, put them in a common location
 set undofile

@@ -83,11 +83,39 @@
   (:map dired-mode-map
     ("C-c o" . dired-open-file)))
 
-(use-package linum
+
+(use-package eshell
+  :ensure nil
   :custom
-  (global-linum-mode t)
+  (password-cache-expiry 300)
+  (eshell-prefer-lisp-functions t)
+  (eshell-prefer-lisp-variables t)
+  (eshell-prompt-function (lambda () (concat (file-name-base (eshell/pwd)) " ⊢")))
+  (eshell-prompt-regexp "[^/]+ ⊢")
   :config
-  (global-linum-mode t))
+  (require 'em-tramp)
+  (add-to-list 'eshell-modules-list 'eshell-tramp))
+
+(use-package display-line-numbers
+  :ensure nil
+  :init
+  (defcustom display-line-numbers-exempt-modes '()
+   "Major modes on which to disable the linum mode, exempts them from global requirement"
+   :group 'display-line-numbers
+   :type 'list
+   :version "green")
+
+  (defun display-line-numbers--turn-on ()
+    "turn on line numbers but excempting certain majore modes defined in `display-line-numbers-exempt-modes'"
+    (if (and
+         (not (member major-mode display-line-numbers-exempt-modes))
+         (not (minibufferp)))
+        (display-line-numbers-mode)))
+  :custom
+;; "Major modes on which to disable the linum mode, exempts them from global requirement"
+  (display-line-numbers-exempt-modes '(vterm-mode eshell-mode shell-mode term-mode ansi-term-mode pdf-view-mode helm-mode))
+  :config
+  (add-hook 'prog-mode-hook 'display-line-numbers-mode))
 
 (use-package ibuffer
   :ensure nil
@@ -332,10 +360,7 @@
   (add-hook 'tuareg-mode-hook 'merlin-mode))
 
 ;; haskell
-(use-package haskell-mode
-  :custom
-  (haskell-process-args-cabal-repl '("--ghc-options=-ferror-spans +RTS -M2G -RTS"))
-  (haskell-process-args-ghci '("-ferror-spans" "+RTS -M2G -RTS")))
+(use-package haskell-mode)
 
 ;; nix
 (use-package nix-mode
@@ -433,9 +458,7 @@ Source: https://stackoverflow.com/questions/11043004/emacs-compile-buffer-auto-c
 
 (set-theme)
 
-
 ;; Screenshot to svg
-
 (defun screenshot-svg ()
   "Save a screenshot of the current frame as an SVG image.
 Saves to a temp file and puts the filename in the kill ring.
@@ -455,6 +478,13 @@ Source: https://old.reddit.com/r/emacs/comments/idz35e/emacs_27_can_take_svg_scr
     (unless (get-buffer-process buffer)
       (recompile))))
 
+;; I use from commandline
+(defun shutdown ()
+  (interactive)
+  (progn
+    (desktop-save "~/.cache/emacs/desktop")
+    (save-buffers-kill-emacs)))
+
 (define-minor-mode compile-on-save-mode
   "Minor mode to automatically call `recompile' whenever the
 current buffer is saved. When there is ongoing compilation,
@@ -470,7 +500,7 @@ nothing happens."
              (shell-command-to-string "agda-mode locate")))
 
 ;; ## added by OPAM user-setup for emacs / base ## 56ab50dc8996d2bb95e7856a6eddb17b ## you can edit, but keep this line
-(require 'opam-user-setup "~/.config/emacs/opam-user-setup.el")
+;; (require 'opam-user-setup "~/.config/emacs/opam-user-setup.el")
 ;; ## end of OPAM user-setup addition for emacs / base ## keep this line
 
 (provide 'init.el)
