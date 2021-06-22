@@ -21,7 +21,6 @@
 (use-package use-package-ensure-system-package
   :ensure t)
 
-
 ;; not a system package, but we have to change paths before anything else kicks in
 (use-package no-littering
   :ensure t
@@ -46,7 +45,7 @@
 ;; (require 'use-package-ensure)
 ;; (setq use-package-always-ensure t)
 
-;;; Built-in packages, for neatness
+;; # Built-in packages, for neatness
 
 (use-package auto-complete
   :ensure nil
@@ -59,7 +58,7 @@
   (desktop-base-lock-name "lock")
   (desktop-path '("~/.cache/emacs/desktop"))
   (desktop-auto-save-timeout 30)
-  (desktop-save 0)
+;;(desktop-save 0)
   :config
   (add-hook 'after-make-frame-functions
     (lambda (frame)
@@ -82,7 +81,6 @@
   :bind
   (:map dired-mode-map
     ("C-c o" . dired-open-file)))
-
 
 (use-package eshell
   :ensure nil
@@ -146,8 +144,9 @@
   (when (fboundp 'windmove-default-keybindings)
     (windmove-default-keybindings)))
 
-;;; Installed packages
-;; Visual things
+;;# Installed packages
+
+;;## Visual things
 (use-package doom-themes
   :config
   ;; Global settings (defaults)
@@ -159,7 +158,17 @@
   ;; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config))
 
-;; General goodies
+;; highlight all whitespaces
+(use-package unicode-whitespace
+  :custom
+  (global-whitespace-mode 1)
+  (global-whitespace-newline-mode 1)
+  :config
+  (setq whitespace-global-modes '(not agda2-mode))
+  (unicode-whitespace-setup 'subdued-faces))
+
+;;## General goodies
+
 (use-package auto-complete
   :config
   (ac-config-default)
@@ -236,15 +245,6 @@
   ;; enable pdftools instead of docview
   (pdf-tools-install))
 
-;; highlight all whitespaces
-(use-package unicode-whitespace
-  :custom
-  (global-whitespace-mode 1)
-  (global-whitespace-newline-mode 1)
-  :config
-  (setq whitespace-global-modes '(not agda2-mode))
-  (unicode-whitespace-setup 'subdued-faces))
-
 ;; Flycheck
 (use-package flycheck
   :config
@@ -253,14 +253,10 @@
   (use-package flycheck-mypy)
   (use-package flycheck-pyflakes))
 
-;; Language server protocol
-(use-package lsp-mode
-  :config
-  (use-package lsp-ui)
-  (use-package lsp-haskell
-    :config
-    (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
-    (add-hook 'haskell-mode-hook 'haskell-doc-mode)))
+;; increment-decrement numbers as in vim
+(use-package evil-numbers)
+
+;;## Writing
 
 ;; word processor and markup
 (use-package wc-mode)
@@ -289,7 +285,6 @@
 (use-package olivetti
   :custom
   (olivetti-body-width 90))
-
 
 (use-package markdown-mode
   :config
@@ -337,8 +332,8 @@
   ;; activate org-indent-mode on org-indent
   (add-hook 'org-mode-hook 'org-indent-mode))
 
+;;## Programming
 
-;; Programming
 (use-package magit
   :custom
   ;; highlight word-differences in diffs
@@ -350,7 +345,17 @@
   :custom
   (editorconfig-mode t))
 
-;; ocaml
+;; Language server protocol
+(use-package lsp-mode
+  :config
+  (use-package lsp-ui)
+  (use-package lsp-haskell
+    :config
+    (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
+    (add-hook 'haskell-mode-hook 'haskell-doc-mode)))
+
+
+;;### ocaml
 (use-package tuareg
   ;; activate tuareg (ocaml) mode in ml4 files
   ;; (syntax extensions for coq)
@@ -359,10 +364,10 @@
   :config ;; from https://github.com/ocaml/merlin/wiki/emacs-from-scratch
   (add-hook 'tuareg-mode-hook 'merlin-mode))
 
-;; haskell
+;;### haskell
 (use-package haskell-mode)
 
-;; nix
+;;### nix
 (use-package nix-mode
   ;; activate nix-mode in .nix files
   :mode "\\.nix\\'")
@@ -381,13 +386,18 @@
     (proof-autosend-enable nil)
     (proof-three-window-enable nil)
     (proof-toolbar-enable t))
+
 (use-package company-coq
   :init
   ;; company-coq is an addon on top of proofgeneral,
   ;; enable it as we enter coq mode
   (add-hook 'coq-mode-hook #'company-coq-mode))
 
-;;; Commentary:
+
+
+
+;;# Commentary:
+
 ;; NB:
 ;; - copy current buffer's file path to kill-ring
 ;;   (kill-new buffer-file-name)
@@ -395,9 +405,10 @@
 ;; - occur mode (M-s o)
 
 
-;;; Bindings:
+;;# Bindings:
 
-;;; Code:
+;;## Code:
+
 ;;(add-to-list
 ;; due to a weird bug, both tokens from PG and company-coq are used
 ;; which results in "token undefined" errors when using PG ones
@@ -494,6 +505,7 @@ nothing happens."
     (progn  (make-local-variable 'after-save-hook)
         (add-hook 'after-save-hook 'compile-on-save-start nil t))
       (kill-local-variable 'after-save-hook)))
+
 
 ;; agda2 mode, gets appended by `agda-mode setup`
 (load-file (let ((coding-system-for-read 'utf-8))
