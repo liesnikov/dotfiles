@@ -489,7 +489,7 @@ Source: https://old.reddit.com/r/emacs/comments/idz35e/emacs_27_can_take_svg_scr
     (unless (get-buffer-process buffer)
       (recompile))))
 
-;; I use from commandline
+;; I use this from commandline
 (defun shutdown ()
   (interactive)
   (progn
@@ -505,6 +505,12 @@ nothing happens."
     (progn  (make-local-variable 'after-save-hook)
         (add-hook 'after-save-hook 'compile-on-save-start nil t))
       (kill-local-variable 'after-save-hook)))
+
+
+(defun eshell/trueclear ()
+  "True clear for eshell, instead of default scroll."
+  (interactive)
+   (let ((eshell-buffer-maximum-lines 0)) (eshell-truncate-buffer)))
 
 
 ;; agda2 mode, gets appended by `agda-mode setup`
