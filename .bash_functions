@@ -22,6 +22,46 @@ themetime () {
       xfconf-query -c xsettings -p /Net/ThemeName -s $DAY_GTK_THEME
       sed -i 's/set background=dark/set background=light/' ~/.vimrc
       ;;
+    switch)
+      CURRENT=$(xfconf-query -c xfwm4 -p /general/theme)
+      if [[ "$CURRENT" == "$DAY_WM_THEME" ]]; then
+        themetime night
+      elif [[ "$CURRENT" == "$DAY_NIGHT_THEME" ]]; then
+        themetime day
+      else
+        echo "current theme is not among daily or nightly ones"
+      fi
+      ;;
+    current)
+      CURRENT_WM=$(xfconf-query -c xfwm4 -p /general/theme)
+      CURRENT_GTK=$(xfconf-query -c xsettings -p /Net/ThemeName)
+      echo "current wm theme": "$CURRENT_WM"
+      echo "current gtk theme": "$CURRENT_GTK"
+      if [[ "$CURRENT_WM" == "$DAY_WM_THEME" ]] &&
+         [[ "$CURRENT_GTK" == "$DAY_GTK_THEME" ]] ; then
+        echo "that is a day theme"
+      elif [[ "$CURRENT_WM" == "$NIGHT_WM_THEME" ]] &&
+           [[ "$CURRENT_GTK" == "$NIGHT_GTK_THEME" ]] ; then
+        echo "that is a night theme"
+      else
+        echo "current theme is not consistent"
+      fi
+      ;;
+    help)
+      echo "day theme": "$DAY_WM_THEME"
+      echo "night theme": "$NIGHT_WM_THEME"
+      echo possible commands: "day", "night", "switch", "current", "help"
+      ;;
+    -h)
+      themetime help
+      ;;
+    --help)
+      themetime help
+      ;;
+    *)
+      echo "defulting to 'switch' command"
+      themetime switch
+      ;;
   esac
 }
 
