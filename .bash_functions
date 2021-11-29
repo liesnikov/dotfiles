@@ -48,9 +48,14 @@ wifi () {
       wifi off
       wifi on
       ;;
+    remove)
+      echo "removing wifi module" && sudo modprobe -rf ath11k_pci && echo "removed"
+      ;;
+    load)
+      echo "loading the module in" && sudo modprobe ath11k_pci && echo "loaded"
+      ;;
     reload)
-      echo "removing wifi module" && sudo modprobe -rf ath11k_pci &&
-      echo "module removed, loading back in" && sudo modprobe ath11k_pci &&
+      wifi remove && wifi load &&
       echo "module loaded, restarting network-manager" && sudo service network-manager restart &&
       echo "wifi reloaded";;
     list)
