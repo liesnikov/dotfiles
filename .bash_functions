@@ -7,10 +7,10 @@ cp_p () {
 }
 
 themetime () {
-  NIGHT_GTK_THEME=Arc-Dark
-  NIGHT_WM_THEME=Arc-Dark
-  DAY_GTK_THEME=Arc
-  DAY_WM_THEME=Arc
+  NIGHT_GTK_THEME="Arc-Dark"
+  NIGHT_WM_THEME="Arc-Dark"
+  DAY_GTK_THEME="Arc"
+  DAY_WM_THEME="Arc"
   case "$1" in
     night)
       xfconf-query -c xfwm4 -p /general/theme -s $NIGHT_WM_THEME
