@@ -26,7 +26,7 @@ themetime () {
       CURRENT=$(xfconf-query -c xfwm4 -p /general/theme)
       if [[ "$CURRENT" == "$DAY_WM_THEME" ]]; then
         themetime night
-      elif [[ "$CURRENT" == "$DAY_NIGHT_THEME" ]]; then
+      elif [[ "$CURRENT" == "$NIGHT_WM_THEME" ]]; then
         themetime day
       else
         echo "current theme is not among daily or nightly ones"
