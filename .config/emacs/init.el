@@ -1,4 +1,6 @@
 ;;; package -- summary
+;; M-x occur ';;;' to look for headers
+
 (require 'package)
 (unless (assoc-default "melpa" package-archives)
   (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t))
@@ -45,7 +47,7 @@
 ;; (require 'use-package-ensure)
 ;; (setq use-package-always-ensure t)
 
-;; # Built-in packages, for neatness
+;;;# Built-in packages, for neatness
 
 (use-package auto-complete
   :ensure nil
@@ -144,9 +146,10 @@
   (when (fboundp 'windmove-default-keybindings)
     (windmove-default-keybindings)))
 
-;;# Installed packages
+;;;# Installed packages
 
-;;## Visual things
+
+;;;## Visual things
 (use-package doom-themes
   :config
   ;; Global settings (defaults)
@@ -167,7 +170,7 @@
   (setq whitespace-global-modes '(not agda2-mode))
   (unicode-whitespace-setup 'subdued-faces))
 
-;;## General goodies
+;;;## General goodies
 
 (use-package auto-complete
   :config
@@ -256,7 +259,7 @@
 ;; increment-decrement numbers as in vim
 (use-package evil-numbers)
 
-;;## Writing
+;;;## Writing
 
 ;; word processor and markup
 (use-package wc-mode)
@@ -332,8 +335,10 @@
   ;; activate org-indent-mode on org-indent
   (add-hook 'org-mode-hook 'org-indent-mode))
 
-;;## Programming
+;;;## Programming
 
+
+;;;### misc
 (use-package magit
   :custom
   ;; highlight word-differences in diffs
@@ -354,8 +359,7 @@
     (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
     (add-hook 'haskell-mode-hook 'haskell-doc-mode)))
 
-
-;;### ocaml
+;;;### ocaml
 (use-package tuareg
   ;; activate tuareg (ocaml) mode in ml4 files
   ;; (syntax extensions for coq)
@@ -364,15 +368,15 @@
   :config ;; from https://github.com/ocaml/merlin/wiki/emacs-from-scratch
   (add-hook 'tuareg-mode-hook 'merlin-mode))
 
-;;### haskell
+;;;### haskell
 (use-package haskell-mode)
 
-;;### nix
+;;;### nix
 (use-package nix-mode
   ;; activate nix-mode in .nix files
   :mode "\\.nix\\'")
 
-;; proof assistants
+;;### proof assistants
 (use-package idris-mode)
 
 (use-package proof-general
@@ -393,10 +397,7 @@
   ;; enable it as we enter coq mode
   (add-hook 'coq-mode-hook #'company-coq-mode))
 
-
-
-
-;;# Commentary:
+;;; Commentary:
 
 ;; NB:
 ;; - copy current buffer's file path to kill-ring
@@ -405,9 +406,9 @@
 ;; - occur mode (M-s o)
 
 
-;;# Bindings:
+;;; Bindings:
 
-;;## Code:
+;;; Code:
 
 ;;(add-to-list
 ;; due to a weird bug, both tokens from PG and company-coq are used
