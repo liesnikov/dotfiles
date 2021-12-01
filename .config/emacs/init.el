@@ -148,6 +148,11 @@
 
 ;;;# Installed packages
 
+;;;## Package managment
+
+(use-package quelpa
+  :config
+  (use-package quelpa-use-package))
 
 ;;;## Visual things
 (use-package doom-themes
@@ -378,6 +383,8 @@
 
 ;;### proof assistants
 (use-package idris-mode)
+(use-package idris2-mode
+  :quelpa (idris2-mode :fetcher github :repo "idris-community/idris2-mode"))
 
 (use-package proof-general
   :custom
