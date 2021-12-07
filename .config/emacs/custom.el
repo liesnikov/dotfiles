@@ -20,7 +20,7 @@
  '(keyboard-coding-system 'utf-8-unix)
  '(menu-bar-mode nil)
  '(package-selected-packages
-   '(ac-math auctex auto-complete auto-complete-auctex color-moccur company-auctex company-coq doom-themes editorconfig evil-numbers flycheck flycheck-haskell flycheck-mypy flycheck-pyflakes gnu-elpa-keyring-update haskell-mode helm helm-projectile helm-rg ibuffer-projectile idris-mode lsp-haskell lsp-mode lsp-ui magit markdown-mode merlin nix-haskell-mode nix-mode no-littering olivetti org org-download org-present pdf-tools projectile proof-general rg transpose-frame tuareg unicode-whitespace use-package use-package-ensure-system-package wc-mode which-key))
+   '(ac-math auctex auto-complete auto-complete-auctex color-moccur company-auctex company-coq doom-themes editorconfig evil-numbers flycheck flycheck-haskell flycheck-mypy flycheck-pyflakes gnu-elpa-keyring-update haskell-mode helm helm-projectile helm-rg ibuffer-projectile idris-mode idris2-mode lsp-haskell lsp-mode lsp-ui magit markdown-mode merlin nix-haskell-mode nix-mode no-littering olivetti org org-download org-present pdf-tools projectile proof-general quelpa quelpa-use-package rg transpose-frame tuareg unicode-whitespace use-package use-package-ensure-system-package wc-mode which-key))
  '(safe-local-variable-values nil)
  '(scroll-bar-mode nil)
  '(scroll-conservatively 10000)
