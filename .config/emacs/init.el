@@ -4,6 +4,10 @@
 (require 'package)
 (unless (assoc-default "melpa" package-archives)
   (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t))
+(unless (assoc-default "gnu" package-archives)
+  (add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/") t))
+(unless (assoc-default "nongnu" package-archives)
+  (add-to-list 'package-archives '("nongnu" . "https://elpa.nongnu.org/packages/") t))
 (unless (assoc-default "org" package-archives)
   (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t))
 (when (< emacs-major-version 27) (package-initialize))
@@ -150,8 +154,11 @@
 
 ;;;## Package managment
 
+
+;; quelpa is a tool to compile and install Emacs Lisp packages locally from local or remote source code.
 (use-package quelpa
   :config
+  ;; quelpa handler for use-package
   (use-package quelpa-use-package))
 
 ;;;## Visual things
