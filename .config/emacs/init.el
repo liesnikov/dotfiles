@@ -275,7 +275,12 @@
   (use-package flycheck-pyflakes))
 
 ;; increment-decrement numbers as in vim
-(use-package evil-numbers)
+(use-package evil-numbers
+  :bind(("C-c +" . 'evil-numbers/inc-at-pt)
+        ("C-c -" . 'evil-numbers/dec-at-pt)
+        ("C-c C-+" . 'evil-numbers/inc-at-pt-incremental)
+        ("C-c C--" . 'evil-numbers/dec-at-pt-incremental)))
+
 
 ;;;## Writing
 
