@@ -154,7 +154,6 @@
 
 ;;;## Package managment
 
-
 ;; quelpa is a tool to compile and install Emacs Lisp packages locally from local or remote source code.
 (use-package quelpa
   :config
@@ -192,12 +191,16 @@
   (use-package auto-complete-auctex)
   (use-package ac-math))
 
+;; provide a popup when you press a button with all bindings that follow
 (use-package which-key
   :config
   (which-key-mode))
 
+;; provide colours in occur mode
 (use-package color-moccur
   :bind (("M-s O" . moccur)))
+
+;; turn frame around, somehow not available by default
 (use-package transpose-frame)
 
 ;; because elpa keys are expiring sometimes
@@ -222,6 +225,8 @@
       (unless (eq ibuffer-sorting-mode 'alphabetic)
         (ibuffer-do-sort-by-alphabetic))))))
 
+
+;; search package instead of grep
 (use-package rg
   :ensure-system-package (rg . ripgrep))
 
@@ -244,6 +249,7 @@
   :config
   (use-package helm-projectile
     :config (helm-projectile-on))
+  ;; integration with rg (required above)
   (use-package helm-rg)
   (helm-mode 1))
 
@@ -356,7 +362,7 @@
   ;; highlight word-differences in diffs
   (magit-diff-refine-hunk (quote all))
   :bind (;; magit open default window binding
-         ("C-x g".  magit-status)))
+         ("C-x g" .  magit-status)))
 
 (use-package editorconfig
   :custom
