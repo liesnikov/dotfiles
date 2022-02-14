@@ -281,6 +281,12 @@
         ("C-c C-+" . 'evil-numbers/inc-at-pt-incremental)
         ("C-c C--" . 'evil-numbers/dec-at-pt-incremental)))
 
+;; move around efficiently
+(use-package avy
+  :bind
+  (("C-;" . avy-goto-char-timer))
+  :config
+  (avy-setup-default))
 
 ;;;## Writing
 
@@ -308,6 +314,7 @@
   (add-hook 'latex-mode-hook 'turn-on-reftex))
 
 ;; package for writing mode, introduces margins
+;; for search purposes: org-mode
 (use-package olivetti
   :custom
   (olivetti-body-width 90))
