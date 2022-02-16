@@ -92,7 +92,7 @@
   :ensure nil
   :custom
   (password-cache-expiry 300)
-  (eshell-load-hook ((lambda nil (setenv "PAGER" ""))))
+  (eshell-load-hook (lambda nil (setenv "PAGER" "")))
   (eshell-prefer-lisp-functions t)
   (eshell-prefer-lisp-variables t)
   (eshell-prompt-function (lambda ()
@@ -124,15 +124,15 @@
   :config
   (add-hook 'prog-mode-hook 'display-line-numbers-mode))
 
-(use-package gdb
+(use-package gdb-mi
   :ensure nil
   :custom
   (gdb-many-windows t))
 
 (use-package ibuffer
   :ensure nil
-  :custom
   ;; commented out for potential performance gains?
+  ;; :custom
   ;; (ibuffer-saved-filter-groups nil)
   ;; (ibuffer-saved-filters nil)
   :bind (;; map C-x C-b to ibuffer instead of default `list-buffers`
