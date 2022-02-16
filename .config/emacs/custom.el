@@ -11,8 +11,6 @@
  '(calendar-week-start-day 1)
  '(custom-enabled-themes '(doom-one))
  '(custom-theme-allow-multiple-selections nil)
- '(eshell-load-hook '((lambda nil (setenv "PAGER" ""))))
- '(gdb-many-windows t)
  '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
  '(initial-buffer-choice t)

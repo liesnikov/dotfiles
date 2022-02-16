@@ -92,6 +92,7 @@
   :ensure nil
   :custom
   (password-cache-expiry 300)
+  (eshell-load-hook ((lambda nil (setenv "PAGER" ""))))
   (eshell-prefer-lisp-functions t)
   (eshell-prefer-lisp-variables t)
   (eshell-prompt-function (lambda ()
@@ -122,6 +123,11 @@
   (display-line-numbers-exempt-modes '(vterm-mode eshell-mode shell-mode term-mode ansi-term-mode pdf-view-mode))
   :config
   (add-hook 'prog-mode-hook 'display-line-numbers-mode))
+
+(use-package gdb
+  :ensure nil
+  :custom
+  (gdb-many-windows t))
 
 (use-package ibuffer
   :ensure nil
