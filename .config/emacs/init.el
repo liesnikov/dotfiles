@@ -124,8 +124,9 @@
 (use-package ibuffer
   :ensure nil
   :custom
-  (ibuffer-saved-filter-groups nil)
-  (ibuffer-saved-filters nil)
+  ;; commented out for potential performance gains?
+  ;; (ibuffer-saved-filter-groups nil)
+  ;; (ibuffer-saved-filters nil)
   :bind (;; map C-x C-b to ibuffer instead of default `list-buffers`
          ("C-x C-b" . ibuffer)))
 
@@ -212,7 +213,9 @@
          ("C-x p". projectile-command-map))
 
   :custom
+  (projectile-enable-caching t)
   (projectile-mode t nil (projectile))
+  (projectile-file-exists-local-cache-expire (* 5 60))
   (projectile-cache-file "~/.cache/emacs/projectile/cache")
 
   :config
