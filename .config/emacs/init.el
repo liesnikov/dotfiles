@@ -94,7 +94,9 @@
   (password-cache-expiry 300)
   (eshell-prefer-lisp-functions t)
   (eshell-prefer-lisp-variables t)
-  (eshell-prompt-function (lambda () (concat (file-name-base (eshell/pwd)) " ⊢")))
+  (eshell-prompt-function (lambda ()
+                            (concat (file-name-base (eshell/pwd))
+                                    " ⊢")))
   (eshell-prompt-regexp "[^/]+ ⊢")
   :config
   (require 'em-tramp)
