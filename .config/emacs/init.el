@@ -56,7 +56,7 @@
 (use-package auto-complete
   :ensure nil
   :custom
-  (ac-comphist-file "/home/buzzer/.cache/emacs/ac-comphist.dat"))
+  (ac-comphist-file "~/.cache/emacs/ac-comphist.dat"))
 
 (use-package desktop
   :ensure nil
@@ -213,7 +213,7 @@
 
   :custom
   (projectile-mode t nil (projectile))
-  (projectile-cache-file "/home/buzzer/.cache/emacs/projectile.cache")
+  (projectile-cache-file "~/.cache/emacs/projectile/cache")
 
   :config
   (use-package ibuffer-projectile
