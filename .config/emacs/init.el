@@ -243,8 +243,8 @@
   (use-package ivy
     :custom
     (ivy-mode t)
-    ;; technically not an ivy variable, but useful to have for some reasons atm unknown to me
-    (enable-recursive-minibuffers t)
+    (enable-recursive-minibuffers t) ;; technically not an ivy variable, but useful to have for some reasons atm unknown to me
+    (ivy-use-virtual-buffers t) ;; add recent files and/or bookmarks to ‘ivy-switch-buffer’.
     (ivy-count-format "(%d/%d) ")
     :config
     (use-package ivy-hydra)
