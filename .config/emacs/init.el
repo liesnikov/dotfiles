@@ -231,16 +231,22 @@
   :ensure-system-package (rg . ripgrep))
 
 ;; ivy is an autocompletion framework
-(use-package ivy
-  :custom
-  (ivy-mode)
-  :config
-  (setq enable-recursive-minibuffers t)
-  (use-package counsel
-  (use-package swiper)
+(use-package counsel
   :bind (("M-x" . counsel-M-x)
-         ("C-x C-f" . counsel-find-file)))
-         ("C-x b" . ivy-switch-buffer))
+         ("C-x C-f" . counsel-find-file))
+  :config
+  (use-package swiper
+    :bind (("C-s" . swiper-isearch)))
+  (use-package ivy
+    :custom
+    (ivy-mode t)
+    ;; technically not an ivy variable, but useful to have for some reasons atm unknown to me
+    (enable-recursive-minibuffers t)
+    (ivy-count-format "(%d/%d) ")
+    :config
+    (use-package ivy-hydra)
+    :bind (("C-x b" . ivy-switch-buffer))))
+
 
 ;; view pdfs in emacs
 (use-package pdf-tools
