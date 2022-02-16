@@ -117,7 +117,7 @@
         (display-line-numbers-mode)))
   :custom
 ;; "Major modes on which to disable the linum mode, exempts them from global requirement"
-  (display-line-numbers-exempt-modes '(vterm-mode eshell-mode shell-mode term-mode ansi-term-mode pdf-view-mode helm-mode))
+  (display-line-numbers-exempt-modes '(vterm-mode eshell-mode shell-mode term-mode ansi-term-mode pdf-view-mode))
   :config
   (add-hook 'prog-mode-hook 'display-line-numbers-mode))
 
@@ -230,28 +230,17 @@
 (use-package rg
   :ensure-system-package (rg . ripgrep))
 
-;; helm is an autocompletion framework
-(use-package helm
+;; ivy is an autocompletion framework
+(use-package ivy
   :custom
-  (helm-mode t)
-  (helm-completion-style (quote helm-fuzzy))
-
-  :bind (("M-x" . helm-M-x)
-         ("C-x C-f" . helm-find-files)
-         ("C-x b" . helm-mini)
-         :map helm-map
-         ("<tab>" . helm-execute-persistent-action)
-         ("M-x" . helm-select-action)
-         :map helm-find-files-map
-         ("<tab>" . helm-execute-persistent-action)
-         ("M-x" . helm-select-action))
-
+  (ivy-mode)
   :config
-  (use-package helm-projectile
-    :config (helm-projectile-on))
-  ;; integration with rg (required above)
-  (use-package helm-rg)
-  (helm-mode 1))
+  (setq enable-recursive-minibuffers t)
+  (use-package counsel
+  (use-package swiper)
+  :bind (("M-x" . counsel-M-x)
+         ("C-x C-f" . counsel-find-file)))
+         ("C-x b" . ivy-switch-buffer))
 
 ;; view pdfs in emacs
 (use-package pdf-tools
