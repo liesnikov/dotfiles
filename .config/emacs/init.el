@@ -291,15 +291,15 @@
 
 ;; increment-decrement numbers as in vim
 (use-package evil-numbers
-  :bind(("C-c +" . 'evil-numbers/inc-at-pt)
-        ("C-c -" . 'evil-numbers/dec-at-pt)
-        ("C-c C-+" . 'evil-numbers/inc-at-pt-incremental)
-        ("C-c C--" . 'evil-numbers/dec-at-pt-incremental)))
+  :bind (("C-c +" . 'evil-numbers/inc-at-pt)
+         ("C-c -" . 'evil-numbers/dec-at-pt)
+         ("C-c C-+" . 'evil-numbers/inc-at-pt-incremental)
+         ("C-c C--" . 'evil-numbers/dec-at-pt-incremental)))
 
 ;; move around efficiently
 (use-package avy
-  :bind
-  (("C-;" . avy-goto-char-timer))
+  :bind (("C-;" . avy-goto-char-timer)
+         ("M-g g" . avy-goto-line))
   :config
   (avy-setup-default))
 
