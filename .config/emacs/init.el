@@ -246,7 +246,6 @@
   :bind (("C-x b" . ivy-switch-buffer))
   :custom
   (ivy-mode t)
-  (ivy-height 6)
   (ivy-read-action-format-function 'ivy-read-action-format-columns) ;; use columns in ivy
   (enable-recursive-minibuffers t) ;; technically not an ivy variable, but useful to have for some reasons atm unknown to me
   (ivy-use-virtual-buffers t) ;; add recent files and/or bookmarks to ‘ivy-switch-buffer’.
