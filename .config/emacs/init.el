@@ -330,7 +330,11 @@
 ;; for search purposes: org-mode
 (use-package olivetti
   :custom
-  (olivetti-body-width 90))
+  (olivetti-body-width 90)
+  :config
+  (defun olivetti ()
+    (interactive)
+    (call-interactively #'olivetti-mode )))
 
 (use-package markdown-mode
   :config
