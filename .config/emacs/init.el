@@ -65,13 +65,12 @@
   (desktop-path '("~/.cache/emacs/desktop"))
   (desktop-auto-save-timeout 30)
 ;;(desktop-save 0)
-  :config
-  (add-hook 'after-make-frame-functions
-    (lambda (frame)
-        (with-selected-frame frame
-            (unless desktop-save-mode
-                (desktop-save-mode 1)
-                (desktop-read))))))
+  :hook
+  (after-make-frame-functions . (lambda (frame)
+                                  (with-selected-frame frame
+                                    (unless desktop-save-mode
+                                      (desktop-save-mode 1)
+                                      (desktop-read))))))
 
 (use-package dired
   :ensure nil
@@ -122,7 +121,7 @@
 ;; "Major modes on which to disable the linum mode, exempts them from global requirement"
   (display-line-numbers-exempt-modes '(vterm-mode eshell-mode shell-mode term-mode ansi-term-mode pdf-view-mode))
   :config
-  (add-hook 'prog-mode-hook 'display-line-numbers-mode))
+  :hook (prog-mode . display-line-numbers-mode))
 
 (use-package gdb-mi
   :ensure nil
@@ -228,13 +227,12 @@
 
   :config
   (use-package ibuffer-projectile
-    :config
-    (add-hook 'ibuffer-hook
+    :hook
     ;; ibuffer-projectile automatic sorting
-    (lambda ()
-      (ibuffer-projectile-set-filter-groups)
-      (unless (eq ibuffer-sorting-mode 'alphabetic)
-        (ibuffer-do-sort-by-alphabetic))))))
+    (ibuffer . (lambda ()
+                 (ibuffer-projectile-set-filter-groups)
+                 (unless (eq ibuffer-sorting-mode 'alphabetic)
+                   (ibuffer-do-sort-by-alphabetic))))))
 
 
 ;; search package instead of grep
@@ -270,15 +268,15 @@
 ;; view pdfs in emacs
 (use-package pdf-tools
   :config
-  (add-hook 'pdf-view-mode-hook
-            (lambda ()
-              ; Disable linum (line numbers) when entering pdf-tools mode.
-              ; from https://stackoverflow.com/a/6839968
-              (add-hook 'after-change-major-mode-hook
-                        (lambda () (linum-mode 0))
-                        :append :local)))
-  ;; enable pdftools instead of docview
-  (pdf-tools-install))
+  (pdf-tools-install) ;; enable pdftools instead of docview
+
+  :hook
+  ; Disable linum (line numbers) when entering pdf-tools mode.
+  ; from https://stackoverflow.com/a/6839968
+  (pdf-view-mode . (lambda ()
+                     (add-hook 'after-change-major-mode-hook
+                               (lambda () (linum-mode 0))
+                               :append :local))))
 
 ;; Flycheck
 (use-package flycheck
@@ -313,19 +311,20 @@
   :ensure auctex
   :custom
   (reftex-plug-into-AUCTeX t)
+  :hook
+  (TeX-mode . (lambda () (flyspell-mode t)))
+  (LaTeX-mode . LaTeX-math-mode)
+  (LaTeX-mode .
+              (lambda () (set (make-variable-buffer-local 'TeX-electric-math)
+                          (cons "\\(" "\\)"))))
+  ;; Turn on RefTeX with AUCTeX LaTeX mode
+  (LaTeX-mode . turn-on-reftex)
+  ;; with Emacs latex mode
+  (latex-mode . turn-on-reftex)
   :config
   (use-package company-auctex
     :config
-    (company-auctex-init))
-  (add-hook 'TeX-mode-hook (lambda () (flyspell-mode t)))
-  (add-hook 'LaTeX-mode-hook 'LaTeX-math-mode)
-  (add-hook 'LaTeX-mode-hook
-          (lambda () (set (make-variable-buffer-local 'TeX-electric-math)
-                          (cons "\\(" "\\)"))))
-  ;; Turn on RefTeX with AUCTeX LaTeX mode
-  (add-hook 'LaTeX-mode-hook 'turn-on-reftex)
-  ;; with Emacs latex mode
-  (add-hook 'latex-mode-hook 'turn-on-reftex))
+    (company-auctex-init)))
 
 ;; package for writing mode, introduces margins
 ;; for search purposes: org-mode
@@ -346,19 +345,19 @@
           )
         )
 
+
   ;; wrap reftex-citation with local variables for markdown format
   (defun markdown-reftex-citation ()
     (interactive)
     (let ((reftex-cite-format markdown-cite-format)
           (reftex-cite-key-separator "; @"))
       (reftex-citation)))
-
-  ;; bind modified reftex-citation to C-c[, without enabling reftex-mode
-  ;; https://www.gnu.org/software/auctex/manual/reftex/Citations-Outside-LaTeX.html#SEC31
-  (add-hook
-   'markdown-mode-hook
-   (lambda ()
-     (define-key markdown-mode-map "\C-c[" 'markdown-reftex-citation))))
+  :hook
+  ; bind modified reftex-citation to C-c[, without enabling reftex-mode
+  ; https://www.gnu.org/software/auctex/manual/reftex/Citations-Outside-LaTeX.html#SEC31
+  (markdown-mode . (lambda ()
+                     (define-key markdown-mode-map "\C-c["
+                       'markdown-reftex-citation))))
 
 (use-package org
   :custom
@@ -376,8 +375,10 @@
   :config
   (use-package org-download)
   (use-package org-present)
-  ;; activate org-indent-mode on org-indent
-  (add-hook 'org-mode-hook 'org-indent-mode))
+  :hook
+  ; activate org-indent-mode on org-indent
+  (org-mode . org-indent-mode)
+)
 
 ;;;## Programming
 
@@ -399,9 +400,9 @@
   :config
   (use-package lsp-ui)
   (use-package lsp-haskell
-    :config
-    (add-hook 'haskell-mode-hook 'interactive-haskell-mode)
-    (add-hook 'haskell-mode-hook 'haskell-doc-mode)))
+    :hook
+    (haskell-mode . interactive-haskell-mode)
+    (haskell-mode . haskell-doc-mode)))
 
 ;;;### ocaml
 (use-package tuareg
@@ -409,8 +410,10 @@
   ;; (syntax extensions for coq)
   :mode "\\.ml4\\'")
 (use-package merlin
-  :config ;; from https://github.com/ocaml/merlin/wiki/emacs-from-scratch
-  (add-hook 'tuareg-mode-hook 'merlin-mode))
+  :hook
+   ;; from https://github.com/ocaml/merlin/wiki/emacs-from-scratch
+  (tuareg-mode . merlin-mode)
+  )
 
 ;;;### haskell
 (use-package haskell-mode)
@@ -438,10 +441,10 @@
     (proof-toolbar-enable t))
 
 (use-package company-coq
-  :init
+  :hook
   ;; company-coq is an addon on top of proofgeneral,
   ;; enable it as we enter coq mode
-  (add-hook 'coq-mode-hook #'company-coq-mode))
+  (coq-mode . company-coq-mode))
 
 ;;; Commentary:
 
