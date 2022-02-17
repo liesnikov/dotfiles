@@ -242,21 +242,30 @@
   :ensure-system-package (rg . ripgrep))
 
 ;; ivy is an autocompletion framework
-(use-package counsel
-  :bind (("M-x" . counsel-M-x)
-         ("C-x C-f" . counsel-find-file))
+(use-package ivy
+  :bind (("C-x b" . ivy-switch-buffer))
+  :custom
+  (ivy-mode t)
+  (ivy-height 6)
+  (ivy-read-action-format-function 'ivy-read-action-format-columns) ;; use columns in ivy
+  (enable-recursive-minibuffers t) ;; technically not an ivy variable, but useful to have for some reasons atm unknown to me
+  (ivy-use-virtual-buffers t) ;; add recent files and/or bookmarks to ‘ivy-switch-buffer’.
   :config
-  (use-package swiper
-    :bind (("C-s" . swiper-isearch)))
-  (use-package ivy
-    :custom
-    (ivy-mode t)
-    (enable-recursive-minibuffers t) ;; technically not an ivy variable, but useful to have for some reasons atm unknown to me
-    (ivy-use-virtual-buffers t) ;; add recent files and/or bookmarks to ‘ivy-switch-buffer’.
-    (ivy-count-format "(%d/%d) ")
+  (use-package ivy-hydra)
+  (use-package ivy-rich
     :config
-    (use-package ivy-hydra)
-    :bind (("C-x b" . ivy-switch-buffer))))
+    (ivy-rich-mode t)
+    (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)))
+
+(use-package swiper
+  :bind (("C-s" . swiper-isearch)))
+
+(use-package counsel
+  :custom
+  (counsel-mode t)
+  :bind
+  (("M-x" . counsel-M-x)
+   ("C-x C-f" . counsel-find-file)))
 
 
 ;; view pdfs in emacs

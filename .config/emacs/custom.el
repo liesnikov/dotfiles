@@ -25,7 +25,7 @@
      flycheck flycheck-haskell flycheck-mypy flycheck-pyflakes
      gnu-elpa-keyring-update
      haskell-mode
-     ibuffer-projectile idris-mode idris2-mode ivy ivy-hydra
+     ibuffer-projectile idris-mode idris2-mode ivy ivy-hydra ivy-rich
      lsp-haskell lsp-mode lsp-ui
      magit markdown-mode merlin nix-haskell-mode
      nix-mode no-littering
