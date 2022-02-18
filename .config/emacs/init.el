@@ -77,15 +77,15 @@
   :custom
   (dired-async-mode t)
   (dired-listing-switches "-al")
+  :bind
+  (:map dired-mode-map
+        ("C-c o" . dired-open-file))
   :config
   (defun dired-open-file ()
     "In dired, open the file named on this line."
     (interactive)
     (let* ((file (dired-get-filename nil t)))
-      (call-process "xdg-open" nil 0 nil file)))
-  :bind
-  (:map dired-mode-map
-    ("C-c o" . dired-open-file)))
+      (call-process "xdg-open" nil 0 nil file))))
 
 (use-package eshell
   :ensure nil
@@ -110,7 +110,6 @@
    :group 'display-line-numbers
    :type 'list
    :version "green")
-
   (defun display-line-numbers--turn-on ()
     "turn on line numbers but excempting certain majore modes defined in `display-line-numbers-exempt-modes'"
     (if (and
@@ -120,7 +119,6 @@
   :custom
 ;; "Major modes on which to disable the linum mode, exempts them from global requirement"
   (display-line-numbers-exempt-modes '(vterm-mode eshell-mode shell-mode term-mode ansi-term-mode pdf-view-mode))
-  :config
   :hook (prog-mode . display-line-numbers-mode))
 
 (use-package gdb-mi
@@ -144,19 +142,19 @@
 
 (use-package windmove
   :ensure nil
+  :init
+  ;; Windmove is a library built into GnuEmacs starting with version 21.
+  ;; It lets you move point from window to window using Shift and the arrow keys.
+  ;; https://www.emacswiki.org/emacs/WindMove
+  (when (fboundp 'windmove-default-keybindings)
+    (windmove-default-keybindings))
   :bind (;; new bindings to change widnow sizes
          ;; similar bindings to windmove (see below),
          ;; which has S-<arrow> as moving binding
          ("S-C-<left>" . shrink-window-horizontally)
          ("S-C-<right>".  enlarge-window-horizontally)
          ("S-C-<down>" . shrink-window)
-         ("S-C-<up>" . enlarge-window))
-  :init
-  ;; Windmove is a library built into GnuEmacs starting with version 21.
-  ;; It lets you move point from window to window using Shift and the arrow keys.
-  ;; https://www.emacswiki.org/emacs/WindMove
-  (when (fboundp 'windmove-default-keybindings)
-    (windmove-default-keybindings)))
+         ("S-C-<up>" . enlarge-window)))
 
 ;;;# Installed packages
 
@@ -170,10 +168,13 @@
 
 ;;;## Visual things
 (use-package doom-themes
-  :config
+  :custom
   ;; Global settings (defaults)
-  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-        doom-themes-enable-italic t) ; if nil, italics is universally disabled
+  ; if nil, bold is universally disabled
+  (doom-themes-enable-bold t)
+  ; if nil, bold is universally disabled
+  (doom-themes-enable-italic t)
+  :config
   ;; (load-theme 'doom-one t)
   ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config)
@@ -185,8 +186,8 @@
   :custom
   (global-whitespace-mode 1)
   (global-whitespace-newline-mode 1)
+  (whitespace-global-modes '(not agda2-mode))
   :config
-  (setq whitespace-global-modes '(not agda2-mode))
   (unicode-whitespace-setup 'subdued-faces))
 
 ;;;## General goodies
@@ -308,7 +309,7 @@
 ;; loading auctex directly doesn't work for some reason
 ;; https://github.com/jwiegley/use-package/issues/379
 (use-package tex-mode
-  :ensure auctex
+  :after auctex
   :custom
   (reftex-plug-into-AUCTeX t)
   :hook
@@ -348,7 +349,6 @@
           (?t . "@%l")
           )
         )
-
 
   ;; wrap reftex-citation with local variables for markdown format
   (defun markdown-reftex-citation ()
