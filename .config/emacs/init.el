@@ -301,7 +301,7 @@
   :config
   (avy-setup-default))
 
-;;;## Writing
+;;;## Writing & reading
 
 ;; word processor and markup
 (use-package wc-mode)
@@ -336,6 +336,10 @@
   (defun olivetti ()
     (interactive)
     (call-interactively #'olivetti-mode )))
+
+(use-package nov
+  :config
+  (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode)))
 
 (use-package markdown-mode
   :config
