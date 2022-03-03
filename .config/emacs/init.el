@@ -64,13 +64,15 @@
   (desktop-base-lock-name "lock")
   (desktop-path '("~/.cache/emacs/desktop"))
   (desktop-auto-save-timeout 30)
+  (desktop-load-locked-desktop t)
 ;;(desktop-save 0)
-  :hook
-  (after-make-frame-functions . (lambda (frame)
-                                  (with-selected-frame frame
-                                    (unless desktop-save-mode
-                                      (desktop-save-mode 1)
-                                      (desktop-read))))))
+  :config
+  (add-hook 'after-make-frame-functions
+    (lambda (frame)
+      (with-selected-frame frame
+        (unless desktop-save-mode
+          (desktop-save-mode 1)
+          (desktop-read))))))
 
 (use-package dired
   :ensure nil
