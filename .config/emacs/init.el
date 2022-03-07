@@ -192,6 +192,14 @@
   :config
   (unicode-whitespace-setup 'subdued-faces))
 
+(use-package emojify
+  ;; :wave:
+  :custom
+  (emojify-display-style 'unicode)
+  (emojify-emoji-styles '(unicode github))
+  :hook
+  (after-init . global-emojify-mode))
+
 ;;;## General goodies
 
 (use-package auto-complete

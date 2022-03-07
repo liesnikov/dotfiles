@@ -21,7 +21,7 @@
    '(ac-math auctex auto-complete auto-complete-auctex avy
      color-moccur company-auctex company-coq counsel-projectile
      doom-themes
-     editorconfig evil-numbers
+     editorconfig emojify evil-numbers
      flycheck flycheck-haskell flycheck-mypy flycheck-pyflakes
      gnu-elpa-keyring-update
      haskell-mode
