@@ -16,20 +16,19 @@
 (setq custom-file "~/.config/emacs/custom.el")
 (load custom-file)
 
+;;; Use-package
 (unless (package-installed-p 'use-package)
   (package-install 'use-package))
 (eval-when-compile
   (require 'use-package))
-
-;;; Use-package
-
 (use-package use-package
   :custom
-  (use-package-hook-name-suffix nil))
+  (use-package-hook-name-suffix nil)
+  :config
+  ;; The :ensure-system-package keyword allows you to ensure system binaries exist alongside your package declarations.
+  (use-package use-package-ensure-system-package
+    :ensure t))
 
-;; The :ensure-system-package keyword allows you to ensure system binaries exist alongside your package declarations.
-(use-package use-package-ensure-system-package
-  :ensure t)
 
 ;; not a system package, but we have to change paths before anything else kicks in
 (use-package no-littering
