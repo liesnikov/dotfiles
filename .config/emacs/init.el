@@ -23,6 +23,10 @@
 
 ;;; Use-package
 
+(use-package use-package
+  :custom
+  (use-package-hook-name-suffix nil))
+
 ;; The :ensure-system-package keyword allows you to ensure system binaries exist alongside your package declarations.
 (use-package use-package-ensure-system-package
   :ensure t)
@@ -66,13 +70,12 @@
   (desktop-auto-save-timeout 30)
   (desktop-load-locked-desktop t)
 ;;(desktop-save 0)
-  :config
-  (add-hook 'after-make-frame-functions
-    (lambda (frame)
-      (with-selected-frame frame
-        (unless desktop-save-mode
-          (desktop-save-mode 1)
-          (desktop-read))))))
+  :hook
+  (after-make-frame-functions . (lambda (frame)
+                                  (with-selected-frame frame
+                                    (unless desktop-save-mode
+                                      (desktop-save-mode 1)
+                                      (desktop-read))))))
 
 (use-package dired
   :ensure nil
@@ -121,7 +124,7 @@
   :custom
 ;; "Major modes on which to disable the linum mode, exempts them from global requirement"
   (display-line-numbers-exempt-modes '(vterm-mode eshell-mode shell-mode term-mode ansi-term-mode pdf-view-mode))
-  :hook (prog-mode . display-line-numbers-mode))
+  :hook (prog-mode-hook . display-line-numbers-mode))
 
 (use-package gdb-mi
   :ensure nil
@@ -198,7 +201,7 @@
   (emojify-display-style 'unicode)
   (emojify-emoji-styles '(unicode github))
   :hook
-  (after-init . global-emojify-mode))
+  (after-init-hook . global-emojify-mode))
 
 ;;;## General goodies
 
@@ -240,10 +243,10 @@
   (use-package ibuffer-projectile
     :hook
     ;; ibuffer-projectile automatic sorting
-    (ibuffer . (lambda ()
-                 (ibuffer-projectile-set-filter-groups)
-                 (unless (eq ibuffer-sorting-mode 'alphabetic)
-                   (ibuffer-do-sort-by-alphabetic))))))
+    (ibuffer-hook . (lambda ()
+                      (ibuffer-projectile-set-filter-groups)
+                      (unless (eq ibuffer-sorting-mode 'alphabetic)
+                        (ibuffer-do-sort-by-alphabetic))))))
 
 
 ;; search package instead of grep
@@ -284,10 +287,10 @@
   :hook
   ; Disable linum (line numbers) when entering pdf-tools mode.
   ; from https://stackoverflow.com/a/6839968
-  (pdf-view-mode . (lambda ()
-                     (add-hook 'after-change-major-mode-hook
-                               (lambda () (linum-mode 0))
-                               :append :local))))
+  (pdf-view-mode-hook . (lambda ()
+                          (add-hook 'after-change-major-mode-hook
+                                    (lambda () (linum-mode 0))
+                                    :append :local))))
 
 ;; Flycheck
 (use-package flycheck
@@ -324,15 +327,15 @@
   :custom
   (reftex-plug-into-AUCTeX t)
   :hook
-  (TeX-mode . (lambda () (flyspell-mode t)))
-  (LaTeX-mode . LaTeX-math-mode)
-  (LaTeX-mode .
+  (TeX-mode-hook . (lambda () (flyspell-mode t)))
+  (LaTeX-mode-hook . LaTeX-math-mode)
+  (LaTeX-mode-hook .
               (lambda () (set (make-variable-buffer-local 'TeX-electric-math)
                           (cons "\\(" "\\)"))))
   ;; Turn on RefTeX with AUCTeX LaTeX mode
-  (LaTeX-mode . turn-on-reftex)
+  (LaTeX-mode-hook . turn-on-reftex)
   ;; with Emacs latex mode
-  (latex-mode . turn-on-reftex)
+  (latex-mode-hook . turn-on-reftex)
   :config
   (use-package company-auctex
     :config
@@ -374,9 +377,9 @@
   :hook
   ; bind modified reftex-citation to C-c[, without enabling reftex-mode
   ; https://www.gnu.org/software/auctex/manual/reftex/Citations-Outside-LaTeX.html#SEC31
-  (markdown-mode . (lambda ()
-                     (define-key markdown-mode-map "\C-c["
-                       'markdown-reftex-citation))))
+  (markdown-mode-hook . (lambda ()
+                          (define-key markdown-mode-map "\C-c["
+                            'markdown-reftex-citation))))
 
 (use-package org
   :custom
@@ -396,7 +399,7 @@
   (use-package org-present)
   :hook
   ; activate org-indent-mode on org-indent
-  (org-mode . org-indent-mode)
+  (org-mode-hook . org-indent-mode)
 )
 
 ;;;## Programming
@@ -420,8 +423,8 @@
   (use-package lsp-ui)
   (use-package lsp-haskell
     :hook
-    (haskell-mode . interactive-haskell-mode)
-    (haskell-mode . haskell-doc-mode)))
+    (haskell-mode-hook . interactive-haskell-mode)
+    (haskell-mode-hook . haskell-doc-mode)))
 
 ;;;### ocaml
 (use-package tuareg
@@ -431,7 +434,7 @@
 (use-package merlin
   :hook
    ;; from https://github.com/ocaml/merlin/wiki/emacs-from-scratch
-  (tuareg-mode . merlin-mode)
+  (tuareg-mode-hook . merlin-mode)
   )
 
 ;;;### haskell
@@ -463,7 +466,7 @@
   :hook
   ;; company-coq is an addon on top of proofgeneral,
   ;; enable it as we enter coq mode
-  (coq-mode . company-coq-mode))
+  (coq-mode-hook . company-coq-mode))
 
 ;;; Commentary:
 
