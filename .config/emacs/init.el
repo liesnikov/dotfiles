@@ -23,12 +23,13 @@
   (require 'use-package))
 (use-package use-package
   :custom
+  ;; disable :hook suffix to use abnormal hooks with the same syntax
   (use-package-hook-name-suffix nil)
   :config
-  ;; The :ensure-system-package keyword allows you to ensure system binaries exist alongside your package declarations.
+  ;; The :ensure-system-package keyword allows
+  ;; to ensure system binaries exist alongside package declarations.
   (use-package use-package-ensure-system-package
     :ensure t))
-
 
 ;; not a system package, but we have to change paths before anything else kicks in
 (use-package no-littering
@@ -168,7 +169,8 @@
 (use-package quelpa
   :config
   ;; quelpa handler for use-package
-  (use-package quelpa-use-package))
+  (use-package quelpa-use-package
+    :requires use-package))
 
 ;;;## Visual things
 (use-package doom-themes
@@ -240,6 +242,7 @@
 
   :config
   (use-package ibuffer-projectile
+    :requires ibuffer
     :hook
     ;; ibuffer-projectile automatic sorting
     (ibuffer-hook . (lambda ()
@@ -295,9 +298,12 @@
 (use-package flycheck
   :config
   (global-flycheck-mode)
-  (use-package flycheck-haskell)
-  (use-package flycheck-mypy)
-  (use-package flycheck-pyflakes))
+  (use-package flycheck-haskell
+    :requires flycheck)
+  (use-package flycheck-mypy
+    :requires flycheck)
+  (use-package flycheck-pyflakes
+    :requires flycheck))
 
 ;; increment-decrement numbers as in vim
 (use-package evil-numbers
@@ -337,6 +343,7 @@
   (latex-mode-hook . turn-on-reftex)
   :config
   (use-package company-auctex
+    :requires company
     :config
     (company-auctex-init)))
 
@@ -398,8 +405,7 @@
   (use-package org-present)
   :hook
   ; activate org-indent-mode on org-indent
-  (org-mode-hook . org-indent-mode)
-)
+  (org-mode-hook . org-indent-mode))
 
 ;;;## Programming
 
@@ -430,7 +436,9 @@
   ;; activate tuareg (ocaml) mode in ml4 files
   ;; (syntax extensions for coq)
   :mode "\\.ml4\\'")
+
 (use-package merlin
+  :requires tuareg
   :hook
    ;; from https://github.com/ocaml/merlin/wiki/emacs-from-scratch
   (tuareg-mode-hook . merlin-mode)
@@ -462,6 +470,7 @@
     (proof-toolbar-enable t))
 
 (use-package company-coq
+  :requires company
   :hook
   ;; company-coq is an addon on top of proofgeneral,
   ;; enable it as we enter coq mode
