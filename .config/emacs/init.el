@@ -398,8 +398,8 @@
                  ("begin" "$1" "$" "$$" "\\(" "\\["))))
   (org-modules
    (quote
-    (org-bbdb org-bibtex org-docview org-eww org-gnus
-     org-info org-irc org-mhe org-rmail org-tempo org-w3m)))
+    (ol-bbdb ol-bibtex ol-docview ol-eww ol-gnus
+     ol-info ol-irc ol-mhe ol-rmail org-tempo ol-w3m)))
   :config
   (use-package org-download)
   (use-package org-present)
