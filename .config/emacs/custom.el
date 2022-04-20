@@ -34,7 +34,7 @@
      quelpa quelpa-use-package
      rg
      transpose-frame tuareg
-     unicode-whitespace use-package use-package-ensure-system-package
+     undo-tree unicode-whitespace use-package use-package-ensure-system-package
      wc-mode which-key))
  '(safe-local-variable-values nil)
  '(scroll-bar-mode nil)

@@ -330,6 +330,10 @@
   :config
   (avy-setup-default))
 
+(use-package undo-tree
+  :config
+  (global-undo-tree-mode))
+
 ;;;## Writing & reading
 
 ;; word processor and markup
