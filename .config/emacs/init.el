@@ -251,14 +251,15 @@
   (projectile-cache-file "~/.cache/emacs/projectile/cache")
 
   :config
+
   (use-package ibuffer-projectile
-    :requires ibuffer
+    :config
     :hook
-    ;; ibuffer-projectile automatic sorting
-    (ibuffer-hook . (lambda ()
-                      (ibuffer-projectile-set-filter-groups)
-                      (unless (eq ibuffer-sorting-mode 'alphabetic)
-                        (ibuffer-do-sort-by-alphabetic))))))
+    (ibuffer-hook . ;; ibuffer-projectile automatic sorting
+      (lambda ()
+        (ibuffer-projectile-set-filter-groups)
+        (unless (eq ibuffer-sorting-mode 'alphabetic)
+          (ibuffer-do-sort-by-alphabetic))))))
 
 
 ;; search package instead of grep
