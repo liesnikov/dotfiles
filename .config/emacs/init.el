@@ -161,6 +161,16 @@
          ("S-C-<down>" . shrink-window)
          ("S-C-<up>" . enlarge-window)))
 
+(use-package nxml-mode
+  :ensure nil
+  :config
+  (defun xml-pretty-print ()
+    (interactive)
+    sgml-pretty-print)
+  (use-package noxml-fold
+    :hook
+    (nxml-mode-hook . (lambda () (noxml-fold-mode 1)))))
+
 ;;;# Installed packages
 
 ;;;## Package managment
