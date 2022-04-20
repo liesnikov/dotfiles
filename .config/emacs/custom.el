@@ -29,7 +29,7 @@
      lsp-haskell lsp-mode lsp-ui
      magit markdown-mode merlin nix-haskell-mode
      nix-mode no-littering nov
-     olivetti org org-download org-present
+     olivetti org org-download org-modern org-present
      pdf-tools projectile proof-general
      quelpa quelpa-use-package
      rg

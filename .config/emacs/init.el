@@ -403,6 +403,10 @@
   :config
   (use-package org-download)
   (use-package org-present)
+  (use-package org-modern
+    :hook
+    ((org-mode-hook . org-modern-mode)
+     (org-agenda-finalize-hook . org-modern-agenda)))
   :hook
   ; activate org-indent-mode on org-indent
   (org-mode-hook . org-indent-mode))
