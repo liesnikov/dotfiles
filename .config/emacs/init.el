@@ -328,7 +328,10 @@
 
 (use-package undo-tree
   :config
-  (global-undo-tree-mode))
+  (global-undo-tree-mode)
+  (defadvice undo-tree-make-history-save-file-name
+    (after undo-tree activate)
+    (setq ad-return-value (concat ad-return-value ".gz"))))
 
 ;;;## Writing & reading
 
