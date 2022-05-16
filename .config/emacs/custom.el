@@ -21,12 +21,11 @@
    '(ac-math auctex auto-complete auto-complete-auctex avy
      color-moccur company-auctex company-coq counsel-projectile
      doom-themes
-     editorconfig emojify evil-numbers
-     flycheck flycheck-haskell flycheck-mypy flycheck-pyflakes
+     editorconfig eglot emojify evil-numbers
+     flymake flymake-haskell-multi
      gnu-elpa-keyring-update
      haskell-mode
      ibuffer-projectile idris-mode idris2-mode ivy ivy-hydra ivy-rich
-     lsp-haskell lsp-mode lsp-ui
      magit markdown-mode merlin nix-haskell-mode
      nix-mode no-littering nov noxml-fold
      olivetti org org-download org-modern org-present

@@ -305,16 +305,11 @@
                                     (lambda () (linum-mode 0))
                                     :append :local))))
 
-;; Flycheck
-(use-package flycheck
+;; Flymake
+(use-package flymake
   :config
-  (global-flycheck-mode)
-  (use-package flycheck-haskell
-    :requires flycheck)
-  (use-package flycheck-mypy
-    :requires flycheck)
-  (use-package flycheck-pyflakes
-    :requires flycheck))
+  (use-package flymake-haskell-multi
+    :requires flymake))
 
 ;; increment-decrement numbers as in vim
 (use-package evil-numbers
@@ -442,13 +437,7 @@
   (editorconfig-mode t))
 
 ;; Language server protocol
-(use-package lsp-mode
-  :config
-  (use-package lsp-ui)
-  (use-package lsp-haskell
-    :hook
-    (haskell-mode-hook . interactive-haskell-mode)
-    (haskell-mode-hook . haskell-doc-mode)))
+(use-package eglot)
 
 ;;;### ocaml
 (use-package tuareg
