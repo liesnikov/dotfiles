@@ -171,6 +171,11 @@
     :hook
     (nxml-mode-hook . (lambda () (noxml-fold-mode 1)))))
 
+(use-package display-fill-column-indicator
+  :ensure nil
+  :custom
+  (display-fill-column-indicator-column 100))
+
 ;;;# Installed packages
 
 ;;;## Package managment
