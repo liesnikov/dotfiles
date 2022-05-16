@@ -461,7 +461,9 @@
   )
 
 ;;;### haskell
-(use-package haskell-mode)
+(use-package haskell-mode
+  :hook
+  (haskell-mode-hook . interactive-haskell-mode))
 
 ;;;### nix
 (use-package nix-mode
