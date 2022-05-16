@@ -153,6 +153,9 @@
   ;; https://www.emacswiki.org/emacs/WindMove
   (when (fboundp 'windmove-default-keybindings)
     (windmove-default-keybindings))
+  :custom
+  (window-resize-pixelwise 't)
+  (frame-resize-pixelwise 't)
   :bind (;; new bindings to change widnow sizes
          ;; similar bindings to windmove (see below),
          ;; which has S-<arrow> as moving binding
