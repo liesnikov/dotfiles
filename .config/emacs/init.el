@@ -315,6 +315,8 @@
 
 ;; Flymake
 (use-package flymake
+  :custom
+  (flymake-run-in-place nil)
   :config
   (use-package flymake-haskell-multi
     :requires flymake))
