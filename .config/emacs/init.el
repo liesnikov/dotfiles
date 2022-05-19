@@ -502,15 +502,17 @@
 ;;; Commentary:
 
 ;; NB:
-;; - copy current buffer's file path to kill-ring
-;;   (kill-new buffer-file-name)
 ;; - toggle-truncate-lines
 ;; - occur mode (M-s o)
-
 
 ;;; Bindings:
 
 ;;; Code:
+
+(defun kill-filename ()
+  ;; copy current buffer's file path to kill-ring
+  (interactive)
+  (kill-new buffer-file-name))
 
 ;;(add-to-list
 ;; due to a weird bug, both tokens from PG and company-coq are used
