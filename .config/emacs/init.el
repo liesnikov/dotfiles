@@ -84,7 +84,8 @@
   (dired-listing-switches "-al")
   :bind
   (:map dired-mode-map
-        ("C-c o" . dired-open-file))
+        ("C-c o"   . dired-open-file)
+        ("C-c C-o" . dired-open-file))
   :config
   (defun dired-open-file ()
     "In dired, open the file named on this line."
