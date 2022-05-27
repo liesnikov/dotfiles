@@ -31,6 +31,10 @@
   (use-package use-package-ensure-system-package
     :ensure t))
 
+;; ensure all packages -- installs them
+;; (require 'use-package-ensure)
+;; (setq use-package-always-ensure t)
+
 ;; not a system package, but we have to change paths before anything else kicks in
 (use-package no-littering
   :ensure t
@@ -50,10 +54,6 @@
           (no-littering-expand-var-file-name "eshell")
         transient-history-file
           (no-littering-expand-var-file-name "transient/history.el")))
-
-;; ensure all packages -- installs them
-;; (require 'use-package-ensure)
-;; (setq use-package-always-ensure t)
 
 ;;;# Built-in packages, for neatness
 
