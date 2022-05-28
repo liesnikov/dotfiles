@@ -180,6 +180,14 @@
   :custom
   (display-fill-column-indicator-column 100))
 
+; rectangular editining with C-<return>
+; borrowed from https://karthinks.com/software/more-batteries-included-with-emacs/
+(use-package cua-base
+  :config
+  (cua-mode 't))
+
+;; end of built-in packages
+
 ;;;# Installed packages
 
 ;;;## Package managment
