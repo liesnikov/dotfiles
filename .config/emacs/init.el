@@ -503,8 +503,11 @@
 ;;; Commentary:
 
 ;; NB:
-;; - toggle-truncate-lines
-;; - occur mode (M-s o)
+; - toggle-truncate-lines
+; - occur mode (M-s o)
+; - re-builder for interactive regex building
+;   invoke by M-x re-builder
+
 
 ;;; Bindings:
 
