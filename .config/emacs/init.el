@@ -420,6 +420,7 @@
                             'markdown-reftex-citation))))
 
 (use-package org
+  :bind (("C-c l" . org-store-link))
   :custom
   (org-agenda-files nil)
   (org-cycle-include-plain-lists (quote integrate))
