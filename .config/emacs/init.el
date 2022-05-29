@@ -525,13 +525,18 @@
 ;;; Commentary:
 
 ;; NB:
-; - toggle-truncate-lines
-; - occur mode (M-s o)
-; - re-builder for interactive regex building
-;   invoke by M-x re-builder
-;- text-mode menu bar:
-;  M-` tmm-menubar
 
+; to stop wrapping lines: toggle-truncate-lines
+
+; occur mode (M-s o)
+
+; interactive regex building (M-x) bound to re-builder
+
+; text-mode menu bar (M-`) bound to tmm-menubar
+
+; artist-mode to draw ASCII diagrams: artist-mode
+
+; to open two different views on the same buffer: make-indirect buffer 
 
 ;;; Bindings:
 
