@@ -186,6 +186,19 @@
   :config
   (cua-mode 't))
 
+; contex-menu mode and functions
+; borrowed from http://amodernist.com/texts/emacs-mouse.html
+(use-package mouse
+  :custom
+  (context-menu-mode 't)
+  (context-menu-functions '(context-menu-ffap
+                            occur-context-menu
+                            context-menu-region
+                            context-menu-undo
+                            dictionary-context-menu)))
+
+
+
 ;; end of built-in packages
 
 ;;;# Installed packages
