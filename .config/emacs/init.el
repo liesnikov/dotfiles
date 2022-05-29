@@ -529,6 +529,8 @@
 ; - occur mode (M-s o)
 ; - re-builder for interactive regex building
 ;   invoke by M-x re-builder
+;- text-mode menu bar:
+;  M-` tmm-menubar
 
 
 ;;; Bindings:
