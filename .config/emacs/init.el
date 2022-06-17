@@ -320,7 +320,7 @@
   :bind
   (("M-x" . counsel-M-x)
    ("C-x C-f" . counsel-find-file)
-   ("C-c C-r" . counsel-rg)))
+   ("C-c r g" . counsel-rg)))
 
 
 ;; view pdfs in emacs
