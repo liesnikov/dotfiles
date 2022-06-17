@@ -82,10 +82,9 @@
   :custom
   (dired-async-mode t)
   (dired-listing-switches "-al")
-  :bind
-  (:map dired-mode-map
-        ("C-c o"   . dired-open-file)
-        ("C-c C-o" . dired-open-file))
+  :bind (:map dired-mode-map
+         ("C-c o"   . dired-open-file)
+         ("C-c C-o" . dired-open-file))
   :config
   (defun dired-open-file ()
     "In dired, open the file named on this line."
@@ -192,6 +191,7 @@
 (use-package mouse
   ; contex-menu mode and functions
   ; borrowed from http://amodernist.com/texts/emacs-mouse.html
+  :ensure nil
   :custom
   (context-menu-mode 't)
   (context-menu-functions '(context-menu-ffap
