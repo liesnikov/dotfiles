@@ -500,6 +500,9 @@
 
 ;;;### haskell
 (use-package haskell-mode
+  :custom
+  (haskell-process-type 'cabal-repl)
+  (haskell-compiler-type 'cabal)
   :hook
   (haskell-mode-hook . interactive-haskell-mode))
 
