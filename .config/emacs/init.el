@@ -200,7 +200,9 @@
                             context-menu-undo
                             dictionary-context-menu)))
 
-
+(use-package calendar
+  ; we're gonna use it org-mode functions
+  :ensure nil)
 
 ;; end of built-in packages
 
@@ -443,22 +445,37 @@
                             'markdown-reftex-citation))))
 
 (use-package org
-  :bind (("C-c l" . org-store-link))
+  :defines org-date-today
+  :bind (:map org-mode-map
+         ("C-c l" . org-store-link)
+         ("C-c t" . org-date-today))
   :custom
   (org-agenda-files nil)
   (org-cycle-include-plain-lists (quote integrate))
   (org-export-backends (quote (ascii beamer html icalendar latex md odt)))
   (org-format-latex-options
    (quote
-    (:foreground default :background default :scale 1.2 :html-foreground "Black" :html-background "Transparent" :html-scale 1.0 :matchers
-                 ("begin" "$1" "$" "$$" "\\(" "\\["))))
-  (org-modules
-   (quote
+    (:foreground default :background default
+     :scale 1.2 :html-foreground "Black"
+     :html-background "Transparent" :html-scale 1.0
+     :matchers ("begin" "$1" "$" "$$" "\\(" "\\["))))
+  (org-modules (quote
     (ol-bbdb ol-bibtex ol-docview ol-eww ol-gnus
      ol-info ol-irc ol-mhe ol-rmail org-tempo ol-w3m)))
   :hook
   ; activate org-indent-mode on org-indent
-  (org-mode-hook . org-indent-mode))
+  (org-mode-hook . org-indent-mode)
+  :config
+  (defun org-date-today ()
+    "Insert time stamp corresponding to cursor date in *Calendar* buffer.
+     If there is already a time stamp at the cursor position, update it."
+    (interactive)
+    (if (org-at-timestamp-p 'lax)
+        (org-timestamp-change 0 'calendar)
+      (let ((cal-date (calendar-current-date)))
+        (org-insert-time-stamp
+         (encode-time 0 0 0 (nth 1 cal-date) (car cal-date) (nth 2 cal-date)))))))
+
 (use-package org-download
   :requires org)
 (use-package org-present
