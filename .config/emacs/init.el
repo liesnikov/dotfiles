@@ -24,12 +24,12 @@
 (use-package use-package
   :custom
   ;; disable :hook suffix to use abnormal hooks with the same syntax
-  (use-package-hook-name-suffix nil)
-  :config
+  (use-package-hook-name-suffix nil))
+(use-package use-package-ensure-system-package
   ;; The :ensure-system-package keyword allows
   ;; to ensure system binaries exist alongside package declarations.
-  (use-package use-package-ensure-system-package
-    :ensure t))
+  :requires use-package
+  :ensure t)
 
 ;; ensure all packages -- installs them
 ;; (require 'use-package-ensure)
@@ -170,10 +170,11 @@
   :config
   (defun xml-pretty-print ()
     (interactive)
-    sgml-pretty-print)
-  (use-package noxml-fold
-    :hook
-    (nxml-mode-hook . (lambda () (noxml-fold-mode 1)))))
+    sgml-pretty-print))
+(use-package noxml-fold
+  :requires nxml-node
+  :hook
+  (nxml-mode-hook . (lambda () (noxml-fold-mode 1))))
 
 (use-package display-fill-column-indicator
   :ensure nil
@@ -205,12 +206,13 @@
 
 ;;;## Package managment
 
-;; quelpa is a tool to compile and install Emacs Lisp packages locally from local or remote source code.
 (use-package quelpa
-  :config
-  ;; quelpa handler for use-package
-  (use-package quelpa-use-package
-    :requires use-package))
+  ; quelpa is a tool to compile and install Emacs Lisp packages
+  ; locally from local or remote source code.
+  )
+(use-package quelpa-use-package
+  ; quelpa handler for use-package
+  :requires (quelpa use-package))
 
 ;;;## Visual things
 (use-package doom-themes
@@ -250,27 +252,31 @@
   :config
   (ac-config-default)
   ;; doesn't really work, enables auto-fill-mode globally)
-  (global-auto-complete-mode t)
-  (use-package auto-complete-auctex)
-  (use-package ac-math))
+  (global-auto-complete-mode t))
+(use-package auto-complete-auctex
+  :requires auto-complete)
+(use-package ac-math
+  :requires auto-complete)
 
-;; provide a popup when you press a button with all bindings that follow
 (use-package which-key
+  ;; provide a popup when you press a button with all bindings that follow
   :config
   (which-key-mode))
 
-;; provide colours in occur mode
 (use-package color-moccur
+  ;; provide colours in occur mode
   :bind (("M-s O" . moccur)))
 
-;; turn frame around, somehow not available by default
-(use-package transpose-frame)
+(use-package transpose-frame
+  ;; turn frame around, somehow not available by default
+  )
 
-;; because elpa keys are expiring sometimes
-(use-package gnu-elpa-keyring-update)
+(use-package gnu-elpa-keyring-update
+  ;; because elpa keys are expiring sometimes
+  )
 
-;; projectile organizes buffers in projects
 (use-package projectile
+  ;; projectile organizes buffers in projects
   :bind (:map projectile-mode-map
          ("C-x p". projectile-command-map))
 
@@ -278,38 +284,41 @@
   (projectile-enable-caching t)
   (projectile-mode t nil (projectile))
   (projectile-file-exists-local-cache-expire (* 5 60))
-  (projectile-cache-file "~/.cache/emacs/projectile/cache")
+  (projectile-cache-file "~/.cache/emacs/projectile/cache"))
 
-  :config
+(use-package ibuffer-projectile
+  ; integrate projectile with ibuffer
+  :requires projectile
+  :hook
+  (ibuffer-hook . ;; ibuffer-projectile automatic sorting
+    (lambda ()
+      (ibuffer-projectile-set-filter-groups)
+      (unless (eq ibuffer-sorting-mode 'alphabetic)
+        (ibuffer-do-sort-by-alphabetic)))))
 
-  (use-package ibuffer-projectile
-    :config
-    :hook
-    (ibuffer-hook . ;; ibuffer-projectile automatic sorting
-      (lambda ()
-        (ibuffer-projectile-set-filter-groups)
-        (unless (eq ibuffer-sorting-mode 'alphabetic)
-          (ibuffer-do-sort-by-alphabetic))))))
-
-
-;; search package instead of grep
 (use-package rg
+  ; search package instead of grep
   :ensure-system-package (rg . ripgrep))
 
-;; ivy is an autocompletion framework
 (use-package ivy
+  ; ivy is an autocompletion framework
   :bind (("C-x b" . ivy-switch-buffer))
   :custom
+  ; enable ivy
   (ivy-mode t)
-  (ivy-read-action-format-function 'ivy-read-action-format-columns) ;; use columns in ivy
-  (enable-recursive-minibuffers t) ;; technically not an ivy variable, but useful to have for some reasons atm unknown to me
-  (ivy-use-virtual-buffers t) ;; add recent files and/or bookmarks to ‘ivy-switch-buffer’.
+  ; use columns in ivy
+  (ivy-read-action-format-function 'ivy-read-action-format-columns)
+  ; technically not an ivy variable, but useful to have for some reasons atm unknown to me
+  (enable-recursive-minibuffers t)
+  ; add recent files and/or bookmarks to ‘ivy-switch-buffer’.
+  (ivy-use-virtual-buffers t))
+(use-package ivy-hydra
+  :requires ivy)
+(use-package ivy-rich
+  :requires ivy
   :config
-  (use-package ivy-hydra)
-  (use-package ivy-rich
-    :config
-    (ivy-rich-mode t)
-    (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)))
+  (ivy-rich-mode t)
+  (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line))
 
 (use-package swiper
   :bind (("C-s" . swiper-isearch)))
@@ -339,10 +348,9 @@
 ;; Flymake
 (use-package flymake
   :custom
-  (flymake-run-in-place nil)
-  :config
-  (use-package flymake-haskell-multi
-    :requires flymake))
+  (flymake-run-in-place nil))
+(use-package flymake-haskell-multi
+  :requires flymake)
 
 ;; increment-decrement numbers as in vim
 (use-package evil-numbers
@@ -386,12 +394,11 @@
   ;; Turn on RefTeX with AUCTeX LaTeX mode
   (LaTeX-mode-hook . turn-on-reftex)
   ;; with Emacs latex mode
-  (latex-mode-hook . turn-on-reftex)
+  (latex-mode-hook . turn-on-reftex))
+(use-package company-auctex
+  :requires (company tex-mode)
   :config
-  (use-package company-auctex
-    :requires company
-    :config
-    (company-auctex-init)))
+  (company-auctex-init))
 
 ;; package for writing mode, introduces margins
 ;; for search purposes: org-mode
@@ -447,16 +454,18 @@
    (quote
     (ol-bbdb ol-bibtex ol-docview ol-eww ol-gnus
      ol-info ol-irc ol-mhe ol-rmail org-tempo ol-w3m)))
-  :config
-  (use-package org-download)
-  (use-package org-present)
-  (use-package org-modern
-    :hook
-    ((org-mode-hook . org-modern-mode)
-     (org-agenda-finalize-hook . org-modern-agenda)))
   :hook
   ; activate org-indent-mode on org-indent
   (org-mode-hook . org-indent-mode))
+(use-package org-download
+  :requires org)
+(use-package org-present
+  :requires org)
+(use-package org-modern
+  :requires org
+  :hook
+  ((org-mode-hook . org-modern-mode)
+   (org-agenda-finalize-hook . org-modern-agenda)))
 
 ;;;## Programming
 
