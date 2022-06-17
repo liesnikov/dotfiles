@@ -447,8 +447,8 @@
 (use-package org
   :defines org-date-today
   :bind (:map org-mode-map
-         ("C-c l" . org-store-link)
-         ("C-c t" . org-date-today))
+         ; and to insert current date use org-time-stamp bound to C-c .
+         ("C-c l" . org-store-link))
   :custom
   (org-agenda-files nil)
   (org-cycle-include-plain-lists (quote integrate))
@@ -464,17 +464,7 @@
      ol-info ol-irc ol-mhe ol-rmail org-tempo ol-w3m)))
   :hook
   ; activate org-indent-mode on org-indent
-  (org-mode-hook . org-indent-mode)
-  :config
-  (defun org-date-today ()
-    "Insert time stamp corresponding to cursor date in *Calendar* buffer.
-     If there is already a time stamp at the cursor position, update it."
-    (interactive)
-    (if (org-at-timestamp-p 'lax)
-        (org-timestamp-change 0 'calendar)
-      (let ((cal-date (calendar-current-date)))
-        (org-insert-time-stamp
-         (encode-time 0 0 0 (nth 1 cal-date) (car cal-date) (nth 2 cal-date)))))))
+  (org-mode-hook . org-indent-mode))
 
 (use-package org-download
   :requires org)
