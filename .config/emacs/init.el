@@ -181,15 +181,17 @@
   :custom
   (display-fill-column-indicator-column 100))
 
-; rectangular editining with C-<return>
-; borrowed from https://karthinks.com/software/more-batteries-included-with-emacs/
 (use-package cua-base
+  ; rectangular editining with C-<return>
+  ; borrowed from https://karthinks.com/software/more-batteries-included-with-emacs/
+  ; disabled because it messes with the usual rectangular editing and doesn't allow to delete rectangles efficiently
+  :disabled
   :config
   (cua-mode 't))
 
-; contex-menu mode and functions
-; borrowed from http://amodernist.com/texts/emacs-mouse.html
 (use-package mouse
+  ; contex-menu mode and functions
+  ; borrowed from http://amodernist.com/texts/emacs-mouse.html
   :custom
   (context-menu-mode 't)
   (context-menu-functions '(context-menu-ffap
