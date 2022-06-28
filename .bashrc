@@ -70,25 +70,8 @@ if [ -f "$HOME"/.bash_functions ]; then
   . "$HOME"/.bash_functions
 fi
 
-# found on udacity git course
-# Enable tab completion
-# source ~/.git-completion.bash
 
-# Change command prompt
-# source ~/.git-prompt.sh
-# export GIT_PS1_SHOWDIRTYSTATE=1
-# export GIT_PS1_SHOWUNTRACKEDFILES=1
-# '\u' adds the name of the current user to the prompt
-# '\$(__git_ps1)' adds git-related stuff
-# '\W' adds the name of the current directory
-# '\[\e[1m\]' opens bold, '\[\e[0m\]' closes
-# export PS1='\[\e[1m\]$(__git_ps1 "(%s)")\W\[\e[0m\] ⊢ '
 export PS1='\[\e[1m\]\W\[\e[0m\] ⊢ '
-
-# exercism
-#if [ -f ~/.config/exercism/exercism_completion.bash ]; then
-#  source ~/.config/exercism/exercism_completion.bash
-#fi
 
 # virtualenv for python wrapper
 export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
@@ -103,6 +86,7 @@ export PIP_VIRTUALENV_BASE=/home/buzzer/.virtualenvs
 stty -ixon
 
 export LOCALE_ARCHIVE="/usr/lib/locale/locale-archive"
+
 
 # If not running interactively, do not do anything otherwise start tmux
 [[ $- != *i* ]] && return
