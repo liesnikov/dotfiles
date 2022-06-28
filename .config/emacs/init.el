@@ -335,7 +335,6 @@
    ("C-x C-f" . counsel-find-file)
    ("C-c r g" . counsel-rg)))
 
-
 ;; view pdfs in emacs
 (use-package pdf-tools
   :config
@@ -377,6 +376,12 @@
   (defadvice undo-tree-make-history-save-file-name
     (after undo-tree activate)
     (setq ad-return-value (concat ad-return-value ".gz"))))
+
+(use-package envrc
+  ; package for direnv, usefull when working with nix
+  :config
+  (envrc-global-mode))
+
 
 ;;;## Writing & reading
 

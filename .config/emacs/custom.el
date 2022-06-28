@@ -5,11 +5,11 @@
  ;; If there is more than one, they won't work right.
  '(ansi-color-faces-vector
    [default default default italic underline success warning error])
- '(ansi-color-names-vector
-   ["#242424" "#e5786d" "#95e454" "#cae682" "#8ac6f2" "#333366" "#ccaa8f" "#f6f3e8"])
  '(auto-save-default nil)
  '(calendar-week-start-day 1)
  '(custom-enabled-themes '(doom-one))
+ '(custom-safe-themes
+   '("835868dcd17131ba8b9619d14c67c127aa18b90a82438c8613586331129dda63" "6c386d159853b0ee6695b45e64f598ed45bd67c47f671f69100817d7db64724d" "f4876796ef5ee9c82b125a096a590c9891cec31320569fc6ff602ff99ed73dca" "77113617a0642d74767295c4408e17da3bfd9aa80aaa2b4eeb34680f6172d71a" default))
  '(custom-theme-allow-multiple-selections nil)
  '(indent-tabs-mode nil)
  '(inhibit-startup-screen t)
@@ -21,7 +21,7 @@
    '(ac-math auctex auto-complete auto-complete-auctex avy
      color-moccur company-auctex company-coq counsel-projectile
      doom-themes
-     editorconfig eglot emojify evil-numbers
+     editorconfig eglot emojify evil-numbers envrc
      flymake flymake-haskell-multi
      gnu-elpa-keyring-update
      haskell-mode
