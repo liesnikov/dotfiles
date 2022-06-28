@@ -52,7 +52,6 @@ if [ -n "$force_color_prompt" ]; then
     fi
 fi
 
-
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
@@ -78,9 +77,9 @@ export PS1='\[\e[1m\]\W\[\e[0m\] ⊢ '
 
 # virtualenv for python wrapper
 export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
-export WORKON_HOME=/home/buzzer/.virtualenvs
+export WORKON_HOME=~/.virtualenvs
 source ~/.local/bin/virtualenvwrapper_lazy.sh
-export PIP_VIRTUALENV_BASE=/home/buzzer/.virtualenvs
+export PIP_VIRTUALENV_BASE=~/.virtualenvs
 
 # set vi mode for navigating and stuff
 # set -o vi
