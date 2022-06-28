@@ -70,6 +70,9 @@ if [ -f "$HOME"/.bash_functions ]; then
   . "$HOME"/.bash_functions
 fi
 
+if direnv --version &> /dev/null; then
+  eval "$(direnv hook bash)"
+fi
 
 export PS1='\[\e[1m\]\W\[\e[0m\] ⊢ '
 
