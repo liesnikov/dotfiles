@@ -378,6 +378,7 @@
     (setq ad-return-value (concat ad-return-value ".gz"))))
 
 (use-package envrc
+  :ensure-system-package direnv
   ; package for direnv, usefull when working with nix
   :config
   (envrc-global-mode))
