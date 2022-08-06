@@ -50,6 +50,8 @@
           (no-littering-expand-var-file-name "auto-save-list/.saves-")
         backup-directory-alist
           `(("." . ,(no-littering-expand-var-file-name "backup")))
+        create-lockfiles ; get rid of .# files, which are annoying
+          nil
         eshell-directory-name
           (no-littering-expand-var-file-name "eshell")
         transient-history-file
@@ -264,6 +266,8 @@
 
 (use-package which-key
   ;; provide a popup when you press a button with all bindings that follow
+  :custom
+  (which-key-min-display-lines 10)
   :config
   (which-key-mode))
 
@@ -516,8 +520,8 @@
 ;;;### haskell
 (use-package haskell-mode
   :custom
-  (haskell-process-type 'cabal-repl)
-  (haskell-compiler-type 'cabal)
+  (haskell-process-type 'auto)
+  (haskell-compiler-type 'auto)
   :hook
   (haskell-mode-hook . interactive-haskell-mode))
 
