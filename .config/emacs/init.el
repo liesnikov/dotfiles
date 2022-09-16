@@ -329,7 +329,8 @@
   (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line))
 
 (use-package swiper
-  :bind (("C-s" . swiper-isearch)))
+  :bind (("C-s" . swiper-isearch)
+         ("C-r" . swiper-isearch-backward)))
 
 (use-package counsel
   :custom
