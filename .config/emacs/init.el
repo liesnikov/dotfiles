@@ -240,7 +240,10 @@
   :custom
   (global-whitespace-mode 1)
   (global-whitespace-newline-mode 1)
-  (whitespace-global-modes '(not agda2-mode))
+  ; in agda it's simply annoying, but for magit it's causing errors
+  ; see https://github.com/magit/magit/issues/4766 and
+  ; https://emacs.stackexchange.com/questions/38771/magit-status-does-not-open-when-using-global-whitespace-mode-1/38778#38778
+  (whitespace-global-modes '(not agda2-mode magit-mode))
   :config
   (unicode-whitespace-setup 'subdued-faces))
 
