@@ -221,6 +221,8 @@
   :requires (quelpa use-package))
 
 ;;;## Visual things
+
+;; color theme
 (use-package doom-themes
   :custom
   ;; Global settings (defaults)
@@ -235,10 +237,22 @@
   ;; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config))
 
+;; hide minor modes under a drop-down menu
+(use-package minions
+  :config (minions-mode 1))
+
+;; modeline as tabs
+(use-package moody
+  :custom
+  (x-underline-at-descent-line t)
+  (moody-mode-line-height 45)
+  :config
+  (moody-replace-mode-line-buffer-identification)
+  (moody-replace-vc-mode))
+
 ;; highlight all whitespaces
 (use-package unicode-whitespace
   :custom
-  (global-whitespace-mode 1)
   (global-whitespace-newline-mode 1)
   ; in agda it's simply annoying, but for magit it's causing errors
   ; see https://github.com/magit/magit/issues/4766 and
