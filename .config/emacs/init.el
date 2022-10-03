@@ -23,19 +23,19 @@
   (require 'use-package))
 (use-package use-package
   :custom
-  ;; disable :hook suffix to use abnormal hooks with the same syntax
+  ; disable :hook suffix to use abnormal hooks with the same syntax
   (use-package-hook-name-suffix nil))
 (use-package use-package-ensure-system-package
-  ;; The :ensure-system-package keyword allows
-  ;; to ensure system binaries exist alongside package declarations.
+  ; The :ensure-system-package keyword allows
+  ; to ensure system binaries exist alongside package declarations.
   :requires use-package
   :ensure t)
 
 ;; ensure all packages -- installs them
-;; (require 'use-package-ensure)
-;; (setq use-package-always-ensure t)
+; (require 'use-package-ensure)
+; (setq use-package-always-ensure t)
 
-;; not a system package, but we have to change paths before anything else kicks in
+; not a system package, but we have to change paths before anything else kicks in
 (use-package no-littering
   :ensure t
   :init
@@ -71,7 +71,7 @@
   (desktop-path '("~/.cache/emacs/desktop"))
   (desktop-auto-save-timeout 30)
   (desktop-load-locked-desktop t)
-;;(desktop-save 0)
+; (desktop-save 0)
   :hook
   (after-make-frame-functions . (lambda (frame)
                                   (with-selected-frame frame
@@ -118,14 +118,16 @@
    :type 'list
    :version "green")
   (defun display-line-numbers--turn-on ()
-    "turn on line numbers but excempting certain majore modes defined in `display-line-numbers-exempt-modes'"
+    "turn on line numbers but excempting certain majore modes
+     defined in `display-line-numbers-exempt-modes'"
     (if (and
          (not (member major-mode display-line-numbers-exempt-modes))
          (not (minibufferp)))
         (display-line-numbers-mode)))
   :custom
-;; "Major modes on which to disable the linum mode, exempts them from global requirement"
-  (display-line-numbers-exempt-modes '(vterm-mode eshell-mode shell-mode term-mode ansi-term-mode pdf-view-mode))
+; "Major modes on which to disable the linum mode, exempts them from global requirement"
+  (display-line-numbers-exempt-modes
+   '(vterm-mode eshell-mode shell-mode term-mode ansi-term-mode pdf-view-mode))
   :hook (prog-mode-hook . display-line-numbers-mode))
 
 (use-package gdb-mi
@@ -135,11 +137,11 @@
 
 (use-package ibuffer
   :ensure nil
-  ;; commented out for potential performance gains?
-  ;; :custom
-  ;; (ibuffer-saved-filter-groups nil)
-  ;; (ibuffer-saved-filters nil)
-  :bind (;; map C-x C-b to ibuffer instead of default `list-buffers`
+  ; commented out for potential performance gains?
+  ; :custom
+  ; (ibuffer-saved-filter-groups nil)
+  ; (ibuffer-saved-filters nil)
+  :bind (; map C-x C-b to ibuffer instead of default `list-buffers`
          ("C-x C-b" . ibuffer)))
 
 (use-package recentf
@@ -150,17 +152,17 @@
 (use-package windmove
   :ensure nil
   :init
-  ;; Windmove is a library built into GnuEmacs starting with version 21.
-  ;; It lets you move point from window to window using Shift and the arrow keys.
-  ;; https://www.emacswiki.org/emacs/WindMove
+  ; Windmove is a library built into GnuEmacs starting with version 21.
+  ; It lets you move point from window to window using Shift and the arrow keys.
+  ; https://www.emacswiki.org/emacs/WindMove
   (when (fboundp 'windmove-default-keybindings)
     (windmove-default-keybindings))
   :custom
   (window-resize-pixelwise 't)
   (frame-resize-pixelwise 't)
-  :bind (;; new bindings to change widnow sizes
-         ;; similar bindings to windmove (see below),
-         ;; which has S-<arrow> as moving binding
+  :bind (; new bindings to change widnow sizes
+         ; similar bindings to windmove (see below),
+         ; which has S-<arrow> as moving binding
          ("S-C-<left>" . shrink-window-horizontally)
          ("S-C-<right>".  enlarge-window-horizontally)
          ("S-C-<down>" . shrink-window)
@@ -180,15 +182,17 @@
 (use-package display-fill-column-indicator
   :ensure nil
   :custom
-  (display-fill-column-indicator-column 100))
+  (display-fill-column-indicator 't)
+  (global-display-fill-column-indicator-mode 't)
+  (display-fill-column-indicator-column 90))
 
-(use-package cua-base
-  ; rectangular editining with C-<return>
-  ; borrowed from https://karthinks.com/software/more-batteries-included-with-emacs/
-  ; disabled because it messes with the usual rectangular editing and doesn't allow to delete rectangles efficiently
-  :disabled
-  :config
-  (cua-mode 't))
+; (use-package cua-base
+;   ; rectangular editining with C-<return>
+;   ; borrowed from https://karthinks.com/software/more-batteries-included-with-emacs/
+;   ; disabled because it messes with the usual rectangular editing
+;   ; and doesn't allow to delete rectangles efficiently
+;   :config
+;   (cua-mode 't))
 
 (use-package mouse
   ; contex-menu mode and functions
@@ -203,74 +207,77 @@
                             dictionary-context-menu)))
 
 (use-package calendar
-  ; we're gonna use it org-mode functions
   :ensure nil
   :custom
+  ; The day of the week on which a week in the calendar begins.
+  ; 1 means Monday
   (calendar-week-start-day 1))
 
 (use-package simple
   :ensure nil
   :custom
+  ; Indentation can insert tabs if this is non-nil.
   (indent-tabs-mode nil))
 
 (use-package menu-bar
   :ensure nil
   :custom
+  ; disable menu bar
   (menu-bar-mode nil))
 
 (use-package scroll-bar
   :ensure nil
   :custom
+  ; disable scroll bar
   (scroll-bar-mode nil))
 
 (use-package mule
   :ensure nil
   :custom
+  ; Specify coding system for keyboard input.
   (keyboard-coding-system 'utf-8-unix))
 
 (use-package select
   :ensure nil
   :custom
+  ; Coding system for communicating with other programs.
   (selection-coding-system 'utf-8))
 
 (use-package paren
   :ensure nil
   :custom
+  ; Toggle visualization of matching parens
   (show-paren-mode t))
 
-(use-package bindings
-  :ensure nil
-  :custom
-  )
-
-;; catch-all package for all the things that don't have their own package
+; catch-all package for all the things that don't have their own package
 (use-package emacs
   :ensure nil
   :custom
-  ;; don't show startup emacs screen
+  ; don't show startup emacs screen
   (inhibit-startup-screen t)
-  ;; If the value is nil and ‘inhibit-startup-screen’ is nil, show the startup screen.
-  ;; If t, open the ‘*scratch*’ buffer.
+  ; If the value is nil and ‘inhibit-startup-screen’ is nil, show the startup screen.
+  ; If t, open the ‘*scratch*’ buffer.
   (initial-buffer-choice t)
-  ;; text present in the scratch buffer by default
+  ; text present in the scratch buffer by default
   (initial-scratch-message nil)
 
-  ;; If the value is greater than 100, redisplay will never recenter point,
-  ;; but will always scroll just enough text to bring point into view, even if you move far away.
+  ; If the value is greater than 100, redisplay will never recenter point,
+  ; but will always scroll just enough text to bring point into view,
+  ; even if you move far away.
   (scroll-conservatively 10000)
 
-  ;; The number of lines to try scrolling a window by when point moves out.
+  ; The number of lines to try scrolling a window by when point moves out.
   (scroll-step 1)
 
-  ;; pressing tab always indents
+  ; pressing tab always indents
   (tab-always-indent t)
-  ;; display tab width
+  ; display tab width
   (tab-width 2)
 
-  ;; disable tool-bar
+  ; disable tool-bar
   (tool-bar-mode nil)
 
-  ;; make mode-line line indicator be line-number:colon-number
+  ; make mode-line line indicator be line-number:colon-number
   (mode-line-position (list "%l:%c")))
 
 ;; end of built-in packages
@@ -298,17 +305,17 @@
   ; if nil, bold is universally disabled
   (doom-themes-enable-italic t)
   :config
-  ;; (load-theme 'doom-one t)
-  ;; Enable flashing mode-line on errors
+  ; (load-theme 'doom-one t)
+  ; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config)
-  ;; Corrects (and improves) org-mode's native fontification.
+  ; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config))
 
-;; hide minor modes under a drop-down menu
+; hide minor modes under a drop-down menu
 (use-package minions
   :config (minions-mode 1))
 
-;; modeline as tabs
+; modeline as tabs
 (use-package moody
   :custom
   (x-underline-at-descent-line t)
@@ -341,7 +348,7 @@
 (use-package auto-complete
   :config
   (ac-config-default)
-  ;; doesn't really work, enables auto-fill-mode globally)
+  ; doesn't really work, enables auto-fill-mode globally)
   (global-auto-complete-mode t))
 (use-package auto-complete-auctex
   :requires auto-complete)
@@ -349,26 +356,26 @@
   :requires auto-complete)
 
 (use-package which-key
-  ;; provide a popup when you press a button with all bindings that follow
+  ; provide a popup when you press a button with all bindings that follow
   :custom
   (which-key-min-display-lines 10)
   :config
   (which-key-mode))
 
 (use-package color-moccur
-  ;; provide colours in occur mode
+  ; provide colours in occur mode
   :bind (("M-s O" . moccur)))
 
 (use-package transpose-frame
-  ;; turn frame around, somehow not available by default
+  ; turn frame around, somehow not available by default
   )
 
 (use-package gnu-elpa-keyring-update
-  ;; because elpa keys are expiring sometimes
+  ; because elpa keys are expiring sometimes
   )
 
 (use-package projectile
-  ;; projectile organizes buffers in projects
+  ; projectile organizes buffers in projects
   :bind (:map projectile-mode-map
          ("C-x p". projectile-command-map))
 
@@ -382,7 +389,7 @@
   ; integrate projectile with ibuffer
   :requires projectile
   :hook
-  (ibuffer-hook . ;; ibuffer-projectile automatic sorting
+  (ibuffer-hook . ; ibuffer-projectile automatic sorting
     (lambda ()
       (ibuffer-projectile-set-filter-groups)
       (unless (eq ibuffer-sorting-mode 'alphabetic)
@@ -424,10 +431,10 @@
    ("C-x C-f" . counsel-find-file)
    ("C-c r g" . counsel-rg)))
 
-;; view pdfs in emacs
+; view pdfs in emacs
 (use-package pdf-tools
   :config
-  (pdf-tools-install) ;; enable pdftools instead of docview
+  (pdf-tools-install) ; enable pdftools instead of docview
 
   :hook
   ; Disable linum (line numbers) when entering pdf-tools mode.
@@ -444,14 +451,14 @@
 (use-package flymake-haskell-multi
   :requires flymake)
 
-;; increment-decrement numbers as in vim
+; increment-decrement numbers as in vim
 (use-package evil-numbers
   :bind (("C-c +" . 'evil-numbers/inc-at-pt)
          ("C-c -" . 'evil-numbers/dec-at-pt)
          ("C-c C-+" . 'evil-numbers/inc-at-pt-incremental)
          ("C-c C--" . 'evil-numbers/dec-at-pt-incremental)))
 
-;; move around efficiently
+; move around efficiently
 (use-package avy
   :bind (("C-;" . avy-goto-char-timer)
          ("M-g g" . avy-goto-line)
@@ -478,8 +485,8 @@
 ;; word processor and markup
 (use-package wc-mode)
 
-;; loading auctex directly doesn't work for some reason
-;; https://github.com/jwiegley/use-package/issues/379
+; loading auctex directly doesn't work for some reason
+; https://github.com/jwiegley/use-package/issues/379
 (use-package tex-mode
   :after auctex
   :custom
@@ -490,17 +497,17 @@
   (LaTeX-mode-hook .
               (lambda () (set (make-variable-buffer-local 'TeX-electric-math)
                           (cons "\\(" "\\)"))))
-  ;; Turn on RefTeX with AUCTeX LaTeX mode
+  ; Turn on RefTeX with AUCTeX LaTeX mode
   (LaTeX-mode-hook . turn-on-reftex)
-  ;; with Emacs latex mode
+  ; with Emacs latex mode
   (latex-mode-hook . turn-on-reftex))
 (use-package company-auctex
   :requires (company tex-mode)
   :config
   (company-auctex-init))
 
-;; package for writing mode, introduces margins
-;; for search purposes: org-mode
+; package for writing mode, introduces margins
+; for search purposes: org-mode
 (use-package olivetti
   :custom
   (olivetti-body-width 90)
@@ -515,8 +522,8 @@
 
 (use-package markdown-mode
   :config
-  ;; from https://gist.github.com/kleinschmidt/5ab0d3c423a7ee013a2c01b3919b009a
-  ;; define markdown citation formats
+  ; from https://gist.github.com/kleinschmidt/5ab0d3c423a7ee013a2c01b3919b009a
+  ; define markdown citation formats
   (defvar markdown-cite-format)
   (setq markdown-cite-format
         '(
@@ -526,7 +533,7 @@
           )
         )
 
-  ;; wrap reftex-citation with local variables for markdown format
+  ; wrap reftex-citation with local variables for markdown format
   (defun markdown-reftex-citation ()
     (interactive)
     (let ((reftex-cite-format markdown-cite-format)
@@ -577,9 +584,9 @@
 ;;;### misc
 (use-package magit
   :custom
-  ;; highlight word-differences in diffs
+  ; highlight word-differences in diffs
   (magit-diff-refine-hunk (quote all))
-  :bind (;; magit open default window binding
+  :bind (; magit open default window binding
          ("C-x g" .  magit-status)))
 
 (use-package editorconfig
@@ -591,14 +598,14 @@
 
 ;;;### ocaml
 (use-package tuareg
-  ;; activate tuareg (ocaml) mode in ml4 files
-  ;; (syntax extensions for coq)
+  ; activate tuareg (ocaml) mode in ml4 files
+  ; (syntax extensions for coq)
   :mode "\\.ml4\\'")
 
 (use-package merlin
   :requires tuareg
   :hook
-   ;; from https://github.com/ocaml/merlin/wiki/emacs-from-scratch
+   ; from https://github.com/ocaml/merlin/wiki/emacs-from-scratch
   (tuareg-mode-hook . merlin-mode)
   )
 
@@ -612,7 +619,7 @@
 
 ;;;### nix
 (use-package nix-mode
-  ;; activate nix-mode in .nix files
+  ; activate nix-mode in .nix files
   :mode "\\.nix\\'")
 
 ;;### proof assistants
@@ -635,8 +642,8 @@
 (use-package company-coq
   :requires company
   :hook
-  ;; company-coq is an addon on top of proofgeneral,
-  ;; enable it as we enter coq mode
+  ; company-coq is an addon on top of proofgeneral,
+  ; enable it as we enter coq mode
   (coq-mode-hook . company-coq-mode))
 
 ;;; Commentary:
@@ -660,14 +667,14 @@
 ;;; Code:
 
 (defun kill-filename ()
-  ;; copy current buffer's file path to kill-ring
+  ; copy current buffer's file path to kill-ring
   (interactive)
   (kill-new buffer-file-name))
 
-;;(add-to-list
-;; due to a weird bug, both tokens from PG and company-coq are used
-;; which results in "token undefined" errors when using PG ones
-;; 'coq-mode-hook (unicode-tokens-use-shortcuts nil))
+;(add-to-list
+; due to a weird bug, both tokens from PG and company-coq are used
+; which results in "token undefined" errors when using PG ones
+; 'coq-mode-hook (unicode-tokens-use-shortcuts nil))
 
 (defun bury-compile-buffer-if-successful (buffer string)
   "Bury a compilation BUFFER if succeeded without warnings (check STRING).
@@ -716,15 +723,15 @@ Source: https://stackoverflow.com/questions/11043004/emacs-compile-buffer-auto-c
 
 (dbus-register-signal
  :session
- nil ;; service name, nil is a wildcard
- "/org/xfce/Xfconf" ;; path
- "org.xfce.Xfconf" ;; interface
- "PropertyChanged" ;; message
+ nil ; service name, nil is a wildcard
+ "/org/xfce/Xfconf" ; path
+ "org.xfce.Xfconf" ; interface
+ "PropertyChanged" ; message
  #'detect-and-switch-theme)
 
 (set-theme)
 
-;; Screenshot to svg
+; Screenshot to svg
 (defun screenshot-svg ()
   "Save a screenshot of the current frame as an SVG image.
 Saves to a temp file and puts the filename in the kill ring.
@@ -737,14 +744,14 @@ Source: https://old.reddit.com/r/emacs/comments/idz35e/emacs_27_can_take_svg_scr
     (kill-new filename)
     (message filename)))
 
-;; "Compile on save" in Emacs
-;; from https://rtime.ciirc.cvut.cz/~sojka/blog/compile-on-save/
+; "Compile on save" in Emacs
+; from https://rtime.ciirc.cvut.cz/~sojka/blog/compile-on-save/
 (defun compile-on-save-start ()
   (let ((buffer (compilation-find-buffer)))
     (unless (get-buffer-process buffer)
       (recompile))))
 
-;; I use this from commandline
+; I use this from commandline
 (defun shutdown ()
   (interactive)
   (progn
