@@ -204,7 +204,74 @@
 
 (use-package calendar
   ; we're gonna use it org-mode functions
-  :ensure nil)
+  :ensure nil
+  :custom
+  (calendar-week-start-day 1))
+
+(use-package simple
+  :ensure nil
+  :custom
+  (indent-tabs-mode nil))
+
+(use-package menu-bar
+  :ensure nil
+  :custom
+  (menu-bar-mode nil))
+
+(use-package scroll-bar
+  :ensure nil
+  :custom
+  (scroll-bar-mode nil))
+
+(use-package mule
+  :ensure nil
+  :custom
+  (keyboard-coding-system 'utf-8-unix))
+
+(use-package select
+  :ensure nil
+  :custom
+  (selection-coding-system 'utf-8))
+
+(use-package paren
+  :ensure nil
+  :custom
+  (show-paren-mode t))
+
+(use-package bindings
+  :ensure nil
+  :custom
+  )
+
+;; catch-all package for all the things that don't have their own package
+(use-package emacs
+  :ensure nil
+  :custom
+  ;; don't show startup emacs screen
+  (inhibit-startup-screen t)
+  ;; If the value is nil and ‘inhibit-startup-screen’ is nil, show the startup screen.
+  ;; If t, open the ‘*scratch*’ buffer.
+  (initial-buffer-choice t)
+  ;; text present in the scratch buffer by default
+  (initial-scratch-message nil)
+
+  ;; If the value is greater than 100, redisplay will never recenter point,
+  ;; but will always scroll just enough text to bring point into view, even if you move far away.
+  (scroll-conservatively 10000)
+
+  ;; The number of lines to try scrolling a window by when point moves out.
+  (scroll-step 1)
+
+  ;; pressing tab always indents
+  (tab-always-indent t)
+  ;; display tab width
+  (tab-width 2)
+
+  ;; disable tool-bar
+  (tool-bar-mode nil)
+
+  ;; make mode-line line indicator be line-number:colon-number
+  (mode-line-position (list "%l:%c")))
 
 ;; end of built-in packages
 

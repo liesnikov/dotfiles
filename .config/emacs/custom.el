@@ -6,17 +6,10 @@
  '(ansi-color-faces-vector
    [default default default italic underline success warning error])
  '(auto-save-default nil)
- '(calendar-week-start-day 1)
  '(custom-enabled-themes '(doom-one))
  '(custom-safe-themes
    '("835868dcd17131ba8b9619d14c67c127aa18b90a82438c8613586331129dda63" "6c386d159853b0ee6695b45e64f598ed45bd67c47f671f69100817d7db64724d" "f4876796ef5ee9c82b125a096a590c9891cec31320569fc6ff602ff99ed73dca" "77113617a0642d74767295c4408e17da3bfd9aa80aaa2b4eeb34680f6172d71a" default))
  '(custom-theme-allow-multiple-selections nil)
- '(indent-tabs-mode nil)
- '(inhibit-startup-screen t)
- '(initial-buffer-choice t)
- '(initial-scratch-message nil)
- '(keyboard-coding-system 'utf-8-unix)
- '(menu-bar-mode nil)
  '(package-selected-packages
    '(ac-math auctex auto-complete auto-complete-auctex avy
      color-moccur company-auctex company-coq counsel-projectile
@@ -26,7 +19,7 @@
      gnu-elpa-keyring-update
      haskell-mode
      ibuffer-projectile idris-mode idris2-mode ivy ivy-hydra ivy-rich
-     magit markdown-mode merlin
+     magit markdown-mode merlin minions moody
      nix-haskell-mode nix-mode no-littering nov noxml-fold
      olivetti org org-download org-modern org-present
      pdf-tools projectile proof-general
@@ -35,15 +28,7 @@
      transpose-frame tuareg
      undo-tree unicode-whitespace use-package use-package-ensure-system-package
      wc-mode which-key))
- '(safe-local-variable-values nil)
- '(scroll-bar-mode nil)
- '(scroll-conservatively 10000)
- '(scroll-step 1)
- '(selection-coding-system 'utf-8)
- '(show-paren-mode t)
- '(tab-always-indent t)
- '(tab-width 2)
- '(tool-bar-mode nil))
+ '(safe-local-variable-values nil))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
