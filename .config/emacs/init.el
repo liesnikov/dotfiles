@@ -217,7 +217,9 @@
   :ensure nil
   :custom
   ; Indentation can insert tabs if this is non-nil.
-  (indent-tabs-mode nil))
+  (indent-tabs-mode nil)
+  ; Don't wrap lines by default
+  (toggle-truncate-lines 1))
 
 (use-package menu-bar
   :ensure nil
