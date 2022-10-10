@@ -251,6 +251,13 @@
   ; Toggle visualization of matching parens
   (show-paren-mode t))
 
+(use-package pixel-scroll
+  :ensure nil
+  :custom
+  ; When enabled, this minor mode allows to scroll the display
+  ; precisely, according to the turning of the mouse wheel.
+  (pixel-scroll-precision-mode 't))
+
 ; catch-all package for all the things that don't have their own package
 (use-package emacs
   :ensure nil
