@@ -479,7 +479,19 @@
   :ensure-system-package direnv
   ; package for direnv, usefull when working with nix
   :config
-  (envrc-global-mode))
+  (envrc-global-mode)
+  (defun envrc-reload-or-clear ()
+    (interactive)
+    (envrc--clear (current-buffer))
+    (condition-case nil
+        (envrc--with-required-current-env env-dir
+          (when (string= (envrc--find-env-dir) env-dir)
+            (envrc--update)
+            (message "Refreshed %s in env %s" (buffer-name) env-dir)))
+      (user-error
+       (message "Unloaded env for %s" (buffer-name)))))
+  :hook
+  (eshell-directory-change-hook . envrc-reload-or-clear))
 
 
 ;;;## Writing & reading
