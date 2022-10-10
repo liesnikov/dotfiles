@@ -596,6 +596,12 @@
 ;; Language server protocol
 (use-package eglot)
 
+;;;### rust
+(use-package rustic
+  :custom
+  (rustic-lsp-client 'eglot))
+
+
 ;;;### ocaml
 (use-package tuareg
   ; activate tuareg (ocaml) mode in ml4 files

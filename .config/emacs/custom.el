@@ -24,7 +24,7 @@
      olivetti org org-download org-modern org-present
      pdf-tools projectile proof-general
      quelpa quelpa-use-package
-     rg
+     rg rustic
      transpose-frame tuareg
      undo-tree unicode-whitespace use-package use-package-ensure-system-package
      wc-mode which-key))
