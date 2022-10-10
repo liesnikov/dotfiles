@@ -708,11 +708,11 @@
 Source: https://stackoverflow.com/questions/11043004/emacs-compile-buffer-auto-close"
   (if (and
        (string-match "compilation" (buffer-name buffer))
-       (string-match "finished" string))
-       ; (not
-       ;  (with-current-buffer buffer
-       ;    (goto-char 1)
-       ;    (search-forward "warning" nil t))))
+       (string-match "finished" string)
+       (not
+        (with-current-buffer buffer
+          (goto-char 1)
+          (search-forward "warning" nil t))))
       (run-with-timer 0.5 nil
                       (lambda (buf)
                         (bury-buffer buf)
