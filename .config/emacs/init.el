@@ -633,6 +633,7 @@
 (use-package idris2-mode
   :quelpa (idris2-mode :fetcher github :repo "idris-community/idris2-mode"))
 
+;;;#### coq
 (use-package proof-general
   :custom
     (coq-auto-adapt-printing-width t)
@@ -652,7 +653,13 @@
   ; enable it as we enter coq mode
   (coq-mode-hook . company-coq-mode))
 
-;;; Commentary:
+;;;#### agda
+;; agda2 mode, gets appended by `agda-mode setup`
+(load-file (let ((coding-system-for-read 'utf-8))
+             (shell-command-to-string "agda-mode locate")))
+
+
+;;;#Commentary:
 
 ;; NB:
 
@@ -666,11 +673,11 @@
 
 ; artist-mode to draw ASCII diagrams: artist-mode
 
-; to open two different views on the same buffer: make-indirect buffer 
+; to open two different views on the same buffer: make-indirect-buffer
 
-;;; Bindings:
+;;;#Bindings:
 
-;;; Code:
+;;;#Code:
 
 (defun kill-filename ()
   ; copy current buffer's file path to kill-ring
@@ -779,11 +786,6 @@ nothing happens."
   "True clear for eshell, instead of default scroll."
   (interactive)
    (let ((eshell-buffer-maximum-lines 0)) (eshell-truncate-buffer)))
-
-
-;; agda2 mode, gets appended by `agda-mode setup`
-(load-file (let ((coding-system-for-read 'utf-8))
-             (shell-command-to-string "agda-mode locate")))
 
 ;; ## added by OPAM user-setup for emacs / base ## 56ab50dc8996d2bb95e7856a6eddb17b ## you can edit, but keep this line
 ;; (require 'opam-user-setup "~/.config/emacs/opam-user-setup.el")
