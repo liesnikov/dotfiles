@@ -630,6 +630,7 @@
 
 ;;;### rust
 (use-package rustic
+  :requires eglot
   :custom
   (rustic-lsp-client 'eglot))
 
