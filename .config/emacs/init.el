@@ -287,7 +287,14 @@
   (tool-bar-mode nil)
 
   ; make mode-line line indicator be line-number:colon-number
-  (mode-line-position (list "%l:%c")))
+  (mode-line-position (list "%l:%c"))
+
+  ; fonts
+  :custom-face
+  (default ((t (:height 130
+                :width condensed
+                :foundry "ADBO"
+                :family "Source Code Pro")))))
 
 ;; end of built-in packages
 
