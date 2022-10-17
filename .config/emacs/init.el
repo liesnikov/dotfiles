@@ -259,9 +259,13 @@
   (pixel-scroll-precision-mode 't))
 
 ; catch-all package for all the things that don't have their own package
-(use-package emacs
+(use-package cus-start
   :ensure nil
   :custom
+  ; personal info
+  (user-full-name "Bohdan Liesnikov")
+  (user-mail-address "bohdan@liesnikov")
+
   ; don't show startup emacs screen
   (inhibit-startup-screen t)
   ; If the value is nil and ‘inhibit-startup-screen’ is nil, show the startup screen.
