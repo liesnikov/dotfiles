@@ -8,7 +8,7 @@
  '(auto-save-default nil)
  '(custom-enabled-themes '(doom-one))
  '(custom-safe-themes
-   '("835868dcd17131ba8b9619d14c67c127aa18b90a82438c8613586331129dda63" "6c386d159853b0ee6695b45e64f598ed45bd67c47f671f69100817d7db64724d" "f4876796ef5ee9c82b125a096a590c9891cec31320569fc6ff602ff99ed73dca" "77113617a0642d74767295c4408e17da3bfd9aa80aaa2b4eeb34680f6172d71a" default))
+   '(default))
  '(custom-theme-allow-multiple-selections nil)
  '(package-selected-packages
    '(ac-math auctex auto-complete auto-complete-auctex avy
