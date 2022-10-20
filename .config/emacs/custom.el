@@ -15,7 +15,7 @@
      color-moccur company-auctex company-coq counsel-projectile
      doom-themes
      editorconfig eglot emojify evil-numbers envrc
-     flymake flymake-haskell-multi
+     flycheck
      gnu-elpa-keyring-update
      haskell-mode
      ibuffer-projectile idris-mode idris2-mode ivy ivy-hydra ivy-rich

@@ -465,15 +465,10 @@
                                     (lambda () (linum-mode 0))
                                     :append :local))))
 
-(use-package flymake
-  ; Flymake is a minor Emacs mode performing on-the-fly syntax checks.
-  :custom
-  (flymake-run-in-place nil))
-(use-package flymake-haskell-multi
-  ; Syntax-check haskell-mode using both ghc and hlint
-  :requires (flymake haskell-mode)
-  :hook
-  (haskell-mode-hook . flymake-haskell-multi-load))
+(use-package flycheck
+  ; Flycheck is a minor Emacs mode performing on-the-fly syntax checks.
+  :init
+  (global-flycheck-mode))
 
 (use-package evil-numbers
   ; increment-decrement numbers as in vim
@@ -555,7 +550,19 @@
     (interactive)
     (call-interactively #'olivetti-mode )))
 
+; errors out when loading
+; (use-package flycheck-grammarly
+;   ; package to send text to grammarly
+;   :ensure t
+;   :requires flycheck
+;   :config
+;   (with-eval-after-load 'flycheck
+;     (flycheck-grammarly-setup))
+;   :hook
+;   (markdown-mode-hook . flyspell-grammarly))
+
 (use-package nov
+  ; Major mode for reading EPUB documents
   :config
   (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode)))
 
