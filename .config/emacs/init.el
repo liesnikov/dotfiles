@@ -35,8 +35,8 @@
 ; (require 'use-package-ensure)
 ; (setq use-package-always-ensure t)
 
-; not a system package, but we have to change paths before anything else kicks in
 (use-package no-littering
+  ; not a system package, but we have to change paths before anything else kicks in
   :ensure t
   :init
   (setq no-littering-etc-directory
@@ -258,8 +258,8 @@
   ; precisely, according to the turning of the mouse wheel.
   (pixel-scroll-precision-mode 't))
 
-; catch-all package for all the things that don't have their own package
 (use-package cus-start
+  ; catch-all package for all the things that don't have their own package
   :ensure nil
   :custom
   ; personal info
@@ -316,8 +316,8 @@
 
 ;;;## Visual things
 
-;; color theme
 (use-package doom-themes
+  ; color theme
   :custom
   ;; Global settings (defaults)
   ; if nil, bold is universally disabled
@@ -331,12 +331,12 @@
   ; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config))
 
-; hide minor modes under a drop-down menu
 (use-package minions
+  ; hide minor modes under a drop-down menu
   :config (minions-mode 1))
 
-; modeline as tabs
 (use-package moody
+  ; modeline as tabs
   :custom
   (x-underline-at-descent-line t)
   (moody-mode-line-height 45)
@@ -344,8 +344,8 @@
   (moody-replace-mode-line-buffer-identification)
   (moody-replace-vc-mode))
 
-;; highlight all whitespaces
 (use-package unicode-whitespace
+  ; highlight all whitespaces
   :custom
   (global-whitespace-newline-mode 1)
   ; in agda it's simply annoying, but for magit it's causing errors
@@ -356,7 +356,7 @@
   (unicode-whitespace-setup 'subdued-faces))
 
 (use-package emojify
-  ;; :wave:
+  ; enable emoji rendering where they are typeset as text :nonexistent: or :wave:
   :custom
   (emojify-display-style 'unicode)
   (emojify-emoji-styles '(unicode github))
@@ -370,6 +370,7 @@
   (ac-config-default)
   ; doesn't really work, enables auto-fill-mode globally)
   (global-auto-complete-mode t))
+
 (use-package auto-complete-auctex
   :requires auto-complete)
 (use-package ac-math
@@ -451,8 +452,8 @@
    ("C-x C-f" . counsel-find-file)
    ("C-c r g" . counsel-rg)))
 
-; view pdfs in emacs
 (use-package pdf-tools
+  ; view pdfs in emacs
   :config
   (pdf-tools-install) ; enable pdftools instead of docview
 
@@ -464,22 +465,25 @@
                                     (lambda () (linum-mode 0))
                                     :append :local))))
 
-;; Flymake
 (use-package flymake
+  ; Flymake is a minor Emacs mode performing on-the-fly syntax checks.
   :custom
   (flymake-run-in-place nil))
 (use-package flymake-haskell-multi
-  :requires flymake)
+  ; Syntax-check haskell-mode using both ghc and hlint
+  :requires (flymake haskell-mode)
+  :hook
+  (haskell-mode-hook . flymake-haskell-multi-load))
 
-; increment-decrement numbers as in vim
 (use-package evil-numbers
+  ; increment-decrement numbers as in vim
   :bind (("C-c +" . 'evil-numbers/inc-at-pt)
          ("C-c -" . 'evil-numbers/dec-at-pt)
          ("C-c C-+" . 'evil-numbers/inc-at-pt-incremental)
          ("C-c C--" . 'evil-numbers/dec-at-pt-incremental)))
 
-; move around efficiently
 (use-package avy
+  ; move around efficiently
   :bind (("C-;" . avy-goto-char-timer)
          ("M-g g" . avy-goto-line)
          ("M-g M-g" . avy-goto-line))
@@ -515,11 +519,14 @@
 ;;;## Writing & reading
 
 ;; word processor and markup
-(use-package wc-mode)
 
-; loading auctex directly doesn't work for some reason
-; https://github.com/jwiegley/use-package/issues/379
+(use-package wc-mode
+  ; count words
+  )
+
 (use-package tex-mode
+  ; loading auctex directly doesn't work for some reason
+  ; https://github.com/jwiegley/use-package/issues/379
   :after auctex
   :custom
   (reftex-plug-into-AUCTeX t)
@@ -538,9 +545,9 @@
   :config
   (company-auctex-init))
 
-; package for writing mode, introduces margins
-; for search purposes: org-mode
 (use-package olivetti
+  ; package for writing mode, introduces margins
+  ; for search purposes: org-mode
   :custom
   (olivetti-body-width 90)
   :config
@@ -615,6 +622,7 @@
 
 ;;;### misc
 (use-package magit
+  ; emacs git interface
   :custom
   ; highlight word-differences in diffs
   (magit-diff-refine-hunk (quote all))
@@ -775,6 +783,7 @@ Source: https://stackoverflow.com/questions/11043004/emacs-compile-buffer-auto-c
  "PropertyChanged" ; message
  #'detect-and-switch-theme)
 
+; actually set the correct theme when loading
 (set-theme)
 
 ; Screenshot to svg
