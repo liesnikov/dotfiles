@@ -764,10 +764,10 @@ Source: https://stackoverflow.com/questions/11043004/emacs-compile-buffer-auto-c
     (if
         (string= newtheme
                  expected-value)
-        (progn (load-theme light-theme t)
-               (disable-theme dark-theme))
-        (progn (load-theme dark-theme t)
-               (disable-theme light-theme)))))
+        (progn (disable-theme dark-theme)
+               (load-theme light-theme t))
+        (progn (disable-theme light-theme)
+               (load-theme dark-theme t)))))
 
 (defun detect-and-switch-theme (servname setpath themename)
   (if
