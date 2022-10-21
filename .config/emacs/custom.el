@@ -11,8 +11,9 @@
    '(default))
  '(custom-theme-allow-multiple-selections nil)
  '(package-selected-packages
-   '(ac-math auctex auto-complete auto-complete-auctex avy
-     color-moccur company-auctex company-coq counsel-projectile
+   '(
+     ac-math auctex auto-complete auto-complete-auctex avy
+     color-moccur company-auctex company-coq counsel counsel-projectile
      doom-themes
      editorconfig eglot emojify evil-numbers envrc
      flycheck
@@ -25,7 +26,9 @@
      pdf-tools projectile proof-general
      quelpa quelpa-use-package
      rg rustic
+     swiper
      transpose-frame tuareg
      undo-tree unicode-whitespace use-package use-package-ensure-system-package
-     wc-mode which-key))
+     wc-mode which-key
+     ))
  '(safe-local-variable-values nil))
