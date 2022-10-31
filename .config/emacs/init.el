@@ -258,7 +258,7 @@
   ; precisely, according to the turning of the mouse wheel.
   (pixel-scroll-precision-mode 't))
 
-(use-package cus-start
+(use-package emacs
   ; catch-all package for all the things that don't have their own package
   :ensure nil
   :custom
