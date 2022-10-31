@@ -2,6 +2,9 @@
 ;; M-x occur ';;;' to look for headers
 
 (require 'package)
+
+;;; Setup package archives
+
 (unless (assoc-default "melpa" package-archives)
   (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t))
 (unless (assoc-default "gnu" package-archives)
@@ -84,6 +87,8 @@
   :custom
   (dired-async-mode t)
   (dired-listing-switches "-al")
+  ; for some reason this errors out on master-81d7827
+  (dired-make-directory-clickable nil)
   :bind (:map dired-mode-map
          ("C-c o"   . dired-open-file)
          ("C-c C-o" . dired-open-file))
@@ -707,7 +712,7 @@
              (shell-command-to-string "agda-mode locate")))
 
 
-;;;#Commentary:
+;;; Commentary:
 
 ;; NB:
 
@@ -723,9 +728,9 @@
 
 ; to open two different views on the same buffer: make-indirect-buffer
 
-;;;#Bindings:
+;;; Bindings:
 
-;;;#Code:
+;;; Code:
 
 (defun kill-filename ()
   ; copy current buffer's file path to kill-ring
