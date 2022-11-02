@@ -263,9 +263,10 @@
   ; precisely, according to the turning of the mouse wheel.
   (pixel-scroll-precision-mode 't))
 
-(use-package emacs
+(use-package cus-start
   ; catch-all package for all the things that don't have their own package
   :ensure nil
+  :demand
   :custom
   ; personal info
   (user-full-name "Bohdan Liesnikov")
