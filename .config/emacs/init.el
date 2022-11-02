@@ -738,10 +738,29 @@
 
 ;;; Code:
 
-(defun kill-filename ()
+(defun personal/kill-filename ()
   ; copy current buffer's file path to kill-ring
   (interactive)
   (kill-new buffer-file-name))
+
+(defun personal/get-filename-line-column (&optional full-path)
+  (require 'magit)
+  (let ((line (current-line))
+        (column (current-column))
+        (filename (if full-path
+                      (buffer-file-name)
+                      (magit-file-relative-name))))
+  (concat filename
+          ":"
+          (number-to-string line)
+          ":"
+          (number-to-string column))))
+
+(defun personal/kill-filename-line-column (&optional full-path)
+  ; copy current buffer's file path to kill-ring
+  (interactive)
+  (kill-new (personal/get-filename-line-column full-path)))
+
 
 ;(add-to-list
 ; due to a weird bug, both tokens from PG and company-coq are used
