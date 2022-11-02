@@ -604,7 +604,6 @@
                             'markdown-reftex-citation))))
 
 (use-package org
-  :defines org-date-today
   :bind (:map org-mode-map
          ; and to insert current date use org-time-stamp bound to C-c .
          ("C-c l" . org-store-link))
