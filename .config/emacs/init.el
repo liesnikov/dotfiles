@@ -353,11 +353,10 @@
 (use-package unicode-whitespace
   ; highlight all whitespaces
   :custom
-  (global-whitespace-newline-mode 1)
-  ; in agda it's simply annoying, but for magit it's causing errors
-  ; see https://github.com/magit/magit/issues/4766 and
-  ; https://emacs.stackexchange.com/questions/38771/magit-status-does-not-open-when-using-global-whitespace-mode-1/38778#38778
-  (whitespace-global-modes '(not agda2-mode magit-mode))
+  ; this is the default, but it breaks so many things I'd rather have it explicit
+  ; in particular it breaks org-mode tex import
+  (global-whitespace-mode nil)
+  (global-whitespace-newline-mode t)
   :config
   (unicode-whitespace-setup 'subdued-faces))
 
