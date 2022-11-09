@@ -11,8 +11,6 @@
   (add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/") t))
 (unless (assoc-default "nongnu" package-archives)
   (add-to-list 'package-archives '("nongnu" . "https://elpa.nongnu.org/packages/") t))
-(unless (assoc-default "org" package-archives)
-  (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t))
 (when (< emacs-major-version 27) (package-initialize))
 
 ;;; Custom:
