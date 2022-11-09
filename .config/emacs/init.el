@@ -256,6 +256,22 @@
   ; Toggle visualization of matching parens
   (show-paren-mode t))
 
+(use-package whitespace
+  :ensure nil
+  ; highlight all whitespaces
+  :custom
+  ; this is the default, but it breaks so many things I'd rather have it explicit
+  ; in particular it breaks org-mode tex import
+  (global-whitespace-mode t)
+  ; This function is obsolete since 28.1
+  ; (global-whitespace-newline-mode t)
+  ; * in agda it's simply annoying, but for magit it's causing errors
+  ;   see https://github.com/magit/magit/issues/4766 and
+  ;   https://emacs.stackexchange.com/questions/38771/magit-status-does-not-open-when-using-global-whitespace-mode-1/38778#38778
+  ; * for magit it breaks commit flow
+  ; * for tex mode -- it breaks org-mode tex export
+  (whitespace-global-modes '(not agda2-mode magit-mode tex-mode)))
+
 (use-package pixel-scroll
   :ensure nil
   :custom
@@ -351,18 +367,7 @@
   (moody-replace-vc-mode))
 
 (use-package unicode-whitespace
-  ; highlight all whitespaces
-  :custom
-  ; this is the default, but it breaks so many things I'd rather have it explicit
-  ; in particular it breaks org-mode tex import
-  (global-whitespace-mode nil)
-  (global-whitespace-newline-mode t)
-  ; * in agda it's simply annoying, but for magit it's causing errors
-  ;   see https://github.com/magit/magit/issues/4766 and
-  ;   https://emacs.stackexchange.com/questions/38771/magit-status-does-not-open-when-using-global-whitespace-mode-1/38778#38778
-  ; * for magit it breaks commit flow
-  ; * for tex mode -- it breaks org-mode tex export
-  (whitespace-global-modes '(not agda2-mode magit-mode tex-mode))
+  :requires whitespace
   :config
   (unicode-whitespace-setup 'subdued-faces))
 
