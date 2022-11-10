@@ -258,11 +258,13 @@
   :ensure nil
   ; highlight all whitespaces
   :custom
-  ; this is the default, but it breaks so many things I'd rather have it explicit
-  ; in particular it breaks org-mode tex import
+  ; global-whitespace-mode is known to break org-mode export sometimes
   (global-whitespace-mode t)
-  ; This function is obsolete since 28.1
-  ; (global-whitespace-newline-mode t)
+  (whitespace-style '(face trailing tabs empty indentation
+                      newline newline-mark
+                      space-after-tab::tab  space-after-tab::space
+                      space-before-tab::tab space-before-tab::space
+                      space-mark spaces tab-mark))
   ; * in agda it's simply annoying, but for magit it's causing errors
   ;   see https://github.com/magit/magit/issues/4766 and
   ;   https://emacs.stackexchange.com/questions/38771/magit-status-does-not-open-when-using-global-whitespace-mode-1/38778#38778
