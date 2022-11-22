@@ -610,8 +610,11 @@
 
 (use-package org
   :bind (:map org-mode-map
-         ; and to insert current date use org-time-stamp bound to C-c .
-         ("C-c l" . org-store-link))
+          ; some default and non-default mappings
+          ; * to insert current date use org-time-stamp bound to C-c .
+          ; * to org-global-cycle use C-u TAB
+          ; * to store a link to an org heading use C-c l
+          ("C-c l" . org-store-link))
   :custom
   (org-agenda-files nil)
   (org-cycle-include-plain-lists (quote integrate))
