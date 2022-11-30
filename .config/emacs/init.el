@@ -587,13 +587,12 @@
   ; from https://gist.github.com/kleinschmidt/5ab0d3c423a7ee013a2c01b3919b009a
   ; define markdown citation formats
   (defvar markdown-cite-format)
+  ; these are the only two formats available:
+  ; https://pandoc.org/MANUAL.html#extension-citations
   (setq markdown-cite-format
-        '(
-          (?\C-m . "[@%l]")
-          (?p . "[@%l]")
-          (?t . "@%l")
-          )
-        )
+        '((?\C-m . "[@%l]")
+          (?p    . "[@%l]")
+          (?t    . "@%l")))
 
   ; wrap reftex-citation with local variables for markdown format
   (defun markdown-reftex-citation ()
