@@ -14,12 +14,12 @@ shopt -s histappend
 # Eternal bash history. https://stackoverflow.com/a/19533853
 # Undocumented feature which sets the size to "unlimited".
 # http://stackoverflow.com/questions/9457233/unlimited-bash-history
-export HISTFILESIZE=-1
-export HISTSIZE=-1
+export HISTFILESIZE=
+export HISTSIZE=
 export HISTTIMEFORMAT="[%F %T] "
 # Change the file location because certain bash sessions truncate .bash_history file upon close.
 # http://superuser.com/questions/575479/bash-history-truncated-to-500-lines-on-each-login
-export HISTFILE=~/.bash_eternal_history
+export HISTFILE="${XDG_DATA_HOME}"/.bash_eternal_history
 
 # After each command, append to the history file and reread it
 PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND$'\n'}history -a; history -c; history -r"
