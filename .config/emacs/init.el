@@ -279,10 +279,10 @@
   ; precisely, according to the turning of the mouse wheel.
   (pixel-scroll-precision-mode 't))
 
-(use-package cus-start
+; re-evaluate this on restart if emacs gets stuck with wrong colours
+; to select until the closing parenthesis use C-M-f or C-M-b
+(use-package emacs
   ; catch-all package for all the things that don't have their own package
-  :ensure nil
-  :demand
   :custom
   ; personal info
   (user-full-name "Bohdan Liesnikov")
