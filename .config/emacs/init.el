@@ -280,7 +280,7 @@
   (pixel-scroll-precision-mode 't))
 
 ; re-evaluate this on restart if emacs gets stuck with wrong colours
-; to select until the closing parenthesis use C-M-f or C-M-b
+; to select the whole sexpr put carriage on the first parenthesis and press C-M-space
 (use-package emacs
   ; catch-all package for all the things that don't have their own package
   :custom
@@ -315,9 +315,8 @@
   ; make mode-line line indicator be line-number:colon-number
   (mode-line-position (list "%l:%c"))
 
-  ; fonts
   :custom-face
-  (default ((t (:height 130
+  (default ((t (:height 125
                 :width condensed
                 :foundry "ADBO"
                 :family "Source Code Pro")))))
