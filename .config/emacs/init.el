@@ -659,6 +659,22 @@
 ;; Language server protocol
 (use-package eglot)
 
+(use-package copilot
+  :quelpa (copilot :fetcher github
+                   :repo "zerolfx/copilot.el"
+                   :branch "main"
+                   :files ("dist" "*.el"))
+  :hook (prog-mode-hook . copilot-mode)
+  :bind (:map copilot-mode-map
+              ("C-<tab>" . copilot-tab))
+  :config
+  (defun copilot-tab (arg)
+    (interactive "P")
+    (if (bound-and-true-p arg)
+        (copilot-next-completion)
+        (or (copilot-accept-completion)
+            (copilot-complete)))))
+
 ;;;### rust
 (use-package rustic
   :requires eglot
