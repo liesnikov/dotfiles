@@ -367,7 +367,45 @@
 
 (use-package unicode-whitespace
   :requires whitespace
-  :config
+  :custom
+  (unicode-whitespace-soft-space-mappings
+   ; this is the default except for "Space", initially it's also Middle dot
+   '(("Space" ("Space"))
+     ("Em Quad"
+      ("Circled Bullet" "Middle Dot" "."))
+     ("Em Space"
+      ("Circled Bullet" "Middle Dot" "."))
+     ("En Quad"
+      ("Circled Bullet" "Middle Dot" "."))
+     ("En Space"
+      ("Circled Bullet" "Middle Dot" "."))
+     ("Figure Space"
+      ("Circled Bullet" "Middle Dot" "."))
+     ("Four-Per-Em Space"
+      ("Circled Bullet" "Middle Dot" "."))
+     ("Hair Space"
+      ("Circled Bullet" "Middle Dot" "."))
+     ("Ideographic Space"
+      ("Circled Bullet" "Middle Dot" "."))
+     ("Medium Mathematical Space"
+      ("Circled Bullet" "Middle Dot" "."))
+     ("Mongolian Vowel Separator"
+      ("Circled Bullet" "Middle Dot" "."))
+     ("Ogham Space Mark"
+      ("Circled Bullet" "Middle Dot" "."))
+     ("Punctuation Space"
+      ("Circled Bullet" "Middle Dot" "."))
+     ("Six-Per-Em Space"
+      ("Circled Bullet" "Middle Dot" "."))
+     ("Tag Space"
+      ("Circled Bullet" "Middle Dot" "."))
+     ("Thin Space"
+      ("Circled Bullet" "Middle Dot" "."))
+     ("Three-Per-Em Space"
+      ("Circled Bullet" "Middle Dot" "."))
+     ("Zero Width Space"
+      ("Circled Bullet" "Middle Dot" "."))))
+ :config
   (unicode-whitespace-setup 'subdued-faces))
 
 (use-package emojify
