@@ -138,3 +138,17 @@ streaming() {
        -s $OUTRES -preset $QUALITY -tune film -acodec libmp3lame -threads $THREADS -strict normal \
        -bufsize $CBR "rtmp://$SERVER.twitch.tv/app/$STREAM_KEY"
  }
+
+screen_set() {
+  case $1 in
+    laptop)
+      xrandr --output eDP-1 --primary --mode 3840x2400 --pos 0x0 --rotate normal --output DP-1 --off --output HDMI-1 --off --output DP-2 --off --output DP-3 --off
+      ;;
+    work)
+      xrandr --output DP-2 --primary --mode 3840x2160 --pos 0x0 --rotate normal --output eDP-1 --off
+      ;;
+    *)
+      echo "couldn't recognise the setup"
+      ;;
+   esac
+}
