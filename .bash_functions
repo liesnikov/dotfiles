@@ -145,7 +145,10 @@ screen_set() {
       xrandr --output eDP-1 --primary --mode 3840x2400 --pos 0x0 --rotate normal --output DP-1 --off --output HDMI-1 --off --output DP-2 --off --output DP-3 --off
       ;;
     work)
-      xrandr --output DP-2 --primary --mode 3840x2160 --pos 0x0 --rotate normal --output eDP-1 --off
+      xrandr --output DP-2 --primary --scale 1 --mode 3840x2160 --pos 0x0 --rotate normal --output eDP-1 --off
+      ;;
+    home)
+      xrandr --output eDP-1 --mode 3840x2400 --pos 0x0 --rotate normal --output DP-1 --mode 1920x1080 --primary --scale 2 --pos 3840x0
       ;;
     *)
       echo "couldn't recognise the setup"
