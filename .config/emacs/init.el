@@ -774,7 +774,7 @@
 ;;;#### agda
 ;; agda2 mode, gets appended by `agda-mode setup`
 (load-file (let ((coding-system-for-read 'utf-8))
-             (shell-command-to-string "agda-mode locate")))
+                (shell-command-to-string "agda-mode locate")))
 
 
 ;;; Commentary:
