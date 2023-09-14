@@ -56,7 +56,9 @@
         eshell-directory-name
           (no-littering-expand-var-file-name "eshell")
         transient-history-file
-          (no-littering-expand-var-file-name "transient/history.el")))
+        (no-littering-expand-var-file-name "transient/history.el"))
+  :config
+  (no-littering-theme-backups))
 
 ;;;# Built-in packages, for neatness
 
@@ -260,17 +262,22 @@
   :custom
   ; global-whitespace-mode is known to break org-mode export sometimes
   (global-whitespace-mode t)
-  (whitespace-style '(face trailing tabs empty indentation
+  (whitespace-style '(face
+                      trailing
+                      space-mark spaces
+                      tab-mark tabs
+                      empty
+                      ;indentation::space
+                      ;indentation::tab
                       newline newline-mark
-                      space-after-tab::tab  space-after-tab::space
-                      space-before-tab::tab space-before-tab::space
-                      space-mark spaces tab-mark))
+                      space-after-tab::tab space-after-tab::space
+                      space-before-tab::tab space-before-tab::space))
   ; * in agda it's simply annoying, but for magit it's causing errors
   ;   see https://github.com/magit/magit/issues/4766 and
   ;   https://emacs.stackexchange.com/questions/38771/magit-status-does-not-open-when-using-global-whitespace-mode-1/38778#38778
   ; * for magit it breaks commit flow
   ; * for tex mode -- it breaks org-mode tex export
-  (whitespace-global-modes '(not agda2-mode magit-mode tex-mode)))
+  (whitespace-global-modes '(not agda2-mode magit-mode tex-mode org-mode)))
 
 (use-package pixel-scroll
   :ensure nil
@@ -604,15 +611,15 @@
     (call-interactively #'olivetti-mode )))
 
 ; errors out when loading
-; (use-package flycheck-grammarly
-;   ; package to send text to grammarly
-;   :ensure t
-;   :requires flycheck
-;   :config
-;   (with-eval-after-load 'flycheck
-;     (flycheck-grammarly-setup))
-;   :hook
-;   (markdown-mode-hook . flyspell-grammarly))
+;(use-package flycheck-grammarly
+;  ; package to send text to grammarly
+;  :ensure t
+;  :requires flycheck
+;  :config
+;  (with-eval-after-load 'flycheck
+;    (flycheck-grammarly-setup))
+;  :hook
+;  (markdown-mode-hook . flyspell-grammarly))
 
 (use-package nov
   ; Major mode for reading EPUB documents
@@ -678,6 +685,14 @@
   ((org-mode-hook . org-modern-mode)
    (org-agenda-finalize-hook . org-modern-agenda)))
 
+(use-package org-modern-indent
+  :quelpa (org-modern-indent :fetcher github
+                             :repo "jdtsmith/org-modern-indent"
+                             :files ("*.el"))
+  :config ; add late to hook
+  ; because of the depth argument can't use :hook
+  (add-hook 'org-mode-hook #'org-modern-indent-mode 90))
+
 ;;;## Programming
 
 
@@ -695,7 +710,14 @@
   (editorconfig-mode t))
 
 ;; Language server protocol
-(use-package eglot)
+(use-package eglot
+  :config
+  (add-hook 'haskell-mode-hook 'eglot-ensure)
+  :config
+  :custom
+  (eglot-autoshutdown t)  ;; shutdown language server after closing last file
+  (eglot-confirm-server-initiated-edits nil)  ;; allow edits without confirmation
+  )
 
 (use-package copilot
   :quelpa (copilot :fetcher github
@@ -771,6 +793,11 @@
   ; enable it as we enter coq mode
   (coq-mode-hook . company-coq-mode))
 
+;(add-to-list
+; due to a weird bug, both tokens from PG and company-coq are used
+; which results in "token undefined" errors when using PG ones
+; 'coq-mode-hook (unicode-tokens-use-shortcuts nil))
+
 ;;;#### agda
 ;; agda2 mode, gets appended by `agda-mode setup`
 (load-file (let ((coding-system-for-read 'utf-8))
@@ -820,12 +847,6 @@
   (interactive)
   (kill-new (personal/get-filename-line-column full-path)))
 
-
-;(add-to-list
-; due to a weird bug, both tokens from PG and company-coq are used
-; which results in "token undefined" errors when using PG ones
-; 'coq-mode-hook (unicode-tokens-use-shortcuts nil))
-
 (defun bury-compile-buffer-if-successful (buffer string)
   "Bury a compilation BUFFER if succeeded without warnings (check STRING).
 Source: https://stackoverflow.com/questions/11043004/emacs-compile-buffer-auto-close"
@@ -846,7 +867,7 @@ Source: https://stackoverflow.com/questions/11043004/emacs-compile-buffer-auto-c
 
 ;; Automatically switch themes
 
-(defun set-theme (&optional name)
+(defun personal/set-theme (&optional name)
   "Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
   (interactive (list (if current-prefix-arg
                          (read-from-minibuffer "System theme: ")
@@ -865,11 +886,11 @@ Source: https://stackoverflow.com/questions/11043004/emacs-compile-buffer-auto-c
         (progn (disable-theme light-theme)
                (load-theme dark-theme t)))))
 
-(defun detect-and-switch-theme (servname setpath themename)
+(defun personal/detect-and-switch-theme (servname setpath themename)
   (if
       (string= setpath
                "/Net/ThemeName")
-      (set-theme (car themename))))
+      (personal/set-theme (car themename))))
 
 (dbus-register-signal
  :session
@@ -877,10 +898,10 @@ Source: https://stackoverflow.com/questions/11043004/emacs-compile-buffer-auto-c
  "/org/xfce/Xfconf" ; path
  "org.xfce.Xfconf" ; interface
  "PropertyChanged" ; message
- #'detect-and-switch-theme)
+ #'personal/detect-and-switch-theme)
 
 ; actually set the correct theme when loading
-(set-theme)
+(personal/set-theme)
 
 ; Screenshot to svg
 (defun screenshot-svg ()
@@ -902,13 +923,6 @@ Source: https://old.reddit.com/r/emacs/comments/idz35e/emacs_27_can_take_svg_scr
     (unless (get-buffer-process buffer)
       (recompile))))
 
-; I use this from commandline
-(defun shutdown ()
-  (interactive)
-  (progn
-    (desktop-save "~/.cache/emacs/desktop")
-    (save-buffers-kill-emacs)))
-
 (define-minor-mode compile-on-save-mode
   "Minor mode to automatically call `recompile' whenever the
 current buffer is saved. When there is ongoing compilation,
@@ -919,6 +933,12 @@ nothing happens."
         (add-hook 'after-save-hook 'compile-on-save-start nil t))
       (kill-local-variable 'after-save-hook)))
 
+; I use this from commandline
+(defun personal/shutdown ()
+  (interactive)
+  (progn
+    (desktop-save "~/.cache/emacs/desktop")
+    (save-buffers-kill-emacs)))
 
 (defun eshell/trueclear ()
   "True clear for eshell, instead of default scroll."

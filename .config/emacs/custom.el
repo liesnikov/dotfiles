@@ -16,13 +16,13 @@
      color-moccur company-auctex company-coq counsel counsel-projectile copilot
      doom-themes
      editorconfig eglot emojify evil-numbers envrc
-     flycheck
+     flycheck flycheck-grammarly
      gnu-elpa-keyring-update
      haskell-mode
      ibuffer-projectile idris-mode idris2-mode ivy ivy-hydra ivy-rich
      magit markdown-mode merlin minions moody
      nix-haskell-mode nix-mode no-littering nov noxml-fold
-     olivetti org org-download org-modern org-present
+     olivetti org org-download org-modern org-present org-modern-indent
      pdf-tools projectile proof-general
      quelpa quelpa-use-package
      rg rustic
