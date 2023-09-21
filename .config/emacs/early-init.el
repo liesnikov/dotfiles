@@ -17,7 +17,7 @@
 
 ;; Default frame configuration: full screen, good-looking title bar on macOS
 (setq frame-resize-pixelwise t)
-(setq default-frame-alist '(;; You can turn off scroll bars by uncommenting these lines:
+(setq initial-frame-alist '(;; You can turn off scroll bars by uncommenting these lines:
                             ;; (vertical-scroll-bars . nil)
                             ;; (horizontal-scroll-bars . nil)
 
