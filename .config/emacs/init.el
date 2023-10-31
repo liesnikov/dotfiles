@@ -621,10 +621,10 @@
 ;  :hook
 ;  (markdown-mode-hook . flyspell-grammarly))
 
-(use-package nov
-  ; Major mode for reading EPUB documents
-  :config
-  (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode)))
+;(use-package nov
+;  ; Major mode for reading EPUB documents
+;  :config
+;  (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode)))
 
 (use-package markdown-mode
   :config

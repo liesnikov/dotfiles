@@ -21,7 +21,7 @@
      ibuffer-projectile idris-mode idris2-mode ivy ivy-hydra ivy-rich
      magit markdown-mode merlin minions moody
      lsp-mode lsp-ui lsp-haskell
-     nix-haskell-mode nix-mode no-littering nov noxml-fold
+     nix-haskell-mode nix-mode no-littering noxml-fold
      olivetti org org-download org-modern org-present org-modern-indent
      pdf-tools projectile proof-general
      quelpa quelpa-use-package
