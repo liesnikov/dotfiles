@@ -20,13 +20,14 @@
      haskell-mode
      ibuffer-projectile idris-mode idris2-mode ivy ivy-hydra ivy-rich
      magit markdown-mode merlin minions moody
+     lsp-mode lsp-ui lsp-haskell
      nix-haskell-mode nix-mode no-littering nov noxml-fold
      olivetti org org-download org-modern org-present org-modern-indent
      pdf-tools projectile proof-general
      quelpa quelpa-use-package
      rg rustic
      swiper
-     transpose-frame tuareg
+     transpose-frame tuareg tree-sitter-langs
      undo-tree unicode-whitespace use-package use-package-ensure-system-package
      wc-mode which-key
      ))

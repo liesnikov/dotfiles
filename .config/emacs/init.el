@@ -712,12 +712,21 @@
 ;; Language server protocol
 (use-package eglot
   :config
-  (add-hook 'haskell-mode-hook 'eglot-ensure)
+;  (add-hook 'haskell-mode-hook 'eglot-ensure)
   :config
+;    (setq-default eglot-workspace-configuration
+;                '((haskell
+;                   (plugin
+;                    (hlint
+;                     (globalOn . t))))))
   :custom
   (eglot-autoshutdown t)  ;; shutdown language server after closing last file
   (eglot-confirm-server-initiated-edits nil)  ;; allow edits without confirmation
   )
+
+; in some cases more functional than eglot, albeit slower
+(use-package lsp-mode)
+(use-package lsp-ui)
 
 (use-package copilot
   :quelpa (copilot :fetcher github
@@ -734,6 +743,10 @@
         (copilot-next-completion)
         (or (copilot-accept-completion)
             (copilot-complete)))))
+
+
+(use-package tree-sitter-langs
+  :after tree-sitter)
 
 ;;;### rust
 (use-package rustic
@@ -762,6 +775,13 @@
   (haskell-compiler-type 'auto)
   :hook
   (haskell-mode-hook . interactive-haskell-mode))
+
+(use-package lsp-haskell
+  :requires lsp-mode lsp-ui
+  :hook
+    (haskell-mode-hook . lsp-deferred)
+    (haskell-literate-mode-hook . lsp-deferred)
+  )
 
 ;;;### nix
 (use-package nix-mode
