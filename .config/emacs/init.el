@@ -286,6 +286,9 @@
   ; precisely, according to the turning of the mouse wheel.
   (pixel-scroll-precision-mode 't))
 
+(use-package tree-sitter
+  :custom (global-tree-sitter-mode 't))
+
 ; re-evaluate this on restart if emacs gets stuck with wrong colours
 ; to select the whole sexpr put carriage on the first parenthesis and press C-M-space
 (use-package emacs
