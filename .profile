@@ -39,6 +39,11 @@ if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then . ~/.nix-profile/etc/profile
 # for KeePassXC, since it doesn't respect system's theme on ubuntu 18.04
 # https://github.com/keepassxreboot/keepassxc/issues/1931
 # works with qt5-style-plugins
-export QT_QPA_PLATFORMTHEME=gtk2
+# export QT_QPA_PLATFORMTHEME=gtk2
 #export QT_AUTO_SCREEN_SCALE_FACTOR=0
 export GHCUP_USE_XDG_DIRS=1
+
+
+
+EDITOR="/snap/bin/emacs.emacsclient -n -c"
+

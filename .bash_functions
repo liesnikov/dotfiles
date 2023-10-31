@@ -150,8 +150,16 @@ screen_set() {
     home)
       xrandr --output eDP-1 --mode 3840x2400 --pos 0x0 --rotate normal --output DP-1 --mode 1920x1080 --primary --scale 2 --pos 3840x0
       ;;
+    home2)
+      xrandr --output eDP-1 --mode 3840x2400 --pos 0x0 --rotate normal --output DP-2 --mode 1920x1080 --primary --scale 2 --pos 3840x0
+      ;;
     *)
       echo "couldn't recognise the setup"
       ;;
    esac
+}
+
+
+touchpad-on () {
+    synclient TouchpadOff=0;
 }
