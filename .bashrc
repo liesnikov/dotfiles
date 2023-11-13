@@ -137,12 +137,6 @@ fi
 
 export PS1='\[\e[1m\]\W\[\e[0m\] ⊢ '
 
-# virtualenv for python wrapper
-export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
-export WORKON_HOME=~/.virtualenvs
-source ~/.local/bin/virtualenvwrapper_lazy.sh
-export PIP_VIRTUALENV_BASE=~/.virtualenvs
-
 # set vi mode for navigating and stuff
 # set -o vi
 
