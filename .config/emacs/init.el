@@ -624,6 +624,20 @@
 ;  :hook
 ;  (markdown-mode-hook . flyspell-grammarly))
 
+; errors out with (file-missing Doing vfork No such file or directory)
+;(use-package flymake-vale
+;  :ensure-system-package vale
+;  :quelpa (flymake-vale :fetcher github
+;                        :repo "tpeacock19/flymake-vale"
+;                        :files ("*.el"))
+;  :hook (text-mode-hook     . flymake-vale-load)
+;        (latex-mode-hook    . flymake-vale-load)
+;        (org-mode-hook      . flymake-vale-load)
+;        (markdown-mode-hook . flymake-vale-load)
+;        (message-mode-hook  . flymake-vale-load)
+; )
+
+
 ;(use-package nov
 ;  ; Major mode for reading EPUB documents
 ;  :config
