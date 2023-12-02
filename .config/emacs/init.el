@@ -530,6 +530,8 @@
 
 (use-package flycheck
   ; Flycheck is a minor Emacs mode performing on-the-fly syntax checks.
+  :custom
+  (flycheck-checker-error-threshold nil)
   :init
   (global-flycheck-mode))
 
@@ -635,8 +637,17 @@
 ;        (org-mode-hook      . flymake-vale-load)
 ;        (markdown-mode-hook . flymake-vale-load)
 ;        (message-mode-hook  . flymake-vale-load)
-; )
-
+                                        ; )
+(flycheck-define-checker vale
+  "A checker for prose"
+  :command ("vale" "--output" "line"
+            source)
+  :standard-input nil
+  :error-patterns
+  ((error line-start (file-name) ":" line ":" column ":" (id (one-or-more (not (any ":")))) ":" (message) line-end))
+  :modes (markdown-mode org-mode text-mode tex-mode)
+  )
+(add-to-list 'flycheck-checkers 'vale 'append)
 
 ;(use-package nov
 ;  ; Major mode for reading EPUB documents
