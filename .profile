@@ -34,8 +34,6 @@ fi
 
 test -r $OPAMROOT/opam-init/init.sh && . $OPAMROOT/opam-init/init.sh > /dev/null 2> /dev/null || true  # by opam, ml package manager
 
-if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then . ~/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
-
 # for KeePassXC, since it doesn't respect system's theme on ubuntu 18.04
 # https://github.com/keepassxreboot/keepassxc/issues/1931
 # works with qt5-style-plugins
@@ -43,7 +41,6 @@ if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then . ~/.nix-profile/etc/profile
 #export QT_AUTO_SCREEN_SCALE_FACTOR=0
 export GHCUP_USE_XDG_DIRS=1
 
+if [ -e /home/bohdan/.local/state/nix/profile/etc/profile.d/nix.sh ]; then . /home/bohdan/.local/state/nix/profile/etc/profile.d/nix.sh; fi # added by Nix installer
 
-
-EDITOR="/snap/bin/emacs.emacsclient -n -c"
-
+export NIX_PATH="/home/bohdan/.local/state/nix/defexpr/channels"
