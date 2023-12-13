@@ -515,6 +515,13 @@
    ("C-x C-f" . counsel-find-file)
    ("C-c r g" . counsel-rg)))
 
+
+(use-package expand-region
+  ; expand selection semantically
+  :bind
+  (("M-=" . 'er/expand-region))
+  )
+
 (use-package pdf-tools
   ; view pdfs in emacs
   :config
