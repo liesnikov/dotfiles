@@ -760,7 +760,9 @@
   )
 
 ; in some cases more functional than eglot, albeit slower
-(use-package lsp-mode)
+(use-package lsp-mode
+  :custom
+  (lsp-file-watch-threshold nil))
 (use-package lsp-ui)
 
 (use-package copilot
