@@ -785,6 +785,8 @@
 (use-package tree-sitter-langs
   :after tree-sitter)
 
+(use-package dockerfile-mode)
+
 ;;;### rust
 (use-package rustic
   :requires eglot

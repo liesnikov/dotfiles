@@ -13,7 +13,7 @@
    '(
      ac-math auctex auto-complete auto-complete-auctex avy
      color-moccur company-auctex company-coq counsel counsel-projectile copilot
-     doom-themes
+     doom-themes dockerfile-mode
      editorconfig eglot emojify evil-numbers envrc expand-region
      flycheck flycheck-grammarly
      gnu-elpa-keyring-update
