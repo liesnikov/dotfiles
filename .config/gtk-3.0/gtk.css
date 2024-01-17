@@ -1,0 +1,4 @@
+wnck-pager:selected {
+  background-color: lightblue; }
+wnck-pager:hover {
+    background-color: gray; }
