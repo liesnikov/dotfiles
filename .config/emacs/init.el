@@ -426,6 +426,20 @@
   :hook
   (after-init-hook . global-emojify-mode))
 
+(use-package dashboard
+  :custom
+  (dashboard-banner-logo-title "Welcome back 👋")
+  (dashboard-startup-banner 'logo)
+  (dashboard-center-content 't)
+  (dashboard-show-shortcuts 't)
+  (dashboard-items '((recents  . 5)
+                     (bookmarks . 5)
+                     (projects . 5)
+                     (registers . 5)))
+  :config
+  (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
+  (dashboard-setup-startup-hook))
+
 ;;;## General goodies
 
 (use-package auto-complete
