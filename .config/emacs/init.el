@@ -74,6 +74,7 @@
   (desktop-path '("~/.cache/emacs/desktop"))
   (desktop-auto-save-timeout 30)
   (desktop-load-locked-desktop t)
+  (desktop-restore-forces-onscreen nil) ; from https://stackoverflow.com/questions/18612742/emacs-desktop-save-mode-error#comment47963002_26546872
 ; (desktop-save 0)
   :hook
   (after-make-frame-functions . (lambda (frame)
