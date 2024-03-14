@@ -15,7 +15,7 @@
      color-moccur company-auctex company-coq counsel counsel-projectile copilot
      doom-themes dockerfile-mode dashboard
      editorconfig eglot emojify evil-numbers envrc expand-region ellama
-     flycheck flycheck-grammarly
+     flymake-vale
      gnu-elpa-keyring-update
      haskell-mode
      ibuffer-project idris-mode idris2-mode ivy ivy-hydra ivy-rich

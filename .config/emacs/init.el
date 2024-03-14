@@ -544,13 +544,6 @@
                                     (lambda () (linum-mode 0))
                                     :append :local))))
 
-(use-package flycheck
-  ; Flycheck is a minor Emacs mode performing on-the-fly syntax checks.
-  :custom
-  (flycheck-checker-error-threshold nil)
-  :init
-  (global-flycheck-mode))
-
 (use-package evil-numbers
   ; increment-decrement numbers as in vim
   :bind (("C-c +" . 'evil-numbers/inc-at-pt)
@@ -631,39 +624,16 @@
     (interactive)
     (call-interactively #'olivetti-mode )))
 
-; errors out when loading
-;(use-package flycheck-grammarly
-;  ; package to send text to grammarly
-;  :ensure t
-;  :requires flycheck
-;  :config
-;  (with-eval-after-load 'flycheck
-;    (flycheck-grammarly-setup))
-;  :hook
-;  (markdown-mode-hook . flyspell-grammarly))
-
-; errors out with (file-missing Doing vfork No such file or directory)
-;(use-package flymake-vale
-;  :ensure-system-package vale
-;  :quelpa (flymake-vale :fetcher github
-;                        :repo "tpeacock19/flymake-vale"
-;                        :files ("*.el"))
-;  :hook (text-mode-hook     . flymake-vale-load)
-;        (latex-mode-hook    . flymake-vale-load)
-;        (org-mode-hook      . flymake-vale-load)
-;        (markdown-mode-hook . flymake-vale-load)
-;        (message-mode-hook  . flymake-vale-load)
-                                        ; )
-(flycheck-define-checker vale
-  "A checker for prose"
-  :command ("vale" "--output" "line"
-            source)
-  :standard-input nil
-  :error-patterns
-  ((error line-start (file-name) ":" line ":" column ":" (id (one-or-more (not (any ":")))) ":" (message) line-end))
-  :modes (markdown-mode org-mode text-mode tex-mode)
-  )
-(add-to-list 'flycheck-checkers 'vale 'append)
+(use-package flymake-vale
+  :ensure-system-package vale
+  :quelpa (flymake-vale :fetcher github
+                        :repo "tpeacock19/flymake-vale")
+  :hook
+  ('find-file-hook . 'flymake-vale-maybe-load)
+  :config
+  ;; flymake-vale-modes defaults to:
+  ;;  => (text-mode latex-mode org-mode markdown-mode message-mode)
+  (add-to-list 'flymake-vale-modes 'adoc-mode))
 
 ;(use-package nov
 ;  ; Major mode for reading EPUB documents
