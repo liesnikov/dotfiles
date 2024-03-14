@@ -14,16 +14,16 @@
      ac-math auctex auto-complete auto-complete-auctex avy
      color-moccur company-auctex company-coq counsel counsel-projectile copilot
      doom-themes dockerfile-mode dashboard
-     editorconfig eglot emojify evil-numbers envrc expand-region
+     editorconfig eglot emojify evil-numbers envrc expand-region ellama
      flycheck flycheck-grammarly
      gnu-elpa-keyring-update
      haskell-mode
-     ibuffer-projectile idris-mode idris2-mode ivy ivy-hydra ivy-rich
+     ibuffer-project idris-mode idris2-mode ivy ivy-hydra ivy-rich
      magit markdown-mode merlin minions moody
-     lsp-mode lsp-ui lsp-haskell
+     lsp-mode lsp-ui lsp-haskell llm-ollama
      nix-haskell-mode nix-mode no-littering noxml-fold
      olivetti org org-download org-modern org-present org-modern-indent
-     pdf-tools projectile proof-general
+     pdf-tools proof-general
      quelpa quelpa-use-package
      rg rustic
      swiper

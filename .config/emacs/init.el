@@ -141,6 +141,11 @@
   :custom
   (gdb-many-windows t))
 
+(use-package project
+  :ensure nil
+  :custom project-vc-extra-root-markers '(".projectile"))
+
+
 (use-package ibuffer
   :ensure nil
   ; commented out for potential performance gains?
@@ -433,6 +438,7 @@
   (dashboard-startup-banner 'logo)
   (dashboard-center-content 't)
   (dashboard-show-shortcuts 't)
+  (dashboard-projects-backend 'project-el)
   (dashboard-items '((recents  . 5)
                      (bookmarks . 5)
                      (projects . 5)
@@ -473,26 +479,14 @@
   ; because elpa keys are expiring sometimes
   )
 
-(use-package projectile
-  ; projectile organizes buffers in projects
-  :bind (:map projectile-mode-map
-         ("C-x p". projectile-command-map))
-
-  :custom
-  (projectile-enable-caching t)
-  (projectile-mode t nil (projectile))
-  (projectile-file-exists-local-cache-expire (* 5 60))
-  (projectile-cache-file "~/.cache/emacs/projectile/cache"))
-
-(use-package ibuffer-projectile
-  ; integrate projectile with ibuffer
-  :requires projectile
+(use-package ibuffer-project
+  ; group ibuffer entries by the project
+  :after project
   :hook
-  (ibuffer-hook . ; ibuffer-projectile automatic sorting
-    (lambda ()
-      (ibuffer-projectile-set-filter-groups)
-      (unless (eq ibuffer-sorting-mode 'alphabetic)
-        (ibuffer-do-sort-by-alphabetic)))))
+  ('ibuffer-hook . (lambda ()
+     (setq ibuffer-filter-groups (ibuffer-project-generate-filter-groups))
+     (unless (eq ibuffer-sorting-mode 'project-file-relative)
+       (ibuffer-do-sort-by-project-file-relative)))))
 
 (use-package rg
   ; search package instead of grep
@@ -780,6 +774,11 @@
   (lsp-file-watch-threshold nil))
 (use-package lsp-ui)
 
+(use-package tree-sitter-langs
+  :after tree-sitter)
+
+(use-package dockerfile-mode)
+
 (use-package copilot
   :quelpa (copilot :fetcher github
                    :repo "zerolfx/copilot.el"
@@ -796,11 +795,18 @@
         (or (copilot-accept-completion)
             (copilot-complete)))))
 
-
-(use-package tree-sitter-langs
-  :after tree-sitter)
-
-(use-package dockerfile-mode)
+(use-package ellama
+  :custom
+  (ellama-language "English")
+  (ellama-keymap-prefix "C-c e l")
+  (ellama-sessions-directory "~/.cache/emasc/ellama-sessions")
+  :bind (:map ellama-command-map
+         ("q" . ellama--cancel-current-request-and-quit))
+  :init
+  (require 'llm-ollama)
+  (setopt ellama-provider
+     (make-llm-ollama
+      :chat-model "mistral-openorca" :embedding-model "mistral-openorca")))
 
 ;;;### rust
 (use-package rustic
