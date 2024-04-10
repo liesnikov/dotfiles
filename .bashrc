@@ -52,6 +52,9 @@ alias wget=wget --hsts-file="$XDG_DATA_HOME/wget-hsts"
 
 # ERRFILE="$XDG_CACHE_HOME/X11/xsession-errors"
 
+# set ssh to be authentificated via 1password
+export SSH_AUTH_SOCK=~/.1password/agent.sock
+
 # set PATH so it includes user's private bin if it exists
 if [ -d "$HOME/bin" ] ; then
     PATH="$HOME/bin:$PATH"
