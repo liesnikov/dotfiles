@@ -26,7 +26,7 @@
      pdf-tools proof-general
      quelpa quelpa-use-package
      rg rustic
-     swiper
+     swiper sideline-flymake
      transpose-frame tuareg tree-sitter-langs
      undo-tree unicode-whitespace use-package use-package-ensure-system-package
      wc-mode which-key
