@@ -757,6 +757,11 @@
   (eglot-confirm-server-initiated-edits nil)  ;; allow edits without confirmation
   )
 
+; for breadcrumbs modeline
+(use-package breadcrumb
+  :config
+  (breadcrumb-mode))
+
 ; in some cases more functional than eglot, albeit slower
 ;(use-package lsp-mode
 ;  :custom
