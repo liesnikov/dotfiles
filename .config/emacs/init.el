@@ -447,8 +447,9 @@
   (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
   (dashboard-setup-startup-hook))
 
+; because there's no sideline for flymake by default
 (use-package sideline-flymake
-  :hook (flymake-mode . sideline-mode)
+  :hook (flymake-mode-hook . sideline-mode)
   :init
   (setq sideline-flymake-display-mode 'point) ; 'point to show errors only on point
                                               ; 'line to show errors on the current line
@@ -732,8 +733,7 @@
 
 ;; Language server protocol
 (use-package eglot
-  :config
-;  (add-hook 'haskell-mode-hook 'eglot-ensure)
+  :hook (haskell-mode-hook . eglot-ensure)
   :config
 ;    (setq-default eglot-workspace-configuration
 ;                '((haskell
@@ -746,10 +746,10 @@
   )
 
 ; in some cases more functional than eglot, albeit slower
-(use-package lsp-mode
-  :custom
-  (lsp-file-watch-threshold nil))
-(use-package lsp-ui)
+;(use-package lsp-mode
+;  :custom
+;  (lsp-file-watch-threshold nil))
+;(use-package lsp-ui)
 
 (use-package tree-sitter-langs
   :requires tree-sitter)
@@ -813,12 +813,12 @@
   :hook
   (haskell-mode-hook . interactive-haskell-mode))
 
-(use-package lsp-haskell
-  :requires lsp-mode lsp-ui
-  :hook
-    (haskell-mode-hook . lsp-deferred)
-    (haskell-literate-mode-hook . lsp-deferred)
-  )
+;(use-package lsp-haskell
+;  :requires lsp-mode lsp-ui
+;  :hook
+;    (haskell-mode-hook . lsp-deferred)
+;    (haskell-literate-mode-hook . lsp-deferred)
+;  )
 
 ;;;### nix
 (use-package nix-mode
