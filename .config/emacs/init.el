@@ -62,11 +62,6 @@
 
 ;;;# Built-in packages, for neatness
 
-(use-package auto-complete
-  :ensure nil
-  :custom
-  (ac-comphist-file "~/.cache/emacs/ac-comphist.dat"))
-
 (use-package desktop
   :ensure nil
   :custom
@@ -457,16 +452,21 @@
 
 ;;;## General goodies
 
-(use-package auto-complete
-  :config
-  (ac-config-default)
-  ; doesn't really work, enables auto-fill-mode globally)
-  (global-auto-complete-mode t))
+;autocomplete
+(use-package company
+  :custom
+  (company-idle-delay 0)
+  (company-minimum-prefix-length 1)
+  (company-selection-wrap-around t))
 
-(use-package auto-complete-auctex
-  :requires auto-complete)
-(use-package ac-math
-  :requires auto-complete)
+(use-package company-box
+  :hook (company-mode-hook . company-box-mode))
+
+(use-package company-quickhelp
+  :custom
+  (company-quickhelp-delay 1)
+  :config
+  (company-quickhelp-mode))
 
 (use-package which-key
   ; provide a popup when you press a button with all bindings that follow
@@ -601,6 +601,12 @@
   ; count words
   )
 
+(use-package tex
+  :defer t
+  :ensure auctex
+  :config
+  (setq TeX-auto-save t))
+
 (use-package tex-mode
   ; loading auctex directly doesn't work for some reason
   ; https://github.com/jwiegley/use-package/issues/379
@@ -617,6 +623,12 @@
   (LaTeX-mode-hook . turn-on-reftex)
   ; with Emacs latex mode
   (latex-mode-hook . turn-on-reftex))
+
+(use-package company-math
+  :requires (company tex-mode)
+  :config
+  (add-to-list 'company-backends 'company-math-symbols-unicode))
+
 (use-package company-auctex
   :requires (company tex-mode)
   :config
@@ -811,7 +823,12 @@
   (haskell-process-type 'auto)
   (haskell-compiler-type 'auto)
   :hook
+  (haskell-mode-hook . eglot-ensure)
   (haskell-mode-hook . interactive-haskell-mode))
+
+(use-package company-cabal
+  :config
+  (add-to-list 'company-backends 'company-cabal))
 
 ;(use-package lsp-haskell
 ;  :requires lsp-mode lsp-ui
