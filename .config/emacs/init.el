@@ -752,7 +752,7 @@
 (use-package lsp-ui)
 
 (use-package tree-sitter-langs
-  :after tree-sitter)
+  :requires tree-sitter)
 
 (use-package dockerfile-mode)
 

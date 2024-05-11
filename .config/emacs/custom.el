@@ -27,7 +27,7 @@
      quelpa quelpa-use-package
      rg rustic
      swiper sideline-flymake
-     transpose-frame tuareg tree-sitter-langs
+     transpose-frame tuareg tree-sitter tree-sitter-langs
      undo-tree unicode-whitespace use-package use-package-ensure-system-package
      wc-mode which-key
      ))
