@@ -133,11 +133,13 @@
 
 (use-package gdb-mi
   :ensure nil
+  :defer t
   :custom
   (gdb-many-windows t))
 
 (use-package project
   :ensure nil
+  :defer t
   :custom project-vc-extra-root-markers '(".projectile"))
 
 
@@ -176,6 +178,7 @@
 
 (use-package nxml-mode
   :ensure nil
+  :defer t
   :config
   (defun xml-pretty-print ()
     (interactive)
@@ -187,6 +190,7 @@
 
 (use-package display-fill-column-indicator
   :ensure nil
+  :defer t
   :custom
   (display-fill-column-indicator 't)
   (global-display-fill-column-indicator-mode 't)
@@ -204,6 +208,7 @@
   ; contex-menu mode and functions
   ; borrowed from http://amodernist.com/texts/emacs-mouse.html
   :ensure nil
+  :defer t
   :custom
   (context-menu-mode 't)
   (context-menu-functions '(context-menu-ffap
@@ -214,6 +219,7 @@
 
 (use-package calendar
   :ensure nil
+  :defer t
   :custom
   ; The day of the week on which a week in the calendar begins.
   ; 1 means Monday
@@ -221,6 +227,7 @@
 
 (use-package simple
   :ensure nil
+  :defer t
   :custom
   ; Indentation can insert tabs if this is non-nil.
   (indent-tabs-mode nil)
@@ -270,7 +277,7 @@
                       empty
                       ;indentation::space
                       ;indentation::tab
-                      newline newline-mark
+                      ;newline newline-mark
                       space-after-tab::tab space-after-tab::space
                       space-before-tab::tab space-before-tab::space))
   ; * in agda it's simply annoying, but for magit it's causing errors
@@ -278,7 +285,7 @@
   ;   https://emacs.stackexchange.com/questions/38771/magit-status-does-not-open-when-using-global-whitespace-mode-1/38778#38778
   ; * for magit it breaks commit flow
   ; * for tex mode -- it breaks org-mode tex export
-  (whitespace-global-modes '(not agda2-mode magit-mode tex-mode org-mode)))
+  (whitespace-global-modes '(not magit-mode tex-mode org-mode)))
 
 (use-package pixel-scroll
   :ensure nil
@@ -454,6 +461,7 @@
 
 ;autocomplete
 (use-package company
+  :defer t
   :custom
   (company-idle-delay 0)
   (company-minimum-prefix-length 1)
@@ -463,12 +471,14 @@
   :hook (company-mode-hook . company-box-mode))
 
 (use-package company-quickhelp
+  :defer t
   :custom
   (company-quickhelp-delay 1)
   :config
   (company-quickhelp-mode))
 
 (use-package which-key
+  :defer t
   ; provide a popup when you press a button with all bindings that follow
   :custom
   (which-key-min-display-lines 10)
@@ -476,6 +486,7 @@
   (which-key-mode))
 
 (use-package color-moccur
+  :defer t
   ; provide colours in occur mode
   :bind (("M-s O" . moccur)))
 
@@ -568,6 +579,7 @@
   (avy-setup-default))
 
 (use-package undo-tree
+  :defer t
   :config
   (global-undo-tree-mode)
   (defadvice undo-tree-make-history-save-file-name
@@ -637,6 +649,7 @@
 (use-package olivetti
   ; package for writing mode, introduces margins
   ; for search purposes: org-mode
+  :defer t
   :custom
   (olivetti-body-width 90)
   :config
@@ -800,14 +813,13 @@
   (require 'llm-ollama)
   (setopt ellama-provider
      (make-llm-ollama
-      :chat-model "mistral-openorca" :embedding-model "mistral-openorca")))
+      :chat-model "llama3" :embedding-model "llama3")))
 
 ;;;### rust
 (use-package rustic
+  :defer t
   :requires eglot
-  :custom
-  (rustic-lsp-client 'eglot))
-
+  :custom (rustic-lsp-client 'eglot))
 
 ;;;### ocaml
 (use-package tuareg
@@ -848,12 +860,15 @@
   :mode "\\.nix\\'")
 
 ;;### proof assistants
-(use-package idris-mode)
+(use-package idris-mode
+  :defer t)
 (use-package idris2-mode
-  :quelpa (idris2-mode :fetcher github :repo "idris-community/idris2-mode"))
+  :quelpa (idris2-mode :fetcher github :repo "idris-community/idris2-mode")
+  :defer t)
 
 ;;;#### coq
 (use-package proof-general
+  :defer t
   :custom
     (coq-auto-adapt-printing-width t)
     (coq-compile-auto-save (quote ask-coq))
@@ -965,19 +980,22 @@ Source: https://stackoverflow.com/questions/11043004/emacs-compile-buffer-auto-c
         (progn (disable-theme light-theme)
                (load-theme dark-theme t)))))
 
-(defun personal/detect-and-switch-theme (servname setpath themename)
-  (if
-      (string= setpath
-               "/Net/ThemeName")
-      (personal/set-theme (car themename))))
 
-(dbus-register-signal
- :session
- nil ; service name, nil is a wildcard
- "/org/xfce/Xfconf" ; path
- "org.xfce.Xfconf" ; interface
- "PropertyChanged" ; message
- #'personal/detect-and-switch-theme)
+;this is a default package, but we load it here to use the function
+(use-package dbus
+  :config
+  (defun personal/detect-and-switch-theme (servname setpath themename)
+    (if
+        (string= setpath
+                 "/Net/ThemeName")
+        (personal/set-theme (car themename))))
+  (dbus-register-signal
+   :session
+   nil ; service name, nil is a wildcard
+   "/org/xfce/Xfconf" ; path
+   "org.xfce.Xfconf" ; interface
+   "PropertyChanged" ; message
+   #'personal/detect-and-switch-theme))
 
 ; actually set the correct theme when loading
 (personal/set-theme)
