@@ -5,6 +5,8 @@
 
 ;;; Setup package archives
 
+(unless (assoc-default "jcs-elpa" package-archives)
+  (add-to-list 'package-archives '("jcs-elpa" . "https://jcs-emacs.github.io/jcs-elpa/packages/") t))
 (unless (assoc-default "melpa" package-archives)
   (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t))
 (unless (assoc-default "gnu" package-archives)
@@ -457,7 +459,8 @@
 ; a minor mode to enable errors appearing next to the code
 (use-package sideline
   :ensure t
-  :hook (flymake-mode-hook . sideline-mode))
+  :hook (flymake-mode-hook . sideline-mode)
+        (eglot-mode-hook . sideline-mode))
 
 ; because there's no sideline for flymake by default
 (use-package sideline-flymake
@@ -466,6 +469,11 @@
   (sideline-flymake-display-mode 'line) ; 'point to show errors only on point
                                         ; 'line to show errors on the current line
   (sideline-backends-right '(sideline-flymake)))
+
+(use-package sideline-eglot
+  :ensure t
+  :custom
+  (sideline-backends-right '(sideline-eglot)))
 
 ;;;## General goodies
 
