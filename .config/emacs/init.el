@@ -212,12 +212,12 @@
   :ensure nil
   :defer t
   :custom
-  (context-menu-mode 't)
-  (context-menu-functions '(context-menu-ffap
-                            occur-context-menu
-                            context-menu-region
-                            context-menu-undo
-                            dictionary-context-menu)))
+  (context-menu-mode 't))
+  ;(context-menu-functions '(context-menu-ffap
+  ;                          occur-context-menu
+  ;                          context-menu-region
+  ;                          context-menu-undo
+  ;                          dictionary-context-menu)))
 
 (use-package calendar
   :ensure nil
