@@ -144,7 +144,6 @@
   :defer t
   :custom project-vc-extra-root-markers '(".projectile"))
 
-
 (use-package ibuffer
   :ensure nil
   ; commented out for potential performance gains?
