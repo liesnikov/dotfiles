@@ -297,6 +297,10 @@
 (use-package tree-sitter
   :custom (global-tree-sitter-mode 't))
 
+(use-package flymake
+  :ensure nil
+  :hook (prog-mode-hook . flymake-mode))
+
 ; re-evaluate this on restart if emacs gets stuck with wrong colours
 ; to select the whole sexpr put carriage on the first parenthesis and press C-M-space
 (use-package emacs
@@ -371,6 +375,7 @@
   (doom-themes-org-config))
 
 (use-package minions
+  :custom (minions-prominent-modes '(flymake-mode))
   ; hide minor modes under a drop-down menu
   :config (minions-mode 1))
 
@@ -449,13 +454,18 @@
   (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
   (dashboard-setup-startup-hook))
 
+; a minor mode to enable errors appearing next to the code
+(use-package sideline
+  :ensure t
+  :hook (flymake-mode-hook . sideline-mode))
+
 ; because there's no sideline for flymake by default
 (use-package sideline-flymake
-  :hook (flymake-mode-hook . sideline-mode)
-  :init
-  (setq sideline-flymake-display-mode 'point) ; 'point to show errors only on point
-                                              ; 'line to show errors on the current line
-  (setq sideline-backends-right '(sideline-flymake)))
+  :defer t
+  :custom
+  (sideline-flymake-display-mode 'line) ; 'point to show errors only on point
+                                        ; 'line to show errors on the current line
+  (sideline-backends-right '(sideline-flymake)))
 
 ;;;## General goodies
 
