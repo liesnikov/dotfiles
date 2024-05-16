@@ -155,8 +155,15 @@
 
 (use-package recentf
   :ensure nil
+  :defer
   :custom
-  (recentf-save-file "~/.cache/emacs/recentf"))
+  ;; ivy makes searching through long lists easy, bump these up some from
+  ;; the defaults.
+  (recentf-max-saved-items 50)
+  (recentf-max-menu-items 25)
+  (recentf-save-file "~/.cache/emacs/recentf")
+  :config
+  (add-to-list 'recentf-exclude "-autoloads.el"))
 
 (use-package windmove
   :ensure nil
@@ -228,12 +235,34 @@
 
 (use-package simple
   :ensure nil
-  :defer t
   :custom
   ; Indentation can insert tabs if this is non-nil.
   (indent-tabs-mode nil)
   ; Don't wrap lines by default
-  (toggle-truncate-lines 1))
+  (toggle-truncate-lines 1)
+  (kill-ring-max 500)
+  (eval-expression-print-length nil)
+  (eval-expression-print-level nil)
+  :bind
+  ("C-z" . undo)
+  ;; The -dwim versions of these three commands are new in Emacs 26 and
+  ;; better than their non-dwim counterparts, so override those default
+  ;; bindings:
+  ("M-l" . downcase-dwim)
+  ("M-c" . capitalize-dwim)
+  ("M-u" . upcase-dwim)
+  :config
+  ;; C-o runs `open-line', which I never use and is annoying to hit by accident
+  (unbind-key "C-o"))
+
+(use-package prog-mode
+  :defer t
+  :config
+  ;; Prettify-symbols-mode will replace some symbols (like "lambda") with
+  ;; their prettier cousins (like λ), but smartly as it's configured by
+  ;; major modes themselves.
+  (global-prettify-symbols-mode))
+
 
 (use-package menu-bar
   :ensure nil
@@ -300,7 +329,36 @@
 
 (use-package flymake
   :ensure nil
-  :hook (prog-mode-hook . flymake-mode))
+  :custom (flymake-proc-compilation-prevents-syntax-check nil)
+  :hook ((prog-mode-hook LaTeX-mode) . flymake-mode)
+  :bind (:map flymake-mode-map
+              ("C-c n" . flymake-goto-next-error)
+              ("C-c p" . flymake-goto-next-error)))
+
+(use-package flyspell
+  ;; on the fly spell checking
+  :hook
+  (text-mode-hook . turn-on-flyspell)
+  (prog-mode-hook . flyspell-prog-mode)
+  :custom
+  (flyspell-issue-welcome-flag nil)
+  (flyspell-use-global-abbrev-table-p t))
+
+(use-package reftex
+  :hook
+  (LaTeX-mode . turn-on-reftex)
+  :custom
+  (reftex-cite-format
+   '((?\C-m . "\\cite[]{%l}")
+     (?t . "\\citet{%l}")
+     (?p . "\\citep[]{%l}")
+     (?a . "\\autocite{%l}")
+     (?A . "\\textcite{%l}")
+     (?P . "[@%l]")
+     (?T . "@%l [p. ]")
+     (?x . "[]{%l}")
+     (?X . "{%l}"))))
+
 
 ; re-evaluate this on restart if emacs gets stuck with wrong colours
 ; to select the whole sexpr put carriage on the first parenthesis and press C-M-space
@@ -911,9 +969,12 @@
 
 ;;;#### agda
 ;; agda2 mode, gets appended by `agda-mode setup`
-(load-file (let ((coding-system-for-read 'utf-8))
-                (shell-command-to-string "agda-mode locate")))
+(defun agda-load ()
+  (interactive)
+  (load-file (let ((coding-system-for-read 'utf-8))
+                (shell-command-to-string "agda-mode locate"))))
 
+(agda-load)
 
 ;;; Commentary:
 
