@@ -13,22 +13,22 @@
    '(
      auctex avy
      breadcrumb
-     color-moccur company company-quickhelp company-cabal company-box company-haskell company-auctex company-coq counsel counsel-projectile copilot
-     doom-themes dockerfile-mode dashboard
-     editorconfig eglot emojify evil-numbers envrc expand-region ellama
+     color-moccur company company-auctex company-box company-cabal company-coq company-haskell company-quickhelp copilot counsel counsel-projectile
+     dashboard dockerfile-mode doom-themes
+     editorconfig eglot ellama emojify envrc evil-numbers expand-region
      flymake-vale
      gnu-elpa-keyring-update
      haskell-mode
      ibuffer-project idris-mode idris2-mode ivy ivy-hydra ivy-rich
-     magit markdown-mode merlin minions moody
      llm-ollama
+     magit markdown-mode merlin minions moody
      nix-haskell-mode nix-mode no-littering noxml-fold
-     olivetti org org-download org-modern org-present org-modern-indent
+     olivetti org org-download org-modern org-modern-indent org-present
      pdf-tools proof-general
      quelpa quelpa-use-package
      rg rustic
-     swiper sideline sideline-flymake sideline-eglot
-     transpose-frame tuareg tree-sitter tree-sitter-langs
+     sideline sideline-eglot sideline-flymake sort-words swiper
+     transpose-frame tree-sitter tree-sitter-langs tuareg
      undo-tree unicode-whitespace use-package use-package-ensure-system-package
      wc-mode which-key
      ))

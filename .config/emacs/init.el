@@ -679,6 +679,7 @@
   :hook
   (eshell-directory-change-hook . envrc-reload-or-clear))
 
+(use-package sort-words)
 
 ;;;## Writing & reading
 
