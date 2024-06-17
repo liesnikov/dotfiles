@@ -116,7 +116,8 @@
   :ensure nil
   :init
   (defcustom display-line-numbers-exempt-modes '()
-   "Major modes on which to disable the linum mode, exempts them from global requirement"
+    "Major modes on which to disable the display-line-numbers mode,
+     exempts them from global requirement"
    :group 'display-line-numbers
    :type 'list
    :version "green")
@@ -128,7 +129,7 @@
          (not (minibufferp)))
         (display-line-numbers-mode)))
   :custom
-; "Major modes on which to disable the linum mode, exempts them from global requirement"
+; "Major modes on which to disable the display-line-numbers mode, exempts them from global requirement"
   (display-line-numbers-exempt-modes
    '(vterm-mode eshell-mode shell-mode term-mode ansi-term-mode pdf-view-mode))
   :hook (prog-mode-hook . display-line-numbers-mode))
@@ -631,11 +632,11 @@
   (pdf-tools-install) ; enable pdftools instead of docview
 
   :hook
-  ; Disable linum (line numbers) when entering pdf-tools mode.
+  ; Disable line numbers when entering pdf-tools mode.
   ; from https://stackoverflow.com/a/6839968
   (pdf-view-mode-hook . (lambda ()
                           (add-hook 'after-change-major-mode-hook
-                                    (lambda () (linum-mode 0))
+                                    (lambda () (display-line-numbers-mode 0))
                                     :append :local))))
 
 (use-package evil-numbers
