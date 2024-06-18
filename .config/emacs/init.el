@@ -555,7 +555,6 @@
   (company-quickhelp-mode))
 
 (use-package which-key
-  :defer t
   ; provide a popup when you press a button with all bindings that follow
   :custom
   (which-key-min-display-lines 10)
