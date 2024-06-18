@@ -640,6 +640,10 @@
                                     (lambda () (display-line-numbers-mode 0))
                                     :append :local))))
 
+(use-package evil
+  :custom
+  (evil-mode t))
+
 (use-package evil-numbers
   ; increment-decrement numbers as in vim
   :bind (("C-c +" . 'evil-numbers/inc-at-pt)
@@ -847,6 +851,9 @@
   (eglot-autoshutdown t)  ;; shutdown language server after closing last file
   (eglot-confirm-server-initiated-edits nil)  ;; allow edits without confirmation
   )
+
+(use-package eldoc-box
+  :custom (eldoc-box-hover-at-point-mode t))
 
 ; for breadcrumbs modeline
 (use-package breadcrumb

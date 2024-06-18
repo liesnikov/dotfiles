@@ -15,7 +15,7 @@
      breadcrumb
      color-moccur company company-auctex company-box company-cabal company-coq company-haskell company-quickhelp copilot counsel counsel-projectile
      dashboard dockerfile-mode doom-themes
-     editorconfig eglot ellama emojify envrc evil-numbers expand-region
+     editorconfig eglot eldoc-box ellama emojify envrc evil evil-numbers expand-region
      flymake-vale
      gnu-elpa-keyring-update
      haskell-mode
