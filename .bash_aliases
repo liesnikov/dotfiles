@@ -14,3 +14,8 @@ alias emacso="emacsclient -n -c -a \"\""
 alias i3lock="i3lock -c 000000"
 alias lock="dm-tool lock"
 alias suspend="systemctl suspend"
+
+alias ollama-web-create="docker run -d --gpus all --network=host -v open-webui:/app/backend/data -e OLLAMA_BASE_URL=http://127.0.0.1:1143 --name ollama-webui --restart on-failure:5 ghcr.io/open-webui/open-webui:cuda"
+alias ollama-web-start="docker start ollama-webui; xdg-open http://localhost:8080"
+alias ollama-web-pause="docker stop ollama-webui"
+alias ollama-web-kill="docker rm -f ollama-webui"
