@@ -641,7 +641,7 @@
 
 (use-package evil
   :custom
-  (evil-mode t))
+  (evil-mode nil))
 
 (use-package evil-numbers
   ; increment-decrement numbers as in vim
