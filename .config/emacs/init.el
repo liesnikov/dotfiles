@@ -852,7 +852,7 @@
   )
 
 (use-package eldoc-box
-  :custom (eldoc-box-hover-at-point-mode t))
+  :hook (eglot-managed-mode-hook . eldoc-box-hover-mode))
 
 ; for breadcrumbs modeline
 (use-package breadcrumb
