@@ -30,4 +30,8 @@
 
     # Let Home Manager install and manage itself.
     programs.home-manager.enable = true;
+
+    # Don't use nix-provided man but rather host system one
+    programs.man.enable = false;
+    home.extraOutputsToInstall = [ "man" ];
   }
