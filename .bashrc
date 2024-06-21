@@ -68,7 +68,6 @@ if [ -d "$CABAL_DIR/bin" ] ; then
     PATH="$CABAL_DIR/bin:$PATH"
 fi
 
-
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
 HISTCONTROL=ignoreboth
