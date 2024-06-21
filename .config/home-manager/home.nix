@@ -11,12 +11,23 @@
       direnv
       nix-direnv
       xkb-switch
+
       vale
+
       nodejs
+
       haskellPackages.hasktags
       alex
       happy
+
       custom-agda
+
+      pandoc
+      ripgrep
+      fd
+      jq
+
+      diffpdf
       ];
     # This value determines the Home Manager release that your
     # configuration is compatible with. This helps avoid breakage
