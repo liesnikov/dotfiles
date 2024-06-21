@@ -41,6 +41,8 @@ test -r $OPAMROOT/opam-init/init.sh && . $OPAMROOT/opam-init/init.sh > /dev/null
 #export QT_AUTO_SCREEN_SCALE_FACTOR=0
 export GHCUP_USE_XDG_DIRS=1
 
+export EDITOR="emacsclient -n -c -a \"\""
+
 if [ -e /home/bohdan/.local/state/nix/profile/etc/profile.d/nix.sh ]; then . /home/bohdan/.local/state/nix/profile/etc/profile.d/nix.sh; fi # added by Nix installer
 
 export NIX_PATH="/home/bohdan/.local/state/nix/defexpr/channels"
