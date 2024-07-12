@@ -325,8 +325,7 @@
   ; precisely, according to the turning of the mouse wheel.
   (pixel-scroll-precision-mode 't))
 
-(use-package tree-sitter
-  :custom (global-tree-sitter-mode 't))
+(use-package treesit)
 
 (use-package flymake
   :ensure nil
@@ -865,8 +864,21 @@
 ;  (lsp-file-watch-threshold nil))
 ;(use-package lsp-ui)
 
-(use-package tree-sitter-langs
-  :requires tree-sitter)
+(use-package treesit-langs)
+
+(use-package treesit-auto
+  :config
+  (global-treesit-auto-mode))
+
+(use-package treesit-ispell)
+
+
+; alternative to treesit built-in mode
+;(use-package tree-sitter
+;  :custom (global-tree-sitter-mode 't))
+;
+;(use-package tree-sitter-langs
+;  :requires tree-sitter)
 
 (use-package dockerfile-mode)
 
