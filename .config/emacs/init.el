@@ -838,16 +838,20 @@
 
 ;; Language server protocol
 (use-package eglot
-  :hook (haskell-mode-hook . eglot-ensure)
+  :hook
+  (haskell-mode-hook . eglot-ensure)
+  (sh-mode-hook . eglot-ensure)
+  (bash-ts-mode-hook . eglot-ensure)
+  :custom
+  (eglot-autoshutdown t)  ;; shutdown language server after closing last file
+  (eglot-confirm-server-initiated-edits nil)  ;; allow edits without confirmation
   :config
 ;    (setq-default eglot-workspace-configuration
 ;                '((haskell
 ;                   (plugin
 ;                    (hlint
 ;                     (globalOn . t))))))
-  :custom
-  (eglot-autoshutdown t)  ;; shutdown language server after closing last file
-  (eglot-confirm-server-initiated-edits nil)  ;; allow edits without confirmation
+  (add-to-list 'eglot-server-programs '((sh-mode bash-ts-mode) . ("bash-language-server" "start")))
   )
 
 (use-package eldoc-box
