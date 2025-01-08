@@ -1,6 +1,7 @@
 { config, pkgs, ... }:
   let
-    custom-agda = pkgs.agda.withPackages [ pkgs.agdaPackages.standard-library ];
+    custom-agda = pkgs.agda.withPackages
+      [ pkgs.agdaPackages.standard-library ];
   in {
     # Home Manager needs a bit of information about you and the
     # paths it should manage.
@@ -8,19 +9,25 @@
     home.homeDirectory = "/home/bohdan";
 
     home.packages = with pkgs; [
+
       direnv
-      nix-direnv
-      xkb-switch
+      nix-direnv # support direnv for flakes
+      nixfmt-rfc-style
 
-      vale
+      cachix # for better nix caches
 
-      nodejs
+      xkb-switch # to switch languages between different windows
+
+      vale # for writing
+
+      nodejs # for github copilot
 
       haskellPackages.hasktags
       alex
       happy
 
-      custom-agda
+      #custom-agda
+      agda
 
       pandoc
       ripgrep
@@ -28,7 +35,11 @@
       jq
 
       diffpdf
+      ocrmypdf
+
       bash-language-server
+
+      code2prompt
     ];
     # This value determines the Home Manager release that your
     # configuration is compatible with. This helps avoid breakage
