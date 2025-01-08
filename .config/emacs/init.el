@@ -501,17 +501,23 @@
 
 (use-package dashboard
   :custom
-  (dashboard-banner-logo-title "Welcome back 👋")
+  (dashboard-banner-logo-title "welcome back 👋")
   (dashboard-startup-banner 'logo)
   (dashboard-center-content 't)
   (dashboard-show-shortcuts 't)
   (dashboard-projects-backend 'project-el)
-  (dashboard-items '((recents  . 5)
+  (dashboard-startupify-list '(dashboard-insert-banner
+                               dashboard-insert-newline
+                               dashboard-insert-banner-title
+                               dashboard-insert-newline
+                               dashboard-insert-init-info
+                               dashboard-insert-items))
+  (dashboard-items '((projects . 5)
+                     (recents  . 5)
                      (bookmarks . 5)
-                     (projects . 5)
                      (registers . 5)))
+  (initial-buffer-choice (lambda () (get-buffer-create dashboard-buffer-name)))
   :config
-  (setq initial-buffer-choice (lambda () (get-buffer-create "*dashboard*")))
   (dashboard-setup-startup-hook))
 
 ; a minor mode to enable errors appearing next to the code
@@ -906,14 +912,15 @@
   :custom
   (ellama-language "English")
   (ellama-keymap-prefix "C-c e l")
-  (ellama-sessions-directory "~/.cache/emasc/ellama-sessions")
+  (ellama-sessions-directory "~/.cache/emacs/ellama-sessions")
   :bind (:map ellama-command-map
-         ("q" . ellama--cancel-current-request-and-quit))
+         ("q c" . ellama--cancel-current-request)
+         ("q q" . ellama--cancel-current-request-and-quit))
   :init
   (require 'llm-ollama)
   (setopt ellama-provider
      (make-llm-ollama
-      :chat-model "llama3" :embedding-model "llama3")))
+      :chat-model "llama3.2:3b" :embedding-model "llama3.2:3b")))
 
 ;;;### rust
 (use-package rustic
