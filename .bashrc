@@ -55,19 +55,6 @@ alias wget=wget --hsts-file="$XDG_DATA_HOME/wget-hsts"
 # set ssh to be authentificated via 1password
 export SSH_AUTH_SOCK=~/.1password/agent.sock
 
-# set PATH so it includes user's private bin if it exists
-if [ -d "$HOME/bin" ] ; then
-    PATH="$HOME/bin:$PATH"
-fi
-
-if [ -d "$HOME/.local/bin" ] ; then
-    PATH="$HOME/.local/bin::$PATH"
-fi
-
-if [ -d "$CABAL_DIR/bin" ] ; then
-    PATH="$CABAL_DIR/bin:$PATH"
-fi
-
 # don't put duplicate lines or lines starting with space in the history.
 # See bash(1) for more options
 HISTCONTROL=ignoreboth

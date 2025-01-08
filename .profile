@@ -16,19 +16,19 @@ if [ -n "$BASH_VERSION" ]; then
     fi
 fi
 
-# set PATH so it includes user's private bin if it exists
-if [ -d "$HOME/bin" ] ; then
+   # set PATH so it includes user's private bin if it exists
+if [ -d "$HOME/bin" ] && [[ ":$PATH:" != *":$HOME/bin:"* ]]; then
     PATH="$HOME/bin:$PATH"
 fi
 
-if [ -d "$HOME/.local/bin" ] ; then
-    PATH="$HOME/.local/bin::$PATH"
+if [ -d "$HOME/.local/bin" ] && [[ ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
+    PATH="$HOME/.local/bin:$PATH"
 fi
 
 export XDG_DATA_HOME="$HOME"/.local/share
 export CABAL_DIR="$XDG_DATA_HOME"/cabal
 
-if [ -d "$CABAL_DIR/bin" ] ; then
+if [ -d "$CABAL_DIR/bin" ] && [[ ":$PATH:" != *":$CABAL_DIR/bin:"* ]]; then
     PATH="$CABAL_DIR/bin:$PATH"
 fi
 
@@ -39,7 +39,23 @@ test -r $OPAMROOT/opam-init/init.sh && . $OPAMROOT/opam-init/init.sh > /dev/null
 # works with qt5-style-plugins
 # export QT_QPA_PLATFORMTHEME=gtk2
 #export QT_AUTO_SCREEN_SCALE_FACTOR=0
+
 export GHCUP_USE_XDG_DIRS=1
+
+export PYTHONSTARTUP="$XDG_CONFIG_HOME"/python/pythonrc
+
+# if vim doesn't have a patch to use xdg directories
+if [ -x "$(command -v vim)" ]; then
+    [ "$(vim --clean -es +'exec "!echo" has("patch-9.1.0327")' +q)" -eq 0 ] && \
+        export VIMINIT="set nocp | source ${XDG_CONFIG_HOME:-$HOME/.config}/vim/vimrc"
+fi
+
+# make vale use xdg directory
+alias vale='vale --config "$XDG_CONFIG_HOME/vale/config.ini"'
+
+export NPM_CONFIG_INIT_MODULE="$XDG_CONFIG_HOME"/npm/config/npm-init.js
+export NPM_CONFIG_CACHE="$XDG_CACHE_HOME"/npm
+export NPM_CONFIG_TMP="$XDG_RUNTIME_DIR"/npm
 
 export EDITOR="emacsclient -n -c -a \"\""
 
