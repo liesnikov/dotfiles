@@ -15,12 +15,12 @@ themetime () {
     night)
       xfconf-query -c xfwm4 -p /general/theme -s $NIGHT_WM_THEME
       xfconf-query -c xsettings -p /Net/ThemeName -s $NIGHT_GTK_THEME
-      sed -i 's/set background=light/set background=dark/' ~/.vimrc
+      sed -i 's/set background=light/set background=dark/' $XDG_CONFIG_HOME/vim/vimrc
       ;;
     day)
       xfconf-query -c xfwm4 -p /general/theme -s $DAY_WM_THEME
       xfconf-query -c xsettings -p /Net/ThemeName -s $DAY_GTK_THEME
-      sed -i 's/set background=dark/set background=light/' ~/.vimrc
+      sed -i 's/set background=dark/set background=light/' $XDG_CONFIG_HOME/vim/vimrc
       ;;
     switch)
       CURRENT=$(xfconf-query -c xfwm4 -p /general/theme)
