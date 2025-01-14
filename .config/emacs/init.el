@@ -143,7 +143,14 @@
 (use-package project
   :ensure nil
   :defer t
-  :custom project-vc-extra-root-markers '(".projectile"))
+  :bind (:map project-prefix-map
+         ("m" . magit-project-status))
+  :custom
+  (project-vc-extra-root-markers '(".projectile"))
+  (project-switch-commands '((project-find-file "Find file")
+                             (project-find-dir "Find directory")
+                             (magit-project-status "Magit")
+                             (project-eshell "Eshell"))))
 
 (use-package ibuffer
   :ensure nil
