@@ -610,7 +610,15 @@
   ; technically not an ivy variable, but useful to have for some reasons atm unknown to me
   (enable-recursive-minibuffers t)
   ; add recent files and/or bookmarks to ‘ivy-switch-buffer’.
-  (ivy-use-virtual-buffers t))
+  (ivy-use-virtual-buffers t)
+
+  :defines issue-1755-fix
+  :hook ('shell-mode-hook . 'issue-1755-fix)
+  :init
+  (defun issue-1755-fix ()
+    ;; to override ivy-mode, which provides a problematic
+    ;; completion-in-region variation:
+    (setq-local completion-in-region-function #'completion--in-region)))
 (use-package ivy-hydra
   :requires ivy)
 (use-package ivy-rich
