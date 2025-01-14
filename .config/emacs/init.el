@@ -143,14 +143,24 @@
 (use-package project
   :ensure nil
   :defer t
+  :defines project-try-magit
   :bind (:map project-prefix-map
-         ("m" . magit-project-status))
+         ("m" . project-try-magit))
   :custom
   (project-vc-extra-root-markers '(".projectile"))
   (project-switch-commands '((project-find-file "Find file")
                              (project-find-dir "Find directory")
-                             (magit-project-status "Magit")
-                             (project-eshell "Eshell"))))
+                             (project-try-magit "Magit")
+                             (project-eshell "Eshell")))
+  :init
+  (defun project-try-magit ()
+    (interactive)
+    (require 'magit)
+    (condition-case err
+        (magit-project-status)
+      (error (progn
+               (message "%s" (error-message-string err)
+               (project-find-dir)))))))
 
 (use-package ibuffer
   :ensure nil
