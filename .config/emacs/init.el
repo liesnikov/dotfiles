@@ -863,6 +863,13 @@
   :bind (; magit open default window binding
          ("C-x g" .  magit-status)))
 
+(use-package git-link
+  :defer t
+  :bind ("C-c g l" . git-link-dispatch)
+  :custom
+  ;; Link to a particular revision of a file rather than using the branch name in the URL.
+  (git-link-use-commit t))
+
 (use-package editorconfig
   :custom
   (editorconfig-mode t))

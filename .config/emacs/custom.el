@@ -17,7 +17,7 @@
      dashboard dockerfile-mode doom-themes
      editorconfig eglot eldoc-box ellama emojify envrc evil evil-numbers expand-region
      flymake-vale
-     gnu-elpa-keyring-update
+     gnu-elpa-keyring-update git-link
      haskell-mode
      ibuffer-project idris-mode idris2-mode ivy ivy-hydra ivy-rich
      llm-ollama
