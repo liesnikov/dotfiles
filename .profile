@@ -39,6 +39,8 @@ test -r $OPAMROOT/opam-init/init.sh && . $OPAMROOT/opam-init/init.sh > /dev/null
 # works with qt5-style-plugins
 # export QT_QPA_PLATFORMTHEME=gtk2
 #export QT_AUTO_SCREEN_SCALE_FACTOR=0
+# for Okular, since it doesn't respect system's theme on ubuntu 24.04
+export QT_QPA_PLATFORMTHEME=qt5ct
 
 export GHCUP_USE_XDG_DIRS=1
 
