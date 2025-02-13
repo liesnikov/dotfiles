@@ -632,7 +632,8 @@
   (ivy-use-virtual-buffers t)
 
   :defines issue-1755-fix
-  :hook ('shell-mode-hook . 'issue-1755-fix)
+  :hook ('shell-mode-hook  . 'issue-1755-fix)
+        ('eshell-mode-hook . 'issue-1755-fix)
   :init
   (defun issue-1755-fix ()
     ;; to override ivy-mode, which provides a problematic
