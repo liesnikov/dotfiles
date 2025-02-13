@@ -691,8 +691,8 @@
 
 (use-package avy
   ; move around efficiently
-  :bind (("C-;" . avy-goto-char-timer)
-         ("M-g g" . avy-goto-line)
+  :bind (("M-g c"   . avy-goto-char-timer)
+         ("M-g g"   . avy-goto-line)
          ("M-g M-g" . avy-goto-line))
   :config
   (avy-setup-default))
