@@ -153,13 +153,23 @@ screen_set() {
       xrandr --output DP-1 --primary --scale 1 --mode 3840x2160 --pos 0x0 --rotate normal \
              --output eDP-1 --off; }
       ;;
-    work-both) {
+    work-three) {
+      xrandr --output DP-1-2 --primary --scale 1 --mode 3840x2160 --pos 0x0      --rotate normal \
+             --output DP-1-1           --scale 1 --mode 4096x2304 --left-of DP-1-2 --rotate normal \
+             --output eDP-1-1 --off; }
+      ;;
+    work-laptop-right) {
       xrandr --output DP-2  --primary --scale 1 --mode 3840x2160 --pos 0x0       --rotate normal \
              --output eDP-1           --scale 1 --mode 3840x2400 --right-of DP-2 --rotate normal; } || {
       xrandr --output DP-1  --primary --scale 1 --mode 3840x2160 --pos 0x0       --rotate normal \
              --output eDP-1           --scale 1 --mode 3840x2400 --right-of DP-1 --rotate normal; }
       ;;
-
+    work-laptop-below) {
+      xrandr --output DP-2  --primary --scale 1 --mode 3840x2160 --pos 0x0       --rotate normal \
+             --output eDP-1           --scale 1 --mode 3840x2400 --below DP-2 --rotate normal; } || {
+      xrandr --output DP-1  --primary --scale 1 --mode 3840x2160 --pos 0x0       --rotate normal \
+             --output eDP-1           --scale 1 --mode 3840x2400 --below DP-1 --rotate normal; }
+      ;;
     jesper-table) {
       xrandr --output DP-2  --primary --scale 1 --mode 3840x2160 --pos 0x0    --rotate normal \
              --output eDP-1           --scale 1 --mode 3840x2160 --pos 0x0    --rotate normal; } || {
