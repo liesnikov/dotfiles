@@ -685,8 +685,8 @@
 
 (use-package evil-numbers
   ; increment-decrement numbers as in vim
-  :bind (("C-c +" . 'evil-numbers/inc-at-pt)
-         ("C-c -" . 'evil-numbers/dec-at-pt)
+  :bind (("C-c +"   . 'evil-numbers/inc-at-pt)
+         ("C-c -"   . 'evil-numbers/dec-at-pt)
          ("C-c C-+" . 'evil-numbers/inc-at-pt-incremental)
          ("C-c C--" . 'evil-numbers/dec-at-pt-incremental)))
 
@@ -942,6 +942,7 @@
   :hook (prog-mode-hook . copilot-mode)
   :bind (:map copilot-mode-map
               ("C-<tab>" . copilot-tab))
+  :custom (copilot-max-char-warning-disable 't)
   :config
   (defun copilot-tab (arg)
     (interactive "P")
@@ -956,13 +957,13 @@
   (ellama-keymap-prefix "C-c e l")
   (ellama-sessions-directory "~/.cache/emacs/ellama-sessions")
   :bind (:map ellama-command-map
-         ("q c" . ellama--cancel-current-request)
+         ("q c" . (lambda () (interactive) (ellama--cancel-current-request)))
          ("q q" . ellama--cancel-current-request-and-quit))
   :init
   (require 'llm-ollama)
   (setopt ellama-provider
      (make-llm-ollama
-      :chat-model "llama3.2:3b" :embedding-model "llama3.2:3b")))
+      :chat-model "llama3.2" :embedding-model "llama3.2")))
 
 ;;;### rust
 (use-package rustic
