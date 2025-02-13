@@ -17,10 +17,11 @@ alias suspend="systemctl suspend"
 
 alias kill-lockscreen="sudo systemctl restart lightdm"
 
-alias ollama-web-create="docker run -d --gpus all --network=host -v open-webui:/app/backend/data -e OLLAMA_BASE_URL=http://127.0.0.1:1143 --name ollama-webui --restart on-failure:5 ghcr.io/open-webui/open-webui:cuda"
-alias ollama-web-start="docker start ollama-webui; xdg-open http://localhost:8080"
-alias ollama-web-pause="docker stop ollama-webui"
-alias ollama-web-kill="docker rm -f ollama-webui"
+alias open-webui-create="docker run -d --gpus all --network=host -v open-webui:/app/backend/data -e OLLAMA_BASE_URL=http://127.0.0.1:1143 --name open-webui --restart on-failure:5 ghcr.io/open-webui/open-webui:cuda"
+alias open-webui-start="docker start open-webui; xdg-open http://localhost:8080"
+alias open-webui-pause="docker stop open-webui"
+alias open-webui-kill="docker rm -f open-webui"
+alias open-webui-log="docker logs --follow open-webui"
 
 alias sound-hdmi="pactl set-card-profile 0 output:hdmi-stereo+input:analog-stereo"
 alias sound-laptop="pactl set-card-profile 0 output:analog-stereo+input:analog-stereo"
