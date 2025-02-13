@@ -29,7 +29,7 @@
      rg rustic
      sideline sideline-eglot sideline-flymake sort-words swiper
      transpose-frame treesit-auto treesit-ispell treesit-langs tuareg
-     undo-tree unicode-whitespace use-package use-package-ensure-system-package
+     undo-tree unicode-whitespace use-package use-package-ensure-system-package ultra-scroll
      wc-mode which-key
      ))
  '(safe-local-variable-values nil))

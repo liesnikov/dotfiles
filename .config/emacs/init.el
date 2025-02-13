@@ -556,6 +556,14 @@
   :custom
   (sideline-backends-right '(sideline-eglot)))
 
+(use-package ultra-scroll
+  :quelpa (ultra-scroll :fetcher github
+                        :repo "jdtsmith/ultra-scroll")
+  :custom
+  (scroll-conservatively 101) ; important!
+  (scroll-margin 0)
+  (ultra-scroll-mode 1))
+
 ;;;## General goodies
 
 ;autocomplete
