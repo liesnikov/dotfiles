@@ -37,6 +37,9 @@
 ;; ensure all packages -- installs them
 ; (require 'use-package-ensure)
 ; (setq use-package-always-ensure t)
+(unless (package-installed-p 'vc-use-package)
+  (package-vc-install "https://github.com/slotThe/vc-use-package"))
+(require 'vc-use-package)
 
 (use-package no-littering
   ; not a system package, but we have to change paths before anything else kicks in
@@ -427,14 +430,6 @@
 
 ;;;## Package managment
 
-(use-package quelpa
-  ; quelpa is a tool to compile and install Emacs Lisp packages
-  ; locally from local or remote source code.
-  )
-(use-package quelpa-use-package
-  ; quelpa handler for use-package
-  :requires (quelpa use-package))
-
 ;;;## Visual things
 
 (use-package doom-themes
@@ -558,8 +553,8 @@
   (sideline-backends-right '(sideline-eglot)))
 
 (use-package ultra-scroll
-  :quelpa (ultra-scroll :fetcher github
-                        :repo "jdtsmith/ultra-scroll")
+  :vc (:fetcher github
+       :repo "jdtsmith/ultra-scroll")
   :custom
   (scroll-conservatively 101) ; important!
   (scroll-margin 0)
@@ -780,8 +775,8 @@
 
 (use-package flymake-vale
   :ensure-system-package vale
-  :quelpa (flymake-vale :fetcher github
-                        :repo "tpeacock19/flymake-vale")
+  :vc (:fetcher github
+       :repo "tpeacock19/flymake-vale")
   :hook
   ('find-file-hook . 'flymake-vale-maybe-load)
   :config
@@ -854,9 +849,6 @@
    (org-agenda-finalize-hook . org-modern-agenda)))
 
 (use-package org-modern-indent
-  :quelpa (org-modern-indent :fetcher github
-                             :repo "jdtsmith/org-modern-indent"
-                             :files ("*.el"))
   :config ; add late to hook
   ; because of the depth argument can't use :hook
   (add-hook 'org-mode-hook #'org-modern-indent-mode 90))
@@ -935,10 +927,6 @@
 (use-package dockerfile-mode)
 
 (use-package copilot
-  :quelpa (copilot :fetcher github
-                   :repo "zerolfx/copilot.el"
-                   :branch "main"
-                   :files ("dist" "*.el"))
   :hook (prog-mode-hook . copilot-mode)
   :bind (:map copilot-mode-map
               ("C-<tab>" . copilot-tab))
@@ -1013,7 +1001,7 @@
 (use-package idris-mode
   :defer t)
 (use-package idris2-mode
-  :quelpa (idris2-mode :fetcher github :repo "idris-community/idris2-mode")
+  :vc (:fetcher github :repo "idris-community/idris2-mode")
   :defer t)
 
 ;;;#### coq

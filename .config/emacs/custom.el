@@ -17,21 +17,29 @@
      dashboard dockerfile-mode doom-themes
      editorconfig eglot eldoc-box ellama emojify envrc evil evil-numbers expand-region
      flymake-vale
-     gnu-elpa-keyring-update git-link
+     git-link gnu-elpa-keyring-update
      haskell-mode
      ibuffer-project idris-mode idris2-mode ivy ivy-hydra ivy-rich
      llm-ollama
      magit markdown-mode merlin minions moody
      nix-haskell-mode nix-mode no-littering noxml-fold
      olivetti org org-download org-modern org-modern-indent org-present
-     pdf-tools proof-general
-     quelpa quelpa-use-package
+     pdf-tools prog-mode proof-general
      rg rustic
      sideline sideline-eglot sideline-flymake sort-words swiper
-     transpose-frame treesit-auto treesit-ispell treesit-langs tuareg
-     undo-tree unicode-whitespace use-package use-package-ensure-system-package ultra-scroll
+     transpose-frame treesit treesit-auto treesit-ispell treesit-langs tuareg
+     ultra-scroll undo-tree unicode-whitespace use-package use-package-ensure-system-package
      wc-mode which-key
      ))
+ '(package-vc-selected-packages
+   '((flymake-vale :vc-backend Git :url
+                   "https://github.com/tpeacock19/flymake-vale")
+     (idris2-mode :vc-backend Git :url
+                  "https://github.com/idris-community/idris2-mode")
+     (ultra-scroll :vc-backend Git :url
+                   "https://github.com/jdtsmith/ultra-scroll")
+     (vc-use-package :vc-backend Git :url
+                     "https://github.com/slotThe/vc-use-package")))
  '(safe-local-variable-values nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
