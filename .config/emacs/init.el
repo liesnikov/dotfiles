@@ -350,8 +350,7 @@
   :hook ((prog-mode-hook LaTeX-mode) . flymake-mode)
   :bind (:map flymake-mode-map
               ("C-c n" . flymake-goto-next-error)
-              ("C-c p" . flymake-goto-next-error)
-              ("C-c k" . flymake-proc-compile)))
+              ("C-c p" . flymake-goto-next-error)))
 
 (use-package flyspell
   ;; on the fly spell checking
@@ -360,7 +359,9 @@
   (prog-mode-hook . flyspell-prog-mode)
   :custom
   (flyspell-issue-welcome-flag nil)
-  (flyspell-use-global-abbrev-table-p t))
+  (flyspell-use-global-abbrev-table-p t)
+  :bind (:map flyspell-mode-map
+              ("C-c k" . compile)))
 
 (use-package reftex
   :hook
