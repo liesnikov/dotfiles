@@ -925,7 +925,7 @@
   (global-treesit-auto-mode))
 
 (use-package treesit-ispell
-  :requries treesit)
+  :requires treesit)
 
 ; alternative to treesit built-in mode
 ;(use-package tree-sitter
