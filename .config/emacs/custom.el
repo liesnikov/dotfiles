@@ -15,7 +15,7 @@
      breadcrumb
      color-moccur company company-auctex company-box company-cabal company-coq company-haskell company-quickhelp copilot counsel counsel-projectile
      dashboard dockerfile-mode doom-themes
-     editorconfig eglot eldoc-box ellama emojify envrc evil evil-numbers expand-region
+     editorconfig eglot eglot-booster eldoc-box ellama emojify envrc evil evil-numbers expand-region
      flymake-vale
      git-link gnu-elpa-keyring-update
      haskell-mode
@@ -32,7 +32,9 @@
      wc-mode which-key
      ))
  '(package-vc-selected-packages
-   '((flymake-vale :vc-backend Git :url
+   '((eglot-booster :vc-backend Git :url
+                    "https://github.com/jdtsmith/eglot-booster")
+     (flymake-vale :vc-backend Git :url
                    "https://github.com/tpeacock19/flymake-vale")
      (idris2-mode :vc-backend Git :url
                   "https://github.com/idris-community/idris2-mode")

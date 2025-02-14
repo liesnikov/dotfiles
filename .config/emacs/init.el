@@ -908,6 +908,13 @@
 ;  (lsp-file-watch-threshold nil))
 ;(use-package lsp-ui)
 
+(use-package eglot-booster
+  :after eglot
+  :requires lsp-booster
+  :vc (:fetcher github :repo "jdtsmith/eglot-booster")
+  :ensure-system-package (emacs-lsp-booster . ">&2 echo 'Need to install emacs lsp booster manually'")
+  :config (eglot-booster-mode))
+
 (use-package treesit-langs)
 
 (use-package treesit-auto

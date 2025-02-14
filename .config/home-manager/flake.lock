@@ -1,5 +1,25 @@
 {
   "nodes": {
+    "emacs-lsp-booster": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1716274896,
+        "narHash": "sha256-WsyEkdt8ReGQ40+yV4Cb99A2MEmV0O/i6rmFQura5ww=",
+        "owner": "slotThe",
+        "repo": "emacs-lsp-booster-flake",
+        "rev": "7d110295988fc9bf7fd43bb0cabfbe58a4a5ecf8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "slotThe",
+        "repo": "emacs-lsp-booster-flake",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -38,6 +58,7 @@
     },
     "root": {
       "inputs": {
+        "emacs-lsp-booster": "emacs-lsp-booster",
         "home-manager": "home-manager",
         "nixpkgs": "nixpkgs"
       }

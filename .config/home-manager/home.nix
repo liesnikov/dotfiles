@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, emasc-lsp-booster, ... }:
   let
     custom-agda = pkgs.agda.withPackages
       [ pkgs.agdaPackages.standard-library ];
@@ -21,6 +21,7 @@
       vale # for writing
 
       nodejs # for github copilot
+      emacs-lsp-booster # for lsp-booster
 
       haskellPackages.hasktags
       alex
