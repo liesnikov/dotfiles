@@ -37,8 +37,9 @@
 ;; ensure all packages -- installs them
 ; (require 'use-package-ensure)
 ; (setq use-package-always-ensure t)
+
 (unless (package-installed-p 'vc-use-package)
-  (package-vc-install "https://github.com/slotThe/vc-use-package"))
+  (package-vc-install '(vc-use-package :url "https://github.com/slotThe/vc-use-package")))
 (require 'vc-use-package)
 
 (use-package no-littering
@@ -1069,11 +1070,13 @@
 ;;; Code:
 
 (defun personal/kill-filename ()
-  ; copy current buffer's file path to kill-ring
+  "Copy current buffer's file path to 'kill-ring'."
   (interactive)
   (kill-new buffer-file-name))
 
 (defun personal/get-filename-line-column (&optional full-path)
+  "Get current buffer's file path and line/column location.
+If FULL-PATH is non-nil use full path, otherwise relative."
   (require 'magit)
   (let ((line (current-line))
         (column (current-column))
@@ -1087,7 +1090,8 @@
           (number-to-string column))))
 
 (defun personal/kill-filename-line-column (&optional full-path)
-  ; copy current buffer's file path to kill-ring
+  "Copy current buffer's file path to kill ring.
+If FULL-PATH is non-nil use full path, otherwise relative."
   (interactive)
   (kill-new (personal/get-filename-line-column full-path)))
 
@@ -1166,14 +1170,14 @@ Source: https://old.reddit.com/r/emacs/comments/idz35e/emacs_27_can_take_svg_scr
 ; "Compile on save" in Emacs
 ; from https://rtime.ciirc.cvut.cz/~sojka/blog/compile-on-save/
 (defun compile-on-save-start ()
+  "Start compilation on the current buffer if there is no ongoing compilation."
   (let ((buffer (compilation-find-buffer)))
     (unless (get-buffer-process buffer)
       (recompile))))
 
 (define-minor-mode compile-on-save-mode
-  "Minor mode to automatically call `recompile' whenever the
-current buffer is saved. When there is ongoing compilation,
-nothing happens."
+  "Minor mode to automatically call `recompile' when the current buffer is saved.
+When there is ongoing compilation, nothing happens."
   :lighter " CoS"
     (if compile-on-save-mode
     (progn  (make-local-variable 'after-save-hook)
@@ -1182,14 +1186,16 @@ nothing happens."
 
 ; I use this from commandline
 (defun personal/shutdown ()
+  "Shut down and save desktop file."
   (interactive)
   (progn
     (desktop-save "~/.cache/emacs/desktop")
     (save-buffers-kill-emacs)))
 
 (defun personal/sort-split ()
-  "Sort words in alphabetical order in the currently selected region
-and split the line before every new letter of the alphabet.
+  "Sort and split words per line.
+This function sort words in alphabetical order in the currently selected region
+and inserts a newline before every new letter of the alphabet.
 So that in the end each line has words starting with the same letter"
   (interactive)
   ; if the region is not selected choose current line
