@@ -1187,6 +1187,25 @@ nothing happens."
     (desktop-save "~/.cache/emacs/desktop")
     (save-buffers-kill-emacs)))
 
+(defun personal/sort-split ()
+  "Sort words in alphabetical order in the currently selected region
+and split the line before every new letter of the alphabet.
+So that in the end each line has words starting with the same letter"
+  (interactive)
+  ; if the region is not selected choose current line
+  (let ((beg (if (region-active-p) (region-beginning) (line-beginning-position)))
+        (end (if (region-active-p) (region-end) (line-end-position)))
+        (abc (number-sequence 97 122)))
+    (require 'sort-words)
+    (sort-words beg end)
+    (goto-char beg)
+    (dolist (letter abc)
+      (when (re-search-forward (format " %c" letter) end t)
+        (backward-char 2)
+        (delete-char 1)
+        (open-line 1)
+        (forward-line 1)))))
+
 (defun eshell/trueclear ()
   "True clear for eshell, instead of default scroll."
   (interactive)
