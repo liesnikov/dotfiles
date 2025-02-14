@@ -698,9 +698,10 @@
   :defer t
   :config
   (global-undo-tree-mode)
-  (defadvice undo-tree-make-history-save-file-name
-    (after undo-tree activate)
-    (setq ad-return-value (concat ad-return-value ".gz"))))
+  (defun undo-tree-fix/undo-tree-compress (filename)
+    (concat filename ".gz"))
+  (advice-add 'undo-tree-make-history-save-file-name :filter-return
+              #'undo-tree-fix/undo-tree-compress))
 
 (use-package envrc
   :ensure-system-package direnv
