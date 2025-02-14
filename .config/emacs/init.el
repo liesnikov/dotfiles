@@ -915,14 +915,16 @@
   :ensure-system-package (emacs-lsp-booster . ">&2 echo 'Need to install emacs lsp booster manually'")
   :config (eglot-booster-mode))
 
-(use-package treesit-langs)
+(use-package treesit-langs
+  :requires treesit)
 
 (use-package treesit-auto
+  :requires treesit
   :config
   (global-treesit-auto-mode))
 
-(use-package treesit-ispell)
-
+(use-package treesit-ispell
+  :requries treesit)
 
 ; alternative to treesit built-in mode
 ;(use-package tree-sitter
