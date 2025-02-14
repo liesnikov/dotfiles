@@ -1,0 +1,17 @@
+#[general]
+# mkdir -p ~/.config/alacritty/themes
+# git clone https://github.com/alacritty/alacritty-theme ~/.config/alacritty/themes
+import = ["~/.config/alacritty/themes/themes/one_light.toml"]
+
+[font]
+size = 13.5
+[font.normal]
+family = "Source Code Pro"
+style = "Regular"
+
+[scrolling]
+history = 100000
+
+[window.dimensions]
+columns = 80
+lines = 24

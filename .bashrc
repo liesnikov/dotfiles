@@ -91,6 +91,7 @@ fi
 # set a fancy prompt (non-color, unless we know we "want" color)
 case "$TERM" in
     xterm-color) color_prompt=yes;;
+    tmux-color) color_prompt=yes;;
 esac
 
 force_color_prompt=yes
@@ -129,7 +130,7 @@ export PS1='\[\e[1m\]\W\[\e[0m\] ⊢ '
 # set vi mode for navigating and stuff
 # set -o vi
 
-#so as not to be disturbed by Ctrl-S ctrl-Q in terminals:
+# So as not to be disturbed by Ctrl-S Ctrl-Q in terminals:
 stty -ixon
 
 export LOCALE_ARCHIVE="/usr/lib/locale/locale-archive"

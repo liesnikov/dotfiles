@@ -15,12 +15,18 @@ themetime () {
     night)
       xfconf-query -c xfwm4 -p /general/theme -s $NIGHT_WM_THEME
       xfconf-query -c xsettings -p /Net/ThemeName -s $NIGHT_GTK_THEME
-      sed -i 's/set background=light/set background=dark/' $XDG_CONFIG_HOME/vim/vimrc
+      gsettings set org.gnome.desktop.interface gtk-theme $NIGHT_GTK_THEME
+      gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+      sed -i -e 's/set background=light/set background=dark/1' $XDG_CONFIG_HOME/vim/vimrc
+      sed -i -e 's/light/dark/1' ~/.config/alacritty/alacritty.toml
       ;;
     day)
       xfconf-query -c xfwm4 -p /general/theme -s $DAY_WM_THEME
       xfconf-query -c xsettings -p /Net/ThemeName -s $DAY_GTK_THEME
-      sed -i 's/set background=dark/set background=light/' $XDG_CONFIG_HOME/vim/vimrc
+      gsettings set org.gnome.desktop.interface gtk-theme $DAY_GTK_THEME
+      gsettings set org.gnome.desktop.interface color-scheme 'prefer-light'
+      sed -i -e 's/set background=dark/set background=light/1' $XDG_CONFIG_HOME/vim/vimrc
+      sed -i -e 's/dark/light/1' ~/.config/alacritty/alacritty.toml
       ;;
     switch)
       CURRENT=$(xfconf-query -c xfwm4 -p /general/theme)
