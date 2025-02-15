@@ -20,8 +20,11 @@
 (load custom-file)
 
 ;;; Use-package
-(unless (package-installed-p 'use-package)
-  (package-install 'use-package))
+(when (< emacs-major-version 29)
+  (unless (package-installed-p 'use-package)
+    (unless package-archive-contents
+      (package-refresh-contents))
+    (package-install 'use-package)))
 (eval-when-compile
   (require 'use-package))
 (use-package use-package
