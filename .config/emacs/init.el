@@ -502,6 +502,20 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
    "PropertyChanged" ; message
    #'personal/detect-and-switch-theme))
 
+(use-package faces
+  :ensure nil
+  :custom-face
+  (default ((t (:height 125
+                :width condensed
+                :foundry "ADBO"
+                :family "Source Code Pro"))))
+  (fixed-pitch ((t (:height 1.0
+                    :foundry "ADBO"
+                    :family "Source Code Pro"))))
+  (variable-pitch ((t (:height 1.0
+                       :foundry "ADBO"
+                       :family "Source Sans 3")))))
+
 ;; re-evaluate this on restart if emacs gets stuck with wrong colours
 ;; to select the whole sexpr put carriage on the first parenthesis and press C-M-space
 (use-package emacs
@@ -537,13 +551,7 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
   (tool-bar-mode nil)
 
   ;; make mode-line line indicator be line-number:colon-number
-  (mode-line-position (list "%l:%c"))
-
-  :custom-face
-  (default ((t (:height 125
-                :width condensed
-                :foundry "ADBO"
-                :family "Source Code Pro")))))
+  (mode-line-position (list "%l:%c")))
 
 ;; end of built-in packages
 
