@@ -82,7 +82,17 @@
                                   (with-selected-frame frame
                                     (unless desktop-save-mode
                                       (desktop-save-mode 1)
-                                      (desktop-read))))))
+                                      (desktop-read)))))
+  :functions personal/shutdown
+  :config
+  ;; use this from M-x
+  (defun personal/shutdown ()
+    "Shut down and save desktop file."
+    (interactive)
+    (progn
+      (desktop-save "~/.cache/emacs/desktop")
+      (save-buffers-kill-emacs)))
+  )
 
 (use-package dired
   :ensure nil
@@ -112,9 +122,14 @@
                             (concat (file-name-base (eshell/pwd))
                                     " ⊢")))
   (eshell-prompt-regexp "[^/]+ ⊢")
+  :functions eshell/trueclear
   :config
   (require 'em-tramp)
-  (add-to-list 'eshell-modules-list 'eshell-tramp))
+  (add-to-list 'eshell-modules-list 'eshell-tramp)
+  (defun eshell/trueclear ()
+    "True clear for eshell, instead of default scroll."
+    (interactive)
+    (let ((eshell-buffer-maximum-lines 0)) (eshell-truncate-buffer))))
 
 (use-package display-line-numbers
   :ensure nil
@@ -147,7 +162,7 @@
 (use-package project
   :ensure nil
   :defer t
-  :defines project-try-magit
+  :functions project-try-magit
   :bind (:map project-prefix-map
          ("m" . project-try-magit))
   :custom
@@ -274,9 +289,36 @@
   ("M-l" . downcase-dwim)
   ("M-c" . capitalize-dwim)
   ("M-u" . upcase-dwim)
+  (:map global-map
+        ("C-g" . personal/keyboard-quit-dwim))
+  :functions personal/keyboard-quit-dwim
   :config
   ;; C-o runs `open-line', which I never use and is annoying to hit by accident
-  (unbind-key "C-o"))
+  (unbind-key "C-o")
+  ;; define the new function for quitting
+  (defun personal/keyboard-quit-dwim ()
+    "Do-What-I-Mean behaviour for a general `keyboard-quit'.
+The generic `keyboard-quit' does not do the expected thing when
+the minibuffer is open.  Whereas we want it to close the
+minibuffer, even without explicitly focusing it.
+
+The DWIM behaviour of this command is as follows:
+
+- When the region is active, disable it.
+- When a minibuffer is open, but not focused, close the minibuffer.
+- When the Completions buffer is selected, close it.
+- In every other case use the regular `keyboard-quit'.
+From https://protesilaos.com/codelog/2024-11-28-basic-emacs-configuration/"
+    (interactive)
+    (cond
+     ((region-active-p)
+      (keyboard-quit))
+     ((derived-mode-p 'completion-list-mode)
+      (delete-completion-window))
+     ((> (minibuffer-depth) 0)
+      (abort-recursive-edit))
+     (t
+      (keyboard-quit)))))
 
 (use-package prog-mode
   :defer t
@@ -286,6 +328,43 @@
   ;; major modes themselves.
   (global-prettify-symbols-mode))
 
+(use-package compile
+  :ensure nil
+  :functions personal/compile-on-save-start
+  :defines personal/compile-on-save-mode
+  :hook
+  (compilation-finish-functions . compile-bury-buffer-if-successful)
+  :config
+  (defun personal/compile-bury-buffer-if-successful (buffer string)
+    "Bury a compilation BUFFER if succeeded without warnings (check STRING).
+Source: https://stackoverflow.com/questions/11043004/emacs-compile-buffer-auto-close"
+    (if (and
+         (string-match "compilation" (buffer-name buffer))
+         (string-match "finished" string)
+         (not
+          (with-current-buffer buffer
+            (goto-char 1)
+            (search-forward "warning" nil t))))
+        (run-with-timer 0.5 nil
+                        (lambda (buf)
+                          (bury-buffer buf)
+                          (delete-window (get-buffer-window buf)))
+                        buffer)))
+  ;; "Compile on save" in Emacs
+  ;; from https://rtime.ciirc.cvut.cz/~sojka/blog/compile-on-save/
+  (defun personal/compile-on-save-start ()
+    "Start compilation on the current buffer if there is no ongoing compilation."
+    (let ((buffer (compilation-find-buffer)))
+      (unless (get-buffer-process buffer)
+        (recompile))))
+  (define-minor-mode personal/compile-on-save-mode
+    "Minor mode to automatically call `recompile' when the current buffer is saved.
+When there is ongoing compilation, nothing happens."
+    :lighter " CoS"
+    (if personal/compile-on-save-mode
+        (progn  (make-local-variable 'after-save-hook)
+                (add-hook 'after-save-hook 'personal/compile-on-save-start nil t))
+      (kill-local-variable 'after-save-hook))))
 
 (use-package menu-bar
   :ensure nil
@@ -383,6 +462,48 @@
      (?x . "[]{%l}")
      (?X . "{%l}"))))
 
+(use-package delsel
+  :ensure nil
+  ;; remove the selection when you start typing with an active selection
+  :hook (after-init . delete-selection-mode))
+
+(use-package dbus
+  :ensure nil
+  :functions personal/set-theme personal/detect-and-switch-theme
+  :init
+  ;; not significant that's not in :config, we just don't need anything from dbus
+  (defun personal/set-theme (&optional name)
+    "Automatically switch themes.
+Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
+    (interactive (list (if current-prefix-arg
+                           (read-from-minibuffer "System theme: ")
+                         nil)))
+    (let* ((command "xfconf-query -c xsettings -p /Net/ThemeName")
+           (newtheme (or (if name (concat name "\n"))
+                         (shell-command-to-string command)))
+           (expected-value "Arc\n")
+           (dark-theme 'doom-one)
+           (light-theme 'doom-one-light))
+      (if
+          (string= newtheme
+                   expected-value)
+          (progn (disable-theme dark-theme)
+                 (load-theme light-theme t))
+        (progn (disable-theme light-theme)
+               (load-theme dark-theme t)))))
+  :config
+  (defun personal/detect-and-switch-theme (servname setpath themename)
+    (if
+        (string= setpath
+                 "/Net/ThemeName")
+        (personal/set-theme (car themename))))
+  (dbus-register-signal
+   :session
+   nil ; service name, nil is a wildcard
+   "/org/xfce/Xfconf" ; path
+   "org.xfce.Xfconf" ; interface
+   "PropertyChanged" ; message
+   #'personal/detect-and-switch-theme))
 
 ;; re-evaluate this on restart if emacs gets stuck with wrong colours
 ;; to select the whole sexpr put carriage on the first parenthesis and press C-M-space
@@ -447,7 +568,9 @@
   ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config)
   ;; Corrects (and improves) org-mode's native fontification.
-  (doom-themes-org-config))
+  (doom-themes-org-config)
+  ;; actually set the correct theme when loading
+  (personal/set-theme))
 
 (use-package minions
   :custom (minions-prominent-modes '(flymake-mode))
@@ -628,7 +751,7 @@
   ;; add recent files and/or bookmarks to ‘ivy-switch-buffer’.
   (ivy-use-virtual-buffers t)
 
-  :defines issue-1755-fix
+  :functions issue-1755-fix
   :hook ('shell-mode-hook  . 'issue-1755-fix)
         ('eshell-mode-hook . 'issue-1755-fix)
   :init
@@ -1071,91 +1194,6 @@
 
 ;;; Code:
 
-(defun personal/kill-filename ()
-  "Copy current buffer's file path to 'kill-ring'."
-  (interactive)
-  (kill-new buffer-file-name))
-
-(defun personal/get-filename-line-column (&optional full-path)
-  "Get current buffer's file path and line/column location.
-If FULL-PATH is non-nil use full path, otherwise relative."
-  (require 'magit)
-  (let ((line (current-line))
-        (column (current-column))
-        (filename (if full-path
-                      (buffer-file-name)
-                      (magit-file-relative-name))))
-  (concat filename
-          ":"
-          (number-to-string line)
-          ":"
-          (number-to-string column))))
-
-(defun personal/kill-filename-line-column (&optional full-path)
-  "Copy current buffer's file path to kill ring.
-If FULL-PATH is non-nil use full path, otherwise relative."
-  (interactive)
-  (kill-new (personal/get-filename-line-column full-path)))
-
-(defun bury-compile-buffer-if-successful (buffer string)
-  "Bury a compilation BUFFER if succeeded without warnings (check STRING).
-Source: https://stackoverflow.com/questions/11043004/emacs-compile-buffer-auto-close"
-  (if (and
-       (string-match "compilation" (buffer-name buffer))
-       (string-match "finished" string)
-       (not
-        (with-current-buffer buffer
-          (goto-char 1)
-          (search-forward "warning" nil t))))
-      (run-with-timer 0.5 nil
-                      (lambda (buf)
-                        (bury-buffer buf)
-                        (delete-window (get-buffer-window buf)))
-                      buffer)))
-
-(add-hook 'compilation-finish-functions 'bury-compile-buffer-if-successful)
-
-;; Automatically switch themes
-
-(defun personal/set-theme (&optional name)
-  "Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
-  (interactive (list (if current-prefix-arg
-                         (read-from-minibuffer "System theme: ")
-                       nil)))
-  (let* ((command "xfconf-query -c xsettings -p /Net/ThemeName")
-         (newtheme (or (if name (concat name "\n"))
-                       (shell-command-to-string command)))
-         (expected-value "Arc\n")
-         (dark-theme 'doom-one)
-         (light-theme 'doom-one-light))
-    (if
-        (string= newtheme
-                 expected-value)
-        (progn (disable-theme dark-theme)
-               (load-theme light-theme t))
-        (progn (disable-theme light-theme)
-               (load-theme dark-theme t)))))
-
-
-;this is a default package, but we load it here to use the function
-(use-package dbus
-  :config
-  (defun personal/detect-and-switch-theme (servname setpath themename)
-    (if
-        (string= setpath
-                 "/Net/ThemeName")
-        (personal/set-theme (car themename))))
-  (dbus-register-signal
-   :session
-   nil ; service name, nil is a wildcard
-   "/org/xfce/Xfconf" ; path
-   "org.xfce.Xfconf" ; interface
-   "PropertyChanged" ; message
-   #'personal/detect-and-switch-theme))
-
-; actually set the correct theme when loading
-(personal/set-theme)
-
 ;; Screenshot to svg
 (defun personal/screenshot-svg ()
   "Save a screenshot of the current frame as an SVG image.
@@ -1168,31 +1206,6 @@ Source: https://old.reddit.com/r/emacs/comments/idz35e/emacs_27_can_take_svg_scr
       (insert data))
     (kill-new filename)
     (message filename)))
-
-; "Compile on save" in Emacs
-; from https://rtime.ciirc.cvut.cz/~sojka/blog/compile-on-save/
-(defun compile-on-save-start ()
-  "Start compilation on the current buffer if there is no ongoing compilation."
-  (let ((buffer (compilation-find-buffer)))
-    (unless (get-buffer-process buffer)
-      (recompile))))
-
-(define-minor-mode compile-on-save-mode
-  "Minor mode to automatically call `recompile' when the current buffer is saved.
-When there is ongoing compilation, nothing happens."
-  :lighter " CoS"
-    (if compile-on-save-mode
-    (progn  (make-local-variable 'after-save-hook)
-        (add-hook 'after-save-hook 'compile-on-save-start nil t))
-      (kill-local-variable 'after-save-hook)))
-
-; I use this from commandline
-(defun personal/shutdown ()
-  "Shut down and save desktop file."
-  (interactive)
-  (progn
-    (desktop-save "~/.cache/emacs/desktop")
-    (save-buffers-kill-emacs)))
 
 (defun personal/sort-split ()
   "Sort and split words per line.
@@ -1213,11 +1226,6 @@ So that in the end each line has words starting with the same letter"
         (delete-char 1)
         (open-line 1)
         (forward-line 1)))))
-
-(defun eshell/trueclear ()
-  "True clear for eshell, instead of default scroll."
-  (interactive)
-   (let ((eshell-buffer-maximum-lines 0)) (eshell-truncate-buffer)))
 
 ;; ## added by OPAM user-setup for emacs / base ## 56ab50dc8996d2bb95e7856a6eddb17b ## you can edit, but keep this line
 ;; (require 'opam-user-setup "~/.config/emacs/opam-user-setup.el")
