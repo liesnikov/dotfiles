@@ -716,11 +716,9 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
   (company-selection-wrap-around t))
 
 (use-package company-box
-  :defer t
   :hook (company-mode-hook . company-box-mode))
 
 (use-package company-quickhelp
-  :disabled
   :custom
   (company-quickhelp-delay 1)
   :config
