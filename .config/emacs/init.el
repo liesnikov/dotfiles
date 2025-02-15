@@ -710,25 +710,28 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
 ;;autocomplete
 (use-package company
   :custom
+  (global-company-mode 1)
   (company-idle-delay 0)
   (company-minimum-prefix-length 1)
   (company-selection-wrap-around t))
 
 (use-package company-box
+  :defer t
   :hook (company-mode-hook . company-box-mode))
 
 (use-package company-quickhelp
+  :disabled
   :custom
   (company-quickhelp-delay 1)
   :config
   (company-quickhelp-mode))
 
 (use-package which-key
+  :defer t
   ;; provide a popup when you press a button with all bindings that follow
   :custom
   (which-key-min-display-lines 10)
-  :config
-  (which-key-mode))
+  (which-key-mode t))
 
 (use-package color-moccur
   ;; provide colours in occur mode
@@ -736,7 +739,7 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
 
 (use-package transpose-frame
   ;; turn frame around, somehow not available by default
-  )
+  :defer t)
 
 (use-package gnu-elpa-keyring-update
   ;; because elpa keys are expiring sometimes
@@ -746,12 +749,13 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
   ;; group ibuffer entries by the project
   :after project
   :hook
-  ('ibuffer-hook . (lambda ()
+  (ibuffer-hook . (lambda ()
      (setq ibuffer-filter-groups (ibuffer-project-generate-filter-groups))
      (unless (eq ibuffer-sorting-mode 'project-file-relative)
        (ibuffer-do-sort-by-project-file-relative)))))
 
 (use-package rg
+  :defer t
   ;; search package instead of grep
   :ensure-system-package (rg . ripgrep))
 
@@ -777,8 +781,10 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
     ;; completion-in-region variation:
     (setq-local completion-in-region-function #'completion--in-region)))
 (use-package ivy-hydra
+  :defer t
   :requires ivy)
 (use-package ivy-rich
+  :defer t
   :requires ivy
   :config
   (ivy-rich-mode t)
@@ -817,6 +823,7 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
                                     :append :local))))
 
 (use-package evil
+  :defer t
   :custom
   (evil-mode nil))
 
@@ -862,7 +869,10 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
   :hook
   (eshell-directory-change-hook . envrc-reload-or-clear))
 
-(use-package sort-words)
+(use-package sort-words
+  :defer t
+  :commands sort-words
+  )
 
 (use-package dired-subtree
   :after dired
@@ -876,7 +886,7 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
   (dired-subtree-use-backgrounds nil))
 
 (use-package trashed
-  :commands (trashed)
+  :commands trashed
   :custom
   (trashed-action-confirmer 'y-or-n-p)
   (trashed-use-header-line t)
@@ -890,9 +900,10 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
 
 (use-package wc-mode
   ;; count words
-  )
+  :defer t)
 
 (use-package tex
+  :defer t
   :ensure auctex
   :config
   (setq TeX-auto-save t))
@@ -915,12 +926,14 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
   (latex-mode-hook . turn-on-reftex))
 
 (use-package company-math
-  :requires (company tex-mode)
+  :after company tex-mode
+  :requires company tex-mode
   :config
   (add-to-list 'company-backends 'company-math-symbols-unicode))
 
 (use-package company-auctex
-  :requires (company tex-mode)
+  :after company tex-mode
+  :requires company tex-mode
   :config
   (company-auctex-init))
 
@@ -929,7 +942,7 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
   ;; for search purposes: org-mode
   :custom
   (olivetti-body-width 90)
-  :commands (olivetti)
+  :commands olivetti
   :config
   (defun olivetti ()
     (interactive)
@@ -1001,16 +1014,20 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
   (org-mode-hook . org-indent-mode))
 
 (use-package org-download
+  :defer t
   :requires org)
 (use-package org-present
+  :defer t
   :requires org)
 (use-package org-modern
+  :defer t
   :requires org
   :hook
   ((org-mode-hook . org-modern-mode)
    (org-agenda-finalize-hook . org-modern-agenda)))
 
 (use-package org-modern-indent
+  :defer t
   :config ; add late to hook
   ;; because of the depth argument can't use :hook
   (add-hook 'org-mode-hook #'org-modern-indent-mode 90))
@@ -1094,7 +1111,9 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
 ;(use-package tree-sitter-langs
 ;;  :requires tree-sitter)
 
-(use-package dockerfile-mode)
+(use-package dockerfile-mode
+  :defer t
+  :mode "\\.dockerfile\\'")
 
 (use-package copilot
   :hook (prog-mode-hook . copilot-mode)
@@ -1130,6 +1149,7 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
 
 ;;;### rust
 (use-package rustic
+  :mode ("\\.rs\\'")
   :requires eglot
   :custom (rustic-lsp-client 'eglot))
 
@@ -1156,7 +1176,9 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
   (haskell-mode-hook . interactive-haskell-mode))
 
 (use-package company-cabal
-  :config
+  :defer t
+  :autoload company-cabal
+  :init
   (add-to-list 'company-backends 'company-cabal))
 
 ;;(use-package lsp-haskell
@@ -1172,12 +1194,17 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
   :mode "\\.nix\\'")
 
 ;;### proof assistants
-(use-package idris-mode)
+(use-package idris-mode
+  :mode "\\.idr$" "\\.lidr$")
 (use-package idris2-mode
+  :commands idris2-mode idris2-ipkg-mode
+  :mode "\\.idr$" ("\\.ipkg$" . idris2-ipkg-mode)
   :vc (:fetcher github :repo "idris-community/idris2-mode"))
 
 ;;;#### coq
 (use-package proof-general
+  :commands coq-mode
+  :mode ("\\.v\\'" . coq-mode)
   :custom
     (coq-auto-adapt-printing-width t)
     (coq-compile-auto-save (quote ask-coq))
