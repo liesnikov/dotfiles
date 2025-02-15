@@ -225,10 +225,6 @@
   (defun xml-pretty-print ()
     (interactive)
     sgml-pretty-print))
-(use-package noxml-fold
-  :requires nxml-node
-  :hook
-  (nxml-mode-hook . (lambda () (noxml-fold-mode 1))))
 
 (use-package display-fill-column-indicator
   :ensure nil
@@ -1075,6 +1071,11 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
   (setopt ellama-provider
      (make-llm-ollama
       :chat-model "llama3.2" :embedding-model "llama3.2")))
+
+(use-package noxml-fold
+  :requires nxml-mode
+  :hook
+  (nxml-mode-hook . (lambda () (noxml-fold-mode 1))))
 
 ;;;### rust
 (use-package rustic
