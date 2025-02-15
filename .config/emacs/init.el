@@ -871,8 +871,28 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
 
 (use-package sort-words
   :defer t
-  :commands sort-words
-  )
+  :commands sort-words personal/sort-split
+  :functions personal/sort-split
+  :config
+  (defun personal/sort-split ()
+    "Sort and split words per line.
+This function sort words in alphabetical order in the currently selected region
+and inserts a newline before every new letter of the alphabet.
+So that in the end each line has words starting with the same letter"
+    (interactive)
+    ;; if the region is not selected choose current line
+    (let ((beg (if (region-active-p) (region-beginning) (line-beginning-position)))
+          (end (if (region-active-p) (region-end) (line-end-position)))
+          (abc (number-sequence 97 122)))
+      (require 'sort-words)
+      (sort-words beg end)
+      (goto-char beg)
+      (dolist (letter abc)
+        (when (re-search-forward (format " %c" letter) end t)
+          (backward-char 2)
+          (delete-char 1)
+          (open-line 1)
+          (forward-line 1))))))
 
 (use-package dired-subtree
   :after dired
@@ -1256,39 +1276,6 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
 ;;; Bindings:
 
 ;;; Code:
-
-;; Screenshot to svg
-(defun personal/screenshot-svg ()
-  "Save a screenshot of the current frame as an SVG image.
-Saves to a temp file and puts the filename in the kill ring.
-Source: https://old.reddit.com/r/emacs/comments/idz35e/emacs_27_can_take_svg_screenshots_of_itself/"
-  (interactive)
-  (let* ((filename (make-temp-file "Emacs" nil ".svg"))
-         (data (x-export-frames nil 'svg)))
-    (with-temp-file filename
-      (insert data))
-    (kill-new filename)
-    (message filename)))
-
-(defun personal/sort-split ()
-  "Sort and split words per line.
-This function sort words in alphabetical order in the currently selected region
-and inserts a newline before every new letter of the alphabet.
-So that in the end each line has words starting with the same letter"
-  (interactive)
-  ;; if the region is not selected choose current line
-  (let ((beg (if (region-active-p) (region-beginning) (line-beginning-position)))
-        (end (if (region-active-p) (region-end) (line-end-position)))
-        (abc (number-sequence 97 122)))
-    (require 'sort-words)
-    (sort-words beg end)
-    (goto-char beg)
-    (dolist (letter abc)
-      (when (re-search-forward (format " %c" letter) end t)
-        (backward-char 2)
-        (delete-char 1)
-        (open-line 1)
-        (forward-line 1)))))
 
 ;; ## added by OPAM user-setup for emacs / base ## 56ab50dc8996d2bb95e7856a6eddb17b ## you can edit, but keep this line
 ;; (require 'opam-user-setup "~/.config/emacs/opam-user-setup.el")
