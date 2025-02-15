@@ -161,7 +161,6 @@
 
 (use-package project
   :ensure nil
-  :defer t
   :functions project-try-magit
   :bind (:map project-prefix-map
          ("m" . project-try-magit))
@@ -192,7 +191,6 @@
 
 (use-package recentf
   :ensure nil
-  :defer
   :custom
   ;; ivy makes searching through long lists easy, bump these up some from
   ;; the defaults.
@@ -223,7 +221,6 @@
 
 (use-package nxml-mode
   :ensure nil
-  :defer t
   :config
   (defun xml-pretty-print ()
     (interactive)
@@ -235,7 +232,6 @@
 
 (use-package display-fill-column-indicator
   :ensure nil
-  :defer t
   :custom
   (display-fill-column-indicator 't)
   (global-display-fill-column-indicator-mode 't)
@@ -254,7 +250,6 @@
   ;; contex-menu mode and functions
   ;; borrowed from http://amodernist.com/texts/emacs-mouse.html
   :ensure nil
-  :defer t
   :custom
   (context-menu-mode 't))
   ;;(context-menu-functions '(context-menu-ffap
@@ -321,7 +316,6 @@ From https://protesilaos.com/codelog/2024-11-28-basic-emacs-configuration/"
       (keyboard-quit)))))
 
 (use-package prog-mode
-  :defer t
   :config
   ;; Prettify-symbols-mode will replace some symbols (like "lambda") with
   ;; their prettier cousins (like λ), but smartly as it's configured by
@@ -666,7 +660,6 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
 
 ;; because there's no sideline for flymake by default
 (use-package sideline-flymake
-  :defer t
   :custom
   (sideline-flymake-display-mode 'line) ; 'point to show errors only on point
                                         ; 'line to show errors on the current line
@@ -689,7 +682,6 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
 
 ;;autocomplete
 (use-package company
-  :defer t
   :custom
   (company-idle-delay 0)
   (company-minimum-prefix-length 1)
@@ -699,7 +691,6 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
   :hook (company-mode-hook . company-box-mode))
 
 (use-package company-quickhelp
-  :defer t
   :custom
   (company-quickhelp-delay 1)
   :config
@@ -713,7 +704,6 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
   (which-key-mode))
 
 (use-package color-moccur
-  :defer t
   ;; provide colours in occur mode
   :bind (("M-s O" . moccur)))
 
@@ -819,7 +809,7 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
   (avy-setup-default))
 
 (use-package undo-tree
-  :defer t
+  :bind ("C-/" . undo-tree-undo) ; default binding, but forcing the defer this way
   :config
   (global-undo-tree-mode)
   (defun undo-tree-fix/undo-tree-compress (filename)
@@ -856,7 +846,6 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
   )
 
 (use-package tex
-  :defer t
   :ensure auctex
   :config
   (setq TeX-auto-save t))
@@ -891,9 +880,9 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
 (use-package olivetti
   ;; package for writing mode, introduces margins
   ;; for search purposes: org-mode
-  :defer t
   :custom
   (olivetti-body-width 90)
+  :commands (olivetti)
   :config
   (defun olivetti ()
     (interactive)
@@ -992,7 +981,6 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
          ("C-x g" .  magit-status)))
 
 (use-package git-link
-  :defer t
   :bind ("C-c g l" . git-link-dispatch)
   :custom
   ;; Link to a particular revision of a file rather than using the branch name in the URL.
@@ -1090,7 +1078,6 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
 
 ;;;### rust
 (use-package rustic
-  :defer t
   :requires eglot
   :custom (rustic-lsp-client 'eglot))
 
@@ -1133,15 +1120,12 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
   :mode "\\.nix\\'")
 
 ;;### proof assistants
-(use-package idris-mode
-  :defer t)
+(use-package idris-mode)
 (use-package idris2-mode
-  :vc (:fetcher github :repo "idris-community/idris2-mode")
-  :defer t)
+  :vc (:fetcher github :repo "idris-community/idris2-mode"))
 
 ;;;#### coq
 (use-package proof-general
-  :defer t
   :custom
     (coq-auto-adapt-printing-width t)
     (coq-compile-auto-save (quote ask-coq))
