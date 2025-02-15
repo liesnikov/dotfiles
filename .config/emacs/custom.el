@@ -14,7 +14,7 @@
      auctex avy
      breadcrumb
      color-moccur company company-auctex company-box company-cabal company-coq company-haskell company-quickhelp copilot counsel counsel-projectile
-     dashboard dockerfile-mode doom-themes
+     dashboard dired-subtree dockerfile-mode doom-themes
      editorconfig eglot eglot-booster eldoc-box ellama emojify envrc evil evil-numbers expand-region
      flymake-vale
      git-link gnu-elpa-keyring-update
@@ -27,7 +27,7 @@
      pdf-tools prog-mode proof-general
      rg rustic
      sideline sideline-eglot sideline-flymake sort-words swiper
-     transpose-frame treesit treesit-auto treesit-ispell treesit-langs tuareg
+     transpose-frame trashed treesit treesit-auto treesit-ispell treesit-langs tuareg
      ultra-scroll undo-tree unicode-whitespace use-package use-package-ensure-system-package
      vc-use-package
      wc-mode which-key

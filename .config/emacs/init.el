@@ -102,11 +102,18 @@
   :custom
   (dired-async-mode t)
   (dired-listing-switches "-al")
+  (dired-recursive-copies 'always)
+  (dired-recursive-deletes 'always)
+  (delete-by-moving-to-trash t)
+  (dired-dwim-target t)
   ;; for some reason this errors out on master-81d7827
   (dired-make-directory-clickable nil)
   :bind (:map dired-mode-map
          ("C-c o"   . dired-open-file)
          ("C-c C-o" . dired-open-file))
+  :hook
+  ((dired-mode . dired-hide-details-mode)
+   (dired-mode . hl-line-mode))
   :config
   (defun dired-open-file ()
     "In dired, open the file named on this line."
@@ -502,6 +509,14 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
    "PropertyChanged" ; message
    #'personal/detect-and-switch-theme))
 
+(use-package savehist
+  ;; The built-in savehist package keeps a record of user inputs
+  ;; and stores them across sessions.
+  ;; Thus, the user will always see their latest choices closer to the top
+  ;; (such as with M-x).
+  :ensure nil ; it is built-in
+  :hook (after-init . savehist-mode))
+
 (use-package faces
   :ensure nil
   :custom-face
@@ -848,6 +863,26 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
   (eshell-directory-change-hook . envrc-reload-or-clear))
 
 (use-package sort-words)
+
+(use-package dired-subtree
+  :after dired
+  :bind
+  ( :map dired-mode-map
+    ("<tab>" . dired-subtree-toggle)
+    ("TAB" . dired-subtree-toggle)
+    ("<backtab>" . dired-subtree-remove)
+    ("S-TAB" . dired-subtree-remove))
+  :custom
+  (dired-subtree-use-backgrounds nil))
+
+(use-package trashed
+  :commands (trashed)
+  :custom
+  (trashed-action-confirmer 'y-or-n-p)
+  (trashed-use-header-line t)
+  (trashed-sort-key '("Date deleted" . t))
+  (trashed-date-format "%Y-%m-%d %H:%M:%S"))
+
 
 ;;;## Writing & reading
 
