@@ -312,6 +312,7 @@ From https://protesilaos.com/codelog/2024-11-28-basic-emacs-configuration/"
       (keyboard-quit)))))
 
 (use-package prog-mode
+  :ensure nil
   :config
   ;; Prettify-symbols-mode will replace some symbols (like "lambda") with
   ;; their prettier cousins (like λ), but smartly as it's configured by
@@ -416,7 +417,8 @@ When there is ongoing compilation, nothing happens."
   ;; precisely, according to the turning of the mouse wheel.
   (pixel-scroll-precision-mode 't))
 
-(use-package treesit)
+(use-package treesit
+  :ensure nil)
 
 (use-package flymake
   :ensure nil
@@ -427,6 +429,7 @@ When there is ongoing compilation, nothing happens."
               ("C-c p" . flymake-goto-next-error)))
 
 (use-package flyspell
+  :ensure nil
   ;; on the fly spell checking
   :hook
   (text-mode-hook . turn-on-flyspell)
@@ -438,6 +441,7 @@ When there is ongoing compilation, nothing happens."
               ("C-c k" . compile)))
 
 (use-package reftex
+  :ensure nil
   :hook
   (LaTeX-mode . turn-on-reftex)
   :custom
@@ -498,6 +502,7 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
 ;; re-evaluate this on restart if emacs gets stuck with wrong colours
 ;; to select the whole sexpr put carriage on the first parenthesis and press C-M-space
 (use-package emacs
+  :ensure nil
   ;; catch-all package for all the things that don't have their own package
   :custom
   ;; personal info
