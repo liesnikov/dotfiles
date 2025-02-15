@@ -26,24 +26,24 @@
   (require 'use-package))
 (use-package use-package
   :custom
-  ; disable :hook suffix to use abnormal hooks with the same syntax
+  ;; disable :hook suffix to use abnormal hooks with the same syntax
   (use-package-hook-name-suffix nil))
 (use-package use-package-ensure-system-package
-  ; The :ensure-system-package keyword allows
-  ; to ensure system binaries exist alongside package declarations.
+  ;; The :ensure-system-package keyword allows
+  ;; to ensure system binaries exist alongside package declarations.
   :requires use-package
   :ensure t)
 
 ;; ensure all packages -- installs them
-; (require 'use-package-ensure)
-; (setq use-package-always-ensure t)
+;; (require 'use-package-ensure)
+;; (setq use-package-always-ensure t)
 
 (unless (package-installed-p 'vc-use-package)
   (package-vc-install '(vc-use-package :url "https://github.com/slotThe/vc-use-package")))
 (require 'vc-use-package)
 
 (use-package no-littering
-  ; not a system package, but we have to change paths before anything else kicks in
+  ;; not a system package, but we have to change paths before anything else kicks in
   :ensure t
   :init
   (setq no-littering-etc-directory
@@ -76,7 +76,7 @@
   (desktop-auto-save-timeout 30)
   (desktop-load-locked-desktop t)
   (desktop-restore-forces-onscreen nil) ; from https://stackoverflow.com/questions/18612742/emacs-desktop-save-mode-error#comment47963002_26546872
-; (desktop-save 0)
+;; (desktop-save 0)
   :hook
   (after-make-frame-functions . (lambda (frame)
                                   (with-selected-frame frame
@@ -89,7 +89,7 @@
   :custom
   (dired-async-mode t)
   (dired-listing-switches "-al")
-  ; for some reason this errors out on master-81d7827
+  ;; for some reason this errors out on master-81d7827
   (dired-make-directory-clickable nil)
   :bind (:map dired-mode-map
          ("C-c o"   . dired-open-file)
@@ -133,7 +133,7 @@
          (not (minibufferp)))
         (display-line-numbers-mode)))
   :custom
-; "Major modes on which to disable the display-line-numbers mode, exempts them from global requirement"
+;; "Major modes on which to disable the display-line-numbers mode, exempts them from global requirement"
   (display-line-numbers-exempt-modes
    '(vterm-mode eshell-mode shell-mode term-mode ansi-term-mode pdf-view-mode))
   :hook (prog-mode-hook . display-line-numbers-mode))
@@ -168,11 +168,11 @@
 
 (use-package ibuffer
   :ensure nil
-  ; commented out for potential performance gains?
-  ; :custom
-  ; (ibuffer-saved-filter-groups nil)
-  ; (ibuffer-saved-filters nil)
-  :bind (; map C-x C-b to ibuffer instead of default `list-buffers`
+  ;; commented out for potential performance gains?
+  ;; :custom
+  ;; (ibuffer-saved-filter-groups nil)
+  ;; (ibuffer-saved-filters nil)
+  :bind (;; map C-x C-b to ibuffer instead of default `list-buffers`
          ("C-x C-b" . ibuffer)))
 
 (use-package recentf
@@ -190,17 +190,17 @@
 (use-package windmove
   :ensure nil
   :init
-  ; Windmove is a library built into GnuEmacs starting with version 21.
-  ; It lets you move point from window to window using Shift and the arrow keys.
-  ; https://www.emacswiki.org/emacs/WindMove
+  ;; Windmove is a library built into GnuEmacs starting with version 21.
+  ;; It lets you move point from window to window using Shift and the arrow keys.
+  ;; https://www.emacswiki.org/emacs/WindMove
   (when (fboundp 'windmove-default-keybindings)
     (windmove-default-keybindings))
   :custom
   (window-resize-pixelwise 't)
   (frame-resize-pixelwise 't)
-  :bind (; new bindings to change widnow sizes
-         ; similar bindings to windmove (see below),
-         ; which has S-<arrow> as moving binding
+  :bind (;; new bindings to change widnow sizes
+         ;; similar bindings to windmove (see below),
+         ;; which has S-<arrow> as moving binding
          ("S-C-<left>" . shrink-window-horizontally)
          ("S-C-<right>".  enlarge-window-horizontally)
          ("S-C-<down>" . shrink-window)
@@ -226,41 +226,42 @@
   (global-display-fill-column-indicator-mode 't)
   (display-fill-column-indicator-column 90))
 
-; (use-package cua-base
-;   ; rectangular editining with C-<return>
-;   ; borrowed from https://karthinks.com/software/more-batteries-included-with-emacs/
-;   ; disabled because it messes with the usual rectangular editing
-;   ; and doesn't allow to delete rectangles efficiently
-;   :config
-;   (cua-mode 't))
+;; (use-package cua-base
+;;   :ensure nil
+;;   ;; rectangular editining with C-<return>
+;;   ;; borrowed from https://karthinks.com/software/more-batteries-included-with-emacs/
+;;   ;; disabled because it messes with the usual rectangular editing
+;;   ;; and doesn't allow to delete rectangles efficiently
+;;   :config
+;;   (cua-mode 't))
 
 (use-package mouse
-  ; contex-menu mode and functions
-  ; borrowed from http://amodernist.com/texts/emacs-mouse.html
+  ;; contex-menu mode and functions
+  ;; borrowed from http://amodernist.com/texts/emacs-mouse.html
   :ensure nil
   :defer t
   :custom
   (context-menu-mode 't))
-  ;(context-menu-functions '(context-menu-ffap
-  ;                          occur-context-menu
-  ;                          context-menu-region
-  ;                          context-menu-undo
-  ;                          dictionary-context-menu)))
+  ;;(context-menu-functions '(context-menu-ffap
+  ;;                          occur-context-menu
+  ;;                          context-menu-region
+  ;;                          context-menu-undo
+  ;;                          dictionary-context-menu)))
 
 (use-package calendar
   :ensure nil
   :defer t
   :custom
-  ; The day of the week on which a week in the calendar begins.
-  ; 1 means Monday
+  ;; The day of the week on which a week in the calendar begins.
+  ;; 1 means Monday
   (calendar-week-start-day 1))
 
 (use-package simple
   :ensure nil
   :custom
-  ; Indentation can insert tabs if this is non-nil.
+  ;; Indentation can insert tabs if this is non-nil.
   (indent-tabs-mode nil)
-  ; Don't wrap lines by default
+  ;; Don't wrap lines by default
   (toggle-truncate-lines 1)
   (kill-ring-max 500)
   (eval-expression-print-length nil)
@@ -289,61 +290,61 @@
 (use-package menu-bar
   :ensure nil
   :custom
-  ; disable menu bar
+  ;; disable menu bar
   (menu-bar-mode nil))
 
 (use-package scroll-bar
   :ensure nil
   :custom
-  ; disable scroll bar
+  ;; disable scroll bar
   (scroll-bar-mode nil))
 
 (use-package mule
   :ensure nil
   :custom
-  ; Specify coding system for keyboard input.
+  ;; Specify coding system for keyboard input.
   (keyboard-coding-system 'utf-8-unix))
 
 (use-package select
   :ensure nil
   :custom
-  ; Coding system for communicating with other programs.
+  ;; Coding system for communicating with other programs.
   (selection-coding-system 'utf-8))
 
 (use-package paren
   :ensure nil
   :custom
-  ; Toggle visualization of matching parens
+  ;; Toggle visualization of matching parens
   (show-paren-mode t))
 
 (use-package whitespace
   :ensure nil
-  ; highlight all whitespaces
+  ;; highlight all whitespaces
   :custom
-  ; global-whitespace-mode is known to break org-mode export sometimes
+  ;; global-whitespace-mode is known to break org-mode export sometimes
   (global-whitespace-mode t)
   (whitespace-style '(face
                       trailing
                       space-mark spaces
                       tab-mark tabs
                       empty
-                      ;indentation::space
-                      ;indentation::tab
-                      ;newline newline-mark
+                      ;;indentation::space
+                      ;;indentation::tab
+                      ;;newline newline-mark
                       space-after-tab::tab space-after-tab::space
                       space-before-tab::tab space-before-tab::space))
-  ; * in agda it's simply annoying, but for magit it's causing errors
-  ;   see https://github.com/magit/magit/issues/4766 and
-  ;   https://emacs.stackexchange.com/questions/38771/magit-status-does-not-open-when-using-global-whitespace-mode-1/38778#38778
-  ; * for magit it breaks commit flow
-  ; * for tex mode -- it breaks org-mode tex export
+  ;; * in agda it's simply annoying, but for magit it's causing errors
+  ;;   see https://github.com/magit/magit/issues/4766 and
+  ;;   https://emacs.stackexchange.com/questions/38771/magit-status-does-not-open-when-using-global-whitespace-mode-1/38778#38778
+  ;; * for magit it breaks commit flow
+  ;; * for tex mode -- it breaks org-mode tex export
   (whitespace-global-modes '(not magit-mode tex-mode org-mode)))
 
 (use-package pixel-scroll
   :ensure nil
   :custom
-  ; When enabled, this minor mode allows to scroll the display
-  ; precisely, according to the turning of the mouse wheel.
+  ;; When enabled, this minor mode allows to scroll the display
+  ;; precisely, according to the turning of the mouse wheel.
   (pixel-scroll-precision-mode 't))
 
 (use-package treesit)
@@ -383,40 +384,40 @@
      (?X . "{%l}"))))
 
 
-; re-evaluate this on restart if emacs gets stuck with wrong colours
-; to select the whole sexpr put carriage on the first parenthesis and press C-M-space
+;; re-evaluate this on restart if emacs gets stuck with wrong colours
+;; to select the whole sexpr put carriage on the first parenthesis and press C-M-space
 (use-package emacs
-  ; catch-all package for all the things that don't have their own package
+  ;; catch-all package for all the things that don't have their own package
   :custom
-  ; personal info
+  ;; personal info
   (user-full-name "Bohdan Liesnikov")
   (user-mail-address "bohdan@liesnikov")
 
-  ; don't show startup emacs screen
+  ;; don't show startup emacs screen
   (inhibit-startup-screen t)
-  ; If the value is nil and ‘inhibit-startup-screen’ is nil, show the startup screen.
-  ; If t, open the ‘*scratch*’ buffer.
+  ;; If the value is nil and ‘inhibit-startup-screen’ is nil, show the startup screen.
+  ;; If t, open the ‘*scratch*’ buffer.
   (initial-buffer-choice t)
-  ; text present in the scratch buffer by default
+  ;; text present in the scratch buffer by default
   (initial-scratch-message nil)
 
-  ; If the value is greater than 100, redisplay will never recenter point,
-  ; but will always scroll just enough text to bring point into view,
-  ; even if you move far away.
+  ;; If the value is greater than 100, redisplay will never recenter point,
+  ;; but will always scroll just enough text to bring point into view,
+  ;; even if you move far away.
   (scroll-conservatively 10000)
 
-  ; The number of lines to try scrolling a window by when point moves out.
+  ;; The number of lines to try scrolling a window by when point moves out.
   (scroll-step 1)
 
-  ; pressing tab always indents
+  ;; pressing tab always indents
   (tab-always-indent t)
-  ; display tab width
+  ;; display tab width
   (tab-width 2)
 
-  ; disable tool-bar
+  ;; disable tool-bar
   (tool-bar-mode nil)
 
-  ; make mode-line line indicator be line-number:colon-number
+  ;; make mode-line line indicator be line-number:colon-number
   (mode-line-position (list "%l:%c"))
 
   :custom-face
@@ -434,27 +435,27 @@
 ;;;## Visual things
 
 (use-package doom-themes
-  ; color theme
+  ;; color theme
   :custom
   ;; Global settings (defaults)
-  ; if nil, bold is universally disabled
+  ;; if nil, bold is universally disabled
   (doom-themes-enable-bold t)
-  ; if nil, bold is universally disabled
+  ;; if nil, bold is universally disabled
   (doom-themes-enable-italic t)
   :config
-  ; (load-theme 'doom-one t)
-  ; Enable flashing mode-line on errors
+  ;; (load-theme 'doom-one t)
+  ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config)
-  ; Corrects (and improves) org-mode's native fontification.
+  ;; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config))
 
 (use-package minions
   :custom (minions-prominent-modes '(flymake-mode))
-  ; hide minor modes under a drop-down menu
+  ;; hide minor modes under a drop-down menu
   :config (minions-mode 1))
 
 (use-package moody
-  ; modeline as tabs
+  ;; modeline as tabs
   :custom
   (x-underline-at-descent-line t)
   (moody-mode-line-height 45)
@@ -466,7 +467,7 @@
   :requires whitespace
   :custom
   (unicode-whitespace-soft-space-mappings
-   ; this is the default except for "Space", initially it's also Middle dot
+   ;; this is the default except for "Space", initially it's also Middle dot
    '(("Space" ("Space"))
      ("Em Quad"
       ("Circled Bullet" "Middle Dot" "."))
@@ -506,7 +507,7 @@
   (unicode-whitespace-setup 'subdued-faces))
 
 (use-package emojify
-  ; enable emoji rendering where they are typeset as text :nonexistent: or :wave:
+  ;; enable emoji rendering where they are typeset as text :nonexistent: or :wave:
   :custom
   (emojify-display-style 'unicode)
   (emojify-emoji-styles '(unicode github))
@@ -534,13 +535,13 @@
   :config
   (dashboard-setup-startup-hook))
 
-; a minor mode to enable errors appearing next to the code
+;; a minor mode to enable errors appearing next to the code
 (use-package sideline
   :ensure t
   :hook (flymake-mode-hook . sideline-mode)
         (eglot-mode-hook . sideline-mode))
 
-; because there's no sideline for flymake by default
+;; because there's no sideline for flymake by default
 (use-package sideline-flymake
   :defer t
   :custom
@@ -563,7 +564,7 @@
 
 ;;;## General goodies
 
-;autocomplete
+;;autocomplete
 (use-package company
   :defer t
   :custom
@@ -582,7 +583,7 @@
   (company-quickhelp-mode))
 
 (use-package which-key
-  ; provide a popup when you press a button with all bindings that follow
+  ;; provide a popup when you press a button with all bindings that follow
   :custom
   (which-key-min-display-lines 10)
   :config
@@ -590,19 +591,19 @@
 
 (use-package color-moccur
   :defer t
-  ; provide colours in occur mode
+  ;; provide colours in occur mode
   :bind (("M-s O" . moccur)))
 
 (use-package transpose-frame
-  ; turn frame around, somehow not available by default
+  ;; turn frame around, somehow not available by default
   )
 
 (use-package gnu-elpa-keyring-update
-  ; because elpa keys are expiring sometimes
+  ;; because elpa keys are expiring sometimes
   )
 
 (use-package ibuffer-project
-  ; group ibuffer entries by the project
+  ;; group ibuffer entries by the project
   :after project
   :hook
   ('ibuffer-hook . (lambda ()
@@ -611,20 +612,20 @@
        (ibuffer-do-sort-by-project-file-relative)))))
 
 (use-package rg
-  ; search package instead of grep
+  ;; search package instead of grep
   :ensure-system-package (rg . ripgrep))
 
 (use-package ivy
-  ; ivy is an autocompletion framework
+  ;; ivy is an autocompletion framework
   :bind (("C-x b" . ivy-switch-buffer))
   :custom
-  ; enable ivy
+  ;; enable ivy
   (ivy-mode t)
-  ; use columns in ivy
+  ;; use columns in ivy
   (ivy-read-action-format-function 'ivy-read-action-format-columns)
-  ; technically not an ivy variable, but useful to have for some reasons atm unknown to me
+  ;; technically not an ivy variable, but useful to have for some reasons atm unknown to me
   (enable-recursive-minibuffers t)
-  ; add recent files and/or bookmarks to ‘ivy-switch-buffer’.
+  ;; add recent files and/or bookmarks to ‘ivy-switch-buffer’.
   (ivy-use-virtual-buffers t)
 
   :defines issue-1755-fix
@@ -657,19 +658,19 @@
 
 
 (use-package expand-region
-  ; expand selection semantically
+  ;; expand selection semantically
   :bind
   (("M-=" . 'er/expand-region))
   )
 
 (use-package pdf-tools
-  ; view pdfs in emacs
+  ;; view pdfs in emacs
   :config
   (pdf-tools-install) ; enable pdftools instead of docview
 
   :hook
-  ; Disable line numbers when entering pdf-tools mode.
-  ; from https://stackoverflow.com/a/6839968
+  ;; Disable line numbers when entering pdf-tools mode.
+  ;; from https://stackoverflow.com/a/6839968
   (pdf-view-mode-hook . (lambda ()
                           (add-hook 'after-change-major-mode-hook
                                     (lambda () (display-line-numbers-mode 0))
@@ -680,14 +681,14 @@
   (evil-mode nil))
 
 (use-package evil-numbers
-  ; increment-decrement numbers as in vim
+  ;; increment-decrement numbers as in vim
   :bind (("C-c +"   . 'evil-numbers/inc-at-pt)
          ("C-c -"   . 'evil-numbers/dec-at-pt)
          ("C-c C-+" . 'evil-numbers/inc-at-pt-incremental)
          ("C-c C--" . 'evil-numbers/dec-at-pt-incremental)))
 
 (use-package avy
-  ; move around efficiently
+  ;; move around efficiently
   :bind (("M-g c"   . avy-goto-char-timer)
          ("M-g g"   . avy-goto-line)
          ("M-g M-g" . avy-goto-line))
@@ -705,7 +706,7 @@
 
 (use-package envrc
   :ensure-system-package direnv
-  ; package for direnv, usefull when working with nix
+  ;; package for direnv, usefull when working with nix
   :config
   (envrc-global-mode)
   (defun envrc-reload-or-clear ()
@@ -728,7 +729,7 @@
 ;; word processor and markup
 
 (use-package wc-mode
-  ; count words
+  ;; count words
   )
 
 (use-package tex
@@ -738,8 +739,8 @@
   (setq TeX-auto-save t))
 
 (use-package tex-mode
-  ; loading auctex directly doesn't work for some reason
-  ; https://github.com/jwiegley/use-package/issues/379
+  ;; loading auctex directly doesn't work for some reason
+  ;; https://github.com/jwiegley/use-package/issues/379
   :after auctex
   :custom
   (reftex-plug-into-AUCTeX t)
@@ -749,9 +750,9 @@
   (LaTeX-mode-hook .
               (lambda () (set (make-variable-buffer-local 'TeX-electric-math)
                           (cons "\\(" "\\)"))))
-  ; Turn on RefTeX with AUCTeX LaTeX mode
+  ;; Turn on RefTeX with AUCTeX LaTeX mode
   (LaTeX-mode-hook . turn-on-reftex)
-  ; with Emacs latex mode
+  ;; with Emacs latex mode
   (latex-mode-hook . turn-on-reftex))
 
 (use-package company-math
@@ -765,8 +766,8 @@
   (company-auctex-init))
 
 (use-package olivetti
-  ; package for writing mode, introduces margins
-  ; for search purposes: org-mode
+  ;; package for writing mode, introduces margins
+  ;; for search purposes: org-mode
   :defer t
   :custom
   (olivetti-body-width 90)
@@ -786,42 +787,42 @@
   ;;  => (text-mode latex-mode org-mode markdown-mode message-mode)
   (add-to-list 'flymake-vale-modes 'adoc-mode))
 
-;(use-package nov
-;  ; Major mode for reading EPUB documents
-;  :config
-;  (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode)))
+;;(use-package nov
+;;  ;; Major mode for reading EPUB documents
+;;  :config
+;;  (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode)))
 
 (use-package markdown-mode
   :config
-  ; from https://gist.github.com/kleinschmidt/5ab0d3c423a7ee013a2c01b3919b009a
-  ; define markdown citation formats
+  ;; from https://gist.github.com/kleinschmidt/5ab0d3c423a7ee013a2c01b3919b009a
+  ;; define markdown citation formats
   (defvar markdown-cite-format)
-  ; these are the only two formats available:
-  ; https://pandoc.org/MANUAL.html#extension-citations
+  ;; these are the only two formats available:
+  ;; https://pandoc.org/MANUAL.html#extension-citations
   (setq markdown-cite-format
         '((?\C-m . "[@%l]")
           (?p    . "[@%l]")
           (?t    . "@%l")))
 
-  ; wrap reftex-citation with local variables for markdown format
+  ;; wrap reftex-citation with local variables for markdown format
   (defun markdown-reftex-citation ()
     (interactive)
     (let ((reftex-cite-format markdown-cite-format)
           (reftex-cite-key-separator "; @"))
       (reftex-citation)))
   :hook
-  ; bind modified reftex-citation to C-c[, without enabling reftex-mode
-  ; https://www.gnu.org/software/auctex/manual/reftex/Citations-Outside-LaTeX.html#SEC31
+  ;; bind modified reftex-citation to C-c[, without enabling reftex-mode
+  ;; https://www.gnu.org/software/auctex/manual/reftex/Citations-Outside-LaTeX.html#SEC31
   (markdown-mode-hook . (lambda ()
                           (define-key markdown-mode-map "\C-c["
                             'markdown-reftex-citation))))
 
 (use-package org
   :bind (:map org-mode-map
-          ; some default and non-default mappings
-          ; * to insert current date use org-time-stamp bound to C-c .
-          ; * to org-global-cycle use C-u TAB
-          ; * to store a link to an org heading use C-c l
+          ;; some default and non-default mappings
+          ;; * to insert current date use org-time-stamp bound to C-c .
+          ;; * to org-global-cycle use C-u TAB
+          ;; * to store a link to an org heading use C-c l
           ("C-c l" . org-store-link))
   :custom
   (org-agenda-files nil)
@@ -837,7 +838,7 @@
     (ol-bbdb ol-bibtex ol-docview ol-eww ol-gnus
      ol-info ol-irc ol-mhe ol-rmail org-tempo ol-w3m)))
   :hook
-  ; activate org-indent-mode on org-indent
+  ;; activate org-indent-mode on org-indent
   (org-mode-hook . org-indent-mode))
 
 (use-package org-download
@@ -852,7 +853,7 @@
 
 (use-package org-modern-indent
   :config ; add late to hook
-  ; because of the depth argument can't use :hook
+  ;; because of the depth argument can't use :hook
   (add-hook 'org-mode-hook #'org-modern-indent-mode 90))
 
 ;;;## Programming
@@ -860,11 +861,11 @@
 
 ;;;### misc
 (use-package magit
-  ; emacs git interface
+  ;; emacs git interface
   :custom
-  ; highlight word-differences in diffs
+  ;; highlight word-differences in diffs
   (magit-diff-refine-hunk (quote all))
-  :bind (; magit open default window binding
+  :bind (;; magit open default window binding
          ("C-x g" .  magit-status)))
 
 (use-package git-link
@@ -888,27 +889,27 @@
   (eglot-autoshutdown t)  ;; shutdown language server after closing last file
   (eglot-confirm-server-initiated-edits nil)  ;; allow edits without confirmation
   :config
-;    (setq-default eglot-workspace-configuration
-;                '((haskell
-;                   (plugin
-;                    (hlint
-;                     (globalOn . t))))))
+;;    (setq-default eglot-workspace-configuration
+;;                '((haskell
+;;                   (plugin
+;;                    (hlint
+;;                     (globalOn . t))))))
   (add-to-list 'eglot-server-programs '((sh-mode bash-ts-mode) . ("bash-language-server" "start")))
   )
 
 (use-package eldoc-box
   :hook (eglot-managed-mode-hook . eldoc-box-hover-mode))
 
-; for breadcrumbs modeline
+;; for breadcrumbs modeline
 (use-package breadcrumb
   :config
   (breadcrumb-mode))
 
-; in some cases more functional than eglot, albeit slower
-;(use-package lsp-mode
-;  :custom
-;  (lsp-file-watch-threshold nil))
-;(use-package lsp-ui)
+;; in some cases more functional than eglot, albeit slower
+;;(use-package lsp-mode
+;;  :custom
+;;  (lsp-file-watch-threshold nil))
+;;(use-package lsp-ui)
 
 (use-package eglot-booster
   :after eglot
@@ -928,12 +929,12 @@
 (use-package treesit-ispell
   :requires treesit)
 
-; alternative to treesit built-in mode
-;(use-package tree-sitter
-;  :custom (global-tree-sitter-mode 't))
-;
+;; alternative to treesit built-in mode
+;;(use-package tree-sitter
+;;  :custom (global-tree-sitter-mode 't))
+;;
 ;(use-package tree-sitter-langs
-;  :requires tree-sitter)
+;;  :requires tree-sitter)
 
 (use-package dockerfile-mode)
 
@@ -972,14 +973,14 @@
 
 ;;;### ocaml
 (use-package tuareg
-  ; activate tuareg (ocaml) mode in ml4 files
-  ; (syntax extensions for coq)
+  ;; activate tuareg (ocaml) mode in ml4 files
+  ;; (syntax extensions for coq)
   :mode "\\.ml4\\'")
 
 (use-package merlin
   :requires tuareg
   :hook
-   ; from https://github.com/ocaml/merlin/wiki/emacs-from-scratch
+   ;; from https://github.com/ocaml/merlin/wiki/emacs-from-scratch
   (tuareg-mode-hook . merlin-mode)
   )
 
@@ -996,16 +997,16 @@
   :config
   (add-to-list 'company-backends 'company-cabal))
 
-;(use-package lsp-haskell
-;  :requires lsp-mode lsp-ui
-;  :hook
-;    (haskell-mode-hook . lsp-deferred)
-;    (haskell-literate-mode-hook . lsp-deferred)
-;  )
+;;(use-package lsp-haskell
+;;  :requires lsp-mode lsp-ui
+;;  :hook
+;;    (haskell-mode-hook . lsp-deferred)
+;;    (haskell-literate-mode-hook . lsp-deferred)
+;;  )
 
 ;;;### nix
 (use-package nix-mode
-  ; activate nix-mode in .nix files
+  ;; activate nix-mode in .nix files
   :mode "\\.nix\\'")
 
 ;;### proof assistants
@@ -1032,14 +1033,14 @@
 (use-package company-coq
   :requires company
   :hook
-  ; company-coq is an addon on top of proofgeneral,
-  ; enable it as we enter coq mode
+  ;; company-coq is an addon on top of proofgeneral,
+  ;; enable it as we enter coq mode
   (coq-mode-hook . company-coq-mode))
 
-;(add-to-list
-; due to a weird bug, both tokens from PG and company-coq are used
-; which results in "token undefined" errors when using PG ones
-; 'coq-mode-hook (unicode-tokens-use-shortcuts nil))
+;;(add-to-list
+;; due to a weird bug, both tokens from PG and company-coq are used
+;; which results in "token undefined" errors when using PG ones
+;; 'coq-mode-hook (unicode-tokens-use-shortcuts nil))
 
 ;;;#### agda
 ;; agda2 mode, gets appended by `agda-mode setup`
@@ -1054,17 +1055,17 @@
 
 ;; NB:
 
-; to stop wrapping lines: toggle-truncate-lines
+;; to stop wrapping lines: toggle-truncate-lines
 
-; occur mode (M-s o)
+;; occur mode (M-s o)
 
-; interactive regex building (M-x) bound to re-builder
+;; interactive regex building (M-x) bound to re-builder
 
-; text-mode menu bar (M-`) bound to tmm-menubar
+;; text-mode menu bar (M-`) bound to tmm-menubar
 
-; artist-mode to draw ASCII diagrams: artist-mode
+;; artist-mode to draw ASCII diagrams: artist-mode
 
-; to open two different views on the same buffer: make-indirect-buffer
+;; to open two different views on the same buffer: make-indirect-buffer
 
 ;;; Bindings:
 
@@ -1155,8 +1156,8 @@ Source: https://stackoverflow.com/questions/11043004/emacs-compile-buffer-auto-c
 ; actually set the correct theme when loading
 (personal/set-theme)
 
-; Screenshot to svg
-(defun screenshot-svg ()
+;; Screenshot to svg
+(defun personal/screenshot-svg ()
   "Save a screenshot of the current frame as an SVG image.
 Saves to a temp file and puts the filename in the kill ring.
 Source: https://old.reddit.com/r/emacs/comments/idz35e/emacs_27_can_take_svg_screenshots_of_itself/"
@@ -1199,7 +1200,7 @@ This function sort words in alphabetical order in the currently selected region
 and inserts a newline before every new letter of the alphabet.
 So that in the end each line has words starting with the same letter"
   (interactive)
-  ; if the region is not selected choose current line
+  ;; if the region is not selected choose current line
   (let ((beg (if (region-active-p) (region-beginning) (line-beginning-position)))
         (end (if (region-active-p) (region-end) (line-end-position)))
         (abc (number-sequence 97 122)))
