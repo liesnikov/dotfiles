@@ -96,10 +96,10 @@
                                     (unless desktop-save-mode
                                       (desktop-save-mode 1)
                                       (desktop-read)))))
-  :functions personal/shutdown
+  :functions liesnikov/shutdown
   :config
   ;; use this from M-x
-  (defun personal/shutdown ()
+  (defun liesnikov/shutdown ()
     "Shut down and save desktop file."
     (interactive)
     (progn
@@ -302,13 +302,13 @@
   ("M-c" . capitalize-dwim)
   ("M-u" . upcase-dwim)
   (:map global-map
-        ("C-g" . personal/keyboard-quit-dwim))
-  :functions personal/keyboard-quit-dwim
+        ("C-g" . liesnikov/keyboard-quit-dwim))
+  :functions liesnikov/keyboard-quit-dwim
   :config
   ;; C-o runs `open-line', which I never use and is annoying to hit by accident
   (unbind-key "C-o")
   ;; define the new function for quitting
-  (defun personal/keyboard-quit-dwim ()
+  (defun liesnikov/keyboard-quit-dwim ()
     "Do-What-I-Mean behaviour for a general `keyboard-quit'.
 The generic `keyboard-quit' does not do the expected thing when
 the minibuffer is open.  Whereas we want it to close the
@@ -342,12 +342,12 @@ From https://protesilaos.com/codelog/2024-11-28-basic-emacs-configuration/"
 
 (use-package compile
   :ensure nil
-  :functions personal/compile-on-save-start
-  :defines personal/compile-on-save-mode
+  :functions liesnikov/compile-on-save-start
+  :defines liesnikov/compile-on-save-mode
   :hook
   (compilation-finish-functions . compile-bury-buffer-if-successful)
   :config
-  (defun personal/compile-bury-buffer-if-successful (buffer string)
+  (defun liesnikov/compile-bury-buffer-if-successful (buffer string)
     "Bury a compilation BUFFER if succeeded without warnings (check STRING).
 Source: https://stackoverflow.com/questions/11043004/emacs-compile-buffer-auto-close"
     (if (and
@@ -364,18 +364,18 @@ Source: https://stackoverflow.com/questions/11043004/emacs-compile-buffer-auto-c
                         buffer)))
   ;; "Compile on save" in Emacs
   ;; from https://rtime.ciirc.cvut.cz/~sojka/blog/compile-on-save/
-  (defun personal/compile-on-save-start ()
+  (defun liesnikov/compile-on-save-start ()
     "Start compilation on the current buffer if there is no ongoing compilation."
     (let ((buffer (compilation-find-buffer)))
       (unless (get-buffer-process buffer)
         (recompile))))
-  (define-minor-mode personal/compile-on-save-mode
+  (define-minor-mode liesnikov/compile-on-save-mode
     "Minor mode to automatically call `recompile' when the current buffer is saved.
 When there is ongoing compilation, nothing happens."
     :lighter " CoS"
-    (if personal/compile-on-save-mode
+    (if liesnikov/compile-on-save-mode
         (progn  (make-local-variable 'after-save-hook)
-                (add-hook 'after-save-hook 'personal/compile-on-save-start nil t))
+                (add-hook 'after-save-hook 'liesnikov/compile-on-save-start nil t))
       (kill-local-variable 'after-save-hook))))
 
 (use-package menu-bar
@@ -484,10 +484,10 @@ When there is ongoing compilation, nothing happens."
 
 (use-package dbus
   :ensure nil
-  :functions personal/set-theme personal/detect-and-switch-theme
+  :functions liesnikov/set-theme liesnikov/detect-and-switch-theme
   :init
   ;; not significant that's not in :config, we just don't need anything from dbus
-  (defun personal/set-theme (&optional name)
+  (defun liesnikov/set-theme (&optional name)
     "Automatically switch themes.
 Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
     (interactive (list (if current-prefix-arg
@@ -507,18 +507,18 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
         (progn (disable-theme light-theme)
                (load-theme dark-theme t)))))
   :config
-  (defun personal/detect-and-switch-theme (servname setpath themename)
+  (defun liesnikov/detect-and-switch-theme (servname setpath themename)
     (if
         (string= setpath
                  "/Net/ThemeName")
-        (personal/set-theme (car themename))))
+        (liesnikov/set-theme (car themename))))
   (dbus-register-signal
    :session
    nil ; service name, nil is a wildcard
    "/org/xfce/Xfconf" ; path
    "org.xfce.Xfconf" ; interface
    "PropertyChanged" ; message
-   #'personal/detect-and-switch-theme))
+   #'liesnikov/detect-and-switch-theme))
 
 (use-package savehist
   ;; The built-in savehist package keeps a record of user inputs
@@ -619,7 +619,7 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
   ;; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config)
   ;; actually set the correct theme when loading
-  (personal/set-theme))
+  (liesnikov/set-theme))
 
 (use-package minions
   :custom (minions-prominent-modes '(flymake-mode))
@@ -890,10 +890,10 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
   (eshell-directory-change-hook . envrc-reload-or-clear))
 
 (use-package sort-words
-  :commands sort-words personal/sort-split
-  :functions personal/sort-split
+  :commands sort-words liesnikov/sort-split
+  :functions liesnikov/sort-split
   :config
-  (defun personal/sort-split ()
+  (defun liesnikov/sort-split ()
     "Sort and split words per line.
 This function sort words in alphabetical order in the currently selected region
 and inserts a newline before every new letter of the alphabet.
