@@ -231,13 +231,14 @@
   :custom
   (window-resize-pixelwise 't)
   (frame-resize-pixelwise 't)
-  :bind (;; new bindings to change widnow sizes
+  :bind (:map windmove-mode-map
+         ;; new bindings to change widnow sizes
          ;; similar bindings to windmove (see below),
          ;; which has S-<arrow> as moving binding
-         ("S-C-<left>" . shrink-window-horizontally)
-         ("S-C-<right>".  enlarge-window-horizontally)
-         ("S-C-<down>" . shrink-window)
-         ("S-C-<up>" . enlarge-window)))
+         (("C-S-<left>" . shrink-window-horizontally)
+          ("C-S-<right>".  enlarge-window-horizontally)
+          ("C-S-<down>" . shrink-window)
+          ("C-S-<up>" . enlarge-window))))
 
 (use-package nxml-mode
   :ensure nil
