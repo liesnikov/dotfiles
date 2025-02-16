@@ -934,7 +934,7 @@ So that in the end each line has words starting with the same letter"
 (use-package yasnippet
   :commands yas-expand
   :bind (:map yas-minor-mode-map
-              ("C-x C-y e" . yas-expand))
+              ("C-c & e" . yas-expand))
   :custom
   (yas-global-mode t)
   :config
@@ -944,7 +944,7 @@ So that in the end each line has words starting with the same letter"
 (use-package ivy-yasnippet
   :requires ivy yasnippet
   :bind (:map yas-minor-mode-map
-              ("C-x y" . ivy-yasnippet)))
+              ("C-c e" . ivy-yasnippet)))
 
 ;;;## Writing & reading
 
@@ -1170,7 +1170,9 @@ So that in the end each line has words starting with the same letter"
   :hook (prog-mode-hook . copilot-mode)
   :bind (:map copilot-mode-map
               ("C-<tab>" . copilot-tab))
-  :custom (copilot-max-char-warning-disable 't)
+  :custom
+  (copilot-max-char-warning-disable t)
+  (copilot-indent-offset-warning-disable t)
   :config
   (defun copilot-tab (arg)
     (interactive "P")
