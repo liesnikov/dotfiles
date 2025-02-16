@@ -19,7 +19,7 @@
      flymake-vale
      git-link gnu-elpa-keyring-update
      haskell-mode
-     ibuffer-project idris-mode idris2-mode ivy ivy-hydra ivy-rich
+     ibuffer-project idris-mode idris2-mode ivy ivy-hydra ivy-rich ivy-yasnippet
      llm-ollama
      magit markdown-mode merlin minions moody
      nix-haskell-mode nix-mode no-littering noxml-fold
@@ -31,6 +31,7 @@
      ultra-scroll undo-tree unicode-whitespace use-package use-package-ensure-system-package
      vc-use-package
      wc-mode which-key
+     yasnippet yasnippet-snippets
      ))
  '(package-vc-selected-packages
    '((eglot-booster :vc-backend Git :url

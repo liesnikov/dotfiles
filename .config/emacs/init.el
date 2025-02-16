@@ -911,6 +911,20 @@ So that in the end each line has words starting with the same letter"
   (trashed-sort-key '("Date deleted" . t))
   (trashed-date-format "%Y-%m-%d %H:%M:%S"))
 
+(use-package yasnippet
+  :commands yas-expand
+  :bind (:map yas-minor-mode-map
+              ("C-x C-y e" . yas-expand))
+  :custom
+  (yas-global-mode t)
+  :config
+  (unbind-key "TAB" yas-minor-mode-map))
+(use-package yasnippet-snippets
+  :requires yasnippet)
+(use-package ivy-yasnippet
+  :requires ivy yasnippet
+  :bind (:map yas-minor-mode-map
+              ("C-x y" . ivy-yasnippet)))
 
 ;;;## Writing & reading
 
