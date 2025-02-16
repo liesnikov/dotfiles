@@ -185,11 +185,13 @@
   :bind (:map project-prefix-map
          ("m" . project-try-magit))
   :custom
+  (project-buffers-viewer        'project-list-buffers-ibuffer)
   (project-vc-extra-root-markers '(".projectile"))
-  (project-switch-commands '((project-find-file "Find file")
-                             (project-find-dir "Find directory")
-                             (project-try-magit "Magit")
-                             (project-eshell "Eshell")))
+  (project-switch-commands
+   '((project-find-file "Find file")
+     (project-find-dir "Find directory")
+     (project-try-magit "Magit")
+     (project-eshell "Eshell")))
   :init
   (defun project-try-magit ()
     (interactive)
