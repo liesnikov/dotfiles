@@ -586,7 +586,7 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
   (tool-bar-mode nil)
 
   ;; make mode-line line indicator be line-number:colon-number
-  (mode-line-position (list "%l:%c")))
+  (mode-line-position (list "L%4l:C%3c")))
 
 ;; end of built-in packages
 
