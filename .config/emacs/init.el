@@ -774,6 +774,7 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
 
 (use-package rg
   :defer t
+  :commands rg
   ;; search package instead of grep
   :ensure-system-package (rg . ripgrep))
 
@@ -888,7 +889,6 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
   (eshell-directory-change-hook . envrc-reload-or-clear))
 
 (use-package sort-words
-  :defer t
   :commands sort-words personal/sort-split
   :functions personal/sort-split
   :config
@@ -951,18 +951,19 @@ So that in the end each line has words starting with the same letter"
 ;; word processor and markup
 
 (use-package wc-mode
-  ;; count words
-  :defer t)
+  ;; count words in the buffer
+  :commands wc-mode)
 
 (use-package tex
   :defer t
-  :ensure auctex
-  :config
-  (setq TeX-auto-save t))
-
-(use-package tex-mode
   ;; loading auctex directly doesn't work for some reason
   ;; https://github.com/jwiegley/use-package/issues/379
+  :ensure auctex
+  :custom
+  (TeX-auto-save t)
+  (TeX-parse-self t))
+
+(use-package tex-mode
   :after auctex
   :custom
   (reftex-plug-into-AUCTeX t)
@@ -979,13 +980,11 @@ So that in the end each line has words starting with the same letter"
 
 (use-package company-math
   :after company tex-mode
-  :requires company tex-mode
   :config
   (add-to-list 'company-backends 'company-math-symbols-unicode))
 
 (use-package company-auctex
   :after company tex-mode
-  :requires company tex-mode
   :config
   (company-auctex-init))
 
@@ -1228,7 +1227,6 @@ So that in the end each line has words starting with the same letter"
   (haskell-mode-hook . interactive-haskell-mode))
 
 (use-package company-cabal
-  :defer t
   :autoload company-cabal
   :init
   (add-to-list 'company-backends 'company-cabal))
