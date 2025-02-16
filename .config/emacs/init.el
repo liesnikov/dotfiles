@@ -28,26 +28,16 @@
 (eval-when-compile
   (require 'use-package))
 (use-package use-package
+  :demand t
   :custom
   ;; disable :hook suffix to use abnormal hooks with the same syntax
   (use-package-hook-name-suffix nil))
-(use-package use-package-ensure-system-package
-  ;; The :ensure-system-package keyword allows
-  ;; to ensure system binaries exist alongside package declarations.
-  :requires use-package
-  :ensure t)
 
-;; ensure all packages -- installs them
-;; (require 'use-package-ensure)
-;; (setq use-package-always-ensure t)
-
-(unless (package-installed-p 'vc-use-package)
-  (package-vc-install '(vc-use-package :url "https://github.com/slotThe/vc-use-package")))
-(require 'vc-use-package)
-
+;; load no-littering as the very first package
 (use-package no-littering
-  ;; not a system package, but we have to change paths before anything else kicks in
   :ensure t
+  :demand t
+  ;; not a system package, but we have to change paths before anything else kicks in
   :init
   (setq no-littering-etc-directory
           (expand-file-name "etc/" "~/.config/emacs")
@@ -66,8 +56,28 @@
           (no-littering-expand-var-file-name "eshell")
         transient-history-file
         (no-littering-expand-var-file-name "transient/history.el"))
+  ;; don't include litter directories in recentf
+  (require 'recentf)
+  (add-to-list 'recentf-exclude
+               (recentf-expand-file-name no-littering-var-directory))
+  (add-to-list 'recentf-exclude
+               (recentf-expand-file-name no-littering-etc-directory))
   :config
   (no-littering-theme-backups))
+
+(use-package use-package-ensure-system-package
+  ;; The :ensure-system-package keyword allows
+  ;; to ensure system binaries exist alongside package declarations.
+  :requires use-package
+  :demand t)
+
+;; ensure all packages -- installs them
+;; (require 'use-package-ensure)
+;; (setq use-package-always-ensure t)
+
+(unless (package-installed-p 'vc-use-package)
+  (package-vc-install '(vc-use-package :url "https://github.com/slotThe/vc-use-package")))
+(require 'vc-use-package)
 
 ;;;# Built-in packages, for neatness
 
