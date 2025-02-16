@@ -781,8 +781,8 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
   (ivy-use-virtual-buffers t)
 
   :functions issue-1755-fix
-  :hook ('shell-mode-hook  . 'issue-1755-fix)
-        ('eshell-mode-hook . 'issue-1755-fix)
+  :hook (shell-mode-hook  . issue-1755-fix)
+        (eshell-mode-hook . issue-1755-fix)
   :init
   (defun issue-1755-fix ()
     ;; to override ivy-mode, which provides a problematic
@@ -837,10 +837,10 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
 
 (use-package evil-numbers
   ;; increment-decrement numbers as in vim
-  :bind (("C-c +"   . 'evil-numbers/inc-at-pt)
-         ("C-c -"   . 'evil-numbers/dec-at-pt)
-         ("C-c C-+" . 'evil-numbers/inc-at-pt-incremental)
-         ("C-c C--" . 'evil-numbers/dec-at-pt-incremental)))
+  :bind (("C-c +"   . evil-numbers/inc-at-pt)
+         ("C-c -"   . evil-numbers/dec-at-pt)
+         ("C-c C-+" . evil-numbers/inc-at-pt-incremental)
+         ("C-c C--" . evil-numbers/dec-at-pt-incremental)))
 
 (use-package avy
   ;; move around efficiently
@@ -995,7 +995,7 @@ So that in the end each line has words starting with the same letter"
   :vc (:fetcher github
        :repo "tpeacock19/flymake-vale")
   :hook
-  ('find-file-hook . 'flymake-vale-maybe-load)
+  (find-file-hook . flymake-vale-maybe-load)
   :config
   ;; flymake-vale-modes defaults to:
   ;;  => (text-mode latex-mode org-mode markdown-mode message-mode)
