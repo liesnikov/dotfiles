@@ -819,10 +819,13 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
 (use-package counsel
   :custom
   (counsel-mode t)
+  (counsel-find-file-at-point t)
   :bind
-  (("M-x" . counsel-M-x)
-   ("C-x C-f" . counsel-find-file)
-   ("C-c r g" . counsel-rg)))
+  (:map counsel-mode-map
+        (("M-x"     . counsel-M-x)
+         ("C-x C-f" . counsel-find-file)
+         ("C-x f f" . counsel-find-file)
+         ("C-x f r" . counsel-recentf))))
 
 
 (use-package expand-region
