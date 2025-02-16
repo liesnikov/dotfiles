@@ -528,6 +528,15 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
   :ensure nil ; it is built-in
   :hook (after-init . savehist-mode))
 
+(use-package xref
+  :ensure nil
+  :custom
+  (xref-search-program 'ripgrepz)
+  :config
+  :config
+  (add-to-list 'xref-search-program-alist
+               '(ripgrepz . "xargs -0 rg <C> --null -nH --no-heading --no-messages -g '!*/' -z -e <R>")))
+
 (use-package faces
   :ensure nil
   :custom-face
