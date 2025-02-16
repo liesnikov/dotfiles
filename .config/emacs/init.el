@@ -537,6 +537,14 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
   (add-to-list 'xref-search-program-alist
                '(ripgrepz . "xargs -0 rg <C> --null -nH --no-heading --no-messages -g '!*/' -z -e <R>")))
 
+(use-package which-key
+  :ensure nil
+  :defer t
+  ;; provide a popup when you press a button with all bindings that follow
+  :custom
+  (which-key-min-display-lines 10)
+  (which-key-mode t))
+
 (use-package faces
   :ensure nil
   :custom-face
@@ -743,13 +751,6 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
   (company-quickhelp-delay 1)
   :config
   (company-quickhelp-mode))
-
-(use-package which-key
-  :defer t
-  ;; provide a popup when you press a button with all bindings that follow
-  :custom
-  (which-key-min-display-lines 10)
-  (which-key-mode t))
 
 (use-package color-moccur
   ;; provide colours in occur mode

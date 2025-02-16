@@ -30,7 +30,7 @@
      transpose-frame trashed treesit treesit-auto treesit-ispell treesit-langs tuareg
      ultra-scroll undo-tree unicode-whitespace use-package use-package-ensure-system-package
      vc-use-package
-     wc-mode which-key
+     wc-mode
      yasnippet yasnippet-snippets
      ))
  '(package-vc-selected-packages
