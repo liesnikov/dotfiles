@@ -18,7 +18,7 @@
      editorconfig eglot eglot-booster eldoc-box ellama emojify envrc evil evil-numbers expand-region
      flymake-vale
      git-link gnu-elpa-keyring-update
-     haskell-mode
+     haskell-mode highlight-parentheses
      ibuffer-project idris-mode idris2-mode ivy ivy-hydra ivy-rich ivy-yasnippet
      llm-ollama
      magit markdown-mode merlin minions moody

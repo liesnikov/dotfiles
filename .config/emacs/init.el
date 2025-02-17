@@ -194,6 +194,7 @@
      (project-eshell "Eshell")))
   :init
   (defun project-try-magit ()
+    "Try to open magit status for the current project, or prompt for a project directory."
     (interactive)
     (require 'magit)
     (condition-case err
@@ -246,6 +247,7 @@
   :ensure nil
   :config
   (defun xml-pretty-print ()
+    "Pretty print the XML content in the current buffer."
     (interactive)
     sgml-pretty-print))
 
@@ -312,17 +314,17 @@
   ;; define the new function for quitting
   (defun liesnikov/keyboard-quit-dwim ()
     "Do-What-I-Mean behaviour for a general `keyboard-quit'.
-The generic `keyboard-quit' does not do the expected thing when
-the minibuffer is open.  Whereas we want it to close the
-minibuffer, even without explicitly focusing it.
+     The generic `keyboard-quit' does not do the expected thing when
+     the minibuffer is open.  Whereas we want it to close the
+     minibuffer, even without explicitly focusing it.
 
-The DWIM behaviour of this command is as follows:
+     The DWIM behaviour of this command is as follows:
 
-- When the region is active, disable it.
-- When a minibuffer is open, but not focused, close the minibuffer.
-- When the Completions buffer is selected, close it.
-- In every other case use the regular `keyboard-quit'.
-From https://protesilaos.com/codelog/2024-11-28-basic-emacs-configuration/"
+     - When the region is active, disable it.
+     - When a minibuffer is open, but not focused, close the minibuffer.
+     - When the Completions buffer is selected, close it.
+     - In every other case use the regular `keyboard-quit'.
+     From https://protesilaos.com/codelog/2024-11-28-basic-emacs-configuration/"
     (interactive)
     (cond
      ((region-active-p)
@@ -347,11 +349,11 @@ From https://protesilaos.com/codelog/2024-11-28-basic-emacs-configuration/"
   :functions liesnikov/compile-on-save-start
   :defines liesnikov/compile-on-save-mode
   :hook
-  (compilation-finish-functions . compile-bury-buffer-if-successful)
+  (compilation-finish-functions . liesnikov/compile-bury-buffer-if-successful)
   :config
   (defun liesnikov/compile-bury-buffer-if-successful (buffer string)
     "Bury a compilation BUFFER if succeeded without warnings (check STRING).
-Source: https://stackoverflow.com/questions/11043004/emacs-compile-buffer-auto-close"
+     Source: https://stackoverflow.com/questions/11043004/emacs-compile-buffer-auto-close"
     (if (and
          (string-match "compilation" (buffer-name buffer))
          (string-match "finished" string)
@@ -408,7 +410,9 @@ When there is ongoing compilation, nothing happens."
   :ensure nil
   :custom
   ;; Toggle visualization of matching parens
-  (show-paren-mode t))
+  (show-paren-mode t)
+  ;; Show the matching paren right away
+  (show-paren-delay 0))
 
 (use-package whitespace
   :ensure nil
@@ -491,7 +495,7 @@ When there is ongoing compilation, nothing happens."
   ;; not significant that's not in :config, we just don't need anything from dbus
   (defun liesnikov/set-theme (&optional name)
     "Automatically switch themes.
-Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
+     Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
     (interactive (list (if current-prefix-arg
                            (read-from-minibuffer "System theme: ")
                          nil)))
@@ -510,6 +514,9 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
                (load-theme dark-theme t)))))
   :config
   (defun liesnikov/detect-and-switch-theme (servname setpath themename)
+    "Detect and switch theme, the arguments are from the dbus interface.
+     We don't care about SERVNAME, but we do check that SETPATH is the theme one.
+     If it is, we switch to the theme THEMENAME through `liesnikov/set-theme'."
     (if
         (string= setpath
                  "/Net/ThemeName")
@@ -541,7 +548,6 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
 
 (use-package which-key
   :ensure nil
-  :defer t
   ;; provide a popup when you press a button with all bindings that follow
   :custom
   (which-key-min-display-lines 10)
@@ -596,7 +602,9 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
   (tool-bar-mode nil)
 
   ;; make mode-line line indicator be line-number:colon-number
-  (mode-line-position (list "L%4l:C%3c")))
+  (mode-line-position (list "%3l:%2c"))
+
+  (indicate-empty-lines 't))
 
 ;; end of built-in packages
 
@@ -638,7 +646,8 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
   (moody-replace-vc-mode))
 
 (use-package unicode-whitespace
-  :requires whitespace
+  :defer t
+  :after whitespace
   :custom
   (unicode-whitespace-soft-space-mappings
    ;; this is the default except for "Space", initially it's also Middle dot
@@ -706,8 +715,8 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
                      (bookmarks . 5)
                      (registers . 5)))
   (initial-buffer-choice (lambda () (get-buffer-create dashboard-buffer-name)))
-  :config
-  (dashboard-setup-startup-hook))
+  :hook
+  (after-init-hook . dashboard-setup-startup-hook))
 
 ;; a minor mode to enable errors appearing next to the code
 (use-package sideline
@@ -717,13 +726,16 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
 
 ;; because there's no sideline for flymake by default
 (use-package sideline-flymake
+  :defer t
+  :commands sideline-flymake
   :custom
   (sideline-flymake-display-mode 'line) ; 'point to show errors only on point
                                         ; 'line to show errors on the current line
   (sideline-backends-right '(sideline-flymake)))
 
 (use-package sideline-eglot
-  :ensure t
+  :defer t
+  :commands sideline-eglot
   :custom
   (sideline-backends-right '(sideline-eglot)))
 
@@ -767,6 +779,7 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
   )
 
 (use-package ibuffer-project
+  :defer t
   ;; group ibuffer entries by the project
   :after project
   :hook
@@ -799,8 +812,7 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
         (eshell-mode-hook . issue-1755-fix)
   :init
   (defun issue-1755-fix ()
-    ;; to override ivy-mode, which provides a problematic
-    ;; completion-in-region variation:
+    "To override ivy-mode, which provides a problematic completion-in-region variant."
     (setq-local completion-in-region-function #'completion--in-region)))
 (use-package ivy-hydra
   :defer t
@@ -829,10 +841,10 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
 
 
 (use-package expand-region
+  :commands ex/expand-region
   ;; expand selection semantically
   :bind
-  (("M-=" . 'er/expand-region))
-  )
+  (("M-=" . 'er/expand-region)))
 
 (use-package pdf-tools
   ;; view pdfs in emacs
@@ -872,6 +884,7 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
   :config
   (global-undo-tree-mode)
   (defun undo-tree-fix/undo-tree-compress (filename)
+    "Compress the undo-tree history file on save."
     (concat filename ".gz"))
   (advice-add 'undo-tree-make-history-save-file-name :filter-return
               #'undo-tree-fix/undo-tree-compress))
@@ -879,9 +892,12 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
 (use-package envrc
   :ensure-system-package direnv
   ;; package for direnv, usefull when working with nix
+  :commands envrc-allow envrc-reload-or-clear
+  :custom
+  (envrc-global-mode t)
   :config
-  (envrc-global-mode)
-  (defun envrc-reload-or-clear ()
+  (defun liesnikov/envrc-reload-or-clear ()
+   "Clear the direnv environment and reload, if there's another one."
     (interactive)
     (envrc--clear (current-buffer))
     (condition-case nil
@@ -892,7 +908,7 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
       (user-error
        (message "Unloaded env for %s" (buffer-name)))))
   :hook
-  (eshell-directory-change-hook . envrc-reload-or-clear))
+  (eshell-directory-change-hook . liesniov/envrc-reload-or-clear))
 
 (use-package sort-words
   :commands sort-words liesnikov/sort-split
@@ -900,9 +916,9 @@ Detect xfce4 system theme (or NAME) and switch Emacs theme accordingly."
   :config
   (defun liesnikov/sort-split ()
     "Sort and split words per line.
-This function sort words in alphabetical order in the currently selected region
-and inserts a newline before every new letter of the alphabet.
-So that in the end each line has words starting with the same letter"
+     This function sort words in alphabetical order in the currently selected region
+     and inserts a newline before every new letter of the alphabet.
+     So that in the end each line has words starting with the same letter"
     (interactive)
     ;; if the region is not selected choose current line
     (let ((beg (if (region-active-p) (region-beginning) (line-beginning-position)))
@@ -941,14 +957,25 @@ So that in the end each line has words starting with the same letter"
   :commands yas-expand
   :bind (:map yas-minor-mode-map
               ("C-c & e" . yas-expand))
-  :custom
-  (yas-global-mode t)
+  ;;:custom
+  ;;(yas-global-mode t)
+  :hook
+  (prog-mode . yas-minor-mode)
+  (org-mode . yas-minor-mode)
+  (markdown-mode . yas-minor-mode)
+  (html-mode . yas-minor-mode)
+  :functions liesnikov/disable-yas-if-no-snippets
+  :hook (yas-minor-mode . liesnikov/disable-yas-if-no-snippets)
   :config
-  (unbind-key "TAB" yas-minor-mode-map))
+  (unbind-key "TAB" yas-minor-mode-map)
+  (defun liesnikov/disable-yas-if-no-snippets ()
+    "Disable yasnippet if no snippets are found for the current mode."
+    (when (and yas-minor-mode (null (yas--get-snippet-tables)))
+      (yas-minor-mode -1))))
 (use-package yasnippet-snippets
-  :requires yasnippet)
+  :after yas-expand)
 (use-package ivy-yasnippet
-  :requires ivy yasnippet
+  :after yasnippet
   :bind (:map yas-minor-mode-map
               ("C-c e" . ivy-yasnippet)))
 
@@ -1002,6 +1029,7 @@ So that in the end each line has words starting with the same letter"
   :commands olivetti
   :config
   (defun olivetti ()
+    "Toggle olivetti mode, but interactively."
     (interactive)
     (call-interactively #'olivetti-mode )))
 
@@ -1022,6 +1050,7 @@ So that in the end each line has words starting with the same letter"
 ;;  (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode)))
 
 (use-package markdown-mode
+  :mode "\\.\\(?:md\\|markdown\\|mkd\\|mdown\\|mkdn\\|mdwn\\)\\'"
   :config
   ;; from https://gist.github.com/kleinschmidt/5ab0d3c423a7ee013a2c01b3919b009a
   ;; define markdown citation formats
@@ -1033,18 +1062,16 @@ So that in the end each line has words starting with the same letter"
           (?p    . "[@%l]")
           (?t    . "@%l")))
 
-  ;; wrap reftex-citation with local variables for markdown format
-  (defun markdown-reftex-citation ()
+  (defun liesnikov/markdown-reftex-citation ()
+    "Wrap reftex-citation with local variables for markdown format."
     (interactive)
     (let ((reftex-cite-format markdown-cite-format)
           (reftex-cite-key-separator "; @"))
       (reftex-citation)))
-  :hook
   ;; bind modified reftex-citation to C-c[, without enabling reftex-mode
   ;; https://www.gnu.org/software/auctex/manual/reftex/Citations-Outside-LaTeX.html#SEC31
-  (markdown-mode-hook . (lambda ()
-                          (define-key markdown-mode-map "\C-c["
-                            'markdown-reftex-citation))))
+  :bind (:map markdown-mode-map
+              ("C-c [" . liesnikov/markdown-reftex-citation)))
 
 (use-package org
   :bind (:map org-mode-map
@@ -1151,14 +1178,17 @@ So that in the end each line has words starting with the same letter"
   :config (eglot-booster-mode))
 
 (use-package treesit-langs
+  :defer t
   :requires treesit)
 
 (use-package treesit-auto
+  :defer t
   :requires treesit
   :config
   (global-treesit-auto-mode))
 
 (use-package treesit-ispell
+  :defer t
   :requires treesit)
 
 ;; alternative to treesit built-in mode
@@ -1175,12 +1205,14 @@ So that in the end each line has words starting with the same letter"
 (use-package copilot
   :hook (prog-mode-hook . copilot-mode)
   :bind (:map copilot-mode-map
-              ("C-<tab>" . copilot-tab))
+              ("C-<tab>" . liesnikov/copilot-tab))
   :custom
   (copilot-max-char-warning-disable t)
   (copilot-indent-offset-warning-disable t)
+  (copilot-version "1.271.0") ; latest release is weird and has nil as default
   :config
-  (defun copilot-tab (arg)
+  (defun liesnikov/copilot-tab (arg)
+    "Smarter copilot autocompletion, if ARG is provided, go to the next completion, otherwise accept the current one."
     (interactive "P")
     (if (bound-and-true-p arg)
         (copilot-next-completion)
@@ -1205,6 +1237,40 @@ So that in the end each line has words starting with the same letter"
   :requires nxml-mode
   :hook
   (nxml-mode-hook . (lambda () (noxml-fold-mode 1))))
+
+;; (use-package paredit
+;;   ;; overrides too many bindings, including M-?
+;;   :defer t
+;;   :bind (:map paredit-mode-map
+;;               ("(" . paredit-open-round)
+;;               (")" . paredit-close-round)
+;;               ("[" . paredit-open-square)
+;;               ("]" . paredit-close-square)
+;;               ("{" . paredit-open-curly)
+;;               ("}" . paredit-close-curly)
+;;               ("\"" . paredit-doublequote)
+;;               ("C-d" . paredit-delete-char)
+;;               ("C-j" . paredit-newline)
+;;               ("C-k" . paredit-kill)
+;;               ("RET" . paredit-newline)
+;;               ("DEL" . paredit-backward-delete))
+;;   :hook ((emacs-lisp-mode-hook
+;;           eval-expression-minibuffer-setup-hook
+;;           ielm-mode-hook
+;;           lisp-interaction-mode-hook
+;;           lisp-mode-hook) . paredit-mode))
+
+;; (use-package rainbow-delimiters
+;;   ;; makes the colours weird, hard to spot parentheses
+;;   :defer t
+;;   :hook
+;;   (prog-mode-hook . rainbow-delimiters-mode))
+
+(use-package highlight-parentheses
+  ;; dynamically highlights the parentheses surrounding point based on nesting-level
+  :defer t
+  :hook ((minibuffer-setup-hook
+          prog-mode-hook) . highlight-parentheses-mode))
 
 ;;;### rust
 (use-package rustic
