@@ -1007,29 +1007,34 @@ When there is ongoing compilation, nothing happens."
 
 (use-package yasnippet
   :commands yas-expand
-  :bind (:map yas-minor-mode-map
-              ("C-c & e" . yas-expand))
-  ;;:custom
-  ;;(yas-global-mode t)
-  :hook
-  (prog-mode . yas-minor-mode)
-  (org-mode . yas-minor-mode)
-  (markdown-mode . yas-minor-mode)
-  (html-mode . yas-minor-mode)
+  :autoload yas--get-snippet-tables
+  :bind
+    (:map yas-minor-mode-map
+          ("C-c p y" . yas-expand))
+  :custom
+  ;; this triggers eager package load, but otherwise we have to list all the modes manually
+  (yas-global-mode t)
+  (yas-snippet-dirs
+   (cons
+    (concat user-emacs-directory "yasnippets")
+    yas-snippet-dirs)))
+(use-package yasnippet-snippets
+  :defer t
   :functions liesnikov/disable-yas-if-no-snippets
   :hook (yas-minor-mode . liesnikov/disable-yas-if-no-snippets)
   :config
   (unbind-key "TAB" yas-minor-mode-map)
+  ;; defined in yasnipet-snippets because otherwise we don't get know what snippets exist
   (defun liesnikov/disable-yas-if-no-snippets ()
     "Disable yasnippet if no snippets are found for the current mode."
     (when (and yas-minor-mode (null (yas--get-snippet-tables)))
       (yas-minor-mode -1))))
-(use-package yasnippet-snippets
-  :after yas-expand)
 (use-package ivy-yasnippet
-  :after yasnippet
-  :bind (:map yas-minor-mode-map
-              ("C-c e" . ivy-yasnippet)))
+  :commands ivy-yasnippet
+  :bind
+  ;; because when loading yas-minor-mode-map isn't defined
+  (:map yas-minor-mode-map
+        ("C-c y" . ivy-yasnippet)))
 
 ;;;## Writing & reading
 
