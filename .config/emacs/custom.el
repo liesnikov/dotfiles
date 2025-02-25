@@ -29,7 +29,6 @@
      sideline sideline-eglot sideline-flymake sort-words swiper
      transpose-frame trashed treesit treesit-auto treesit-ispell treesit-langs tuareg
      ultra-scroll undo-tree unicode-whitespace use-package use-package-ensure-system-package
-     vc-use-package
      wc-mode
      yasnippet yasnippet-snippets
      ))
@@ -41,9 +40,7 @@
      (idris2-mode :vc-backend Git :url
                   "https://github.com/idris-community/idris2-mode")
      (ultra-scroll :vc-backend Git :url
-                   "https://github.com/jdtsmith/ultra-scroll")
-     (vc-use-package :vc-backend Git :url
-                     "https://github.com/slotThe/vc-use-package")))
+                   "https://github.com/jdtsmith/ultra-scroll")))
  '(safe-local-variable-values nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

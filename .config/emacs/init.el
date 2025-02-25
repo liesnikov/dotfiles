@@ -75,10 +75,6 @@
 ;; (require 'use-package-ensure)
 ;; (setq use-package-always-ensure t)
 
-(unless (package-installed-p 'vc-use-package)
-  (package-vc-install '(vc-use-package :url "https://github.com/slotThe/vc-use-package")))
-(require 'vc-use-package)
-
 ;;;# Built-in packages, for neatness
 
 (use-package desktop
@@ -740,8 +736,7 @@ When there is ongoing compilation, nothing happens."
   (sideline-backends-right '(sideline-eglot)))
 
 (use-package ultra-scroll
-  :vc (:fetcher github
-       :repo "jdtsmith/ultra-scroll")
+  :vc (:url "https://github.com/jdtsmith/ultra-scroll")
   :custom
   (scroll-conservatively 101) ; important!
   (scroll-margin 0)
@@ -1035,8 +1030,7 @@ When there is ongoing compilation, nothing happens."
 
 (use-package flymake-vale
   :ensure-system-package vale
-  :vc (:fetcher github
-       :repo "tpeacock19/flymake-vale")
+  :vc (:url "https://github.com/tpeacock19/flymake-vale")
   :hook
   (find-file-hook . flymake-vale-maybe-load)
   :config
@@ -1173,7 +1167,7 @@ When there is ongoing compilation, nothing happens."
 (use-package eglot-booster
   :after eglot
   :requires lsp-booster
-  :vc (:fetcher github :repo "jdtsmith/eglot-booster")
+  :vc (:url "https://github.com/jdtsmith/eglot-booster")
   :ensure-system-package (emacs-lsp-booster . ">&2 echo 'Need to install emacs lsp booster manually'")
   :config (eglot-booster-mode))
 
@@ -1323,7 +1317,7 @@ When there is ongoing compilation, nothing happens."
 (use-package idris2-mode
   :commands idris2-mode idris2-ipkg-mode
   :mode "\\.idr$" ("\\.ipkg$" . idris2-ipkg-mode)
-  :vc (:fetcher github :repo "idris-community/idris2-mode"))
+  :vc (:url "https://idris-community/idris2-mode"))
 
 ;;;#### coq
 (use-package proof-general
