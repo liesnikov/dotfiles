@@ -13,7 +13,7 @@
    '(
      auctex avy
      breadcrumb
-     color-moccur company company-auctex company-box company-cabal company-coq company-haskell company-quickhelp copilot counsel counsel-projectile
+     cape color-moccur company-haskell copilot corfu counsel counsel-projectile
      dashboard dired-subtree dockerfile-mode doom-themes
      editorconfig eglot eglot-booster eldoc-box ellama emojify envrc evil evil-numbers expand-region
      flymake-vale

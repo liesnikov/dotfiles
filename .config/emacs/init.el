@@ -301,8 +301,7 @@
   ("M-l" . downcase-dwim)
   ("M-c" . capitalize-dwim)
   ("M-u" . upcase-dwim)
-  (:map global-map
-        ("C-g" . liesnikov/keyboard-quit-dwim))
+  ("C-g" . liesnikov/keyboard-quit-dwim)
   :functions liesnikov/keyboard-quit-dwim
   :config
   ;; C-o runs `open-line', which I never use and is annoying to hit by accident
@@ -448,8 +447,9 @@ When there is ongoing compilation, nothing happens."
   :custom (flymake-proc-compilation-prevents-syntax-check nil)
   :hook ((prog-mode-hook LaTeX-mode) . flymake-mode)
   :bind (:map flymake-mode-map
-              ("C-c n" . flymake-goto-next-error)
-              ("C-c p" . flymake-goto-next-error)))
+              ("M-g n" . flymake-goto-next-error)
+              ("M-g p" . flymake-goto-next-error))
+  )
 
 (use-package flyspell
   :ensure nil
@@ -542,6 +542,27 @@ When there is ongoing compilation, nothing happens."
   (add-to-list 'xref-search-program-alist
                '(ripgrepz . "xargs -0 rg <C> --null -nH --no-heading --no-messages -g '!*/' -z -e <R>")))
 
+(use-package completion-preview
+  :ensure nil
+  :custom
+  (completion-preview-minimum-symbol-length 3)
+  (global-completion-preview-mode 't)
+  :bind (:map completion-preview-active-mode-map
+              ;; Bindings that take effect when the preview is shown:
+              ;; Cycle the completion candidate that the preview shows
+              ( ("M-n" . completion-preview-next-candidate)
+                ("M-p" . completion-preview-prev-candidate)
+                ;; Convenient alternative to C-i after typing one of the above
+                ("M-i" . completion-preview-insert)))
+  :config
+  ;; Non-standard commands to that should show the preview:
+  ;; Org mode has a custom `self-insert-command'
+  ;; (push 'org-self-insert-command completion-preview-commands)
+  ;; Paredit has a custom `delete-backward-char' command
+  ;; (push 'paredit-backward-delete completion-preview-commands)
+  )
+
+
 (use-package which-key
   :ensure nil
   ;; provide a popup when you press a button with all bindings that follow
@@ -589,8 +610,6 @@ When there is ongoing compilation, nothing happens."
   ;; The number of lines to try scrolling a window by when point moves out.
   (scroll-step 1)
 
-  ;; pressing tab always indents
-  (tab-always-indent t)
   ;; display tab width
   (tab-width 2)
 
@@ -600,7 +619,20 @@ When there is ongoing compilation, nothing happens."
   ;; make mode-line line indicator be line-number:colon-number
   (mode-line-position (list "%3l:%2c"))
 
-  (indicate-empty-lines 't))
+  (indicate-empty-lines 't)
+
+  ;; Enable indentation+completion using the TAB key.
+  ;; `completion-at-point' is often bound to M-TAB.
+  (tab-always-indent 'complete)
+
+  ;; Emacs 30 and newer: Disable Ispell completion function.
+  ;; Try `cape-dict' as an alternative.
+  (text-mode-ispell-word-completion nil)
+
+  ;; Hide commands in M-x which do not apply to the current mode.  Corfu
+  ;; commands are hidden, since they are not used via M-x. This setting is
+  ;; useful beyond Corfu.
+  (read-extended-command-predicate #'command-completion-default-include-p))
 
 ;; end of built-in packages
 
@@ -745,25 +777,49 @@ When there is ongoing compilation, nothing happens."
 ;;;## General goodies
 
 ;;autocomplete
-(use-package company
-  :custom
-  (global-company-mode 1)
-  (company-idle-delay 0)
-  (company-minimum-prefix-length 1)
-  (company-selection-wrap-around t))
 
-(use-package company-box
-  :hook (company-mode-hook . company-box-mode))
-
-(use-package company-quickhelp
+(use-package corfu
   :custom
-  (company-quickhelp-delay 1)
-  :config
-  (company-quickhelp-mode))
+  ;; Make the popup appear quicker
+  (corfu-popupinfo-delay '(0.5 . 0.5))
+  ;; don't vary the width too much
+  (corfu-min-width 40)
+  (corfu-max-width 80)
+  ;; only show a few completions at a tim
+  (corfu-count 10)
+  (corfu-scroll-margin 2)
+  ;; Have Corfu wrap around when going up
+  (corfu-cycle t)
+  (corfu-preselect-first t)
+  ;; Enable Corfu
+  (global-corfu-mode t)
+  ;; Enable Corfu history mode to act like `prescient'
+  (corfu-history-mode t)
+  ;; Allow Corfu to show help text next to suggested completion
+  (corfu-popupinfo-mode t)
+  ;; On the exact match still show the completion
+  (corfu-on-exact-match 'show))
+
+(use-package cape
+  :ensure t
+  ;; Bind prefix keymap providing all Cape commands under a mnemonic key.
+  ;; Press C-c p ? to for help.
+  :bind ("C-c p" . cape-prefix-map) ;; Alternative key: M-<tab>, M-p, M-+
+  :hook
+  ;; Add to the global default value of `completion-at-point-functions' which is
+  ;; used by `completion-at-point'.  The order of the functions matters, the
+  ;; first function returning a result wins.  Note that the list of buffer-local
+  ;; completion functions takes precedence over the global list.
+  (completion-at-point-functions cape-dabbrev)
+  (completion-at-point-functions cape-dabbrev)
+  (completion-at-point-functions cape-file)
+  (completion-at-point-functions cape-elisp-block)
+  ;(completion-at-point-functions cape-history)
+  )
 
 (use-package color-moccur
   ;; provide colours in occur mode
-  :bind (("M-s O" . moccur)))
+  :bind (("M-s o" . moccur)))
 
 (use-package transpose-frame
   ;; turn frame around, somehow not available by default
@@ -887,7 +943,8 @@ When there is ongoing compilation, nothing happens."
 (use-package envrc
   :ensure-system-package direnv
   ;; package for direnv, usefull when working with nix
-  :commands envrc-allow envrc-reload-or-clear
+  :commands envrc-allow
+  :functions liesnikov/envrc-reload-or-clear
   :custom
   (envrc-global-mode t)
   :config
@@ -1005,16 +1062,6 @@ When there is ongoing compilation, nothing happens."
   (LaTeX-mode-hook . turn-on-reftex)
   ;; with Emacs latex mode
   (latex-mode-hook . turn-on-reftex))
-
-(use-package company-math
-  :after company tex-mode
-  :config
-  (add-to-list 'company-backends 'company-math-symbols-unicode))
-
-(use-package company-auctex
-  :after company tex-mode
-  :config
-  (company-auctex-init))
 
 (use-package olivetti
   ;; package for writing mode, introduces margins
@@ -1197,9 +1244,10 @@ When there is ongoing compilation, nothing happens."
   :mode "\\.dockerfile\\'")
 
 (use-package copilot
-  :hook (prog-mode-hook . copilot-mode)
-  :bind (:map copilot-mode-map
-              ("C-<tab>" . liesnikov/copilot-tab))
+  :bind
+  ("C-<tab>" . liesnikov/copilot-tab)
+  (:map copilot-mode-map
+        ("C-<tab>" . liesnikov/copilot-tab))
   :custom
   (copilot-max-char-warning-disable t)
   (copilot-indent-offset-warning-disable t)
@@ -1294,10 +1342,6 @@ When there is ongoing compilation, nothing happens."
   (haskell-mode-hook . eglot-ensure)
   (haskell-mode-hook . interactive-haskell-mode))
 
-(use-package company-cabal
-  :autoload company-cabal
-  :init
-  (add-to-list 'company-backends 'company-cabal))
 
 ;;(use-package lsp-haskell
 ;;  :requires lsp-mode lsp-ui
@@ -1334,17 +1378,11 @@ When there is ongoing compilation, nothing happens."
     (proof-three-window-enable nil)
     (proof-toolbar-enable t))
 
-(use-package company-coq
-  :requires company
-  :hook
-  ;; company-coq is an addon on top of proofgeneral,
-  ;; enable it as we enter coq mode
-  (coq-mode-hook . company-coq-mode))
-
 ;;(add-to-list
 ;; due to a weird bug, both tokens from PG and company-coq are used
 ;; which results in "token undefined" errors when using PG ones
 ;; 'coq-mode-hook (unicode-tokens-use-shortcuts nil))
+
 
 ;;;#### agda
 ;; agda2 mode, gets appended by `agda-mode setup`
