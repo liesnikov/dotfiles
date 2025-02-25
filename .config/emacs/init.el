@@ -1256,7 +1256,6 @@ When there is ongoing compilation, nothing happens."
   :custom
   (copilot-max-char-warning-disable t)
   (copilot-indent-offset-warning-disable t)
-  (copilot-version "1.271.0") ; latest release is weird and has nil as default
   :config
   (defun liesnikov/copilot-tab (arg)
     "Smarter copilot autocompletion, if ARG is provided, go to the next completion, otherwise accept the current one."
@@ -1347,7 +1346,6 @@ When there is ongoing compilation, nothing happens."
   (haskell-mode-hook . eglot-ensure)
   (haskell-mode-hook . interactive-haskell-mode))
 
-
 ;;(use-package lsp-haskell
 ;;  :requires lsp-mode lsp-ui
 ;;  :hook
@@ -1417,6 +1415,45 @@ When there is ongoing compilation, nothing happens."
 ;;; Bindings:
 
 ;;; Code:
+
+;; Screenshot to svg
+(defun liesnikov/screenshot-svg ()
+  "Save a screenshot of the current frame as an SVG image.
+Saves to a temp file and puts the filename in the kill ring.
+Source: https://old.reddit.com/r/emacs/comments/idz35e/emacs_27_can_take_svg_screenshots_of_itself/"
+  (interactive)
+  (let* ((filename (make-temp-file "Emacs" nil ".svg"))
+         (data (x-export-frames nil 'svg)))
+    (with-temp-file filename
+      (insert data))
+    (kill-new filename)
+    (message filename)))
+
+(defun liesnikov/kill-filename ()
+  "Copy current buffer's file path to 'kill-ring'."
+  (interactive)
+  (kill-new buffer-file-name))
+
+(defun liesnikov/get-filename-line-column (&optional full-path)
+  "Get current buffer's file path and line/column location.
+If FULL-PATH is non-nil use full path, otherwise relative."
+  (require 'magit)
+  (let ((line (current-line))
+        (column (current-column))
+        (filename (if full-path
+                      (buffer-file-name)
+                      (magit-file-relative-name))))
+  (concat filename
+          ":"
+          (number-to-string line)
+          ":"
+          (number-to-string column))))
+
+(defun liesnikov/kill-filename-line-column (&optional full-path)
+  "Copy current buffer's file path to kill ring.
+If FULL-PATH is non-nil use full path, otherwise relative."
+  (interactive)
+  (kill-new (liesnikov/get-filename-line-column full-path)))
 
 ;; ## added by OPAM user-setup for emacs / base ## 56ab50dc8996d2bb95e7856a6eddb17b ## you can edit, but keep this line
 ;; (require 'opam-user-setup "~/.config/emacs/opam-user-setup.el")
