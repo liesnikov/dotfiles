@@ -240,7 +240,10 @@
           ("C-S-<up>" . enlarge-window))))
 
 (use-package nxml-mode
+  :defer t
   :ensure nil
+  :mode ("\\.\\(xml\\|xsd\\|wsdl\\)\\'")
+  :functions xml-pretty-print
   :config
   (defun xml-pretty-print ()
     "Pretty print the XML content in the current buffer."
@@ -430,7 +433,7 @@ When there is ongoing compilation, nothing happens."
   ;;   https://emacs.stackexchange.com/questions/38771/magit-status-does-not-open-when-using-global-whitespace-mode-1/38778#38778
   ;; * for magit it breaks commit flow
   ;; * for tex mode -- it breaks org-mode tex export
-  (whitespace-global-modes '(not magit-mode tex-mode org-mode)))
+  (whitespace-global-modes '(not magit-mode tex-mode org-mode agda2-mode)))
 
 (use-package pixel-scroll
   :ensure nil
@@ -660,9 +663,10 @@ When there is ongoing compilation, nothing happens."
   (liesnikov/set-theme))
 
 (use-package minions
-  :custom (minions-prominent-modes '(flymake-mode))
+  :custom
+  (minions-prominent-modes '(flymake-mode))
   ;; hide minor modes under a drop-down menu
-  :config (minions-mode 1))
+  (minions-mode 1))
 
 (use-package moody
   ;; modeline as tabs
@@ -801,7 +805,6 @@ When there is ongoing compilation, nothing happens."
   (corfu-on-exact-match 'show))
 
 (use-package cape
-  :ensure t
   ;; Bind prefix keymap providing all Cape commands under a mnemonic key.
   ;; Press C-c p ? to for help.
   :bind ("C-c p" . cape-prefix-map) ;; Alternative key: M-<tab>, M-p, M-+
@@ -856,15 +859,7 @@ When there is ongoing compilation, nothing happens."
   ;; technically not an ivy variable, but useful to have for some reasons atm unknown to me
   (enable-recursive-minibuffers t)
   ;; add recent files and/or bookmarks to ‘ivy-switch-buffer’.
-  (ivy-use-virtual-buffers t)
-
-  :functions issue-1755-fix
-  :hook (shell-mode-hook  . issue-1755-fix)
-        (eshell-mode-hook . issue-1755-fix)
-  :init
-  (defun issue-1755-fix ()
-    "To override ivy-mode, which provides a problematic completion-in-region variant."
-    (setq-local completion-in-region-function #'completion--in-region)))
+  (ivy-use-virtual-buffers t))
 (use-package ivy-hydra
   :defer t
   :requires ivy)
@@ -1009,11 +1004,10 @@ When there is ongoing compilation, nothing happens."
   :commands yas-expand
   :autoload yas--get-snippet-tables
   :bind
-    (:map yas-minor-mode-map
-          ("C-c p y" . yas-expand))
+  ("C-c p y" . yas-expand)
+  (:map yas-minor-mode-map
+        ("C-c p y" . yas-expand))
   :custom
-  ;; this triggers eager package load, but otherwise we have to list all the modes manually
-  (yas-global-mode t)
   (yas-snippet-dirs
    (cons
     (concat user-emacs-directory "yasnippets")
@@ -1030,11 +1024,17 @@ When there is ongoing compilation, nothing happens."
     (when (and yas-minor-mode (null (yas--get-snippet-tables)))
       (yas-minor-mode -1))))
 (use-package ivy-yasnippet
-  :commands ivy-yasnippet
+  :hook (ivy-yasnippet yas-minor-mode)
   :bind
+  ("C-c y" . ivy-yasnippet)
   ;; because when loading yas-minor-mode-map isn't defined
   (:map yas-minor-mode-map
-        ("C-c y" . ivy-yasnippet)))
+        ("C-c y" . ivy-yasnippet))
+  :config
+  ;; this is to load yas-minor-mode on-demand whenever
+  ;; ivy-yasnippet is invoked
+  (advice-add 'ivy-yasnippet :before
+              (lambda () (yas-minor-mode 1))))
 
 ;;;## Writing & reading
 
@@ -1280,7 +1280,7 @@ When there is ongoing compilation, nothing happens."
       :chat-model "llama3.2" :embedding-model "llama3.2")))
 
 (use-package noxml-fold
-  :requires nxml-mode
+  :defer t
   :hook
   (nxml-mode-hook . (lambda () (noxml-fold-mode 1))))
 
@@ -1394,7 +1394,12 @@ When there is ongoing compilation, nothing happens."
   (load-file (let ((coding-system-for-read 'utf-8))
                 (shell-command-to-string "agda-mode locate"))))
 
-(agda-load)
+;; don't load eagerly, wait till we drop into an appropriate file
+;;(agda-load)
+(use-package agda2-mode
+  :mode ("\\.l?agda\\'")
+  :load-path
+  (lambda () (file-name-directory (shell-command-to-string "agda-mode locate"))))
 
 ;;; Commentary:
 
