@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: Hyperlink https
+# key: https
+# --
+[${1:Raw link}](https://$1)

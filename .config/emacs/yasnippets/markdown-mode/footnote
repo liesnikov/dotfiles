@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: Footnote
+# key: footnote
+# --
+[^${1:Footnote link name}]
+[^$1]: ${2:Footnote text}
