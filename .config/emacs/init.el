@@ -28,6 +28,7 @@
 (eval-when-compile
   (require 'use-package))
 (use-package use-package
+  :ensure nil
   :demand t
   :custom
   ;; disable :hook suffix to use abnormal hooks with the same syntax
@@ -451,7 +452,7 @@ When there is ongoing compilation, nothing happens."
   :hook ((prog-mode-hook LaTeX-mode) . flymake-mode)
   :bind (:map flymake-mode-map
               ("M-g n" . flymake-goto-next-error)
-              ("M-g p" . flymake-goto-next-error))
+              ("M-g p" . flymake-goto-prev-error))
   )
 
 (use-package flyspell
@@ -587,6 +588,11 @@ When there is ongoing compilation, nothing happens."
                        :foundry "ADBO"
                        :family "Source Sans 3")))))
 
+(use-package ispell
+  :ensure nil
+  :custom
+  (ispell-dictionary "en_GB-w_accents"))
+
 ;; re-evaluate this on restart if emacs gets stuck with wrong colours
 ;; to select the whole sexpr put carriage on the first parenthesis and press C-M-space
 (use-package emacs
@@ -635,7 +641,9 @@ When there is ongoing compilation, nothing happens."
   ;; Hide commands in M-x which do not apply to the current mode.  Corfu
   ;; commands are hidden, since they are not used via M-x. This setting is
   ;; useful beyond Corfu.
-  (read-extended-command-predicate #'command-completion-default-include-p))
+  ;;(read-extended-command-predicate #'command-completion-default-include-p)
+  (read-extended-command-predicate nil)
+  )
 
 ;; end of built-in packages
 
@@ -752,13 +760,11 @@ When there is ongoing compilation, nothing happens."
 
 ;; a minor mode to enable errors appearing next to the code
 (use-package sideline
-  :ensure t
   :hook (flymake-mode-hook . sideline-mode)
         (eglot-mode-hook . sideline-mode))
 
 ;; because there's no sideline for flymake by default
 (use-package sideline-flymake
-  :defer t
   :commands sideline-flymake
   :custom
   (sideline-flymake-display-mode 'line) ; 'point to show errors only on point
@@ -1087,6 +1093,8 @@ When there is ongoing compilation, nothing happens."
 
 (use-package markdown-mode
   :mode "\\.\\(?:md\\|markdown\\|mkd\\|mdown\\|mkdn\\|mdwn\\)\\'"
+  :hook (markdown-mode-hook . flymake-mode)
+        (markdown-mode-hook . eglot-ensure)
   :config
   ;; from https://gist.github.com/kleinschmidt/5ab0d3c423a7ee013a2c01b3919b009a
   ;; define markdown citation formats
@@ -1176,10 +1184,14 @@ When there is ongoing compilation, nothing happens."
 
 ;; Language server protocol
 (use-package eglot
+  :ensure nil
   :hook
   (haskell-mode-hook . eglot-ensure)
   (sh-mode-hook . eglot-ensure)
   (bash-ts-mode-hook . eglot-ensure)
+  :bind (:map eglot-mode-map
+              (("C-c q" . eglot-code-action-quickfix)
+               ("C-c c" . eglot-code-actions)))
   :custom
   (eglot-autoshutdown t)  ;; shutdown language server after closing last file
   (eglot-confirm-server-initiated-edits nil)  ;; allow edits without confirmation
@@ -1212,7 +1224,8 @@ When there is ongoing compilation, nothing happens."
   :requires lsp-booster
   :vc (:url "https://github.com/jdtsmith/eglot-booster")
   :ensure-system-package (emacs-lsp-booster . ">&2 echo 'Need to install emacs lsp booster manually'")
-  :config (eglot-booster-mode))
+  :custom
+  (eglot-booster-mode t))
 
 (use-package treesit-langs
   :defer t
