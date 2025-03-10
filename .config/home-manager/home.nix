@@ -19,6 +19,7 @@
       xkb-switch # to switch languages between different windows
 
       vale # for writing
+      vale-ls
 
       nodejs # for github copilot
       emacs-lsp-booster # for lsp-booster

@@ -16,7 +16,6 @@
      cape color-moccur company-haskell copilot corfu counsel counsel-projectile
      dashboard dired-subtree dockerfile-mode doom-themes
      editorconfig eglot eglot-booster eldoc-box ellama emojify envrc evil evil-numbers expand-region
-     flymake-vale
      git-link gnu-elpa-keyring-update
      haskell-mode highlight-parentheses
      ibuffer-project idris-mode idris2-mode ivy ivy-hydra ivy-rich ivy-yasnippet
@@ -35,8 +34,6 @@
  '(package-vc-selected-packages
    '((eglot-booster :vc-backend Git :url
                     "https://github.com/jdtsmith/eglot-booster")
-     (flymake-vale :vc-backend Git :url
-                   "https://github.com/tpeacock19/flymake-vale")
      (idris2-mode :vc-backend Git :url
                   "https://github.com/idris-community/idris2-mode")
      (ultra-scroll :vc-backend Git :url

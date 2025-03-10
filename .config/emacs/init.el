@@ -1080,16 +1080,6 @@ When there is ongoing compilation, nothing happens."
     (interactive)
     (call-interactively #'olivetti-mode )))
 
-(use-package flymake-vale
-  :ensure-system-package vale
-  :vc (:url "https://github.com/tpeacock19/flymake-vale")
-  :hook
-  (find-file-hook . flymake-vale-maybe-load)
-  :config
-  ;; flymake-vale-modes defaults to:
-  ;;  => (text-mode latex-mode org-mode markdown-mode message-mode)
-  (add-to-list 'flymake-vale-modes 'adoc-mode))
-
 ;;(use-package nov
 ;;  ;; Major mode for reading EPUB documents
 ;;  :config
@@ -1200,6 +1190,7 @@ When there is ongoing compilation, nothing happens."
 ;;                    (hlint
 ;;                     (globalOn . t))))))
   (add-to-list 'eglot-server-programs '((sh-mode bash-ts-mode) . ("bash-language-server" "start")))
+  (add-to-list 'eglot-server-programs '((markdown-mode rst-mode html-mode org-mode) . ("vale-ls")))
   )
 
 (use-package eldoc-box
