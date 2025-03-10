@@ -25,7 +25,12 @@ if [ -d "$HOME/.local/bin" ] && [[ ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
     PATH="$HOME/.local/bin:$PATH"
 fi
 
+# setting XDG variables
 export XDG_DATA_HOME="$HOME"/.local/share
+export XDG_CONFIG_HOME="$HOME"/.config
+export XDG_STATE_HOME="$HOME"/.local/state
+export XDG_CACHE_HOME="$HOME"/.cache
+
 export CABAL_DIR="$XDG_DATA_HOME"/cabal
 
 if [ -d "$CABAL_DIR/bin" ] && [[ ":$PATH:" != *":$CABAL_DIR/bin:"* ]]; then
