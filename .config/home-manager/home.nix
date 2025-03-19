@@ -20,6 +20,7 @@
 
       vale # for writing
       vale-ls
+      texlab # lsp for latex
 
       nodejs # for github copilot
       emacs-lsp-booster # for lsp-booster

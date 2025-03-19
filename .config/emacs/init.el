@@ -449,7 +449,7 @@ When there is ongoing compilation, nothing happens."
 (use-package flymake
   :ensure nil
   :custom (flymake-proc-compilation-prevents-syntax-check nil)
-  :hook ((prog-mode-hook LaTeX-mode) . flymake-mode)
+  :hook ((prog-mode-hook latex-mode LaTeX-mode) . flymake-mode)
   :bind (:map flymake-mode-map
               ("M-g n" . flymake-goto-next-error)
               ("M-g p" . flymake-goto-prev-error))
@@ -537,11 +537,16 @@ When there is ongoing compilation, nothing happens."
   :ensure nil ; it is built-in
   :hook (after-init . savehist-mode))
 
+(use-package tramp
+  :defer t
+  :ensure nil
+  :custom
+  (tramp-fuse-unmount-on-cleanup 't))
+
 (use-package xref
   :ensure nil
   :custom
   (xref-search-program 'ripgrepz)
-  :config
   :config
   (add-to-list 'xref-search-program-alist
                '(ripgrepz . "xargs -0 rg <C> --null -nH --no-heading --no-messages -g '!*/' -z -e <R>")))
@@ -1063,16 +1068,23 @@ When there is ongoing compilation, nothing happens."
   :after auctex
   :custom
   (reftex-plug-into-AUCTeX t)
+ '(TeX-view-program-selection
+   '((output-pdf "xdg-open")
+     (output-html "xdg-open")
+     ((output-dvi has-no-display-manager) "dvi2tty")
+     ((output-dvi style-pstricks) "dvips and gv")
+     (output-dvi "xdvi")))
   :hook
   (TeX-mode-hook . (lambda () (flyspell-mode t)))
   (LaTeX-mode-hook . LaTeX-math-mode)
   (LaTeX-mode-hook .
               (lambda () (set (make-variable-buffer-local 'TeX-electric-math)
-                          (cons "\\(" "\\)"))))
-  ;; Turn on RefTeX with AUCTeX LaTeX mode
-  (LaTeX-mode-hook . turn-on-reftex)
-  ;; with Emacs latex mode
-  (latex-mode-hook . turn-on-reftex))
+                          (cons "$" "$"))))
+  ;; Turn on RefTeX with AUCTeX LaTeX mode and Emacs latex mode
+  ((LaTeX-mode-hook latex-mode-hook). turn-on-reftex)
+  ((LaTeX-mode-hook latex-mode-hook). flymake-mode)
+  ((LaTeX-mode-hook latex-mode-hook). eglot-ensure)
+  )
 
 (use-package olivetti
   ;; package for writing mode, introduces margins
@@ -1189,6 +1201,7 @@ When there is ongoing compilation, nothing happens."
   (haskell-mode-hook . eglot-ensure)
   (sh-mode-hook . eglot-ensure)
   (bash-ts-mode-hook . eglot-ensure)
+  (latex-mode-hook . eglot-ensure)
   :bind (:map eglot-mode-map
               (("C-c q" . eglot-code-action-quickfix)
                ("C-c c" . eglot-code-actions)))
@@ -1203,7 +1216,7 @@ When there is ongoing compilation, nothing happens."
 ;;                     (globalOn . t))))))
   (add-to-list 'eglot-server-programs '((sh-mode bash-ts-mode) . ("bash-language-server" "start")))
   (add-to-list 'eglot-server-programs '((markdown-mode rst-mode html-mode org-mode) . ("vale-ls")))
-  )
+  (add-to-list 'eglot-server-programs '((latex-mode LaTeX-mode tex-mode TeX-mode) . ("texlab"))))
 
 (use-package eldoc-box
   :hook (eglot-managed-mode-hook . eldoc-box-hover-mode))
