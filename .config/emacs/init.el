@@ -1257,10 +1257,16 @@ When there is ongoing compilation, nothing happens."
   (defun liesnikov/copilot-tab (arg)
     "Smarter copilot autocompletion, if ARG is provided, go to the next completion, otherwise accept the current one."
     (interactive "P")
-    (if (bound-and-true-p arg)
-        (copilot-next-completion)
+    ;; check if copilot mode is active
+    (if (not (bound-and-true-p copilot-mode))
+        (progn
+          (message "Copilot mode wasn't active, activating now")
+          (copilot-mode 't))
+      ;; check if the argument is provided
+      (if (bound-and-true-p arg)
+          (copilot-next-completion)
         (or (copilot-accept-completion)
-            (copilot-complete)))))
+            (copilot-complete))))))
 
 (use-package ellama
   :custom
