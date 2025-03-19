@@ -18,7 +18,7 @@
      editorconfig eglot eglot-booster eldoc-box ellama emojify envrc evil evil-numbers expand-region
      git-link gnu-elpa-keyring-update
      haskell-mode highlight-parentheses
-     ibuffer-project idris-mode idris2-mode ivy ivy-hydra ivy-rich ivy-yasnippet
+     ibuffer-project idris-mode idris2-mode ivy ivy-hydra ivy-rich
      llm-ollama
      magit markdown-mode merlin minions moody
      nix-haskell-mode nix-mode no-littering noxml-fold
@@ -38,7 +38,9 @@
                   "https://github.com/idris-community/idris2-mode")
      (ultra-scroll :vc-backend Git :url
                    "https://github.com/jdtsmith/ultra-scroll")))
- '(safe-local-variable-values nil))
+ '(safe-local-variable-values
+   '((eval progn (olivetti-mode 't))
+     (reftex-default-bibliography "./ref.bib"))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

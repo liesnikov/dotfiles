@@ -31,6 +31,7 @@
   :ensure nil
   :demand t
   :custom
+  ;;(use-package-verbose 't)
   ;; disable :hook suffix to use abnormal hooks with the same syntax
   (use-package-hook-name-suffix nil))
 
