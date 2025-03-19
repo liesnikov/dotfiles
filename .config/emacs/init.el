@@ -1323,7 +1323,7 @@ When there is ongoing compilation, nothing happens."
 
 ;;;### rust
 (use-package rustic
-  :mode ("\\.rs\\'")
+  :mode ("\\.rs\\'" . rustic-mode)
   :requires eglot
   :custom (rustic-lsp-client 'eglot))
 
