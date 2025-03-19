@@ -1222,11 +1222,9 @@ When there is ongoing compilation, nothing happens."
   (eglot-booster-mode t))
 
 (use-package treesit-langs
-  :defer t
   :requires treesit)
 
 (use-package treesit-auto
-  :defer t
   :requires treesit
   :config
   (global-treesit-auto-mode))
@@ -1234,6 +1232,12 @@ When there is ongoing compilation, nothing happens."
 (use-package treesit-ispell
   :defer t
   :requires treesit)
+
+(use-package treesit-fold
+  :bind ("<backtab>" . treesit-fold-toggle)
+  :hook
+  (treesit-fold-mode-hook treesit-fold-indicators-mode)
+  )
 
 ;; alternative to treesit built-in mode
 ;;(use-package tree-sitter
@@ -1323,9 +1327,12 @@ When there is ongoing compilation, nothing happens."
           prog-mode-hook) . highlight-parentheses-mode))
 
 ;;;### rust
+(use-package rust-mode
+  :init
+  (setq rust-mode-treesitter-derive t))
+
 (use-package rustic
-  :mode ("\\.rs\\'" . rustic-mode)
-  :requires eglot
+  :after (rust-mode)
   :custom (rustic-lsp-client 'eglot))
 
 ;;;### ocaml

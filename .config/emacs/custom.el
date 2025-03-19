@@ -26,7 +26,7 @@
      pdf-tools prog-mode proof-general
      rg rustic
      sideline sideline-eglot sideline-flymake sort-words swiper
-     transpose-frame trashed treesit treesit-auto treesit-ispell treesit-langs tuareg
+     transpose-frame trashed treesit treesit-auto treesit-fold treesit-ispell treesit-langs tuareg
      ultra-scroll undo-tree unicode-whitespace use-package use-package-ensure-system-package
      wc-mode
      yasnippet yasnippet-snippets
