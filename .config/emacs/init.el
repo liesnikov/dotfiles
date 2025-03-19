@@ -819,13 +819,12 @@ When there is ongoing compilation, nothing happens."
   ;; Bind prefix keymap providing all Cape commands under a mnemonic key.
   ;; Press C-c p ? to for help.
   :bind ("C-c p" . cape-prefix-map) ;; Alternative key: M-<tab>, M-p, M-+
+  :defer nil
   :hook
   ;; Add to the global default value of `completion-at-point-functions' which is
   ;; used by `completion-at-point'.  The order of the functions matters, the
   ;; first function returning a result wins.  Note that the list of buffer-local
   ;; completion functions takes precedence over the global list.
-  (completion-at-point-functions cape-dabbrev)
-  (completion-at-point-functions cape-dabbrev)
   (completion-at-point-functions cape-file)
   (completion-at-point-functions cape-elisp-block)
   ;(completion-at-point-functions cape-history)
@@ -1014,38 +1013,19 @@ When there is ongoing compilation, nothing happens."
 (use-package yasnippet
   :commands yas-expand
   :autoload yas--get-snippet-tables
-  :bind
-  ("C-c p y" . yas-expand)
-  (:map yas-minor-mode-map
-        ("C-c p y" . yas-expand))
+  :bind-keymap ("C-c &" . yas-minor-mode-map)
+  :bind ((:map yas-minor-mode-map
+              ("C-c & TAB" . yas-expand))
+         (:map cape-prefix-map
+               ("y" . yas-insert-snippet)))
   :custom
+  (unbind-key "TAB" yas-minor-mode-map)
   (yas-snippet-dirs
    (cons
     (concat user-emacs-directory "yasnippets")
     yas-snippet-dirs)))
 (use-package yasnippet-snippets
-  :defer t
-  :functions liesnikov/disable-yas-if-no-snippets
-  :hook (yas-minor-mode . liesnikov/disable-yas-if-no-snippets)
-  :config
-  (unbind-key "TAB" yas-minor-mode-map)
-  ;; defined in yasnipet-snippets because otherwise we don't get know what snippets exist
-  (defun liesnikov/disable-yas-if-no-snippets ()
-    "Disable yasnippet if no snippets are found for the current mode."
-    (when (and yas-minor-mode (null (yas--get-snippet-tables)))
-      (yas-minor-mode -1))))
-(use-package ivy-yasnippet
-  :hook (ivy-yasnippet yas-minor-mode)
-  :bind
-  ("C-c y" . ivy-yasnippet)
-  ;; because when loading yas-minor-mode-map isn't defined
-  (:map yas-minor-mode-map
-        ("C-c y" . ivy-yasnippet))
-  :config
-  ;; this is to load yas-minor-mode on-demand whenever
-  ;; ivy-yasnippet is invoked
-  (advice-add 'ivy-yasnippet :before
-              (lambda () (yas-minor-mode 1))))
+  :defer t)
 
 ;;;## Writing & reading
 
