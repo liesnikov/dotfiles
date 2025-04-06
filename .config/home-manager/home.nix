@@ -12,14 +12,14 @@
 
       direnv
       nix-direnv # support direnv for flakes
-      nixfmt-rfc-style
+      nixfmt-rfc-style # format nix files
 
       cachix # for better nix caches
 
       xkb-switch # to switch languages between different windows
 
       vale # for writing
-      vale-ls
+      vale-ls # lsp server for vale
       texlab # lsp for latex
 
       nodejs # for github copilot
@@ -42,7 +42,7 @@
 
       bash-language-server
 
-      code2prompt
+      code2prompt # concat all files in a project for an llm
     ];
     # This value determines the Home Manager release that your
     # configuration is compatible with. This helps avoid breakage
