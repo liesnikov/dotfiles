@@ -773,7 +773,7 @@ in `theme-preferred-light`. Updates and saves `theme-mode-prefer`."
   ;; modeline as tabs
   :custom
   (x-underline-at-descent-line t)
-  (moody-mode-line-height 45)
+  (moody-mode-line-height 20)
   :config
   (moody-replace-mode-line-buffer-identification)
   (moody-replace-vc-mode))
