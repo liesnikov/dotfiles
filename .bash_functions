@@ -7,35 +7,26 @@ cp_p () {
 }
 
 themetime () {
-  NIGHT_GTK_THEME="Arc-Dark"
-  NIGHT_WM_THEME="Arc-Dark"
-  DAY_GTK_THEME="Arc"
-  DAY_WM_THEME="Arc"
   case "$1" in
     night)
-      xfconf-query -c xfwm4 -p /general/theme -s $NIGHT_WM_THEME
-      xfconf-query -c xsettings -p /Net/ThemeName -s $NIGHT_GTK_THEME
-      gsettings set org.gnome.desktop.interface gtk-theme $NIGHT_GTK_THEME
       gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
       sed -i -e 's/set background=light/set background=dark/1' $XDG_CONFIG_HOME/vim/vimrc
       sed -i -e 's/light/dark/1' ~/.config/alacritty/alacritty.toml
       ;;
     day)
-      xfconf-query -c xfwm4 -p /general/theme -s $DAY_WM_THEME
-      xfconf-query -c xsettings -p /Net/ThemeName -s $DAY_GTK_THEME
-      gsettings set org.gnome.desktop.interface gtk-theme $DAY_GTK_THEME
-      gsettings set org.gnome.desktop.interface color-scheme 'prefer-light'
+      gsettings set org.gnome.desktop.interface color-scheme 'default'
       sed -i -e 's/set background=dark/set background=light/1' $XDG_CONFIG_HOME/vim/vimrc
       sed -i -e 's/dark/light/1' ~/.config/alacritty/alacritty.toml
       ;;
     switch)
-      CURRENT=$(xfconf-query -c xfwm4 -p /general/theme)
-      if [[ "$CURRENT" == "$DAY_WM_THEME" ]]; then
+      CURRENT=$(gsettings get org.gnome.desktop.interface color-scheme)
+      if [[ $CURRENT == "'default'" ]]; then
         themetime night
-      elif [[ "$CURRENT" == "$NIGHT_WM_THEME" ]]; then
+      elif [[ "$CURRENT" == "'prefer-dark'" ]]; then
         themetime day
       else
         echo "current theme is not among daily or nightly ones"
+        echo $CURRENT
       fi
       ;;
     current)
