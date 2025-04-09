@@ -487,7 +487,7 @@ When there is ongoing compilation, nothing happens."
 (use-package delsel
   :ensure nil
   ;; remove the selection when you start typing with an active selection
-  :hook (after-init . delete-selection-mode))
+  :hook (after-init-hook . delete-selection-mode))
 
 (use-package dbus
   :ensure nil
