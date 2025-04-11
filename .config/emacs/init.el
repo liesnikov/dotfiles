@@ -489,135 +489,6 @@ When there is ongoing compilation, nothing happens."
   ;; remove the selection when you start typing with an active selection
   :hook (after-init-hook . delete-selection-mode))
 
-(use-package custom
-  :ensure nil
-  :defines themes-light-and-dark
-           theme-light-or-dark
-  :functions liesnikov/switch-emacs-theme
-             liesnikov/load-init-theme
-  :hook (after-init-hook . liesnikov/switch-emacs-theme)
-  :config
-  (defcustom theme-preferred-light 'modus-operandi-tinted
-    "Preferred light theme"
-    :type 'symbol
-    :group 'customize
-    :set (lambda (sym val)
-           (if (custom-theme-name-valid-p val)
-               (set-default-toplevel-value sym val)
-             (error "Invalid theme name configured for `theme-preferred-light`: %s" theme-preferred-light)))
-    )
-  (defcustom theme-preferred-dark 'modus-vivendi-tinted
-    "Preferred dark theme"
-    :type 'symbol
-    :group 'customize
-    :set (lambda (sym val)
-           (if (custom-theme-name-valid-p val)
-               (set-default-toplevel-value sym val)
-             (error "Invalid theme name configured for `theme-preferred-light`: %s" theme-preferred-light)))
-    )
-  (defcustom theme-mode-prefer 'dark
-    "Preferred mode: light or dark"
-    :type '(choice
-            (const :tag "Light theme" light)
-            (const :tag "Dark theme" dark))
-    :group 'customize)
-  (defun liesnikov/switch-emacs-theme (&optional prefix-arg)
-    "Switch between light and dark themes using custom variables.
-Toggles between themes based on `theme-mode-prefer` by default.
-With prefix argument (C-u), forces the light theme defined
-in `theme-preferred-light`. Updates and saves `theme-mode-prefer`."
-    (interactive "P") ; "P" provides the raw prefix argument
-
-    ;; Use prefix arg (C-u) to force light mode, otherwise toggle current preference
-    (let* ((force-light-p (consp prefix-arg)) ; Check if C-u was used
-           (target-mode (if force-light-p
-                            'light ; Force light if prefix arg exists
-                          theme-mode-prefer)) ; Sync things
-           (theme-to-load (if (eq target-mode 'light)
-                              theme-preferred-light
-                            theme-preferred-dark)))
-
-
-      ;; Disable all currently enabled custom themes for a clean switch
-      (mapc #'disable-theme custom-enabled-themes)
-      ;; Load the desired theme without prompting
-      (load-theme theme-to-load t)
-
-      ;; Set the variable locally
-      (setopt theme-mode-prefer target-mode))
-    )
-  )
-
-(use-package dbus
-  :ensure nil
-  :defines
-  liesnikov/dbus-detect-theme-xfce4
-  liesnikov/dbus-detect-theme-freedesktop
-  liesnikov/infer-theme-mode-preference
-  :hook
-  (after-init-hook .
-                   (lambda ()
-                     (setopt theme-mode-prefer (liesnikov/infer-theme-mode-preference))
-                     (liesnikov/switch-emacs-theme)))
-  :init
-  (defun liesnikov/dbus-detect-theme-xfce4 (servname setpath themename)
-    "Detect and switch theme, the arguments are from the dbus interface.
-     We don't care about SERVNAME, but we do check that SETPATH is the theme one.
-     Depending on whether it's light or dark we switch using `liesnikov/switch-emacs-theme'."
-    (if
-        (string= setpath
-                 "/Net/ThemeName")
-        (let ((light-theme "Arc"))
-          (string= themename light-theme))))
-  (defun liesnikov/dbus-detect-theme-freedesktop (servname setpath val)
-    "Detect and switch preferred color scheme in gnome.
-     The arguments are from the dbus interface.
-     We don't care about SERVNAME, but we do check that SETPATH is the theme one.
-     Depending on whether it's light or dark we switch using `liesnikov/switch-emacs-theme'."
-    (if (and
-           (string= servname "org.freedesktop.appearance")
-           (string= setpath "color-scheme")
-           (string= (type-of (car val)) "integer"))
-        (if (eq 0 (car val))
-            (setopt theme-mode-prefer 'light)
-          (setopt theme-mode-prefer 'dark))
-      )
-    (liesnikov/switch-emacs-theme))
-  :config
-  (defun liesnikov/infer-theme-mode-preference ()
-    (interactive)
-    (let ((free-desktop-pref
-           (dbus-call-method :session ;bus name
-                             "org.freedesktop.portal.Desktop" ;service
-                             "/org/freedesktop/portal/desktop" ;path
-                             "org.freedesktop.portal.Settings" ;interface
-                             "Read" ;method
-                             :timeout 1000
-                             "org.freedesktop.appearance"
-                             "color-scheme")))
-      (if (eq (car (car free-desktop-pref)) 0)
-          'light
-        (let ((xfce-theme
-               (shell-command-to-string
-                         "xfconf-query -c xsettings -p /Net/ThemeName")))
-          (if (string= xfce-theme "Arc\n")
-              'light
-            'dark)))))
-  (dbus-register-signal
-   :session
-   nil ; service name, nil is a wildcard
-   "/org/freedesktop/portal/desktop" ; path
-   "org.freedesktop.impl.portal.Settings" ; interface
-   "SettingChanged" ; message
-   #'liesnikov/dbus-detect-theme-freedesktop)
-  (dbus-register-signal
-   :session
-   nil ; service name, nil is a wildcard
-   "/org/xfce/Xfconf" ; path
-   "org.xfce.Xfconf" ; interface
-   "PropertyChanged" ; message
-   #'liesnikov/dbus-detect-theme-xfce4))
-
 (use-package savehist
   ;; The built-in savehist package keeps a record of user inputs
   ;; and stores them across sessions.
@@ -745,6 +616,43 @@ in `theme-preferred-light`. Updates and saves `theme-mode-prefer`."
 ;;;## Package managment
 
 ;;;## Visual things
+
+(use-package auto-dark
+  :defines
+  auto-dark--dbus-xfce
+  auto-dark--is-light-mode-xfce
+  :custom
+  (auto-dark-themes '((modus-videndi-tinted) (modus-operandi-tinted)))
+  (auto-dark-detection-method 'dbus)
+  ;; because we re-define auto-dark themes when doom is loaded
+  :hook (after-init-hook . (lambda () (auto-dark-mode t)))
+  :config
+  ;; setup for xfce
+  (defconst xfce-light-theme "Arc")
+  (defun auto-dark--dbus-xfce (servname setpath themename)
+    (if (string= setpath "/Net/ThemeName")
+        (let ((appearance (if (string= themename xfce-light-theme)
+                              'light 'dark)))
+          (auto-dark--set-theme appearance))))
+  (defun auto-dark--is-light-mode-xfce ()
+    (let ((xfce-theme
+           (shell-command-to-string
+            "xfconf-query -c xsettings -p /Net/ThemeName")))
+      (string= xfce-theme (concat xfce-light-theme "\n"))))
+  ;; things to enable for xfce
+  ;;(let ((appearance (if (auto-dark--is-light-mode-xfce) 'light 'dark)))
+  ;;  (unless (eq appearance auto-dark--last-dark-mode-state)
+  ;;    (auto-dark--set-theme appearance)))
+  ;;(require dbus)
+  ;;(dbus-register-signal
+  ;; :session
+  ;; nil ; service name, nil is a wildcard
+  ;; "/org/xfce/Xfconf" ; path
+  ;; "org.xfce.Xfconf" ; interface
+  ;; "PropertyChanged" ; message
+  ;; #'auto-dark--dbus-xfce))
+  )
+
 (use-package doom-themes
   ;; color theme
   :custom
@@ -753,9 +661,8 @@ in `theme-preferred-light`. Updates and saves `theme-mode-prefer`."
   (doom-themes-enable-bold t)
   ;; if nil, bold is universally disabled
   (doom-themes-enable-italic t)
-  ;; set my custom preferences
-  (theme-preferred-light 'doom-one-light)
-  (theme-preferred-dark  'doom-one)
+  ;; using auto-dark
+  (auto-dark-themes '((doom-one) (doom-one-light)))
   :config
   ;; (load-theme 'doom-one t)
   ;; Enable flashing mode-line on errors

@@ -11,7 +11,7 @@
  '(custom-theme-allow-multiple-selections nil)
  '(package-selected-packages
    '(
-     auctex avy
+     auctex auto-dark avy
      breadcrumb
      cape color-moccur company-haskell copilot corfu counsel counsel-projectile
      dashboard dired-subtree dockerfile-mode doom-themes
