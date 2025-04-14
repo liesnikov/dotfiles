@@ -344,6 +344,11 @@
   ;; major modes themselves.
   (global-prettify-symbols-mode))
 
+(use-package editorconfig
+  :ensure nil
+  :custom
+  (editorconfig-mode t))
+
 (use-package compile
   :ensure nil
   :functions liesnikov/compile-on-save-start
@@ -1164,10 +1169,6 @@ When there is ongoing compilation, nothing happens."
   :custom
   ;; Link to a particular revision of a file rather than using the branch name in the URL.
   (git-link-use-commit t))
-
-(use-package editorconfig
-  :custom
-  (editorconfig-mode t))
 
 ;; Language server protocol
 (use-package eglot

@@ -10,29 +10,28 @@
  '(custom-safe-themes '(default))
  '(custom-theme-allow-multiple-selections nil)
  '(package-selected-packages
-   '(
-     auctex auto-dark avy
+   '(auctex auto-dark avy
      breadcrumb
-     cape color-moccur company-haskell copilot corfu counsel counsel-projectile
+     cape color-moccur copilot corfu counsel counsel-projectile
      dashboard dired-subtree dockerfile-mode doom-themes
-     editorconfig eglot eglot-booster eldoc-box ellama emojify envrc evil evil-numbers expand-region
+     eglot-booster eldoc-box ellama emojify envrc evil-numbers expand-region
      git-link gnu-elpa-keyring-update
      highlight-parentheses
      ibuffer-project idris-mode idris2-mode ivy ivy-hydra ivy-rich
-     llm-ollama
      magit markdown-mode merlin minions moody
-     nix-haskell-mode nix-mode no-littering noxml-fold
-     olivetti org org-download org-modern org-modern-indent org-present
-     pdf-tools prog-mode proof-general
+     nix-mode no-littering noxml-fold
+     olivetti org-download org-modern org-modern-indent org-present
+     pdf-tools proof-general
      rg rustic
      sideline sideline-eglot sideline-flymake sort-words swiper
-     transpose-frame trashed treesit treesit-auto treesit-fold treesit-ispell treesit-langs tuareg
-     ultra-scroll undo-tree unicode-whitespace use-package use-package-ensure-system-package
+     transpose-frame trashed treesit-auto treesit-fold treesit-ispell treesit-langs tuareg
+     ultra-scroll undo-tree unicode-whitespace use-package-ensure-system-package
      wc-mode
-     yasnippet yasnippet-snippets
-     ))
+     yasnippet yasnippet-snippets))
  '(package-vc-selected-packages
-   '((eglot-booster :vc-backend Git :url
+   '((haskell-ts-mode :url "https://codeberg.org/pranshu/haskell-ts-mode"
+                      :branch "main")
+     (eglot-booster :vc-backend Git :url
                     "https://github.com/jdtsmith/eglot-booster")
      (idris2-mode :vc-backend Git :url
                   "https://github.com/idris-community/idris2-mode")
