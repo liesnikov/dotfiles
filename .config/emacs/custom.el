@@ -16,7 +16,7 @@
      dashboard dired-subtree dockerfile-mode doom-themes
      eglot-booster eldoc-box ellama emojify envrc evil-numbers expand-region
      git-link gnu-elpa-keyring-update
-     highlight-parentheses
+     haskell-ts-mode highlight-parentheses
      ibuffer-project idris-mode idris2-mode ivy ivy-hydra ivy-rich
      magit markdown-mode merlin minions moody
      nix-mode no-littering noxml-fold

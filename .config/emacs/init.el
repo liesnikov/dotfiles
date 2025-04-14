@@ -1174,7 +1174,6 @@ When there is ongoing compilation, nothing happens."
 (use-package eglot
   :ensure nil
   :hook
-  (haskell-ts-hook . eglot-ensure)
   (sh-mode-hook . eglot-ensure)
   (bash-ts-mode-hook . eglot-ensure)
   (latex-mode-hook . eglot-ensure)
@@ -1346,21 +1345,17 @@ When there is ongoing compilation, nothing happens."
   )
 
 ;;;### haskell
-;; instead use haskell-ts-mode
-;;(use-package haskell-mode
-;;  :custom
-;;  (haskell-process-type 'auto)
-;;  (haskell-compiler-type 'auto)
-;;  :hook
-;;  (haskell-mode-hook . eglot-ensure)
-;;  (haskell-mode-hook . interactive-haskell-mode))
-
-;;(use-package lsp-haskell
-;;  :requires lsp-mode lsp-ui
-;;  :hook
-;;    (haskell-mode-hook . lsp-deferred)
-;;    (haskell-literate-mode-hook . lsp-deferred)
-;;  )
+;; copied from https://codeberg.org/pranshu/haskell-ts-mode
+(use-package haskell-ts-mode
+  :vc (:url "https://codeberg.org/pranshu/haskell-ts-mode" :rev "f047919915c02c814f8836ff3e2b2cfa326b2318")
+  :mode "\\.hs\\'"
+  :hook
+  (haskell-ts-mode-hook . eglot-ensure)
+  :config
+  (haskell-ts-setup-eglot)
+  (add-to-list 'treesit-language-source-alist
+               '(haskell . ("https://github.com/tree-sitter/tree-sitter-haskell" "v0.23.1")))
+  )
 
 ;;;### nix
 (use-package nix-mode
