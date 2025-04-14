@@ -1173,7 +1173,7 @@ When there is ongoing compilation, nothing happens."
 (use-package eglot
   :ensure nil
   :hook
-  (haskell-mode-hook . eglot-ensure)
+  (haskell-ts-hook . eglot-ensure)
   (sh-mode-hook . eglot-ensure)
   (bash-ts-mode-hook . eglot-ensure)
   (latex-mode-hook . eglot-ensure)
@@ -1216,7 +1216,9 @@ When there is ongoing compilation, nothing happens."
   (eglot-booster-mode t))
 
 (use-package treesit-langs
-  :requires treesit)
+  :requires treesit
+  :config
+  (treesit-langs-major-mode-setup))
 
 (use-package treesit-auto
   :requires treesit
@@ -1343,13 +1345,14 @@ When there is ongoing compilation, nothing happens."
   )
 
 ;;;### haskell
-(use-package haskell-mode
-  :custom
-  (haskell-process-type 'auto)
-  (haskell-compiler-type 'auto)
-  :hook
-  (haskell-mode-hook . eglot-ensure)
-  (haskell-mode-hook . interactive-haskell-mode))
+;; instead use haskell-ts-mode
+;;(use-package haskell-mode
+;;  :custom
+;;  (haskell-process-type 'auto)
+;;  (haskell-compiler-type 'auto)
+;;  :hook
+;;  (haskell-mode-hook . eglot-ensure)
+;;  (haskell-mode-hook . interactive-haskell-mode))
 
 ;;(use-package lsp-haskell
 ;;  :requires lsp-mode lsp-ui
