@@ -3,15 +3,15 @@
 # set workplaces in xfce to 3x3 grid
 # xprop -root -f _NET_DESKTOP_LAYOUT 32cccc -set _NET_DESKTOP_LAYOUT 0,3,3,0
 
-until p=$(pidof xfsettingsd)
-do
-        sleep 1
-done
+#until p=$(pidof xfsettingsd)
+#do
+#        sleep 1
+#done
 
-sleep 1
-kbdd
-xset r rate 200 70
+#sleep 1
+#kbdd
+#xset r rate 200 70
 # map caps to addtitional ctrl
-setxkbmap "us,ua" -variant "altgr-intl,," -option "ctrl:nocaps"
+#setxkbmap "us,ua" -variant "altgr-intl,," -option "ctrl:nocaps"
 
 #eval `ssh-agent -s`

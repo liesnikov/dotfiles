@@ -16,8 +16,6 @@
 
       cachix # for better nix caches
 
-      xkb-switch # to switch languages between different windows
-
       vale # for writing
       vale-ls # lsp server for vale
       texlab # lsp for latex

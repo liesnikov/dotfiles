@@ -6,8 +6,8 @@ alias lessfollow="less --follow-name +F"
 # caps-unlock here is from a SO answer:
 # https://askubuntu.com/a/941268
 alias CAPS-UNLOCK="caps-unlock"
-alias keyboard-set="caps-unlock; setxkbmap -option ctrl:nocaps ; xset r rate 200 70"
-alias KEYBOARD-SET="keyboard-set"
+#alias keyboard-set="caps-unlock; setxkbmap -option ctrl:nocaps ; xset r rate 200 70"
+#alias KEYBOARD-SET="keyboard-set"
 
 alias untar-gz="tar -xvzf"
 alias emacso="emacsclient -n -c -a \"\""
