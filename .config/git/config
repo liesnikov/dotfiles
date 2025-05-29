@@ -1,8 +1,18 @@
 [user]
   name = "liesnikov"
   useConfigOnly = true
-  email = 17168103+liesnikov@users.noreply.github.com
   signingkey = ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCiqpjB74RPKKqOPuz/exFuM6Zs+85GeCdga6GGN5fZQvxUgYhRJxCXCwDh8AaK8Uz9DohnkPr/+UwRtsq9kQF5EpUcYhqS+m3B+CHubBjZvxGa32xuXLN0s94oQ/QKpaFR4UOW/mjaKvTOtMVV1vYgSfyIjdyWvzsG6Mp2SeiCoKHUH+Z6DbsJYqMVI4CZVoVn5v5yyaqrZRNqmPKSsIb0K0rLQXuyR3mcMTCA9nxPZbJF2WzS4u9MEdXmUWnFHF29gwAYrGdmUV9SRQPtpvGrIlft73uloIQD7yi2ZuV0I76HK4/mNCJbnx98WIFG7sADeYFe0QgqMZb7GlzTjBVf800FmmdiqXYw6neYUSgqY6iJoJutYbyGUXNv5SsWGnicBd43NkVNXQ+XtfRuaXVH4N6nSTVj0HTeYSEeHQUwXy3V4kyU4Fnb59lxIYXjEbtC8saS/cQnKsMjm/RH1G9CvCJ0KTovSOAjMXVfZPdezZB8awNv4FO7is2E3++eqKNfch3+LUvMMlRqSfmN6TSGuxBdP83TvyPAhdD6tCxK/KVMHJe6q6UlJDddk+asVfPvobWZ1hy93HddNtohP7GHBnhw4/3N66qidO+w+QDMcEVyCflX2gZm+6U9lj+758HLRPOKQZ4RqUY74Nd/DG29A2anGCeqBLMY0M5w5pJ9Gw==
+
+[includeIf "hasconfig:remote.*.url:git@github.com:**/**"]
+    path = github
+[includeIf "hasconfig:remote.*.url:https://github.com/**/**"]
+    path = github
+
+[includeIf "hasconfig:remote.*.url:git@codeberg.org:**/**"]
+    path = codeberg
+[includeIf "hasconfig:remote.*.url:https://codeberg.org/**/**"]
+    path = codeberg
+
 [filter "lfs"]
   clean = git-lfs clean -- %f
   smudge = git-lfs smudge -- %f
@@ -18,4 +28,4 @@
 [commit]
   gpgsign = true
 [init]
-	defaultBranch = main
+  defaultBranch = main
