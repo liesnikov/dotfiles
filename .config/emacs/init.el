@@ -32,6 +32,7 @@
   :demand t
   :custom
   ;;(use-package-verbose 't)
+  ;;(use-package-compute-statistics 't)
   ;; disable :hook suffix to use abnormal hooks with the same syntax
   (use-package-hook-name-suffix nil))
 
@@ -107,6 +108,8 @@
 
 (use-package dired
   :ensure nil
+  :defer t
+  :commands dired-open-file
   :custom
   (dired-async-mode t)
   (dired-listing-switches "-al")
@@ -130,6 +133,7 @@
       (call-process "xdg-open" nil 0 nil file))))
 
 (use-package eshell
+  :defer t
   :ensure nil
   :custom
   (password-cache-expiry 300)
@@ -510,6 +514,7 @@ When there is ongoing compilation, nothing happens."
 
 (use-package xref
   :ensure nil
+  :defer t
   :custom
   (xref-search-program 'ripgrepz)
   :config
@@ -569,8 +574,8 @@ When there is ongoing compilation, nothing happens."
   ;; catch-all package for all the things that don't have their own package
   :custom
   ;; personal info
-  (user-full-name "Bohdan Liesnikov")
-  (user-mail-address "bohdan@liesnikov")
+  (user-full-name "Dana Liesnikov")
+  (user-mail-address "liesnikov@laptop")
 
   ;; don't show startup emacs screen
   (inhibit-startup-screen t)
@@ -626,6 +631,7 @@ When there is ongoing compilation, nothing happens."
   :defines
   auto-dark--dbus-xfce
   auto-dark--is-light-mode-xfce
+  ;; auto-dark--set-theme ;; this is for me not to forget how to switch themes manually
   :custom
   (auto-dark-themes '((modus-videndi-tinted) (modus-operandi-tinted)))
   (auto-dark-detection-method 'dbus)
@@ -659,6 +665,7 @@ When there is ongoing compilation, nothing happens."
   )
 
 (use-package doom-themes
+  :defer t
   ;; color theme
   :custom
   ;; Global settings (defaults)
@@ -835,6 +842,8 @@ When there is ongoing compilation, nothing happens."
   :bind (("M-s o" . moccur)))
 
 (use-package transpose-frame
+  ;; from emacs 31 it's built-in
+  ;; https://p.bauherren.ovh/blog/tech/new_window_cmds
   ;; turn frame around, somehow not available by default
   :defer t)
 
@@ -904,9 +913,12 @@ When there is ongoing compilation, nothing happens."
 
 (use-package pdf-tools
   ;; view pdfs in emacs
+  :defer t
+  ;:ensure-system-package elpa-pdf-tools
+  :mode (("\\.pdf\\'" . pdf-view-mode))
   :config
-  (pdf-tools-install) ; enable pdftools instead of docview
-
+  ; enable pdftools instead of docview
+  (pdf-tools-install)
   :hook
   ;; Disable line numbers when entering pdf-tools mode.
   ;; from https://stackoverflow.com/a/6839968
@@ -1085,8 +1097,10 @@ When there is ongoing compilation, nothing happens."
 
 (use-package markdown-mode
   :mode "\\.\\(?:md\\|markdown\\|mkd\\|mdown\\|mkdn\\|mdwn\\)\\'"
-  :hook (markdown-mode-hook . flymake-mode)
-        (markdown-mode-hook . eglot-ensure)
+  :hook
+  (markdown-mode-hook . flymake-mode)
+  (markdown-mode-hook . eglot-ensure)
+  :custom (markdown-inline-image-overlays 't)
   :config
   ;; from https://gist.github.com/kleinschmidt/5ab0d3c423a7ee013a2c01b3919b009a
   ;; define markdown citation formats
@@ -1117,6 +1131,7 @@ When there is ongoing compilation, nothing happens."
           ;; * to store a link to an org heading use C-c l
           ("C-c l" . org-store-link))
   :custom
+  (org-export-headline-levels 1)
   (org-agenda-files nil)
   (org-cycle-include-plain-lists (quote integrate))
   (org-export-backends (quote (ascii beamer html icalendar latex md odt)))
@@ -1191,9 +1206,11 @@ When there is ongoing compilation, nothing happens."
 ;;                     (globalOn . t))))))
   (add-to-list 'eglot-server-programs '((sh-mode bash-ts-mode) . ("bash-language-server" "start")))
   (add-to-list 'eglot-server-programs '((markdown-mode rst-mode html-mode org-mode) . ("vale-ls")))
-  (add-to-list 'eglot-server-programs '((latex-mode LaTeX-mode tex-mode TeX-mode) . ("texlab"))))
+  (add-to-list 'eglot-server-programs '((latex-mode LaTeX-mode tex-mode TeX-mode) . ("texlab")))
+  )
 
 (use-package eldoc-box
+  :custom (eldoc-box-cleanup-interval 2)
   :hook (eglot-managed-mode-hook . eldoc-box-hover-mode))
 
 ;; for breadcrumbs modeline
@@ -1269,19 +1286,20 @@ When there is ongoing compilation, nothing happens."
         (or (copilot-accept-completion)
             (copilot-complete))))))
 
+(use-package llm
+  :defer t
+  :commands make-llm-ollama)
+
 (use-package ellama
+  :defer t
   :custom
   (ellama-language "English")
   (ellama-keymap-prefix "C-c e l")
   (ellama-sessions-directory "~/.cache/emacs/ellama-sessions")
+  (ellama-provider (make-llm-ollama :chat-model "llama3.2" :embedding-model "llama3.2"))
   :bind (:map ellama-command-map
          ("q c" . (lambda () (interactive) (ellama--cancel-current-request)))
-         ("q q" . ellama--cancel-current-request-and-quit))
-  :init
-  (require 'llm-ollama)
-  (setopt ellama-provider
-     (make-llm-ollama
-      :chat-model "llama3.2" :embedding-model "llama3.2")))
+         ("q q" . ellama--cancel-current-request-and-quit)))
 
 (use-package noxml-fold
   :defer t
@@ -1324,10 +1342,12 @@ When there is ongoing compilation, nothing happens."
 
 ;;;### rust
 (use-package rust-mode
+  :defer t
   :init
   (setq rust-mode-treesitter-derive t))
 
 (use-package rustic
+  :mode ("\\.rs\\'" . rustic-mode)
   :after (rust-mode)
   :custom (rustic-lsp-client 'eglot))
 
@@ -1352,7 +1372,6 @@ When there is ongoing compilation, nothing happens."
   :hook
   (haskell-ts-mode-hook . eglot-ensure)
   :config
-  (haskell-ts-setup-eglot)
   (add-to-list 'treesit-language-source-alist
                '(haskell . ("https://github.com/tree-sitter/tree-sitter-haskell" "v0.23.1")))
   )
@@ -1360,7 +1379,13 @@ When there is ongoing compilation, nothing happens."
 ;;;### nix
 (use-package nix-mode
   ;; activate nix-mode in .nix files
-  :mode "\\.nix\\'")
+  :mode "\\.nix\\'"
+  :hook
+  (nix-mode-hook . eglot-ensure)
+  :init
+  (require 'eglot)
+  (add-to-list 'eglot-server-programs '((nix-mode) . ("nixd")))
+  )
 
 ;;### proof assistants
 (use-package idris-mode
