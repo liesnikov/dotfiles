@@ -13,6 +13,7 @@
       direnv
       nix-direnv # support direnv for flakes
       nixfmt-rfc-style # format nix files
+      nixd # language server for nix
 
       cachix # for better nix caches
 
@@ -27,8 +28,8 @@
       alex
       happy
 
-      #custom-agda
-      agda
+      custom-agda
+      #agda
 
       pandoc
       ripgrep
