@@ -981,6 +981,7 @@ When there is ongoing compilation, nothing happens."
   :config
   (avy-setup-default))
 
+;; todo: switch to vundo
 (use-package undo-tree
   :bind ("C-/" . undo-tree-undo) ; default binding, but forcing the defer this way
   :config
@@ -1256,15 +1257,8 @@ When there is ongoing compilation, nothing happens."
   :config
   (breadcrumb-mode))
 
-;; in some cases more functional than eglot, albeit slower
-;;(use-package lsp-mode
-;;  :custom
-;;  (lsp-file-watch-threshold nil))
-;;(use-package lsp-ui)
-
 (use-package eglot-booster
   :after eglot
-  :requires lsp-booster
   :vc (:url "https://github.com/jdtsmith/eglot-booster")
   :ensure-system-package (emacs-lsp-booster . ">&2 echo 'Need to install emacs lsp booster manually'")
   :custom
@@ -1407,7 +1401,6 @@ When there is ongoing compilation, nothing happens."
 ;;;### haskell
 ;; copied from https://codeberg.org/pranshu/haskell-ts-mode
 (use-package haskell-ts-mode
-  :vc (:url "https://codeberg.org/pranshu/haskell-ts-mode" :rev "f047919915c02c814f8836ff3e2b2cfa326b2318")
   :mode "\\.hs\\'"
   :hook
   (haskell-ts-mode-hook . eglot-ensure)
@@ -1429,26 +1422,29 @@ When there is ongoing compilation, nothing happens."
 
 ;;### proof assistants
 (use-package idris-mode
-  :mode "\\.idr$" "\\.lidr$")
+  :mode "\\.idr$" "\\.lidr$"
+  )
 (use-package idris2-mode
   :commands idris2-mode idris2-ipkg-mode
   :mode "\\.idr$" ("\\.ipkg$" . idris2-ipkg-mode)
-  :vc (:url "https://idris-community/idris2-mode"))
+  :vc (:url "https://idris-community/idris2-mode")
+  )
 
 ;;;#### coq
 (use-package proof-general
   :commands coq-mode
   :mode ("\\.v\\'" . coq-mode)
   :custom
-    (coq-auto-adapt-printing-width t)
-    (coq-compile-auto-save (quote ask-coq))
-    (coq-compile-before-require nil)
-    (coq-compile-parallel-in-background t)
-    (coq-maths-menu-enable nil)
-    (coq-unicode-tokens-enable nil)
-    (proof-autosend-enable nil)
-    (proof-three-window-enable nil)
-    (proof-toolbar-enable t))
+  (coq-auto-adapt-printing-width t)
+  (coq-compile-auto-save (quote ask-coq))
+  (coq-compile-before-require nil)
+  (coq-compile-parallel-in-background t)
+  (coq-maths-menu-enable nil)
+  (coq-unicode-tokens-enable nil)
+  (proof-autosend-enable nil)
+  (proof-three-window-enable nil)
+  (proof-toolbar-enable t)
+  )
 
 ;;(add-to-list
 ;; due to a weird bug, both tokens from PG and company-coq are used
@@ -1461,14 +1457,16 @@ When there is ongoing compilation, nothing happens."
 (defun agda-load ()
   (interactive)
   (load-file (let ((coding-system-for-read 'utf-8))
-                (shell-command-to-string "agda-mode locate"))))
+               (shell-command-to-string "agda-mode locate")))
+  )
 
 ;; don't load eagerly, wait till we drop into an appropriate file
 ;;(agda-load)
 (use-package agda2-mode
   :mode ("\\.l?agda\\'")
   :load-path
-  (lambda () (file-name-directory (shell-command-to-string "agda-mode locate"))))
+  (lambda () (file-name-directory (shell-command-to-string "agda-mode locate")))
+  )
 
 ;;; Commentary:
 
