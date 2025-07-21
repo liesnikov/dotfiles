@@ -16,6 +16,7 @@
       nixd # language server for nix
 
       cachix # for better nix caches
+      gh # the github cli app
 
       vale # for writing
       vale-ls # lsp server for vale
