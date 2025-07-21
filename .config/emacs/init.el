@@ -1011,7 +1011,7 @@ When there is ongoing compilation, nothing happens."
       (user-error
        (message "Unloaded env for %s" (buffer-name)))))
   :hook
-  (eshell-directory-change-hook . liesniov/envrc-reload-or-clear))
+  (eshell-directory-change-hook . liesnikov/envrc-reload-or-clear))
 
 (use-package sort-words
   :commands sort-words liesnikov/sort-split
