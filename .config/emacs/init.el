@@ -1264,7 +1264,9 @@ When there is ongoing compilation, nothing happens."
   :vc (:url "https://github.com/jdtsmith/eglot-booster")
   :ensure-system-package (emacs-lsp-booster . ">&2 echo 'Need to install emacs lsp booster manually'")
   :custom
-  (eglot-booster-mode t))
+  (eglot-booster-io-only (unless (version< emacs-version "30") t))
+  (eglot-booster-mode t)
+  )
 
 (use-package treesit-langs
   :requires treesit
