@@ -8,14 +8,6 @@
 # for ssh logins, install and configure the libpam-umask package.
 #umask 022
 
-# if running bash
-if [ -n "$BASH_VERSION" ]; then
-    # include .bashrc if it exists
-    if [ -f "$HOME/.bashrc" ]; then
-      . "$HOME/.bashrc"
-    fi
-fi
-
    # set PATH so it includes user's private bin if it exists
 if [ -d "$HOME/bin" ] && [[ ":$PATH:" != *":$HOME/bin:"* ]]; then
     PATH="$HOME/bin:$PATH"
@@ -70,3 +62,11 @@ export EDITOR="emacsclient -a 'emacs' -c"
 if [ -e /home/bohdan/.local/state/nix/profile/etc/profile.d/nix.sh ]; then . /home/bohdan/.local/state/nix/profile/etc/profile.d/nix.sh; fi # added by Nix installer
 
 export NIX_PATH="/home/bohdan/.local/state/nix/defexpr/channels"
+
+# if running bash
+if [ -n "$BASH_VERSION" ]; then
+    # include .bashrc if it exists
+    if [ -f "$HOME/.bashrc" ]; then
+      . "$HOME/.bashrc"
+    fi
+fi
