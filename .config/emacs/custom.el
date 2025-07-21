@@ -15,6 +15,7 @@
      cape color-moccur copilot corfu counsel counsel-projectile
      dashboard dired-subtree dockerfile-mode doom-themes
      eglot-booster eldoc-box ellama emojify envrc evil-numbers expand-region
+     forge
      git-link gnu-elpa-keyring-update
      haskell-ts-mode highlight-parentheses
      ibuffer-project idris-mode idris2-mode ivy ivy-hydra ivy-rich

@@ -1219,6 +1219,10 @@ When there is ongoing compilation, nothing happens."
   ;; Link to a particular revision of a file rather than using the branch name in the URL.
   (git-link-use-commit t))
 
+(use-package forge
+  :defer t
+  )
+
 ;; Language server protocol
 (use-package eglot
   :ensure nil
