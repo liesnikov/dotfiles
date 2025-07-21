@@ -116,7 +116,7 @@ if [ -f "$HOME"/.bash_functions ]; then
 fi
 
 if direnv --version &> /dev/null; then
-  eval "$(direnv hook bash)"
+  eval "$(direnv hook bash)";
 fi
 
 export PS1='\[\e[1m\]\W\[\e[0m\] ⊢ '
@@ -128,6 +128,9 @@ export PS1='\[\e[1m\]\W\[\e[0m\] ⊢ '
 stty -ixon
 
 export LOCALE_ARCHIVE="/usr/lib/locale/locale-archive"
+
+export EDITOR="emacsclient -a 'emacs' -c"
+#export EDITOR="vim"
 
 # If not running interactively, do not do anything otherwise start tmux
 [[ $- != *i* ]] && return

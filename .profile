@@ -56,11 +56,7 @@ export NPM_CONFIG_INIT_MODULE="$XDG_CONFIG_HOME"/npm/config/npm-init.js
 export NPM_CONFIG_CACHE="$XDG_CACHE_HOME"/npm
 export NPM_CONFIG_TMP="$XDG_RUNTIME_DIR"/npm
 
-export EDITOR="emacsclient -a 'emacs' -c"
-#export EDITOR="vim"
-
 if [ -e /home/bohdan/.local/state/nix/profile/etc/profile.d/nix.sh ]; then . /home/bohdan/.local/state/nix/profile/etc/profile.d/nix.sh; fi # added by Nix installer
-
 export NIX_PATH="/home/bohdan/.local/state/nix/defexpr/channels"
 
 # if running bash
