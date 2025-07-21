@@ -106,6 +106,92 @@
       (save-buffers-kill-emacs)))
   )
 
+(use-package auth-source
+  :ensure nil
+  :custom (auth-sources '("secrets:Login"))
+)
+
+(use-package calendar
+  :ensure nil
+  :defer t
+  :custom
+  ;; The day of the week on which a week in the calendar begins.
+  ;; 1 means Monday
+  (calendar-week-start-day 1))
+
+(use-package compile
+  :ensure nil
+  :functions liesnikov/compile-on-save-start
+  :defines liesnikov/compile-on-save-mode
+  :hook
+  (compilation-finish-functions . liesnikov/compile-bury-buffer-if-successful)
+  :config
+  (defun liesnikov/compile-bury-buffer-if-successful (buffer string)
+    "Bury a compilation BUFFER if succeeded without warnings (check STRING).
+     Source: https://stackoverflow.com/questions/11043004/emacs-compile-buffer-auto-close"
+    (if (and
+         (string-match "compilation" (buffer-name buffer))
+         (string-match "finished" string)
+         (not
+          (with-current-buffer buffer
+            (goto-char 1)
+            (search-forward "warning" nil t))))
+        (run-with-timer 0.5 nil
+                        (lambda (buf)
+                          (bury-buffer buf)
+                          (delete-window (get-buffer-window buf)))
+                        buffer)))
+  ;; "Compile on save" in Emacs
+  ;; from https://rtime.ciirc.cvut.cz/~sojka/blog/compile-on-save/
+  (defun liesnikov/compile-on-save-start ()
+    "Start compilation on the current buffer if there is no ongoing compilation."
+    (let ((buffer (compilation-find-buffer)))
+      (unless (get-buffer-process buffer)
+        (recompile))))
+  (define-minor-mode liesnikov/compile-on-save-mode
+    "Minor mode to automatically call `recompile' when the current buffer is saved.
+When there is ongoing compilation, nothing happens."
+    :lighter " CoS"
+    (if liesnikov/compile-on-save-mode
+        (progn  (make-local-variable 'after-save-hook)
+                (add-hook 'after-save-hook 'liesnikov/compile-on-save-start nil t))
+      (kill-local-variable 'after-save-hook))))
+
+(use-package completion-preview
+  :ensure nil
+  :custom
+  (completion-preview-minimum-symbol-length 3)
+  (global-completion-preview-mode 't)
+  :bind (:map completion-preview-active-mode-map
+              ;; Bindings that take effect when the preview is shown:
+              ;; Cycle the completion candidate that the preview shows
+              ( ("M-n" . completion-preview-next-candidate)
+                ("M-p" . completion-preview-prev-candidate)
+                ;; Convenient alternative to C-i after typing one of the above
+                ("M-i" . completion-preview-insert)))
+  :config
+  ;; Non-standard commands to that should show the preview:
+  ;; Org mode has a custom `self-insert-command'
+  ;; (push 'org-self-insert-command completion-preview-commands)
+  ;; Paredit has a custom `delete-backward-char' command
+  ;; (push 'paredit-backward-delete completion-preview-commands)
+  )
+
+;; (use-package cua-base
+;;   :ensure nil
+;;   ;; rectangular editining with C-<return>
+;;   ;; borrowed from https://karthinks.com/software/more-batteries-included-with-emacs/
+;;   ;; disabled because it messes with the usual rectangular editing
+;;   ;; and doesn't allow to delete rectangles efficiently
+;;   :config
+;;   (cua-mode 't)
+;;   )
+
+(use-package delsel
+  :ensure nil
+  ;; remove the selection when you start typing with an active selection
+  :hook (after-init-hook . delete-selection-mode))
+
 (use-package dired
   :ensure nil
   :defer t
@@ -130,28 +216,16 @@
     "In dired, open the file named on this line."
     (interactive)
     (let* ((file (dired-get-filename nil t)))
-      (call-process "xdg-open" nil 0 nil file))))
+      (call-process "xdg-open" nil 0 nil file)))
+  )
 
-(use-package eshell
-  :defer t
+(use-package display-fill-column-indicator
   :ensure nil
   :custom
-  (password-cache-expiry 300)
-  (eshell-load-hook (lambda nil (setenv "PAGER" "")))
-  (eshell-prefer-lisp-functions t)
-  (eshell-prefer-lisp-variables t)
-  (eshell-prompt-function (lambda ()
-                            (concat (file-name-base (eshell/pwd))
-                                    " ⊢")))
-  (eshell-prompt-regexp "[^/]+ ⊢")
-  :functions eshell/trueclear
-  :config
-  (require 'em-tramp)
-  (add-to-list 'eshell-modules-list 'eshell-tramp)
-  (defun eshell/trueclear ()
-    "True clear for eshell, instead of default scroll."
-    (interactive)
-    (let ((eshell-buffer-maximum-lines 0)) (eshell-truncate-buffer))))
+  (display-fill-column-indicator 't)
+  (global-display-fill-column-indicator-mode 't)
+  (display-fill-column-indicator-column 90)
+  )
 
 (use-package display-line-numbers
   :ensure nil
@@ -175,11 +249,168 @@
    '(vterm-mode eshell-mode shell-mode term-mode ansi-term-mode pdf-view-mode))
   :hook (prog-mode-hook . display-line-numbers-mode))
 
+(use-package editorconfig
+  :ensure nil
+  :custom
+  (editorconfig-mode t))
+
+(use-package eshell
+  :defer t
+  :ensure nil
+  :custom
+  (password-cache-expiry 300)
+  (eshell-load-hook (lambda nil (setenv "PAGER" "")))
+  (eshell-prefer-lisp-functions t)
+  (eshell-prefer-lisp-variables t)
+  (eshell-prompt-function (lambda ()
+                            (concat (file-name-base (eshell/pwd))
+                                    " ⊢")))
+  (eshell-prompt-regexp "[^/]+ ⊢")
+  :functions eshell/trueclear
+  :config
+  (require 'em-tramp)
+  (add-to-list 'eshell-modules-list 'eshell-tramp)
+  (defun eshell/trueclear ()
+    "True clear for eshell, instead of default scroll."
+    (interactive)
+    (let ((eshell-buffer-maximum-lines 0)) (eshell-truncate-buffer)))
+  )
+
+(use-package faces
+  :ensure nil
+  :custom-face
+  (default ((t (:height 125
+                :width condensed
+                :foundry "ADBO"
+                :family "Source Code Pro"))))
+  (fixed-pitch ((t (:height 1.0
+                    :foundry "ADBO"
+                    :family "Source Code Pro"))))
+  (variable-pitch ((t (:height 1.0
+                       :foundry "ADBO"
+                       :family "Source Sans 3"))))
+  )
+
+(use-package flymake
+  :ensure nil
+  :custom (flymake-proc-compilation-prevents-syntax-check nil)
+  :hook ((prog-mode-hook latex-mode LaTeX-mode) . flymake-mode)
+  :bind (:map flymake-mode-map
+              ("M-g n" . flymake-goto-next-error)
+              ("M-g p" . flymake-goto-prev-error))
+  )
+
+(use-package flyspell
+  :ensure nil
+  ;; on the fly spell checking
+  :hook
+  (text-mode-hook . turn-on-flyspell)
+  (prog-mode-hook . flyspell-prog-mode)
+  :custom
+  (flyspell-issue-welcome-flag nil)
+  (flyspell-use-global-abbrev-table-p t)
+  :bind (:map flyspell-mode-map
+              ("C-c k" . compile)))
+
+(use-package frame
+  :ensure nil
+  :functions liesnikov/toggle-window-decorations
+  :config
+  (defun liesnikov/toggle-window-decorations ()
+    "Toggle the window decorations (title bar) for the selected frame."
+    (interactive)
+    (let* ((frame (selected-frame))
+           (current-value (frame-parameter frame 'undecorated)))
+      (set-frame-parameter frame 'undecorated (not current-value))))
+  )
+
 (use-package gdb-mi
   :ensure nil
   :defer t
   :custom
-  (gdb-many-windows t))
+  (gdb-many-windows t)
+  )
+
+(use-package ibuffer
+  :ensure nil
+  ;; commented out for potential performance gains?
+  ;; :custom
+  ;; (ibuffer-saved-filter-groups nil)
+  ;; (ibuffer-saved-filters nil)
+  :bind (;; map C-x C-b to ibuffer instead of default `list-buffers`
+         ("C-x C-b" . ibuffer))
+  )
+
+(use-package ispell
+  :ensure nil
+  :custom
+  (ispell-dictionary "en_GB-w_accents")
+  )
+
+(use-package menu-bar
+  :ensure nil
+  :custom
+  ;; disable menu bar
+  (menu-bar-mode nil)
+  )
+
+(use-package mouse
+  ;; contex-menu mode and functions
+  ;; borrowed from http://amodernist.com/texts/emacs-mouse.html
+  :ensure nil
+  :custom
+  (context-menu-mode 't)
+  ;;(context-menu-functions '(context-menu-ffap
+  ;;                          occur-context-menu
+  ;;                          context-menu-region
+  ;;                          context-menu-undo
+  ;;                          dictionary-context-menu))
+  )
+
+(use-package mule
+  :ensure nil
+  :custom
+  ;; Specify coding system for keyboard input.
+  (keyboard-coding-system 'utf-8-unix)
+  )
+
+(use-package nxml-mode
+  :defer t
+  :ensure nil
+  :mode ("\\.\\(xml\\|xsd\\|wsdl\\)\\'")
+  :functions xml-pretty-print
+  :config
+  (defun xml-pretty-print ()
+    "Pretty print the XML content in the current buffer."
+    (interactive)
+    sgml-pretty-print)
+  )
+
+(use-package paren
+  :ensure nil
+  :custom
+  ;; Toggle visualization of matching parens
+  (show-paren-mode t)
+  ;; Show the matching paren right away
+  (show-paren-delay 0)
+  )
+
+(use-package pixel-scroll
+  :ensure nil
+  :custom
+  ;; When enabled, this minor mode allows to scroll the display
+  ;; precisely, according to the turning of the mouse wheel.
+  (pixel-scroll-precision-mode 't)
+  )
+
+(use-package prog-mode
+  :ensure nil
+  :config
+  ;; Prettify-symbols-mode will replace some symbols (like "lambda") with
+  ;; their prettier cousins (like λ), but smartly as it's configured by
+  ;; major modes themselves.
+  (global-prettify-symbols-mode)
+  )
 
 (use-package project
   :ensure nil
@@ -203,16 +434,8 @@
         (magit-project-status)
       (error (progn
                (message "%s" (error-message-string err)
-               (project-find-dir)))))))
-
-(use-package ibuffer
-  :ensure nil
-  ;; commented out for potential performance gains?
-  ;; :custom
-  ;; (ibuffer-saved-filter-groups nil)
-  ;; (ibuffer-saved-filters nil)
-  :bind (;; map C-x C-b to ibuffer instead of default `list-buffers`
-         ("C-x C-b" . ibuffer)))
+                        (project-find-dir))))))
+  )
 
 (use-package recentf
   :ensure nil
@@ -223,74 +446,37 @@
   (recentf-max-menu-items 25)
   (recentf-save-file "~/.cache/emacs/recentf")
   :config
-  (add-to-list 'recentf-exclude "-autoloads.el"))
+  (add-to-list 'recentf-exclude "-autoloads.el")
+  )
 
-(use-package windmove
+(use-package reftex
   :ensure nil
-  :init
-  ;; Windmove is a library built into GnuEmacs starting with version 21.
-  ;; It lets you move point from window to window using Shift and the arrow keys.
-  ;; https://www.emacswiki.org/emacs/WindMove
-  (when (fboundp 'windmove-default-keybindings)
-    (windmove-default-keybindings))
-  :custom
-  (window-resize-pixelwise 't)
-  (frame-resize-pixelwise 't)
-  :bind (:map windmove-mode-map
-         ;; new bindings to change widnow sizes
-         ;; similar bindings to windmove (see below),
-         ;; which has S-<arrow> as moving binding
-         (("C-S-<left>" . shrink-window-horizontally)
-          ("C-S-<right>".  enlarge-window-horizontally)
-          ("C-S-<down>" . shrink-window)
-          ("C-S-<up>" . enlarge-window))))
+  :hook
+  (LaTeX-mode . turn-on-reftex)
+  )
 
-(use-package nxml-mode
-  :defer t
-  :ensure nil
-  :mode ("\\.\\(xml\\|xsd\\|wsdl\\)\\'")
-  :functions xml-pretty-print
-  :config
-  (defun xml-pretty-print ()
-    "Pretty print the XML content in the current buffer."
-    (interactive)
-    sgml-pretty-print))
+(use-package savehist
+  ;; The built-in savehist package keeps a record of user inputs
+  ;; and stores them across sessions.
+  ;; Thus, the user will always see their latest choices closer to the top
+  ;; (such as with M-x).
+  :ensure nil ; it is built-in
+  :hook (after-init . savehist-mode)
+  )
 
-(use-package display-fill-column-indicator
+(use-package scroll-bar
   :ensure nil
   :custom
-  (display-fill-column-indicator 't)
-  (global-display-fill-column-indicator-mode 't)
-  (display-fill-column-indicator-column 90))
+  ;; disable scroll bar
+  (scroll-bar-mode nil)
+  )
 
-;; (use-package cua-base
-;;   :ensure nil
-;;   ;; rectangular editining with C-<return>
-;;   ;; borrowed from https://karthinks.com/software/more-batteries-included-with-emacs/
-;;   ;; disabled because it messes with the usual rectangular editing
-;;   ;; and doesn't allow to delete rectangles efficiently
-;;   :config
-;;   (cua-mode 't))
-
-(use-package mouse
-  ;; contex-menu mode and functions
-  ;; borrowed from http://amodernist.com/texts/emacs-mouse.html
+(use-package select
   :ensure nil
   :custom
-  (context-menu-mode 't))
-  ;;(context-menu-functions '(context-menu-ffap
-  ;;                          occur-context-menu
-  ;;                          context-menu-region
-  ;;                          context-menu-undo
-  ;;                          dictionary-context-menu)))
-
-(use-package calendar
-  :ensure nil
-  :defer t
-  :custom
-  ;; The day of the week on which a week in the calendar begins.
-  ;; 1 means Monday
-  (calendar-week-start-day 1))
+  ;; Coding system for communicating with other programs.
+  (selection-coding-system 'utf-8)
+  )
 
 (use-package simple
   :ensure nil
@@ -338,90 +524,27 @@
      ((> (minibuffer-depth) 0)
       (abort-recursive-edit))
      (t
-      (keyboard-quit)))))
+      (keyboard-quit))))
+  )
 
-(use-package prog-mode
-  :ensure nil
-  :config
-  ;; Prettify-symbols-mode will replace some symbols (like "lambda") with
-  ;; their prettier cousins (like λ), but smartly as it's configured by
-  ;; major modes themselves.
-  (global-prettify-symbols-mode))
-
-(use-package editorconfig
+(use-package tramp
+  :defer t
   :ensure nil
   :custom
-  (editorconfig-mode t))
+  (tramp-fuse-unmount-on-cleanup 't)
+  )
 
-(use-package compile
+(use-package treesit
   :ensure nil
-  :functions liesnikov/compile-on-save-start
-  :defines liesnikov/compile-on-save-mode
-  :hook
-  (compilation-finish-functions . liesnikov/compile-bury-buffer-if-successful)
-  :config
-  (defun liesnikov/compile-bury-buffer-if-successful (buffer string)
-    "Bury a compilation BUFFER if succeeded without warnings (check STRING).
-     Source: https://stackoverflow.com/questions/11043004/emacs-compile-buffer-auto-close"
-    (if (and
-         (string-match "compilation" (buffer-name buffer))
-         (string-match "finished" string)
-         (not
-          (with-current-buffer buffer
-            (goto-char 1)
-            (search-forward "warning" nil t))))
-        (run-with-timer 0.5 nil
-                        (lambda (buf)
-                          (bury-buffer buf)
-                          (delete-window (get-buffer-window buf)))
-                        buffer)))
-  ;; "Compile on save" in Emacs
-  ;; from https://rtime.ciirc.cvut.cz/~sojka/blog/compile-on-save/
-  (defun liesnikov/compile-on-save-start ()
-    "Start compilation on the current buffer if there is no ongoing compilation."
-    (let ((buffer (compilation-find-buffer)))
-      (unless (get-buffer-process buffer)
-        (recompile))))
-  (define-minor-mode liesnikov/compile-on-save-mode
-    "Minor mode to automatically call `recompile' when the current buffer is saved.
-When there is ongoing compilation, nothing happens."
-    :lighter " CoS"
-    (if liesnikov/compile-on-save-mode
-        (progn  (make-local-variable 'after-save-hook)
-                (add-hook 'after-save-hook 'liesnikov/compile-on-save-start nil t))
-      (kill-local-variable 'after-save-hook))))
+  )
 
-(use-package menu-bar
+(use-package which-key
   :ensure nil
+  ;; provide a popup when you press a button with all bindings that follow
   :custom
-  ;; disable menu bar
-  (menu-bar-mode nil))
-
-(use-package scroll-bar
-  :ensure nil
-  :custom
-  ;; disable scroll bar
-  (scroll-bar-mode nil))
-
-(use-package mule
-  :ensure nil
-  :custom
-  ;; Specify coding system for keyboard input.
-  (keyboard-coding-system 'utf-8-unix))
-
-(use-package select
-  :ensure nil
-  :custom
-  ;; Coding system for communicating with other programs.
-  (selection-coding-system 'utf-8))
-
-(use-package paren
-  :ensure nil
-  :custom
-  ;; Toggle visualization of matching parens
-  (show-paren-mode t)
-  ;; Show the matching paren right away
-  (show-paren-delay 0))
+  (which-key-min-display-lines 10)
+  (which-key-mode t)
+  )
 
 (use-package whitespace
   :ensure nil
@@ -444,73 +567,29 @@ When there is ongoing compilation, nothing happens."
   ;;   https://emacs.stackexchange.com/questions/38771/magit-status-does-not-open-when-using-global-whitespace-mode-1/38778#38778
   ;; * for magit it breaks commit flow
   ;; * for tex mode -- it breaks org-mode tex export
-  (whitespace-global-modes '(not magit-mode tex-mode org-mode agda2-mode)))
-
-(use-package pixel-scroll
-  :ensure nil
-  :custom
-  ;; When enabled, this minor mode allows to scroll the display
-  ;; precisely, according to the turning of the mouse wheel.
-  (pixel-scroll-precision-mode 't))
-
-(use-package treesit
-  :ensure nil)
-
-(use-package flymake
-  :ensure nil
-  :custom (flymake-proc-compilation-prevents-syntax-check nil)
-  :hook ((prog-mode-hook latex-mode LaTeX-mode) . flymake-mode)
-  :bind (:map flymake-mode-map
-              ("M-g n" . flymake-goto-next-error)
-              ("M-g p" . flymake-goto-prev-error))
+  (whitespace-global-modes '(not magit-mode tex-mode org-mode agda2-mode))
   )
 
-(use-package flyspell
+(use-package windmove
   :ensure nil
-  ;; on the fly spell checking
-  :hook
-  (text-mode-hook . turn-on-flyspell)
-  (prog-mode-hook . flyspell-prog-mode)
+  :init
+  ;; Windmove is a library built into GnuEmacs starting with version 21.
+  ;; It lets you move point from window to window using Shift and the arrow keys.
+  ;; https://www.emacswiki.org/emacs/WindMove
+  (when (fboundp 'windmove-default-keybindings)
+    (windmove-default-keybindings))
   :custom
-  (flyspell-issue-welcome-flag nil)
-  (flyspell-use-global-abbrev-table-p t)
-  :bind (:map flyspell-mode-map
-              ("C-c k" . compile)))
-
-(use-package reftex
-  :ensure nil
-  :hook
-  (LaTeX-mode . turn-on-reftex)
-  :custom
-  (reftex-cite-format
-   '((?\C-m . "\\cite[]{%l}")
-     (?t . "\\citet{%l}")
-     (?p . "\\citep[]{%l}")
-     (?a . "\\autocite{%l}")
-     (?A . "\\textcite{%l}")
-     (?P . "[@%l]")
-     (?T . "@%l [p. ]")
-     (?x . "[]{%l}")
-     (?X . "{%l}"))))
-
-(use-package delsel
-  :ensure nil
-  ;; remove the selection when you start typing with an active selection
-  :hook (after-init-hook . delete-selection-mode))
-
-(use-package savehist
-  ;; The built-in savehist package keeps a record of user inputs
-  ;; and stores them across sessions.
-  ;; Thus, the user will always see their latest choices closer to the top
-  ;; (such as with M-x).
-  :ensure nil ; it is built-in
-  :hook (after-init . savehist-mode))
-
-(use-package tramp
-  :defer t
-  :ensure nil
-  :custom
-  (tramp-fuse-unmount-on-cleanup 't))
+  (window-resize-pixelwise 't)
+  (frame-resize-pixelwise 't)
+  :bind (:map windmove-mode-map
+         ;; new bindings to change widnow sizes
+         ;; similar bindings to windmove (see below),
+         ;; which has S-<arrow> as moving binding
+         (("C-S-<left>" . shrink-window-horizontally)
+          ("C-S-<right>".  enlarge-window-horizontally)
+          ("C-S-<down>" . shrink-window)
+          ("C-S-<up>" . enlarge-window)))
+  )
 
 (use-package xref
   :ensure nil
@@ -519,53 +598,8 @@ When there is ongoing compilation, nothing happens."
   (xref-search-program 'ripgrepz)
   :config
   (add-to-list 'xref-search-program-alist
-               '(ripgrepz . "xargs -0 rg <C> --null -nH --no-heading --no-messages -g '!*/' -z -e <R>")))
-
-(use-package completion-preview
-  :ensure nil
-  :custom
-  (completion-preview-minimum-symbol-length 3)
-  (global-completion-preview-mode 't)
-  :bind (:map completion-preview-active-mode-map
-              ;; Bindings that take effect when the preview is shown:
-              ;; Cycle the completion candidate that the preview shows
-              ( ("M-n" . completion-preview-next-candidate)
-                ("M-p" . completion-preview-prev-candidate)
-                ;; Convenient alternative to C-i after typing one of the above
-                ("M-i" . completion-preview-insert)))
-  :config
-  ;; Non-standard commands to that should show the preview:
-  ;; Org mode has a custom `self-insert-command'
-  ;; (push 'org-self-insert-command completion-preview-commands)
-  ;; Paredit has a custom `delete-backward-char' command
-  ;; (push 'paredit-backward-delete completion-preview-commands)
+               '(ripgrepz . "xargs -0 rg <C> --null -nH --no-heading --no-messages -g '!*/' -z -e <R>"))
   )
-
-(use-package which-key
-  :ensure nil
-  ;; provide a popup when you press a button with all bindings that follow
-  :custom
-  (which-key-min-display-lines 10)
-  (which-key-mode t))
-
-(use-package faces
-  :ensure nil
-  :custom-face
-  (default ((t (:height 125
-                :width condensed
-                :foundry "ADBO"
-                :family "Source Code Pro"))))
-  (fixed-pitch ((t (:height 1.0
-                    :foundry "ADBO"
-                    :family "Source Code Pro"))))
-  (variable-pitch ((t (:height 1.0
-                       :foundry "ADBO"
-                       :family "Source Sans 3")))))
-
-(use-package ispell
-  :ensure nil
-  :custom
-  (ispell-dictionary "en_GB-w_accents"))
 
 ;; re-evaluate this on restart if emacs gets stuck with wrong colours
 ;; to select the whole sexpr put carriage on the first parenthesis and press C-M-space
