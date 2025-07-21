@@ -1,6 +1,8 @@
 (?i)anonimisation
 (?i)arity
 (?i)asynchronicity
+(?i)bidirectionality
+(?i)bidirectional
 (?i)checkable
 (?i)codebases?
 (?i)codomain
@@ -52,6 +54,7 @@
 (?i)unreduced
 (?i)untyped
 Agda
+Rocq
 Coq
 Lean
 Idris
@@ -62,6 +65,7 @@ LVars
 Ltac
 Matita
 MetaCoq
+MetaRocq
 PTS
 SSReflect
 STLC
