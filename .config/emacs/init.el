@@ -667,7 +667,7 @@ When there is ongoing compilation, nothing happens."
   auto-dark--is-light-mode-xfce
   ;; auto-dark--set-theme ;; this is for me not to forget how to switch themes manually
   :custom
-  (auto-dark-themes '((modus-videndi-tinted) (modus-operandi-tinted)))
+  (auto-dark-themes '((modus-vivendi-tinted) (modus-operandi-tinted)))
   (auto-dark-detection-method 'dbus)
   ;; because we re-define auto-dark themes when doom is loaded
   :hook (after-init-hook . (lambda () (auto-dark-mode t)))
