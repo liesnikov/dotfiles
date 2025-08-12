@@ -995,7 +995,9 @@ When there is ongoing compilation, nothing happens."
         (("M-x"     . counsel-M-x)
          ("C-x C-f" . counsel-find-file)
          ("C-x f f" . counsel-find-file)
-         ("C-x f r" . counsel-recentf))))
+         ("C-x f r" . counsel-recentf)
+         ("C-x r R" . counsel-register)))
+  )
 
 
 (use-package expand-region
