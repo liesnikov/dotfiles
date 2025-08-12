@@ -41,6 +41,13 @@
   :ensure t
   :demand t
   ;; not a system package, but we have to change paths before anything else kicks in
+  :defines
+  no-littering-etc-directory
+  no-littering-var-directory
+  :functions
+  no-littering-expand-var-file-name
+  :commands
+  no-littering-theme-backups
   :init
   (setq no-littering-etc-directory
           (expand-file-name "etc/" "~/.config/emacs")
@@ -121,8 +128,12 @@
 
 (use-package compile
   :ensure nil
-  :functions liesnikov/compile-on-save-start
-  :defines liesnikov/compile-on-save-mode
+  :functions
+  compilation-find-buffer
+  recompile
+  liesnikov/compile-on-save-start
+  :commands
+  liesnikov/compile-on-save-mode
   :hook
   (compilation-finish-functions . liesnikov/compile-bury-buffer-if-successful)
   :config
@@ -147,7 +158,8 @@
     "Start compilation on the current buffer if there is no ongoing compilation."
     (let ((buffer (compilation-find-buffer)))
       (unless (get-buffer-process buffer)
-        (recompile))))
+        (recompile)))
+    )
   (define-minor-mode liesnikov/compile-on-save-mode
     "Minor mode to automatically call `recompile' when the current buffer is saved.
 When there is ongoing compilation, nothing happens."
@@ -155,7 +167,9 @@ When there is ongoing compilation, nothing happens."
     (if liesnikov/compile-on-save-mode
         (progn  (make-local-variable 'after-save-hook)
                 (add-hook 'after-save-hook 'liesnikov/compile-on-save-start nil t))
-      (kill-local-variable 'after-save-hook))))
+      (kill-local-variable 'after-save-hook))
+    )
+  )
 
 (use-package completion-preview
   :ensure nil
@@ -195,7 +209,10 @@ When there is ongoing compilation, nothing happens."
 (use-package dired
   :ensure nil
   :defer t
-  :commands dired-open-file
+  :commands
+  dired-open-file
+  :functions
+  dired-get-filename
   :custom
   (dired-async-mode t)
   (dired-listing-switches "-al")
@@ -229,12 +246,14 @@ When there is ongoing compilation, nothing happens."
 
 (use-package display-line-numbers
   :ensure nil
+  :defines
+  display-line-numbers-exempt-modes
   :init
   (defcustom display-line-numbers-exempt-modes '()
     "Major modes on which to disable the display-line-numbers mode,
      exempts them from global requirement"
    :group 'display-line-numbers
-   :type 'list
+   :type '(list symbol)
    :version "green")
   (defun display-line-numbers--turn-on ()
     "turn on line numbers but excempting certain majore modes
@@ -247,7 +266,8 @@ When there is ongoing compilation, nothing happens."
 ;; "Major modes on which to disable the display-line-numbers mode, exempts them from global requirement"
   (display-line-numbers-exempt-modes
    '(vterm-mode eshell-mode shell-mode term-mode ansi-term-mode pdf-view-mode))
-  :hook (prog-mode-hook . display-line-numbers-mode))
+  :hook (prog-mode-hook . display-line-numbers-mode)
+  )
 
 (use-package editorconfig
   :ensure nil
@@ -257,6 +277,9 @@ When there is ongoing compilation, nothing happens."
 (use-package eshell
   :defer t
   :ensure nil
+  :defines eshell-directory-name ; for no-littering
+  :commands eshell/trueclear ; defined by me in ':config'
+  :functions eshell-truncate-buffer ; used by me in the 'eshell/trueclear'
   :custom
   (password-cache-expiry 300)
   (eshell-load-hook (lambda nil (setenv "PAGER" "")))
@@ -266,7 +289,6 @@ When there is ongoing compilation, nothing happens."
                             (concat (file-name-base (eshell/pwd))
                                     " ⊢")))
   (eshell-prompt-regexp "[^/]+ ⊢")
-  :functions eshell/trueclear
   :config
   (require 'em-tramp)
   (add-to-list 'eshell-modules-list 'eshell-tramp)
@@ -339,6 +361,8 @@ When there is ongoing compilation, nothing happens."
   ;; (ibuffer-saved-filters nil)
   :bind (;; map C-x C-b to ibuffer instead of default `list-buffers`
          ("C-x C-b" . ibuffer))
+  :defines
+  ibuffer-filter-groups ; needed in the ibuffer-project
   )
 
 (use-package ispell
@@ -374,16 +398,20 @@ When there is ongoing compilation, nothing happens."
   (keyboard-coding-system 'utf-8-unix)
   )
 
+(use-package sgml-mode
+  :defer t
+  :functions sgml-pretty-print)
+
 (use-package nxml-mode
   :defer t
   :ensure nil
   :mode ("\\.\\(xml\\|xsd\\|wsdl\\)\\'")
-  :functions xml-pretty-print
+  :commands xml-pretty-print
   :config
   (defun xml-pretty-print ()
     "Pretty print the XML content in the current buffer."
     (interactive)
-    sgml-pretty-print)
+    (sgml-pretty-print))
   )
 
 (use-package paren
@@ -414,7 +442,6 @@ When there is ongoing compilation, nothing happens."
 
 (use-package project
   :ensure nil
-  :functions project-try-magit
   :bind (:map project-prefix-map
          ("m" . project-try-magit))
   :custom
@@ -425,16 +452,23 @@ When there is ongoing compilation, nothing happens."
      (project-find-dir "Find directory")
      (project-try-magit "Magit")
      (project-eshell "Eshell")))
+  :commands
+  project-try-magit
   :init
   (defun project-try-magit ()
-    "Try to open magit status for the current project, or prompt for a project directory."
+    "Try to open magit status for the current project,
+     or prompt for a project directory."
     (interactive)
     (require 'magit)
     (condition-case err
         (magit-project-status)
       (error (progn
-               (message "%s" (error-message-string err)
-                        (project-find-dir))))))
+               (message "%s" (error-message-string err))
+               (project-find-dir)
+               )
+             )
+      )
+    )
   )
 
 (use-package recentf
@@ -662,9 +696,11 @@ When there is ongoing compilation, nothing happens."
 ;;;## Visual things
 
 (use-package auto-dark
-  :defines
+  :functions
   auto-dark--dbus-xfce
   auto-dark--is-light-mode-xfce
+  auto-dark-mode
+  auto-dark--set-theme
   ;; auto-dark--set-theme ;; this is for me not to forget how to switch themes manually
   :custom
   (auto-dark-themes '((modus-vivendi-tinted) (modus-operandi-tinted)))
@@ -709,6 +745,9 @@ When there is ongoing compilation, nothing happens."
   (doom-themes-enable-italic t)
   ;; using auto-dark
   (auto-dark-themes '((doom-one) (doom-one-light)))
+  :functions
+  doom-themes-visual-bell-config
+  doom-themes-org-config
   :config
   ;; (load-theme 'doom-one t)
   ;; Enable flashing mode-line on errors
@@ -727,6 +766,9 @@ When there is ongoing compilation, nothing happens."
   :custom
   (x-underline-at-descent-line t)
   (moody-mode-line-height 20)
+  :functions
+  moody-replace-mode-line-buffer-identification
+  moody-replace-vc-mode
   :config
   (moody-replace-mode-line-buffer-identification)
   (moody-replace-vc-mode))
@@ -772,7 +814,9 @@ When there is ongoing compilation, nothing happens."
       ("Circled Bullet" "Middle Dot" "."))
      ("Zero Width Space"
       ("Circled Bullet" "Middle Dot" "."))))
- :config
+  :functions
+  unicode-whitespace-setup
+  :config
   (unicode-whitespace-setup 'subdued-faces))
 
 (use-package emojify
@@ -861,6 +905,8 @@ When there is ongoing compilation, nothing happens."
   ;; Press C-c p ? to for help.
   :bind ("C-c p" . cape-prefix-map) ;; Alternative key: M-<tab>, M-p, M-+
   :defer nil
+  :defines
+  cape-prefix-map ; for yasnippet
   :hook
   ;; Add to the global default value of `completion-at-point-functions' which is
   ;; used by `completion-at-point'.  The order of the functions matters, the
@@ -889,6 +935,9 @@ When there is ongoing compilation, nothing happens."
   :defer t
   ;; group ibuffer entries by the project
   :after project
+  :functions
+  ibuffer-project-generate-filter-groups
+  ibuffer-do-sort-by-project-file-relative
   :hook
   (ibuffer-hook . (lambda ()
      (setq ibuffer-filter-groups (ibuffer-project-generate-filter-groups))
@@ -919,6 +968,11 @@ When there is ongoing compilation, nothing happens."
 (use-package ivy-rich
   :defer t
   :requires ivy
+  :functions
+  ivy-rich-mode
+  ivy-format-function-line
+  :defines
+  ivy-format-functions-alist
   :config
   (ivy-rich-mode t)
   (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line))
@@ -931,6 +985,8 @@ When there is ongoing compilation, nothing happens."
   :custom
   (counsel-mode t)
   (counsel-find-file-at-point t)
+  :defines
+  counsel-mode-map
   :bind
   (:map counsel-mode-map
         (("M-x"     . counsel-M-x)
@@ -940,7 +996,7 @@ When there is ongoing compilation, nothing happens."
 
 
 (use-package expand-region
-  :commands ex/expand-region
+  :commands er/expand-region
   ;; expand selection semantically
   :bind
   (("M-=" . 'er/expand-region)))
@@ -950,6 +1006,8 @@ When there is ongoing compilation, nothing happens."
   :defer t
   ;:ensure-system-package elpa-pdf-tools
   :mode (("\\.pdf\\'" . pdf-view-mode))
+  :functions
+  pdf-tools-install
   :config
   ; enable pdftools instead of docview
   (pdf-tools-install)
@@ -978,12 +1036,15 @@ When there is ongoing compilation, nothing happens."
   :bind (("M-g c"   . avy-goto-char-timer)
          ("M-g g"   . avy-goto-line)
          ("M-g M-g" . avy-goto-line))
+  :functions avy-setup-default
   :config
   (avy-setup-default))
 
 ;; todo: switch to vundo
 (use-package undo-tree
   :bind ("C-/" . undo-tree-undo) ; default binding, but forcing the defer this way
+  :commands
+  global-undo-tree-mode
   :config
   (global-undo-tree-mode)
   (defun undo-tree-fix/undo-tree-compress (filename)
@@ -999,6 +1060,13 @@ When there is ongoing compilation, nothing happens."
   :functions liesnikov/envrc-reload-or-clear
   :custom
   (envrc-global-mode t)
+  :functions
+  envrc--clear
+  envrc--with-required-current-env
+  envrc--find-env-dir
+  envrc--update
+  :defines
+  env-dir
   :config
   (defun liesnikov/envrc-reload-or-clear ()
    "Clear the direnv environment and reload, if there's another one."
@@ -1020,8 +1088,9 @@ When there is ongoing compilation, nothing happens."
   :config
   (defun liesnikov/sort-split ()
     "Sort and split words per line.
-     This function sort words in alphabetical order in the currently selected region
-     and inserts a newline before every new letter of the alphabet.
+     This function sort words in alphabetical order
+     in the currently selected region and inserts a newline
+     before every new letter of the alphabet.
      So that in the end each line has words starting with the same letter"
     (interactive)
     ;; if the region is not selected choose current line
@@ -1060,6 +1129,8 @@ When there is ongoing compilation, nothing happens."
 (use-package yasnippet
   :commands yas-expand
   :autoload yas--get-snippet-tables
+  :defines
+  yas-minor-mode-map
   :bind-keymap ("C-c &" . yas-minor-mode-map)
   :bind ((:map yas-minor-mode-map
               ("C-c & TAB" . yas-expand))
@@ -1118,7 +1189,9 @@ When there is ongoing compilation, nothing happens."
   ;; for search purposes: org-mode
   :custom
   (olivetti-body-width 90)
-  :commands olivetti
+  :commands
+  olivetti
+  olivetti-mode
   :config
   (defun olivetti ()
     "Toggle olivetti mode, but interactively."
@@ -1136,6 +1209,8 @@ When there is ongoing compilation, nothing happens."
   (markdown-mode-hook . flymake-mode)
   (markdown-mode-hook . eglot-ensure)
   :custom (markdown-inline-image-overlays 't)
+  :defines
+  markdown-mode-map
   :config
   ;; from https://gist.github.com/kleinschmidt/5ab0d3c423a7ee013a2c01b3919b009a
   ;; define markdown citation formats
@@ -1152,7 +1227,8 @@ When there is ongoing compilation, nothing happens."
     (interactive)
     (let ((reftex-cite-format markdown-cite-format)
           (reftex-cite-key-separator "; @"))
-      (reftex-citation)))
+      (reftex-citation))
+    )
   ;; bind modified reftex-citation to C-c[, without enabling reftex-mode
   ;; https://www.gnu.org/software/auctex/manual/reftex/Citations-Outside-LaTeX.html#SEC31
   :bind (:map markdown-mode-map
@@ -1198,9 +1274,10 @@ When there is ongoing compilation, nothing happens."
 
 (use-package org-modern-indent
   :defer t
+  :functions omi/mode
   :config ; add late to hook
   ;; because of the depth argument can't use :hook
-  (add-hook 'org-mode-hook #'org-modern-indent-mode 90))
+  (add-hook 'org-mode-hook #'omi/mode 90))
 
 ;;;## Programming
 
@@ -1212,7 +1289,11 @@ When there is ongoing compilation, nothing happens."
   ;; highlight word-differences in diffs
   (magit-diff-refine-hunk (quote all))
   :bind (;; magit open default window binding
-         ("C-x g" .  magit-status)))
+         ("C-x g" .  magit-status))
+  :functions
+  magit-file-relative-name
+  magit-project-status
+  )
 
 (use-package git-link
   :bind ("C-c g l" . git-link-dispatch)
@@ -1254,6 +1335,7 @@ When there is ongoing compilation, nothing happens."
 
 ;; for breadcrumbs modeline
 (use-package breadcrumb
+  :commands breadcrumb-mode
   :config
   (breadcrumb-mode))
 
@@ -1268,11 +1350,13 @@ When there is ongoing compilation, nothing happens."
 
 (use-package treesit-langs
   :requires treesit
+  :commands treesit-langs-major-mode-setup
   :config
   (treesit-langs-major-mode-setup))
 
 (use-package treesit-auto
   :requires treesit
+  :commands global-treesit-auto-mode
   :config
   (global-treesit-auto-mode))
 
@@ -1298,8 +1382,16 @@ When there is ongoing compilation, nothing happens."
   :mode "\\.dockerfile\\'")
 
 (use-package copilot
+  :defines
+  copilot-mode-map
+  :commands
+  copilot-mode
+  copilot-next-completion
+  copilot-accept-completion
+  copilot-complete
   :bind
   ("C-<tab>" . liesnikov/copilot-tab)
+  :bind
   (:map copilot-mode-map
         ("C-<tab>" . liesnikov/copilot-tab))
   :custom
@@ -1307,7 +1399,9 @@ When there is ongoing compilation, nothing happens."
   (copilot-indent-offset-warning-disable t)
   :config
   (defun liesnikov/copilot-tab (arg)
-    "Smarter copilot autocompletion, if ARG is provided, go to the next completion, otherwise accept the current one."
+    "Smarter copilot autocompletion,
+     if ARG is provided, go to the next completion,
+     otherwise accept the current one."
     (interactive "P")
     ;; check if copilot mode is active
     (if (not (bound-and-true-p copilot-mode))
@@ -1318,7 +1412,8 @@ When there is ongoing compilation, nothing happens."
       (if (bound-and-true-p arg)
           (copilot-next-completion)
         (or (copilot-accept-completion)
-            (copilot-complete))))))
+            (copilot-complete)))))
+  )
 
 (use-package llm
   :defer t
@@ -1331,12 +1426,15 @@ When there is ongoing compilation, nothing happens."
   (ellama-keymap-prefix "C-c e l")
   (ellama-sessions-directory "~/.cache/emacs/ellama-sessions")
   (ellama-provider (make-llm-ollama :chat-model "llama3.2" :embedding-model "llama3.2"))
+  :defines ellama-command-map
+  :commands ellama--cancel-current-request
   :bind (:map ellama-command-map
          ("q c" . (lambda () (interactive) (ellama--cancel-current-request)))
          ("q q" . ellama--cancel-current-request-and-quit)))
 
 (use-package noxml-fold
   :defer t
+  :commands noxml-fold-mode
   :hook
   (nxml-mode-hook . (lambda () (noxml-fold-mode 1))))
 
@@ -1377,6 +1475,7 @@ When there is ongoing compilation, nothing happens."
 ;;;### rust
 (use-package rust-mode
   :defer t
+  :defines rust-mode-treesitter-derive
   :init
   (setq rust-mode-treesitter-derive t))
 
@@ -1502,7 +1601,7 @@ Source: https://old.reddit.com/r/emacs/comments/idz35e/emacs_27_can_take_svg_scr
     (message filename)))
 
 (defun liesnikov/kill-filename ()
-  "Copy current buffer's file path to 'kill-ring'."
+  "Copy current buffer's file path to kill-ring."
   (interactive)
   (kill-new buffer-file-name))
 
@@ -1510,7 +1609,7 @@ Source: https://old.reddit.com/r/emacs/comments/idz35e/emacs_27_can_take_svg_scr
   "Get current buffer's file path and line/column location.
 If FULL-PATH is non-nil use full path, otherwise relative."
   (require 'magit)
-  (let ((line (current-line))
+  (let ((line (line-number-at-pos))
         (column (current-column))
         (filename (if full-path
                       (buffer-file-name)
