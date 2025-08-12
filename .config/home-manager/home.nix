@@ -33,12 +33,12 @@
       #agda
 
       pandoc
+
       ripgrep
       fd
       jq
 
       diffpdf
-      ocrmypdf
 
       bash-language-server
 
