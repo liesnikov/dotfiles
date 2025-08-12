@@ -451,7 +451,10 @@ When there is ongoing compilation, nothing happens."
    '((project-find-file "Find file")
      (project-find-dir "Find directory")
      (project-try-magit "Magit")
-     (project-eshell "Eshell")))
+     (project-eshell "Eshell")
+     (project-switch-to-buffer "Buffers")
+     )
+   )
   :commands
   project-try-magit
   :init
