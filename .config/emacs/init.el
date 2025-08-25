@@ -274,6 +274,13 @@ When there is ongoing compilation, nothing happens."
   :custom
   (editorconfig-mode t))
 
+(use-package eldoc
+  :ensure nil
+  :defer t
+  :custom
+  (eldoc-documentation-strategy eldoc-documentation-compose)
+  )
+
 (use-package eshell
   :defer t
   :ensure nil
@@ -1313,6 +1320,8 @@ When there is ongoing compilation, nothing happens."
 ;; Language server protocol
 (use-package eglot
   :ensure nil
+  :defines
+  eglot-managed-mode-hook
   :hook
   (sh-mode-hook . eglot-ensure)
   (bash-ts-mode-hook . eglot-ensure)
@@ -1336,7 +1345,13 @@ When there is ongoing compilation, nothing happens."
 
 (use-package eldoc-box
   :custom (eldoc-box-cleanup-interval 2)
-  :hook (eglot-managed-mode-hook . eldoc-box-hover-mode))
+  :hook
+  (eglot-managed-mode-hook . eldoc-box-hover-mode)
+  (eglot-managed-mode-hook . eldoc-box-hover-at-point-mode)
+  ;; for some reason doesn't work atm
+  ;;(emacs-lisp-mode-hook . eldoc-box-hover-mode)
+  ;;(emacs-lisp-mode-hook . eldoc-box-hover-at-point-mode)
+  )
 
 ;; for breadcrumbs modeline
 (use-package breadcrumb
