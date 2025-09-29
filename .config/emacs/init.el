@@ -1128,7 +1128,7 @@ When there is ongoing compilation, nothing happens."
     ("<backtab>" . dired-subtree-remove)
     ("S-TAB" . dired-subtree-remove))
   :custom
-  (dired-subtree-use-backgrounds nil))
+  (dired-subtree-use-backgrounds 't))
 
 (use-package trashed
   :commands trashed
