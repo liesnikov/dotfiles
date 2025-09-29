@@ -85,7 +85,7 @@
 ;; (require 'use-package-ensure)
 ;; (setq use-package-always-ensure t)
 
-;;;# Built-in packages, for neatness
+;;; Built-in packages, for neatness
 
 (use-package desktop
   :ensure nil
@@ -699,11 +699,11 @@ When there is ongoing compilation, nothing happens."
 
 ;; end of built-in packages
 
-;;;# Installed packages
+;;; Installed packages
 
-;;;## Package managment
+;;;; Package managment
 
-;;;## Visual things
+;;;; Visual things
 
 (use-package auto-dark
   :functions
@@ -884,7 +884,7 @@ When there is ongoing compilation, nothing happens."
   (scroll-margin 0)
   (ultra-scroll-mode 1))
 
-;;;## General goodies
+;;;; General goodies
 
 ;;autocomplete
 
@@ -1157,13 +1157,34 @@ When there is ongoing compilation, nothing happens."
 (use-package yasnippet-snippets
   :defer t)
 
-;;;## Writing & reading
+;;;; Writing & reading
 
-;; word processor and markup
+;; word processing and markup
 
 (use-package wc-mode
   ;; count words in the buffer
   :commands wc-mode)
+
+(use-package olivetti
+  ;; package for writing mode, introduces margins
+  ;; for search purposes: org-mode
+  :custom
+  (olivetti-body-width 90)
+  :commands
+  olivetti
+  olivetti-mode
+  :config
+  (defun olivetti ()
+    "Toggle olivetti mode, but interactively."
+    (interactive)
+    (call-interactively #'olivetti-mode )))
+
+;;(use-package nov
+;;  ;; Major mode for reading EPUB documents
+;;  :config
+;;  (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode)))
+
+;;;;; TeX
 
 (use-package tex
   :defer t
@@ -1196,24 +1217,7 @@ When there is ongoing compilation, nothing happens."
   ((LaTeX-mode-hook latex-mode-hook). eglot-ensure)
   )
 
-(use-package olivetti
-  ;; package for writing mode, introduces margins
-  ;; for search purposes: org-mode
-  :custom
-  (olivetti-body-width 90)
-  :commands
-  olivetti
-  olivetti-mode
-  :config
-  (defun olivetti ()
-    "Toggle olivetti mode, but interactively."
-    (interactive)
-    (call-interactively #'olivetti-mode )))
-
-;;(use-package nov
-;;  ;; Major mode for reading EPUB documents
-;;  :config
-;;  (add-to-list 'auto-mode-alist '("\\.epub\\'" . nov-mode)))
+;;;;; Markdown
 
 (use-package markdown-mode
   :mode "\\.\\(?:md\\|markdown\\|mkd\\|mdown\\|mkdn\\|mdwn\\)\\'"
@@ -1245,6 +1249,8 @@ When there is ongoing compilation, nothing happens."
   ;; https://www.gnu.org/software/auctex/manual/reftex/Citations-Outside-LaTeX.html#SEC31
   :bind (:map markdown-mode-map
               ("C-c [" . liesnikov/markdown-reftex-citation)))
+
+;;;;; Org
 
 (use-package org
   :bind (:map org-mode-map
@@ -1291,10 +1297,47 @@ When there is ongoing compilation, nothing happens."
   ;; because of the depth argument can't use :hook
   (add-hook 'org-mode-hook #'omi/mode 90))
 
-;;;## Programming
+;;;; Programming
+
+;;;;; Miscellaneous
+
+;; (use-package paredit
+;;   ;; overrides too many bindings, including M-?
+;;   :defer t
+;;   :bind (:map paredit-mode-map
+;;               ("(" . paredit-open-round)
+;;               (")" . paredit-close-round)
+;;               ("[" . paredit-open-square)
+;;               ("]" . paredit-close-square)
+;;               ("{" . paredit-open-curly)
+;;               ("}" . paredit-close-curly)
+;;               ("\"" . paredit-doublequote)
+;;               ("C-d" . paredit-delete-char)
+;;               ("C-j" . paredit-newline)
+;;               ("C-k" . paredit-kill)
+;;               ("RET" . paredit-newline)
+;;               ("DEL" . paredit-backward-delete))
+;;   :hook ((emacs-lisp-mode-hook
+;;           eval-expression-minibuffer-setup-hook
+;;           ielm-mode-hook
+;;           lisp-interaction-mode-hook
+;;           lisp-mode-hook) . paredit-mode))
+
+;; (use-package rainbow-delimiters
+;;   ;; makes the colours weird, hard to spot parentheses
+;;   :defer t
+;;   :hook
+;;   (prog-mode-hook . rainbow-delimiters-mode))
+
+(use-package highlight-parentheses
+  ;; dynamically highlights the parentheses surrounding point based on nesting-level
+  :defer t
+  :hook ((minibuffer-setup-hook
+          prog-mode-hook) . highlight-parentheses-mode))
 
 
-;;;### misc
+;;;;; Version control
+
 (use-package magit
   ;; emacs git interface
   :custom
@@ -1317,7 +1360,10 @@ When there is ongoing compilation, nothing happens."
   :defer t
   )
 
-;; Language server protocol
+;;;;; Language Server Protocol
+
+;; built-in, but easier to configure here
+
 (use-package eglot
   :ensure nil
   :defines
@@ -1353,12 +1399,6 @@ When there is ongoing compilation, nothing happens."
   ;;(emacs-lisp-mode-hook . eldoc-box-hover-at-point-mode)
   )
 
-;; for breadcrumbs modeline
-(use-package breadcrumb
-  :commands breadcrumb-mode
-  :config
-  (breadcrumb-mode))
-
 (use-package eglot-booster
   :after eglot
   :vc (:url "https://github.com/jdtsmith/eglot-booster")
@@ -1367,6 +1407,14 @@ When there is ongoing compilation, nothing happens."
   (eglot-booster-io-only (unless (version< emacs-version "30") t))
   (eglot-booster-mode t)
   )
+
+;;;;; Code navigation
+
+;; for breadcrumbs modeline
+(use-package breadcrumb
+  :commands breadcrumb-mode
+  :config
+  (breadcrumb-mode))
 
 (use-package treesit-langs
   :requires treesit
@@ -1397,9 +1445,7 @@ When there is ongoing compilation, nothing happens."
 ;(use-package tree-sitter-langs
 ;;  :requires tree-sitter)
 
-(use-package dockerfile-mode
-  :defer t
-  :mode "\\.dockerfile\\'")
+;;;;; LLMs
 
 (use-package copilot
   :defines
@@ -1452,47 +1498,10 @@ When there is ongoing compilation, nothing happens."
          ("q c" . (lambda () (interactive) (ellama--cancel-current-request)))
          ("q q" . ellama--cancel-current-request-and-quit)))
 
-(use-package noxml-fold
-  :defer t
-  :commands noxml-fold-mode
-  :hook
-  (nxml-mode-hook . (lambda () (noxml-fold-mode 1))))
+;;;;; Programming language-specific
 
-;; (use-package paredit
-;;   ;; overrides too many bindings, including M-?
-;;   :defer t
-;;   :bind (:map paredit-mode-map
-;;               ("(" . paredit-open-round)
-;;               (")" . paredit-close-round)
-;;               ("[" . paredit-open-square)
-;;               ("]" . paredit-close-square)
-;;               ("{" . paredit-open-curly)
-;;               ("}" . paredit-close-curly)
-;;               ("\"" . paredit-doublequote)
-;;               ("C-d" . paredit-delete-char)
-;;               ("C-j" . paredit-newline)
-;;               ("C-k" . paredit-kill)
-;;               ("RET" . paredit-newline)
-;;               ("DEL" . paredit-backward-delete))
-;;   :hook ((emacs-lisp-mode-hook
-;;           eval-expression-minibuffer-setup-hook
-;;           ielm-mode-hook
-;;           lisp-interaction-mode-hook
-;;           lisp-mode-hook) . paredit-mode))
+;;;;;; Rust
 
-;; (use-package rainbow-delimiters
-;;   ;; makes the colours weird, hard to spot parentheses
-;;   :defer t
-;;   :hook
-;;   (prog-mode-hook . rainbow-delimiters-mode))
-
-(use-package highlight-parentheses
-  ;; dynamically highlights the parentheses surrounding point based on nesting-level
-  :defer t
-  :hook ((minibuffer-setup-hook
-          prog-mode-hook) . highlight-parentheses-mode))
-
-;;;### rust
 (use-package rust-mode
   :defer t
   :defines rust-mode-treesitter-derive
@@ -1504,7 +1513,8 @@ When there is ongoing compilation, nothing happens."
   :after (rust-mode)
   :custom (rustic-lsp-client 'eglot))
 
-;;;### ocaml
+;;;;;; Ocaml
+
 (use-package tuareg
   ;; activate tuareg (ocaml) mode in ml4 files
   ;; (syntax extensions for coq)
@@ -1517,7 +1527,8 @@ When there is ongoing compilation, nothing happens."
   (tuareg-mode-hook . merlin-mode)
   )
 
-;;;### haskell
+;;;;;; Haskell
+
 ;; copied from https://codeberg.org/pranshu/haskell-ts-mode
 (use-package haskell-ts-mode
   :mode "\\.hs\\'"
@@ -1528,7 +1539,8 @@ When there is ongoing compilation, nothing happens."
                '(haskell . ("https://github.com/tree-sitter/tree-sitter-haskell" "v0.23.1")))
   )
 
-;;;### nix
+;;;;;; Nix
+
 (use-package nix-mode
   ;; activate nix-mode in .nix files
   :mode "\\.nix\\'"
@@ -1539,7 +1551,21 @@ When there is ongoing compilation, nothing happens."
   (add-to-list 'eglot-server-programs '((nix-mode) . ("nixd")))
   )
 
-;;### proof assistants
+;;;;; Other programming files
+
+
+(use-package dockerfile-mode
+  :defer t
+  :mode "\\.dockerfile\\'")
+
+(use-package noxml-fold
+  :defer t
+  :commands noxml-fold-mode
+  :hook
+  (nxml-mode-hook . (lambda () (noxml-fold-mode 1))))
+
+;;;; Proof Assistants
+
 (use-package idris-mode
   :mode "\\.idr$" "\\.lidr$"
   )
@@ -1549,7 +1575,8 @@ When there is ongoing compilation, nothing happens."
   :vc (:url "https://idris-community/idris2-mode")
   )
 
-;;;#### coq
+;;;;; Rocq
+
 (use-package proof-general
   :commands coq-mode
   :mode ("\\.v\\'" . coq-mode)
@@ -1571,7 +1598,8 @@ When there is ongoing compilation, nothing happens."
 ;; 'coq-mode-hook (unicode-tokens-use-shortcuts nil))
 
 
-;;;#### agda
+;;;;; Agda
+
 ;; agda2 mode, gets appended by `agda-mode setup`
 (defun agda-load ()
   (interactive)
@@ -1590,17 +1618,11 @@ When there is ongoing compilation, nothing happens."
 ;;; Commentary:
 
 ;; NB:
-
 ;; to stop wrapping lines: toggle-truncate-lines
-
 ;; occur mode (M-s o)
-
 ;; interactive regex building (M-x) bound to re-builder
-
 ;; text-mode menu bar (M-`) bound to tmm-menubar
-
 ;; artist-mode to draw ASCII diagrams: artist-mode
-
 ;; to open two different views on the same buffer: make-indirect-buffer
 
 ;;; Bindings:
