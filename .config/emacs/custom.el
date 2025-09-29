@@ -26,7 +26,7 @@
      rg rustic
      sideline sideline-eglot sideline-flymake sort-words swiper
      transpose-frame trashed treesit-auto treesit-fold treesit-ispell treesit-langs tuareg
-     ultra-scroll undo-tree unicode-whitespace use-package-ensure-system-package
+     ultra-scroll undo-tree unfill unicode-whitespace use-package-ensure-system-package
      wc-mode
      yasnippet yasnippet-snippets))
  '(package-vc-selected-packages
