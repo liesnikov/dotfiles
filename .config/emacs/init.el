@@ -460,6 +460,7 @@ When there is ongoing compilation, nothing happens."
      (project-try-magit "Magit")
      (project-eshell "Eshell")
      (project-switch-to-buffer "Buffers")
+     (keyboard-quit "Quit" "g")
      )
    )
   :commands
