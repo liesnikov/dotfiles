@@ -1562,13 +1562,16 @@ When there is ongoing compilation, nothing happens."
 
 (use-package dockerfile-mode
   :defer t
-  :mode "\\.dockerfile\\'")
+  :mode "\\.dockerfile\\'"
+  )
 
 (use-package noxml-fold
   :defer t
   :commands noxml-fold-mode
   :hook
-  (nxml-mode-hook . (lambda () (noxml-fold-mode 1))))
+  (nxml-mode-hook . (lambda () (noxml-fold-mode 1)))
+  )
+
 (use-package yaml-pro
   :defer t
   )
