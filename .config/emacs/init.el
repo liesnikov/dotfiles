@@ -1569,6 +1569,9 @@ When there is ongoing compilation, nothing happens."
   :commands noxml-fold-mode
   :hook
   (nxml-mode-hook . (lambda () (noxml-fold-mode 1))))
+(use-package yaml-pro
+  :defer t
+  )
 
 ;;;; Proof Assistants
 

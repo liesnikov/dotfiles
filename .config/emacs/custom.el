@@ -28,7 +28,7 @@
      transpose-frame trashed treesit-auto treesit-fold treesit-ispell treesit-langs tuareg
      ultra-scroll undo-tree unfill unicode-whitespace use-package-ensure-system-package
      wc-mode
-     yasnippet yasnippet-snippets))
+     yaml-pro yasnippet yasnippet-snippets))
  '(package-vc-selected-packages
    '((haskell-ts-mode :url "https://codeberg.org/pranshu/haskell-ts-mode"
                       :branch "main")
