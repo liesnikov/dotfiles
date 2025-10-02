@@ -1497,20 +1497,44 @@ When there is ongoing compilation, nothing happens."
 
 (use-package llm
   :defer t
-  :commands make-llm-ollama)
+  :custom
+  (llm-warn-on-nonfree nil)
+  )
+(use-package llm-ollama
+  :defer t
+  :autoload make-llm-ollama
+  )
+(use-package llm-openai
+  :defer a
+  :autoload make-llm-openai-compatible
+  )
 
 (use-package ellama
   :defer t
   :custom
   (ellama-language "English")
-  (ellama-keymap-prefix "C-c e l")
+  (ellama-keymap-prefix "C-c e")
   (ellama-sessions-directory "~/.cache/emacs/ellama-sessions")
-  (ellama-provider (make-llm-ollama :chat-model "llama3.2" :embedding-model "llama3.2"))
+  ;;(ellama-provider (make-llm-ollama :chat-model "llama3.2" :embedding-model "llama3.2"))
+  (ellama-provider (make-llm-openai-compatible
+                    :url "https://openrouter.ai/api/v1"
+                    :key (secrets-get-secret "Login" "OPENROUTER_API_KEY")
+                    ;; choose from https://openrouter.ai/models?fmt=cards&input_modalities=text&order=top-weekly&output_modalities=text&categories=programming
+                    ;; :chat-model "anthropic/claude-sonnet-4"
+                    ;; :chat-model "x-ai/grok-code-fast-1"
+                    ;; :chat-model "google/gemini-2.5-flash"
+                    ))
+  (ellama-auto-scroll 't)
+  (ellama-naming-scheme 'ellama-generate-name-by-llm)
+  (ellama-spinner-enabled 't)
   :defines ellama-command-map
   :commands ellama--cancel-current-request
+  :bind-keymap ("C-c e" . ellama-command-map)
+  :bind ("C-c M-e" . ellama)
   :bind (:map ellama-command-map
          ("q c" . (lambda () (interactive) (ellama--cancel-current-request)))
          ("q q" . ellama--cancel-current-request-and-quit)
+         ("M-e" . ellama)
          )
   )
 
