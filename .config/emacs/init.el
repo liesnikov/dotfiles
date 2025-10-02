@@ -1420,23 +1420,31 @@ When there is ongoing compilation, nothing happens."
 (use-package breadcrumb
   :commands breadcrumb-mode
   :config
-  (breadcrumb-mode))
+  (breadcrumb-mode)
+  )
 
 (use-package treesit-langs
   :requires treesit
   :commands treesit-langs-major-mode-setup
   :config
-  (treesit-langs-major-mode-setup))
+  (treesit-langs-major-mode-setup)
+  )
 
 (use-package treesit-auto
   :requires treesit
   :commands global-treesit-auto-mode
+  :functions treesit-auto-add-to-auto-mode-alist
+  :custom
+  (treesit-auto-install 'prompt)
   :config
-  (global-treesit-auto-mode))
+  (treesit-auto-add-to-auto-mode-alist 'all)
+  (global-treesit-auto-mode)
+  )
 
 (use-package treesit-ispell
   :defer t
-  :requires treesit)
+  :requires treesit
+  )
 
 (use-package treesit-fold
   :bind ("<backtab>" . treesit-fold-toggle)
@@ -1502,7 +1510,9 @@ When there is ongoing compilation, nothing happens."
   :commands ellama--cancel-current-request
   :bind (:map ellama-command-map
          ("q c" . (lambda () (interactive) (ellama--cancel-current-request)))
-         ("q q" . ellama--cancel-current-request-and-quit)))
+         ("q q" . ellama--cancel-current-request-and-quit)
+         )
+  )
 
 ;;;;; Programming language-specific
 
@@ -1570,10 +1580,6 @@ When there is ongoing compilation, nothing happens."
   :commands noxml-fold-mode
   :hook
   (nxml-mode-hook . (lambda () (noxml-fold-mode 1)))
-  )
-
-(use-package yaml-pro
-  :defer t
   )
 
 ;;;; Proof Assistants
