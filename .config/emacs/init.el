@@ -24,9 +24,12 @@
   (unless (package-installed-p 'use-package)
     (unless package-archive-contents
       (package-refresh-contents))
-    (package-install 'use-package)))
+    (package-install 'use-package))
+  )
 (eval-when-compile
-  (require 'use-package))
+  (require 'use-package)
+  )
+
 (use-package use-package
   :ensure nil
   :demand t
@@ -34,7 +37,8 @@
   ;;(use-package-verbose 't)
   ;;(use-package-compute-statistics 't)
   ;; disable :hook suffix to use abnormal hooks with the same syntax
-  (use-package-hook-name-suffix nil))
+  (use-package-hook-name-suffix nil)
+  )
 
 ;; load no-littering as the very first package
 (use-package no-littering
@@ -73,13 +77,15 @@
   (add-to-list 'recentf-exclude
                (recentf-expand-file-name no-littering-etc-directory))
   :config
-  (no-littering-theme-backups))
+  (no-littering-theme-backups)
+  )
 
 (use-package use-package-ensure-system-package
   ;; The :ensure-system-package keyword allows
   ;; to ensure system binaries exist alongside package declarations.
   :requires use-package
-  :demand t)
+  :demand t
+  )
 
 ;; ensure all packages -- installs them
 ;; (require 'use-package-ensure)
@@ -124,7 +130,8 @@
   :custom
   ;; The day of the week on which a week in the calendar begins.
   ;; 1 means Monday
-  (calendar-week-start-day 1))
+  (calendar-week-start-day 1)
+  )
 
 (use-package compile
   :ensure nil
@@ -204,7 +211,8 @@ When there is ongoing compilation, nothing happens."
 (use-package delsel
   :ensure nil
   ;; remove the selection when you start typing with an active selection
-  :hook (after-init-hook . delete-selection-mode))
+  :hook (after-init-hook . delete-selection-mode)
+  )
 
 (use-package dired
   :ensure nil
@@ -272,7 +280,8 @@ When there is ongoing compilation, nothing happens."
 (use-package editorconfig
   :ensure nil
   :custom
-  (editorconfig-mode t))
+  (editorconfig-mode t)
+  )
 
 (use-package eldoc
   :ensure nil
@@ -339,7 +348,8 @@ When there is ongoing compilation, nothing happens."
   (flyspell-issue-welcome-flag nil)
   (flyspell-use-global-abbrev-table-p t)
   :bind (:map flyspell-mode-map
-              ("C-c k" . compile)))
+              ("C-c k" . compile))
+  )
 
 (use-package frame
   :ensure nil
@@ -764,13 +774,15 @@ When there is ongoing compilation, nothing happens."
   ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config)
   ;; Corrects (and improves) org-mode's native fontification.
-  (doom-themes-org-config))
+  (doom-themes-org-config)
+  )
 
 (use-package minions
   :custom
   (minions-prominent-modes '(flymake-mode))
   ;; hide minor modes under a drop-down menu
-  (minions-mode 1))
+  (minions-mode 1)
+  )
 
 (use-package moody
   ;; modeline as tabs
@@ -782,7 +794,8 @@ When there is ongoing compilation, nothing happens."
   moody-replace-vc-mode
   :config
   (moody-replace-mode-line-buffer-identification)
-  (moody-replace-vc-mode))
+  (moody-replace-vc-mode)
+  )
 
 (use-package unicode-whitespace
   :defer t
@@ -828,7 +841,8 @@ When there is ongoing compilation, nothing happens."
   :functions
   unicode-whitespace-setup
   :config
-  (unicode-whitespace-setup 'subdued-faces))
+  (unicode-whitespace-setup 'subdued-faces)
+  )
 
 (use-package emojify
   ;; enable emoji rendering where they are typeset as text :nonexistent: or :wave:
@@ -836,7 +850,8 @@ When there is ongoing compilation, nothing happens."
   (emojify-display-style 'unicode)
   (emojify-emoji-styles '(unicode github))
   :hook
-  (after-init-hook . global-emojify-mode))
+  (after-init-hook . global-emojify-mode)
+  )
 
 (use-package dashboard
   :custom
@@ -857,12 +872,15 @@ When there is ongoing compilation, nothing happens."
                      (registers . 5)))
   (initial-buffer-choice (lambda () (get-buffer-create dashboard-buffer-name)))
   :hook
-  (after-init-hook . dashboard-setup-startup-hook))
+  (after-init-hook . dashboard-setup-startup-hook)
+  )
 
 ;; a minor mode to enable errors appearing next to the code
 (use-package sideline
-  :hook (flymake-mode-hook . sideline-mode)
-        (eglot-mode-hook . sideline-mode))
+  :hook
+  (flymake-mode-hook . sideline-mode)
+  (eglot-mode-hook . sideline-mode)
+  )
 
 ;; because there's no sideline for flymake by default
 (use-package sideline-flymake
@@ -870,20 +888,23 @@ When there is ongoing compilation, nothing happens."
   :custom
   (sideline-flymake-display-mode 'line) ; 'point to show errors only on point
                                         ; 'line to show errors on the current line
-  (sideline-backends-right '(sideline-flymake)))
+  (sideline-backends-right '(sideline-flymake))
+  )
 
 (use-package sideline-eglot
   :defer t
   :commands sideline-eglot
   :custom
-  (sideline-backends-right '(sideline-eglot)))
+  (sideline-backends-right '(sideline-eglot))
+  )
 
 (use-package ultra-scroll
   :vc (:url "https://github.com/jdtsmith/ultra-scroll")
   :custom
   (scroll-conservatively 101) ; important!
   (scroll-margin 0)
-  (ultra-scroll-mode 1))
+  (ultra-scroll-mode 1)
+  )
 
 ;;;; General goodies
 
@@ -909,7 +930,8 @@ When there is ongoing compilation, nothing happens."
   ;; Allow Corfu to show help text next to suggested completion
   (corfu-popupinfo-mode t)
   ;; On the exact match still show the completion
-  (corfu-on-exact-match 'show))
+  (corfu-on-exact-match 'show)
+  )
 
 (use-package cape
   ;; Bind prefix keymap providing all Cape commands under a mnemonic key.
@@ -930,7 +952,8 @@ When there is ongoing compilation, nothing happens."
 
 (use-package color-moccur
   ;; provide colours in occur mode
-  :bind (("M-s o" . moccur)))
+  :bind (("M-s o" . moccur))
+  )
 
 (use-package transpose-frame
   ;; from emacs 31 it's built-in
@@ -953,13 +976,15 @@ When there is ongoing compilation, nothing happens."
   (ibuffer-hook . (lambda ()
      (setq ibuffer-filter-groups (ibuffer-project-generate-filter-groups))
      (unless (eq ibuffer-sorting-mode 'project-file-relative)
-       (ibuffer-do-sort-by-project-file-relative)))))
+       (ibuffer-do-sort-by-project-file-relative))))
+  )
 
 (use-package rg
   :defer t
   :commands rg
   ;; search package instead of grep
-  :ensure-system-package (rg . ripgrep))
+  :ensure-system-package (rg . ripgrep)
+  )
 
 (use-package ivy
   ;; ivy is an autocompletion framework
@@ -972,10 +997,14 @@ When there is ongoing compilation, nothing happens."
   ;; technically not an ivy variable, but useful to have for some reasons atm unknown to me
   (enable-recursive-minibuffers t)
   ;; add recent files and/or bookmarks to ‘ivy-switch-buffer’.
-  (ivy-use-virtual-buffers t))
+  (ivy-use-virtual-buffers t)
+  )
+
 (use-package ivy-hydra
   :defer t
-  :requires ivy)
+  :requires ivy
+  )
+
 (use-package ivy-rich
   :defer t
   :requires ivy
@@ -986,11 +1015,13 @@ When there is ongoing compilation, nothing happens."
   ivy-format-functions-alist
   :config
   (ivy-rich-mode t)
-  (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line))
+  (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
+  )
 
 (use-package swiper
   :bind (("C-s" . swiper-isearch)
-         ("C-r" . swiper-isearch-backward)))
+         ("C-r" . swiper-isearch-backward))
+  )
 
 (use-package counsel
   :custom
@@ -1012,7 +1043,8 @@ When there is ongoing compilation, nothing happens."
   :commands er/expand-region
   ;; expand selection semantically
   :bind
-  (("M-=" . 'er/expand-region)))
+  (("M-=" . 'er/expand-region))
+  )
 
 (use-package pdf-tools
   ;; view pdfs in emacs
@@ -1030,19 +1062,22 @@ When there is ongoing compilation, nothing happens."
   (pdf-view-mode-hook . (lambda ()
                           (add-hook 'after-change-major-mode-hook
                                     (lambda () (display-line-numbers-mode 0))
-                                    :append :local))))
+                                    :append :local)))
+  )
 
 (use-package evil
   :defer t
   :custom
-  (evil-mode nil))
+  (evil-mode nil)
+  )
 
 (use-package evil-numbers
   ;; increment-decrement numbers as in vim
   :bind (("C-c +"   . evil-numbers/inc-at-pt)
          ("C-c -"   . evil-numbers/dec-at-pt)
          ("C-c C-+" . evil-numbers/inc-at-pt-incremental)
-         ("C-c C--" . evil-numbers/dec-at-pt-incremental)))
+         ("C-c C--" . evil-numbers/dec-at-pt-incremental))
+  )
 
 (use-package avy
   ;; move around efficiently
@@ -1064,7 +1099,8 @@ When there is ongoing compilation, nothing happens."
     "Compress the undo-tree history file on save."
     (concat filename ".gz"))
   (advice-add 'undo-tree-make-history-save-file-name :filter-return
-              #'undo-tree-fix/undo-tree-compress))
+              #'undo-tree-fix/undo-tree-compress)
+  )
 
 (use-package envrc
   :ensure-system-package direnv
@@ -1093,7 +1129,8 @@ When there is ongoing compilation, nothing happens."
       (user-error
        (message "Unloaded env for %s" (buffer-name)))))
   :hook
-  (eshell-directory-change-hook . liesnikov/envrc-reload-or-clear))
+  (eshell-directory-change-hook . liesnikov/envrc-reload-or-clear)
+  )
 
 (use-package sort-words
   :commands sort-words liesnikov/sort-split
@@ -1118,7 +1155,8 @@ When there is ongoing compilation, nothing happens."
           (backward-char 2)
           (delete-char 1)
           (open-line 1)
-          (forward-line 1))))))
+          (forward-line 1)))))
+  )
 
 (use-package dired-subtree
   :after dired
@@ -1129,7 +1167,8 @@ When there is ongoing compilation, nothing happens."
     ("<backtab>" . dired-subtree-remove)
     ("S-TAB" . dired-subtree-remove))
   :custom
-  (dired-subtree-use-backgrounds 't))
+  (dired-subtree-use-backgrounds 't)
+  )
 
 (use-package trashed
   :commands trashed
@@ -1137,7 +1176,8 @@ When there is ongoing compilation, nothing happens."
   (trashed-action-confirmer 'y-or-n-p)
   (trashed-use-header-line t)
   (trashed-sort-key '("Date deleted" . t))
-  (trashed-date-format "%Y-%m-%d %H:%M:%S"))
+  (trashed-date-format "%Y-%m-%d %H:%M:%S")
+  )
 
 (use-package yasnippet
   :commands yas-expand
@@ -1178,7 +1218,8 @@ When there is ongoing compilation, nothing happens."
   (defun olivetti ()
     "Toggle olivetti mode, but interactively."
     (interactive)
-    (call-interactively #'olivetti-mode )))
+    (call-interactively #'olivetti-mode ))
+  )
 
 (use-package unfill
   ;; to unwrap lines that are 80-ch wide
@@ -1199,7 +1240,8 @@ When there is ongoing compilation, nothing happens."
   :ensure auctex
   :custom
   (TeX-auto-save t)
-  (TeX-parse-self t))
+  (TeX-parse-self t)
+  )
 
 (use-package tex-mode
   :after auctex
@@ -1281,7 +1323,8 @@ When there is ongoing compilation, nothing happens."
      ol-info ol-irc ol-mhe ol-rmail org-tempo ol-w3m)))
   :hook
   ;; activate org-indent-mode on org-indent
-  (org-mode-hook . org-indent-mode))
+  (org-mode-hook . org-indent-mode)
+  )
 
 (use-package org-download
   :defer t
@@ -1294,7 +1337,8 @@ When there is ongoing compilation, nothing happens."
   :requires org
   :hook
   ((org-mode-hook . org-modern-mode)
-   (org-agenda-finalize-hook . org-modern-agenda)))
+   (org-agenda-finalize-hook . org-modern-agenda))
+  )
 
 (use-package org-modern-indent
   :defer t
@@ -1333,13 +1377,15 @@ When there is ongoing compilation, nothing happens."
 ;;   ;; makes the colours weird, hard to spot parentheses
 ;;   :defer t
 ;;   :hook
-;;   (prog-mode-hook . rainbow-delimiters-mode))
+;;   (prog-mode-hook . rainbow-delimiters-mode)
+;;  )
 
 (use-package highlight-parentheses
   ;; dynamically highlights the parentheses surrounding point based on nesting-level
   :defer t
   :hook ((minibuffer-setup-hook
-          prog-mode-hook) . highlight-parentheses-mode))
+          prog-mode-hook) . highlight-parentheses-mode)
+  )
 
 
 ;;;;; Version control
@@ -1360,7 +1406,8 @@ When there is ongoing compilation, nothing happens."
   :bind ("C-c g l" . git-link-dispatch)
   :custom
   ;; Link to a particular revision of a file rather than using the branch name in the URL.
-  (git-link-use-commit t))
+  (git-link-use-commit t)
+  )
 
 (use-package forge
   :defer t
@@ -1546,7 +1593,8 @@ When there is ongoing compilation, nothing happens."
   :defer t
   :defines rust-mode-treesitter-derive
   :init
-  (setq rust-mode-treesitter-derive t))
+  (setq rust-mode-treesitter-derive t)
+  )
 
 (use-package rustic
   :mode ("\\.rs\\'" . rustic-mode)
