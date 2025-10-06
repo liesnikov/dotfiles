@@ -858,6 +858,7 @@ When there is ongoing compilation, nothing happens."
   (dashboard-center-content 't)
   (dashboard-show-shortcuts 't)
   (dashboard-projects-backend 'project-el)
+  (dashboard-projects-switch-function 'project-switch-project)
   (dashboard-startupify-list '(dashboard-insert-banner
                                dashboard-insert-newline
                                dashboard-insert-banner-title
