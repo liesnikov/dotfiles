@@ -459,18 +459,16 @@ When there is ongoing compilation, nothing happens."
 
 (use-package project
   :ensure nil
-  :bind (:map project-prefix-map
-         ("m" . project-try-magit))
   :custom
   (project-buffers-viewer        'project-list-buffers-ibuffer)
   (project-vc-extra-root-markers '(".projectile"))
   (project-switch-commands
    '((project-find-file "Find file")
      (project-find-dir "Find directory")
-     (project-try-magit "Magit")
+     (project-try-magit "Magit" "m")
      (project-eshell "Eshell")
      (project-switch-to-buffer "Buffers")
-     (keyboard-quit "Quit" "g")
+     (keyboard-quit "Quit" "C-g")
      )
    )
   :commands
