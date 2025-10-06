@@ -1089,8 +1089,13 @@ When there is ongoing compilation, nothing happens."
 ;; todo: switch to vundo
 (use-package undo-tree
   :bind ("C-/" . undo-tree-undo) ; default binding, but forcing the defer this way
+  :custom
+  (undo-tree-enable-undo-in-region 't)
   :commands
   global-undo-tree-mode
+  :functions
+  undo-tree-fix/undo-tree-compress
+  undo-tree-make-history-save-file-name
   :config
   (global-undo-tree-mode)
   (defun undo-tree-fix/undo-tree-compress (filename)
