@@ -904,9 +904,10 @@ When there is ongoing compilation, nothing happens."
   (ultra-scroll-mode 1)
   )
 
-;;;; General goodies
 
-;;autocomplete
+;;;; Autocompletion
+
+;;;;; Buffer autocomplete
 
 (use-package corfu
   ;; Autocomplete in files
@@ -932,6 +933,8 @@ When there is ongoing compilation, nothing happens."
   (corfu-on-exact-match 'show)
   )
 
+;;;;; Emacs autocomplete
+
 (use-package cape
   ;; Autocompletion functions
   ;; Bind prefix keymap providing all Cape commands under a mnemonic key.
@@ -948,42 +951,6 @@ When there is ongoing compilation, nothing happens."
   (completion-at-point-functions cape-file)
   (completion-at-point-functions cape-elisp-block)
   ;(completion-at-point-functions cape-history)
-  )
-
-(use-package color-moccur
-  ;; provide colours in occur mode
-  :bind (("M-s o" . moccur))
-  )
-
-(use-package transpose-frame
-  ;; from emacs 31 it's built-in
-  ;; https://p.bauherren.ovh/blog/tech/new_window_cmds
-  ;; turn frame around, somehow not available by default
-  :defer t)
-
-(use-package gnu-elpa-keyring-update
-  ;; because elpa keys are expiring sometimes
-  )
-
-(use-package ibuffer-project
-  :defer t
-  ;; group ibuffer entries by the project
-  :after project
-  :functions
-  ibuffer-project-generate-filter-groups
-  ibuffer-do-sort-by-project-file-relative
-  :hook
-  (ibuffer-hook . (lambda ()
-     (setq ibuffer-filter-groups (ibuffer-project-generate-filter-groups))
-     (unless (eq ibuffer-sorting-mode 'project-file-relative)
-       (ibuffer-do-sort-by-project-file-relative))))
-  )
-
-(use-package rg
-  :defer t
-  :commands rg
-  ;; search package instead of grep
-  :ensure-system-package (rg . ripgrep)
   )
 
 (use-package ivy
@@ -1038,6 +1005,54 @@ When there is ongoing compilation, nothing happens."
          ("C-x r R" . counsel-register)))
   )
 
+(use-package avy
+  ;; move around efficiently
+  :bind (("M-g c"   . avy-goto-char-timer)
+         ("M-g g"   . avy-goto-line)
+         ("M-g M-g" . avy-goto-line))
+  :functions avy-setup-default
+  :config
+  (avy-setup-default)
+  )
+
+;;;; General goodies
+
+(use-package color-moccur
+  ;; provide colours in occur mode
+  :bind (("M-s o" . moccur))
+  )
+
+(use-package transpose-frame
+  ;; from emacs 31 it's built-in
+  ;; https://p.bauherren.ovh/blog/tech/new_window_cmds
+  ;; turn frame around, somehow not available by default
+  :defer t)
+
+(use-package gnu-elpa-keyring-update
+  ;; because elpa keys are expiring sometimes
+  )
+
+(use-package ibuffer-project
+  :defer t
+  ;; group ibuffer entries by the project
+  :after project
+  :functions
+  ibuffer-project-generate-filter-groups
+  ibuffer-do-sort-by-project-file-relative
+  :hook
+  (ibuffer-hook . (lambda ()
+     (setq ibuffer-filter-groups (ibuffer-project-generate-filter-groups))
+     (unless (eq ibuffer-sorting-mode 'project-file-relative)
+       (ibuffer-do-sort-by-project-file-relative))))
+  )
+
+(use-package rg
+  :defer t
+  :commands rg
+  ;; search package instead of grep
+  :ensure-system-package (rg . ripgrep)
+  )
+
 
 (use-package expand-region
   :commands er/expand-region
@@ -1079,15 +1094,6 @@ When there is ongoing compilation, nothing happens."
          ("C-c C-+" . evil-numbers/inc-at-pt-incremental)
          ("C-c C--" . evil-numbers/dec-at-pt-incremental))
   )
-
-(use-package avy
-  ;; move around efficiently
-  :bind (("M-g c"   . avy-goto-char-timer)
-         ("M-g g"   . avy-goto-line)
-         ("M-g M-g" . avy-goto-line))
-  :functions avy-setup-default
-  :config
-  (avy-setup-default))
 
 ;; todo: switch to vundo
 (use-package undo-tree
