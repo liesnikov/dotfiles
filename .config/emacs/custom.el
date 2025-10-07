@@ -40,7 +40,9 @@
      (ultra-scroll :vc-backend Git :url
                    "https://github.com/jdtsmith/ultra-scroll")))
  '(safe-local-variable-values
-   '((eval progn (olivetti-mode 't))
+   '((eval progn (olivetti-mode 't) (flyspell-buffer)
+           (ispell-change-dictionary "en_GB-w_accents"))
+     (eval progn (olivetti-mode 't))
      (reftex-default-bibliography "./ref.bib"))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
