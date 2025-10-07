@@ -317,7 +317,7 @@ When there is ongoing compilation, nothing happens."
 (use-package faces
   :ensure nil
   :custom-face
-  (default ((t (:height 125
+  (default ((t (:height 120
                 :width condensed
                 :foundry "ADBO"
                 :family "Source Code Pro"))))
