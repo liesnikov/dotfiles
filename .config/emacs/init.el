@@ -493,8 +493,7 @@ When there is ongoing compilation, nothing happens."
 (use-package recentf
   :ensure nil
   :custom
-  ;; ivy makes searching through long lists easy, bump these up some from
-  ;; the defaults.
+  ;; ivy makes searching through long lists easy, bump these up some from the defaults.
   (recentf-max-saved-items 50)
   (recentf-max-menu-items 25)
   (recentf-save-file "~/.cache/emacs/recentf")
@@ -910,6 +909,7 @@ When there is ongoing compilation, nothing happens."
 ;;autocomplete
 
 (use-package corfu
+  ;; Autocomplete in files
   :custom
   ;; Make the popup appear quicker
   (corfu-popupinfo-delay '(0.5 . 0.5))
@@ -933,6 +933,7 @@ When there is ongoing compilation, nothing happens."
   )
 
 (use-package cape
+  ;; Autocompletion functions
   ;; Bind prefix keymap providing all Cape commands under a mnemonic key.
   ;; Press C-c p ? to for help.
   :bind ("C-c p" . cape-prefix-map) ;; Alternative key: M-<tab>, M-p, M-+
@@ -1058,10 +1059,11 @@ When there is ongoing compilation, nothing happens."
   :hook
   ;; Disable line numbers when entering pdf-tools mode.
   ;; from https://stackoverflow.com/a/6839968
-  (pdf-view-mode-hook . (lambda ()
-                          (add-hook 'after-change-major-mode-hook
-                                    (lambda () (display-line-numbers-mode 0))
-                                    :append :local)))
+  (pdf-view-mode-hook .
+    (lambda ()
+      (add-hook 'after-change-major-mode-hook
+                (lambda () (display-line-numbers-mode 0))
+                :append :local)))
   )
 
 (use-package evil
@@ -1138,7 +1140,6 @@ When there is ongoing compilation, nothing happens."
 
 (use-package sort-words
   :commands sort-words liesnikov/sort-split
-  :functions liesnikov/sort-split
   :config
   (defun liesnikov/sort-split ()
     "Sort and split words per line.
@@ -1159,7 +1160,11 @@ When there is ongoing compilation, nothing happens."
           (backward-char 2)
           (delete-char 1)
           (open-line 1)
-          (forward-line 1)))))
+          (forward-line 1)
+          )
+        )
+      )
+    )
   )
 
 (use-package dired-subtree
