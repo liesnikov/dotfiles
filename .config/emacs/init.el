@@ -1065,7 +1065,7 @@ When there is ongoing compilation, nothing happens."
   )
 
 (use-package evil
-  :defer t
+  :disabled 't
   :custom
   (evil-mode nil)
   )
