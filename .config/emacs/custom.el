@@ -10,24 +10,25 @@
  '(custom-safe-themes '(default))
  '(custom-theme-allow-multiple-selections nil)
  '(package-selected-packages
-   '(auctex auto-dark avy
+   '(auctex auto-dark
      breadcrumb
-     cape color-moccur copilot corfu counsel counsel-projectile
+     cape color-moccur consult copilot corfu
      dashboard dired-subtree dockerfile-mode doom-themes
-     eglot-booster eldoc-box ellama emojify envrc evil-numbers expand-region
+     eglot-booster eldoc-box ellama embark embark-consult emojify envrc evil-numbers expand-region
      forge
      git-link gnu-elpa-keyring-update
      haskell-ts-mode highlight-parentheses
-     ibuffer-project idris-mode idris2-mode ivy ivy-hydra ivy-rich
-     magit markdown-mode merlin minions moody
+     ibuffer-project idris-mode idris2-mode
+     magit marginalia markdown-mode merlin minions moody
      nix-mode no-littering noxml-fold
-     olivetti org-download org-modern org-modern-indent org-present
+     olivetti orderless org-download org-modern org-modern-indent org-present
      pdf-tools proof-general
      rg rustic
-     sideline sideline-eglot sideline-flymake sort-words swiper
+     sideline sideline-eglot sideline-flymake sort-words
      transpose-frame trashed treesit-auto treesit-fold treesit-ispell treesit-langs tuareg
      ultra-scroll undo-tree unfill unicode-whitespace use-package-ensure-system-package
-     wc-mode
+     vertico
+     wc-mode wgrep
      yasnippet yasnippet-snippets))
  '(package-vc-selected-packages
    '((haskell-ts-mode :url "https://codeberg.org/pranshu/haskell-ts-mode"
