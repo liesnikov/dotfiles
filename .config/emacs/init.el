@@ -1193,10 +1193,23 @@ When there is ongoing compilation, nothing happens."
 ;;
 ;; Further reading: https://protesilaos.com/emacs/dotemacs#h:61863da4-8739-42ae-a30f-6e9d686e1995
 (use-package embark
-  :bind (("C-." . embark-act)
-         :map minibuffer-local-map
+  :bind
+  (("C-."   . embark-act)         ;; pick some comfortable binding
+   ("M-."   . embark-dwim)        ;; good alternative: M-.
+   ("C-h b" . embark-bindings)    ;; alternative for `describe-bindings'
+   (:map minibuffer-local-map
          ("C-c C-c" . embark-collect)
-         ("C-c C-e" . embark-export))
+         ("C-c C-e" . embark-export)))
+  :custom
+  ;; Optionally replace the key help with a completing-read interface
+  (prefix-help-command embark-prefix-help-command)
+
+  :config
+  ;; Hide the mode line of the Embark live/completions buffers
+  (add-to-list 'display-buffer-alist
+               '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
+                 nil
+                 (window-parameters (mode-line-format . none))))
   )
 
 ;; The `embark-consult' package is glue code to tie together `embark'
