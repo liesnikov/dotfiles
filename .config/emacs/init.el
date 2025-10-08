@@ -1294,7 +1294,7 @@ When there is ongoing compilation, nothing happens."
   :commands er/expand-region
   ;; expand selection semantically
   :bind
-  (("M-=" . 'er/expand-region))
+  (("M-=" . er/expand-region))
   )
 
 (use-package pdf-tools
