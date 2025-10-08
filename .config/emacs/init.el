@@ -1022,14 +1022,10 @@ When there is ongoing compilation, nothing happens."
   (avy-setup-default)
   )
 
-;; The `vertico' package applies a vertical layout to the minibuffer.
-;; It also pops up the minibuffer eagerly so we can see the available
-;; options without further interactions.  This package is very fast
-;; and "just works", though it also is highly customisable in case we
-;; need to modify its behaviour.
-;;
-;; Further reading: https://protesilaos.com/emacs/dotemacs#h:cff33514-d3ac-4c16-a889-ea39d7346dc5
 (use-package vertico
+  ;; The `vertico' package applies a vertical layout to the minibuffer.
+  ;; It also pops up the minibuffer eagerly so we can see the available
+  ;; options without further interactions.
   :custom
   (vertico-cycle t)
   (vertico-resize nil)
@@ -1037,49 +1033,36 @@ When there is ongoing compilation, nothing happens."
   (vertico-mode 1)
   )
 
-;; The `marginalia' package provides helpful annotations next to
-;; completion candidates in the minibuffer.  The information on
-;; display depends on the type of content.  If it is about files, it
-;; shows file permissions and the last modified date.  If it is a
-;; buffer, it shows the buffer's size, major mode, and the like.
-;;
-;; Further reading: https://protesilaos.com/emacs/dotemacs#h:bd3f7a1d-a53d-4d3e-860e-25c5b35d8e7e
 (use-package marginalia
+  ;; The `marginalia' package provides helpful annotations next to completion candidates in the minibuffer.
   :config
   (marginalia-mode 1)
   )
 
-;; The `orderless' package lets the minibuffer use an out-of-order
-;; pattern matching algorithm.  It matches space-separated words or
-;; regular expressions in any order.  In its simplest form, something
-;; like "ins pac" matches `package-menu-mark-install' as well as
-;; `package-install'.  This is a powerful tool because we no longer
-;; need to remember exactly how something is named.
-;;
-;; Note that Emacs has lots of "completion styles" (pattern matching
-;; algorithms), but let us keep things simple.
-;;
-;; Further reading: https://protesilaos.com/emacs/dotemacs#h:7cc77fd0-8f98-4fc0-80be-48a758fcb6e2
 (use-package orderless
+  ;; The `orderless' package lets the minibuffer use an out-of-order
+  ;; pattern matching algorithm.  It matches space-separated words or
+  ;; regular expressions in any order.
   :custom
   (completion-styles '(orderless basic))
   )
 
-;; The `consult' package provides lots of commands that are enhanced
-;; variants of basic, built-in functionality.  One of the headline
-;; features of `consult' is its preview facility, where it shows in
-;; another Emacs window the context of what is currently matched in
-;; the minibuffer.
-;; Configuration modified from the example https://github.com/minad/consult#user-content-use-package-example
 (use-package consult
+  ;; The `consult' package provides lots of commands that are enhanced
+  ;; variants of basic, built-in functionality.  One of the headline
+  ;; features of `consult' is its preview facility, where it shows in
+  ;; another Emacs window the context of what is currently matched in
+  ;; the minibuffer.
+  ;; Configuration modified from the example
+  ;; https://github.com/minad/consult#user-content-use-package-example
+
   ;; Replace bindings. Lazily loaded by `use-package'.
   :bind (;; C-c bindings in `mode-specific-map'
          ("C-c M-x" . consult-mode-command)
          ("C-c h" . consult-history)
          ("C-c k" . consult-kmacro)
          ("C-c m" . consult-man)
-         ("C-c i" . consult-info)
-         ([remap Info-search] . consult-info)
+         ("C-h i" . consult-info)
          ;; C-x bindings in `ctl-x-map'
          ("C-x M-:" . consult-complex-command)     ;; orig. repeat-complex-command
          ("C-x b" . consult-buffer)                ;; orig. switch-to-buffer
@@ -1134,7 +1117,6 @@ When there is ongoing compilation, nothing happens."
 
   ;; The :init configuration is always executed (Not lazy)
   :init
-
   ;; Tweak the register preview for `consult-register-load',
   ;; `consult-register-store' and the built-in commands.  This improves the
   ;; register formatting, adds thin separator lines, register sorting and hides
@@ -1175,24 +1157,11 @@ When there is ongoing compilation, nothing happens."
   ;; (keymap-set consult-narrow-map (concat consult-narrow-key " ?") #'consult-narrow-help)
 )
 
-;; The `embark' package lets you target the thing or context at point
-;; and select an action to perform on it.  Use the `embark-act'
-;; command while over something to find relevant commands.
-;;
-;; When inside the minibuffer, `embark' can collect/export the
-;; contents to a fully fledged Emacs buffer.  The `embark-collect'
-;; command retains the original behaviour of the minibuffer, meaning
-;; that if you navigate over the candidate at hit RET, it will do what
-;; the minibuffer would have done.  In contrast, the `embark-export'
-;; command reads the metadata to figure out what category this is and
-;; places them in a buffer whose major mode is specialised for that
-;; type of content.  For example, when we are completing against
-;; files, the export will take us to a `dired-mode' buffer; when we
-;; preview the results of a grep, the export will put us in a
-;; `grep-mode' buffer.
-;;
-;; Further reading: https://protesilaos.com/emacs/dotemacs#h:61863da4-8739-42ae-a30f-6e9d686e1995
+
 (use-package embark
+  ;; The `embark' package lets you target the thing or context at point
+  ;; and select an action to perform on it.  Use the `embark-act'
+  ;; command while over something to find relevant commands.
   :bind
   (("C-."   . embark-act)         ;; pick some comfortable binding
    ("M-."   . embark-dwim)        ;; good alternative: M-.
@@ -1212,8 +1181,7 @@ When there is ongoing compilation, nothing happens."
                  (window-parameters (mode-line-format . none))))
   )
 
-;; The `embark-consult' package is glue code to tie together `embark'
-;; and `consult'.
+;; The `embark-consult' package is glue code to tie together `embark' and `consult'.
 (use-package embark-consult)
 
 ;; The `wgrep' packages lets us edit the results of a grep search
