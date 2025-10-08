@@ -1324,7 +1324,9 @@ When there is ongoing compilation, nothing happens."
   ;; package for direnv, usefull when working with nix
   :custom
   (envrc-global-mode t)
-  :commands envrc-allow envrc-reload liesnikov/envrc-reload-or-clear
+  :commands
+  envrc-allow envrc-reload
+  liesnikov/envrc-reload-or-clear
   :autoload
   envrc--clear
   envrc--with-required-current-env
@@ -1363,17 +1365,14 @@ When there is ongoing compilation, nothing happens."
            ;; don't insert newline after `a' (97), start with `b' (98).
            (abc (number-sequence 98 122))
            (ci (progn (goto-char beg) (current-indentation))))
-      (require 'sort-words)
       (sort-words beg end)
       (dolist (letter abc)
         (when (re-search-forward (format " %c" letter) end t)
           (backward-char 2) ; go back through the first letter and the space " %c"
           (delete-char 1) ; remove the space
           (newline-and-indent) ; insert a new line and go there
-          )
-        )
-      )
-    )
+          ))
+      ))
   )
 
 (use-package dired-subtree
