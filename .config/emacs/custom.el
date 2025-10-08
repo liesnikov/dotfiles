@@ -15,7 +15,7 @@
      cape color-moccur consult copilot corfu
      dashboard dired-subtree dockerfile-mode doom-themes
      eglot-booster eldoc-box ellama embark embark-consult emojify envrc evil-numbers expand-region
-     forge
+     flymake-collection forge
      git-link gnu-elpa-keyring-update
      haskell-ts-mode highlight-parentheses
      ibuffer-project idris-mode idris2-mode

@@ -1588,6 +1588,10 @@ When there is ongoing compilation, nothing happens."
           prog-mode-hook) . highlight-parentheses-mode)
   )
 
+(use-package flymake-collection
+  :after flymake
+  :hook (after-init . flymake-collection-hook-setup)
+  )
 
 ;;;;; Version control
 
