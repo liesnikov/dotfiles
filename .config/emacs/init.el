@@ -851,6 +851,7 @@ When there is ongoing compilation, nothing happens."
   )
 
 (use-package dashboard
+  ;; show a welcome screen with recent projects
   :custom
   (dashboard-banner-logo-title "welcome back 👋")
   (dashboard-startup-banner 'logo)
@@ -873,15 +874,15 @@ When there is ongoing compilation, nothing happens."
   (after-init-hook . dashboard-setup-startup-hook)
   )
 
-;; a minor mode to enable errors appearing next to the code
 (use-package sideline
+  ;; a minor mode to enable errors appearing next to the code
   :hook
   (flymake-mode-hook . sideline-mode)
   (eglot-mode-hook . sideline-mode)
   )
 
-;; because there's no sideline for flymake by default
 (use-package sideline-flymake
+  ;; because there's no sideline for flymake by default
   :commands sideline-flymake
   :custom
   (sideline-flymake-display-mode 'line) ; 'point to show errors only on point
@@ -1335,10 +1336,9 @@ When there is ongoing compilation, nothing happens."
   :config
   (defun liesnikov/sort-split ()
     "Sort and split words per line.
-     This function sort words in alphabetical order
-     in the currently selected region and inserts a newline
-     before every new letter of the alphabet.
-     So that in the end each line has words starting with the same letter"
+     This function sort words in alphabetical order in the currently selected region
+     and inserts a newline before every new letter of the alphabet.
+     In the end each line has words starting with the same letter."
     (interactive)
     ;; if the region is not selected choose current line
     (let ((beg (if (region-active-p) (region-beginning) (line-beginning-position)))
