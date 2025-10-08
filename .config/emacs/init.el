@@ -83,8 +83,9 @@
 (use-package use-package-ensure-system-package
   ;; The :ensure-system-package keyword allows
   ;; to ensure system binaries exist alongside package declarations.
-  :requires use-package
+  :after use-package
   :demand t
+  :autoload use-package-ensure-system-package-exists?
   )
 
 ;; ensure all packages -- installs them
@@ -124,6 +125,11 @@
   :custom (auth-sources '("secrets:Login"))
 )
 
+(use-package bind-key
+  :ensure nil
+  :autoload bind-key--remove
+  )
+
 (use-package calendar
   :ensure nil
   :defer t
@@ -135,11 +141,11 @@
 
 (use-package compile
   :ensure nil
-  :functions
+  :autoload
   compilation-find-buffer
   recompile
   liesnikov/compile-on-save-start
-  :commands
+  :defines
   liesnikov/compile-on-save-mode
   :hook
   (compilation-finish-functions . liesnikov/compile-bury-buffer-if-successful)
@@ -370,6 +376,12 @@ When there is ongoing compilation, nothing happens."
   (gdb-many-windows t)
   )
 
+(use-package grep
+  :ensure nil
+  :defer t
+  :defines grep-mode-map
+  )
+
 (use-package ibuffer
   :ensure nil
   ;; commented out for potential performance gains?
@@ -416,8 +428,14 @@ When there is ongoing compilation, nothing happens."
   )
 
 (use-package sgml-mode
+  :ensure nil
   :defer t
   :functions sgml-pretty-print)
+
+(use-package system-packages
+  :ensure nil
+  :commands system-packages-install
+  )
 
 (use-package nxml-mode
   :defer t
@@ -1045,6 +1063,7 @@ When there is ongoing compilation, nothing happens."
   ;; The `vertico' package applies a vertical layout to the minibuffer.
   ;; It also pops up the minibuffer eagerly so we can see the available
   ;; options without further interactions.
+  :functions vertico-mode
   :custom
   (vertico-cycle t)
   (vertico-resize nil)
@@ -1054,6 +1073,7 @@ When there is ongoing compilation, nothing happens."
 
 (use-package marginalia
   ;; The `marginalia' package provides helpful annotations next to completion candidates in the minibuffer.
+  :functions marginalia-mode
   :config
   (marginalia-mode 1)
   )
@@ -1133,6 +1153,17 @@ When there is ongoing compilation, nothing happens."
   ;; Enable automatic preview at point in the *Completions* buffer. This is
   ;; relevant when you use the default completion UI.
   :hook (completion-list-mode . consult-preview-at-point-mode)
+
+  :functions
+  consult-register-window consult-xref consult-customize
+  :defines
+  consult-theme
+  consult-ripgrep consult-git-grep consult-grep
+  consult-man
+  consult-bookmark consult-recent-file consult-xref
+  consult--source-bookmark consult--source-file-register
+  consult--source-recent-file consult--source-project-recent-file
+  consult-narrow-key
 
   ;; The :init configuration is always executed (Not lazy)
   :init
@@ -1355,7 +1386,7 @@ When there is ongoing compilation, nothing happens."
   :config
   (defun liesnikov/sort-split ()
     "Sort and split words per line.
-     This function sort words in alphabetical order in the currently selected region
+     This function sort words in alphabetical order in currently selected region
      and inserts a newline before every new letter of the alphabet.
      In the end each line has words starting with the same letter."
     (interactive)
@@ -1913,8 +1944,8 @@ When there is ongoing compilation, nothing happens."
 
 ;;;;; Agda
 
-;; agda2 mode, gets appended by `agda-mode setup`
 (defun agda-load ()
+  "Agda 2 mode, gets appended by `agda-mode setup`."
   (interactive)
   (load-file (let ((coding-system-for-read 'utf-8))
                (shell-command-to-string "agda-mode locate")))
@@ -1956,7 +1987,7 @@ Source: https://old.reddit.com/r/emacs/comments/idz35e/emacs_27_can_take_svg_scr
     (message filename)))
 
 (defun liesnikov/kill-filename ()
-  "Copy current buffer's file path to kill-ring."
+  "Copy current buffer's file path to `kill-ring'."
   (interactive)
   (kill-new buffer-file-name))
 
