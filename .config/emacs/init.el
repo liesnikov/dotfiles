@@ -1771,7 +1771,7 @@ When there is ongoing compilation, nothing happens."
                     :key (secrets-get-secret "Login" "OPENROUTER_API_KEY")
                     ;; choose from https://openrouter.ai/models?fmt=cards&input_modalities=text&order=top-weekly&output_modalities=text&categories=programming
                     ;; :chat-model "anthropic/claude-sonnet-4"
-                    ;; :chat-model "x-ai/grok-code-fast-1"
+                    :chat-model "x-ai/grok-code-fast-1"
                     ;; :chat-model "google/gemini-2.5-flash"
                     ))
   (ellama-auto-scroll 't)
