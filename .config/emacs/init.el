@@ -1182,7 +1182,10 @@ When there is ongoing compilation, nothing happens."
   )
 
 ;; The `embark-consult' package is glue code to tie together `embark' and `consult'.
-(use-package embark-consult)
+(use-package embark-consult
+  :hook
+  (embark-collect-mode . consult-preview-at-point-mode)
+  )
 
 ;; The `wgrep' packages lets us edit the results of a grep search
 ;; while inside a `grep-mode' buffer.  All we need is to toggle the
