@@ -1322,11 +1322,10 @@ When there is ongoing compilation, nothing happens."
 (use-package envrc
   :ensure-system-package direnv
   ;; package for direnv, usefull when working with nix
-  :commands envrc-allow
-  :functions liesnikov/envrc-reload-or-clear
   :custom
   (envrc-global-mode t)
-  :functions
+  :commands envrc-allow envrc-reload liesnikov/envrc-reload-or-clear
+  :autoload
   envrc--clear
   envrc--with-required-current-env
   envrc--find-env-dir
