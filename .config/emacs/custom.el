@@ -31,9 +31,7 @@
      wc-mode wgrep
      yasnippet yasnippet-snippets))
  '(package-vc-selected-packages
-   '((haskell-ts-mode :url "https://codeberg.org/pranshu/haskell-ts-mode"
-                      :branch "main")
-     (eglot-booster :vc-backend Git :url
+   '((eglot-booster :vc-backend Git :url
                     "https://github.com/jdtsmith/eglot-booster")
      (idris2-mode :vc-backend Git :url
                   "https://github.com/idris-community/idris2-mode")
