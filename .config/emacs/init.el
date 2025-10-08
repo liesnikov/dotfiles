@@ -846,6 +846,24 @@ When there is ongoing compilation, nothing happens."
   :custom
   (emojify-display-style 'unicode)
   (emojify-emoji-styles '(unicode github))
+  (emojify-program-contexts 'comments)
+  (emojify-inhibit-major-modes
+   '(dired-mode
+     doc-view-mode
+     debugger-mode
+     pdf-view-mode
+     image-mode
+     help-mode
+     ibuffer-mode
+     magit-popup-mode
+     magit-diff-mode
+     ert-results-mode
+     compilation-mode proced-mode
+     mu4e-headers-mode
+     deft-mode
+     eshell-mode
+     shell-mode
+     ))
   :hook
   (after-init-hook . global-emojify-mode)
   )
