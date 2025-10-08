@@ -1214,7 +1214,7 @@ When there is ongoing compilation, nothing happens."
   ;; command while over something to find relevant commands.
   :bind
   (("C-."   . embark-act)         ;; pick some comfortable binding
-   ("M-."   . embark-dwim)        ;; good alternative: M-.
+   ("C-;"   . embark-dwim)        ;; good alternative: M-.
    ("C-h b" . embark-bindings)    ;; alternative for `describe-bindings'
    (:map minibuffer-local-map
          ("C-c C-c" . embark-collect)
