@@ -1689,12 +1689,14 @@ When there is ongoing compilation, nothing happens."
 
 (use-package treesit-langs
   :requires treesit
+  :demand 't
   :commands treesit-langs-major-mode-setup
   :config
   (treesit-langs-major-mode-setup)
   )
 
 (use-package treesit-auto
+  :demand 't
   :requires treesit
   :commands global-treesit-auto-mode
   :functions treesit-auto-add-to-auto-mode-alist
