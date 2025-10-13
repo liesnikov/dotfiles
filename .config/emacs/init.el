@@ -976,7 +976,7 @@ When there is ongoing compilation, nothing happens."
   ;; Autocompletion functions
   ;; Bind prefix keymap providing all Cape commands under a mnemonic key.
   ;; Press C-c p ? to for help.
-  :bind ("C-c p" . cape-prefix-map) ;; Alternative key: M-<tab>, M-p, M-+
+  ;:bind ("C-c p" . cape-prefix-map) ;; Alternative key: M-<tab>, M-p, M-+
   :defer nil
   :defines
   cape-prefix-map ; for yasnippet
