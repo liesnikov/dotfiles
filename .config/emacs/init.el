@@ -1176,21 +1176,51 @@ When there is ongoing compilation, nothing happens."
   (embark-collect-mode . consult-preview-at-point-mode)
   )
 
-;; The `wgrep' packages lets us edit the results of a grep search
-;; while inside a `grep-mode' buffer.  All we need is to toggle the
-;; editable mode, make the changes, and then type C-c C-c to confirm
-;; or C-c C-k to abort.
-;;
-;; Further reading: https://protesilaos.com/emacs/dotemacs#h:9a3581df-ab18-4266-815e-2edd7f7e4852
-(use-package wgrep
-  :bind ( :map grep-mode-map
-          ("e" . wgrep-change-to-wgrep-mode)
-          ("C-x C-q" . wgrep-change-to-wgrep-mode)
-          ("C-c C-c" . wgrep-finish-edit))
+(use-package yasnippet
+  :commands yas-expand
+  :autoload yas--get-snippet-tables
+  :defines
+  yas-minor-mode-map
+  :bind-keymap ("C-c &" . yas-minor-mode-map)
+  :bind ((:map yas-minor-mode-map
+              ("C-c & TAB" . yas-expand))
+         (:map cape-prefix-map
+               ("y" . yas-insert-snippet)))
+  :custom
+  (unbind-key "TAB" yas-minor-mode-map)
+  (yas-snippet-dirs
+   (cons
+    (concat user-emacs-directory "yasnippets")
+    yas-snippet-dirs)))
+(use-package yasnippet-snippets
+  :defer t)
+
+;;;; Emacs functions
+
+(use-package sort-words
+  :commands sort-words liesnikov/sort-split
+  :config
+  (defun liesnikov/sort-split ()
+    "Sort and split words per line.
+     This function sort words in alphabetical order in currently selected region
+     and inserts a newline before every new letter of the alphabet.
+     In the end each line has words starting with the same letter."
+    (interactive)
+    ;; if the region is not selected choose current line
+    (let* ((beg (if (region-active-p) (region-beginning) (line-beginning-position)))
+           (end (if (region-active-p) (region-end) (line-end-position)))
+           ;; don't insert newline after `a' (97), start with `b' (98).
+           (abc (number-sequence 98 122))
+           (ci (progn (goto-char beg) (current-indentation))))
+      (sort-words beg end)
+      (dolist (letter abc)
+        (when (re-search-forward (format " %c" letter) end t)
+          (backward-char 2) ; go back through the first letter and the space " %c"
+          (delete-char 1) ; remove the space
+          (newline-and-indent) ; insert a new line and go there
+          ))
+      ))
   )
-
-
-;;;; General goodies
 
 (use-package color-moccur
   ;; provide colours in occur mode
@@ -1203,38 +1233,14 @@ When there is ongoing compilation, nothing happens."
   ;; turn frame around, somehow not available by default
   :defer t)
 
-(use-package gnu-elpa-keyring-update
-  ;; because elpa keys are expiring sometimes
-  )
-
-(use-package ibuffer-project
-  :defer t
-  ;; group ibuffer entries by the project
-  :after project
-  :functions
-  ibuffer-project-generate-filter-groups
-  ibuffer-do-sort-by-project-file-relative
-  :hook
-  (ibuffer-hook . (lambda ()
-     (setq ibuffer-filter-groups (ibuffer-project-generate-filter-groups))
-     (unless (eq ibuffer-sorting-mode 'project-file-relative)
-       (ibuffer-do-sort-by-project-file-relative))))
-  )
-
-(use-package rg
-  :defer t
-  :commands rg
-  ;; search package instead of grep
-  :ensure-system-package (rg . ripgrep)
-  )
-
-
 (use-package expand-region
   :commands er/expand-region
   ;; expand selection semantically
   :bind
   (("M-=" . er/expand-region))
   )
+
+;;;; General goodies
 
 (use-package pdf-tools
   ;; view pdfs in emacs
@@ -1289,6 +1295,68 @@ When there is ongoing compilation, nothing happens."
               #'undo-tree-fix/undo-tree-compress)
   )
 
+(use-package gnu-elpa-keyring-update
+  ;; because elpa keys are expiring sometimes
+  )
+
+(use-package ibuffer-project
+  :defer t
+  ;; group ibuffer entries by the project
+  :after project
+  :functions
+  ibuffer-project-generate-filter-groups
+  ibuffer-do-sort-by-project-file-relative
+  :hook
+  (ibuffer-hook . (lambda ()
+     (setq ibuffer-filter-groups (ibuffer-project-generate-filter-groups))
+     (unless (eq ibuffer-sorting-mode 'project-file-relative)
+       (ibuffer-do-sort-by-project-file-relative))))
+  )
+
+(use-package dired-subtree
+  :after dired
+  :bind
+  ( :map dired-mode-map
+    ("<tab>" . dired-subtree-toggle)
+    ("TAB" . dired-subtree-toggle)
+    ("<backtab>" . dired-subtree-remove)
+    ("S-TAB" . dired-subtree-remove))
+  :custom
+  (dired-subtree-use-backgrounds 't)
+  )
+
+(use-package trashed
+  ;; integrate with the system Trash
+  :commands trashed
+  :custom
+  (trashed-action-confirmer 'y-or-n-p)
+  (trashed-use-header-line t)
+  (trashed-sort-key '("Date deleted" . t))
+  (trashed-date-format "%Y-%m-%d %H:%M:%S")
+  )
+
+;;;;; External tool integration
+
+(use-package rg
+  :defer t
+  :commands rg
+  ;; search package instead of grep
+  :ensure-system-package (rg . ripgrep)
+  )
+
+;; The `wgrep' packages lets us edit the results of a grep search
+;; while inside a `grep-mode' buffer.  All we need is to toggle the
+;; editable mode, make the changes, and then type C-c C-c to confirm
+;; or C-c C-k to abort.
+;;
+;; Further reading: https://protesilaos.com/emacs/dotemacs#h:9a3581df-ab18-4266-815e-2edd7f7e4852
+(use-package wgrep
+  :bind ( :map grep-mode-map
+          ("e" . wgrep-change-to-wgrep-mode)
+          ("C-x C-q" . wgrep-change-to-wgrep-mode)
+          ("C-c C-c" . wgrep-finish-edit))
+  )
+
 (use-package envrc
   :ensure-system-package direnv
   ;; package for direnv, usefull when working with nix
@@ -1319,71 +1387,6 @@ When there is ongoing compilation, nothing happens."
   :hook
   (eshell-directory-change-hook . liesnikov/envrc-reload-or-clear)
   )
-
-(use-package sort-words
-  :commands sort-words liesnikov/sort-split
-  :config
-  (defun liesnikov/sort-split ()
-    "Sort and split words per line.
-     This function sort words in alphabetical order in currently selected region
-     and inserts a newline before every new letter of the alphabet.
-     In the end each line has words starting with the same letter."
-    (interactive)
-    ;; if the region is not selected choose current line
-    (let* ((beg (if (region-active-p) (region-beginning) (line-beginning-position)))
-           (end (if (region-active-p) (region-end) (line-end-position)))
-           ;; don't insert newline after `a' (97), start with `b' (98).
-           (abc (number-sequence 98 122))
-           (ci (progn (goto-char beg) (current-indentation))))
-      (sort-words beg end)
-      (dolist (letter abc)
-        (when (re-search-forward (format " %c" letter) end t)
-          (backward-char 2) ; go back through the first letter and the space " %c"
-          (delete-char 1) ; remove the space
-          (newline-and-indent) ; insert a new line and go there
-          ))
-      ))
-  )
-
-(use-package dired-subtree
-  :after dired
-  :bind
-  ( :map dired-mode-map
-    ("<tab>" . dired-subtree-toggle)
-    ("TAB" . dired-subtree-toggle)
-    ("<backtab>" . dired-subtree-remove)
-    ("S-TAB" . dired-subtree-remove))
-  :custom
-  (dired-subtree-use-backgrounds 't)
-  )
-
-(use-package trashed
-  :commands trashed
-  :custom
-  (trashed-action-confirmer 'y-or-n-p)
-  (trashed-use-header-line t)
-  (trashed-sort-key '("Date deleted" . t))
-  (trashed-date-format "%Y-%m-%d %H:%M:%S")
-  )
-
-(use-package yasnippet
-  :commands yas-expand
-  :autoload yas--get-snippet-tables
-  :defines
-  yas-minor-mode-map
-  :bind-keymap ("C-c &" . yas-minor-mode-map)
-  :bind ((:map yas-minor-mode-map
-              ("C-c & TAB" . yas-expand))
-         (:map cape-prefix-map
-               ("y" . yas-insert-snippet)))
-  :custom
-  (unbind-key "TAB" yas-minor-mode-map)
-  (yas-snippet-dirs
-   (cons
-    (concat user-emacs-directory "yasnippets")
-    yas-snippet-dirs)))
-(use-package yasnippet-snippets
-  :defer t)
 
 ;;;; Writing & reading
 
