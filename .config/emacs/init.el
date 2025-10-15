@@ -290,7 +290,7 @@ When there is ongoing compilation, nothing happens."
   :defer t
   :ensure nil
   :defines eshell-directory-name ; for no-littering
-  :commands eshell/trueclear ; defined by me in ':config'
+  :commands eshell/trueclear eshell/less eshell/view ; defined by me in ':config'
   :functions eshell-truncate-buffer ; used by me in the 'eshell/trueclear'
   :custom
   (password-cache-expiry 300)
@@ -307,7 +307,10 @@ When there is ongoing compilation, nothing happens."
   (defun eshell/trueclear ()
     "True clear for eshell, instead of default scroll."
     (interactive)
-    (let ((eshell-buffer-maximum-lines 0)) (eshell-truncate-buffer)))
+    (let ((eshell-buffer-maximum-lines 0)) (eshell-truncate-buffer))
+    )
+  (defalias 'eshell/less 'view-file)
+  (defalias 'eshell/view 'view-file)
   )
 
 (use-package faces
