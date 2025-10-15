@@ -204,16 +204,6 @@ When there is ongoing compilation, nothing happens."
   ;; (push 'paredit-backward-delete completion-preview-commands)
   )
 
-;; (use-package cua-base
-;;   :ensure nil
-;;   ;; rectangular editining with C-<return>
-;;   ;; borrowed from https://karthinks.com/software/more-batteries-included-with-emacs/
-;;   ;; disabled because it messes with the usual rectangular editing
-;;   ;; and doesn't allow to delete rectangles efficiently
-;;   :config
-;;   (cua-mode 't)
-;;   )
-
 (use-package delsel
   :ensure nil
   ;; remove the selection when you start typing with an active selection
@@ -990,63 +980,6 @@ When there is ongoing compilation, nothing happens."
   ;(completion-at-point-functions cape-history)
   )
 
-
-(use-package ivy
-  :disabled t
-  ;; ivy is an autocompletion framework
-  :bind (("C-x b" . ivy-switch-buffer))
-  :custom
-  ;; enable ivy
-  (ivy-mode t)
-  ;; use columns in ivy
-  (ivy-read-action-format-function 'ivy-read-action-format-columns)
-  ;; technically not an ivy variable, but useful to have for some reasons atm unknown to me
-  (enable-recursive-minibuffers t)
-  ;; add recent files and/or bookmarks to ‘ivy-switch-buffer’.
-  (ivy-use-virtual-buffers t)
-  )
-
-(use-package ivy-hydra
-  :disabled t
-  :defer t
-  :requires ivy
-  )
-
-(use-package ivy-rich
-  :disabled t
-  :defer t
-  :requires ivy
-  :functions
-  ivy-rich-mode
-  ivy-format-function-line
-  :defines
-  ivy-format-functions-alist
-  :config
-  (ivy-rich-mode t)
-  (setcdr (assq t ivy-format-functions-alist) #'ivy-format-function-line)
-  )
-
-(use-package swiper
-  :disabled t
-  :bind (("C-s" . swiper-isearch)
-         ("C-r" . swiper-isearch-backward))
-  )
-
-(use-package counsel
-  :disabled t
-  :custom
-  (counsel-mode t)
-  (counsel-find-file-at-point t)
-  :defines
-  counsel-mode-map
-  :bind
-  (:map counsel-mode-map
-        (("M-x"     . counsel-M-x)
-         ("C-x C-f" . counsel-find-file)
-         ("C-x f f" . counsel-find-file)
-         ("C-x f r" . counsel-recentf)
-         ("C-x r R" . counsel-register)))
-  )
 
 (use-package avy
   ;; move around efficiently
