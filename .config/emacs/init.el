@@ -1021,8 +1021,6 @@ When there is ongoing compilation, nothing happens."
   ;; regular expressions in any order.
   :custom
   (completion-styles '(orderless basic))
-  (completion-category-overrides
-      '((variable (styles orderless-annotation))))
   )
 
 (use-package consult
