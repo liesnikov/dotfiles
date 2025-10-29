@@ -587,7 +587,8 @@ When there is ongoing compilation, nothing happens."
      ((> (minibuffer-depth) 0)
       (abort-recursive-edit))
      (t
-      (keyboard-quit))))
+      (keyboard-quit)))
+    )
   )
 
 (use-package tramp
