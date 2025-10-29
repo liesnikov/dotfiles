@@ -1637,7 +1637,9 @@ When there is ongoing compilation, nothing happens."
   )
 
 (use-package eldoc-box
-  :custom (eldoc-box-cleanup-interval 2)
+  :custom
+  (eldoc-box-cleanup-interval 1)
+  (eldoc-box-clear-with-C-g 't)
   :hook
   (eglot-managed-mode-hook . eldoc-box-hover-mode)
   (eglot-managed-mode-hook . eldoc-box-hover-at-point-mode)
