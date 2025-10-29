@@ -1167,6 +1167,7 @@ When there is ongoing compilation, nothing happens."
                '("\\`\\*Embark Collect \\(Live\\|Completions\\)\\*"
                  nil
                  (window-parameters (mode-line-format . none))))
+  (advice-add 'embark-bindings :filter-args (apply-partially #'seq-map #'not))
   )
 
 ;; The `embark-consult' package is glue code to tie together `embark' and `consult'.
