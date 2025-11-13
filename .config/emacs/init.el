@@ -400,6 +400,12 @@ When there is ongoing compilation, nothing happens."
   (menu-bar-mode nil)
   )
 
+(use-package minibuffer
+  :ensure nil
+  :custom
+  (enable-recursive-minibuffers 't)
+  )
+
 (use-package mouse
   ;; contex-menu mode and functions
   ;; borrowed from http://amodernist.com/texts/emacs-mouse.html
@@ -969,19 +975,21 @@ When there is ongoing compilation, nothing happens."
 (use-package cape
   ;; Autocompletion functions
   ;; Bind prefix keymap providing all Cape commands under a mnemonic key.
-  ;; Press C-c p ? to for help.
-  ;:bind ("C-c p" . cape-prefix-map) ;; Alternative key: M-<tab>, M-p, M-+
+  ;; Press C-c P ? to for help.
+  :bind ("C-c P" . cape-prefix-map) ;; Alternative key: M-<tab>, M-p, M-+
   :defer nil
   :defines
   cape-prefix-map ; for yasnippet
-  :hook
+  :init
   ;; Add to the global default value of `completion-at-point-functions' which is
   ;; used by `completion-at-point'.  The order of the functions matters, the
   ;; first function returning a result wins.  Note that the list of buffer-local
   ;; completion functions takes precedence over the global list.
-  (completion-at-point-functions cape-file)
-  (completion-at-point-functions cape-elisp-block)
-  ;(completion-at-point-functions cape-history)
+  (add-hook 'completion-at-point-functions #'cape-dabbrev)
+  (add-hook 'completion-at-point-functions #'cape-file)
+  (add-hook 'completion-at-point-functions #'cape-elisp-block)
+  ;; (add-hook 'completion-at-point-functions #'cape-history)
+  ;; ...
   )
 
 
