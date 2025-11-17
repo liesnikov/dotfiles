@@ -1184,24 +1184,39 @@ When there is ongoing compilation, nothing happens."
   (embark-collect-mode . consult-preview-at-point-mode)
   )
 
+;; this takes quite a bit of time on load, consider switching to built-in abbrev
+;; https://www.rahuljuliato.com/posts/abbrev-mode
 (use-package yasnippet
-  :commands yas-expand
-  :autoload yas--get-snippet-tables
   :defines
   yas-minor-mode-map
-  :bind-keymap ("C-c &" . yas-minor-mode-map)
-  :bind ((:map yas-minor-mode-map
-              ("C-c & TAB" . yas-expand))
-         (:map cape-prefix-map
-               ("y" . yas-insert-snippet)))
+  yas-maybe-expand
+  :commands
+  yas-expand
+  yas-insert-snippet
+  yas-visit-snippet-file
+  :bind-keymap
+  ("C-c &" . yas-minor-mode-map)
+  :bind
+  ((:map yas-minor-mode-map
+         ("TAB" . yas-maybe-expand)
+         ("C-s" . yas-insert-snippet)
+         ("C-n" . yas-new-snippet)
+         ("C-v" . yas-visit-snippet-file)
+         )
+   (:map cape-prefix-map
+         ("y" . yas-insert-snippet)
+         )
+   )
   :custom
   (unbind-key "TAB" yas-minor-mode-map)
   (yas-snippet-dirs
    (cons
     (concat user-emacs-directory "yasnippets")
-    yas-snippet-dirs)))
-(use-package yasnippet-snippets
-  :defer t)
+    yas-snippet-dirs)
+   )
+  )
+
+(use-package yasnippet-snippets)
 
 ;;;; Emacs functions
 
