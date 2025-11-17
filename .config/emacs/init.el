@@ -116,7 +116,8 @@
     "Shut down and save desktop file."
     (interactive)
     (progn
-      (desktop-save "~/.cache/emacs/desktop")
+      ;(desktop-save "~/.cache/emacs/desktop")
+      (desktop-clear)
       (save-buffers-kill-emacs)))
   )
 
