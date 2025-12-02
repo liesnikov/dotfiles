@@ -1787,22 +1787,18 @@ When there is ongoing compilation, nothing happens."
   (ellama-keymap-prefix "C-c e")
   (ellama-sessions-directory "~/.cache/emacs/ellama-sessions")
   ;;(ellama-provider (make-llm-ollama :chat-model "llama3.2" :embedding-model "llama3.2"))
-  (ellama-provider liesnikov/ellama-grok-free)
-  (ellama-providers '(("grok". liesnikov/ellama-grok)
-                      ("grok-free" . liesnikov/ellama-grok-free)
-                      ("claude" . liesnikov/ellama-claude)
-                      ("gemini" . liesnikov/ellama-gemini)
-                      )
-                    )
-  (ellama-auto-scroll 't)
+  (ellama-providers liesnikov/ellama-providers-alist)
   (ellama-naming-scheme 'ellama-generate-name-by-llm)
+  (ellama-auto-scroll 't)
   (ellama-spinner-enabled 't)
   :defines
   ellama-command-map
-  liesnikov/ellama-grok liesnikov/ellama-grok-free
-  liesnikov/ellama-claude liesnikov/ellama-gemini
-  :functions liesnikov/provider-openrouter
-  :commands ellama--cancel-current-request
+  liesnikov/ellama-model-strings
+  liesnikov/ellama-providers-alist
+  :autoload
+  liesnikov/provider-openrouter
+  :commands
+  ellama--cancel-current-request
   :bind-keymap ("C-c e" . ellama-command-map)
   :bind ("C-c M-e" . ellama)
   :bind (:map ellama-command-map
@@ -1822,33 +1818,42 @@ When there is ongoing compilation, nothing happens."
        :chat-model string-id
        )
     )
-  (defconst liesnikov/ellama-grok-free
-    (liesnikov/provider-openrouter "x-ai/grok-4.1-fast:free"))
-  (defconst liesnikov/ellama-grok
-    (liesnikov/provider-openrouter "x-ai/grok-4.1-fast"))
-  (defconst liesnikov/ellama-claude
-    (liesnikov/provider-openrouter "anthropic/claude-sonnet-4"))
-  (defconst liesnikov/ellama-gemini
-    (liesnikov/provider-openrouter "google/gemini-2.5-flash"))
+
+  ;; Define all model strings
+  (defconst liesnikov/ellama-model-strings
+    '("x-ai/grok-4.1-fast:free"
+      "x-ai/grok-4.1-fast"
+      "anthropic/claude-sonnet-4"
+      "google/gemini-2.5-flash"
+      "deepseek/deepseek-v3.2"
+      "deepseek/deepseek-v3.2-speciale"
+      ))
+
+  ;; Generate provider constants and build providers alist
+  (defconst liesnikov/ellama-providers-alist
+    (mapcar (lambda (model-string)
+              (let ((provider (liesnikov/provider-openrouter model-string)))
+                ;; Return pair for the alist (key . provider-symbol)
+                (cons model-string provider)))
+            liesnikov/ellama-model-strings)
+    )
   )
 
 (use-package aider
-  :custom
-  ;; Or chatgpt model
-  ;; (setq aider-args '("--model" "o4-mini"))
-  ;; (setenv "OPENAI_API_KEY" <your-openai-api-key>)
-  ;; Or use your personal config file
-  ;; (setq aider-args `("--config" ,(expand-file-name "~/.aider.conf.yml")))
-  ;;
-  ;; add --no-auto-commits if you don't want it
-  (aider-args '("--model" "openrouter/deepseek/deepseek-v3.2-exp"
-                "--no-auto-accept-architect"
-                "--no-auto-commits"))
+  :defer t
   :bind
   ;; Optional: Set a key binding for the transient menu
   ;; use aider-transient-menu is for wider screens
   ;; use aider-transient-menu-2cols / aider-transient-menu-1col, for narrow screen
-  ("C-c M-a" . 'aider-transient-menu-2cols)
+  ("C-c M-a" . aider-transient-menu-2cols)
+  :custom
+  ;; To use your personal config file
+  ;; (setq aider-args `("--config" ,(expand-file-name "~/.aider.conf.yml")))
+  ;;
+  ;; add --no-auto-commits if you don't want it
+  (aider-args '("--model" "openrouter/deepseek/deepseek-v3.2"
+                "--no-auto-accept-architect"
+                "--no-auto-commits"))
   :config
   (setenv "OPENROUTER_API_KEY" (secrets-get-secret "Login" "OPENROUTER_API_KEY"))
   ;; add aider magit function to magit menu
