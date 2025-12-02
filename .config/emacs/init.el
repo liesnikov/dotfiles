@@ -1993,37 +1993,37 @@ When there is ongoing compilation, nothing happens."
   (lambda () (file-name-directory (shell-command-to-string "agda-mode locate")))
   :defines
   liesnikov/agda-default-name
+  agda2-mode-map
   :functions
   liesnkov/agda-reload
   :commands
   liesnikov/agda-switch liesnikov/agda-reset
   :bind (:map agda2-mode-map
-              (("C-x C-s C-w" . liesnikov/agda-switch)))
+              (("C-c C-x C-w" . liesnikov/agda-switch)))
   :config
-  (defvar liesnikov/agda-default-name nil)
+  (defvar liesnikov/agda-default-name "agda")
   (defun liesnikov/agda-reload ()
-    (require 'inheritenv)
-    (agda2-mode)
     (unload-feature 'agda2 t)
-    (unload-feature 'agda2-mode t)
+    (unless (fboundp 'inheritenv) (autoload #'inheritenv "inheritenv" nil 'macro))
     (let ((agda2-el (inheritenv (shell-command-to-string "agda-mode locate"))))
       (add-to-list 'load-path (file-name-directory agda2-el))
       (load-file agda2-el)
-      (bind-keys :package agda2-mode :map agda2-mode-map ("C-x C-s C-w" . liesnikov/agda-switch))
-      (add-to-list 'auto-mode-alist '("\\.l?agda\\'" . agda2-mode))
+      ;; rebind the "s[w]itch" key
+      (bind-keys :package agda2-mode :map agda2-mode-map ("C-c C-x C-w" . liesnikov/agda-switch))
       )
     )
   (defun liesnikov/agda-switch ()
     (interactive)
-    (setq liesnikov/agda-default-name agda2-program-name)
-    (liesnikov/agda-reload)
-    ;; rebind the key
-    (custom-set-variables '(agda2-program-name (executable-find "agda")))
-    (agda2-mode)
+    (let ((was-agda (eq major-mode 'agda2-mode)))
+      (when was-agda (fundamental-mode))
+      (setq liesnikov/agda-default-name agda2-program-name)
+      (liesnikov/agda-reload)
+      (custom-set-variables '(agda2-program-name (executable-find "agda")))
+      (when was-agda (agda2-mode)))
     )
   (defun liesnikov/agda-reset ()
     (interactive)
-    (liesnikov/agda-reload)
+    (liesnikov/agda-switch)
     (custom-set-variables '(agda2-program-name liesnikov/agda-default-name))
     )
   )
