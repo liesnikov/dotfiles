@@ -1795,15 +1795,15 @@ When there is ongoing compilation, nothing happens."
   (ellama-keymap-prefix "C-c e")
   (ellama-sessions-directory "~/.cache/emacs/ellama-sessions")
   ;;(ellama-provider (make-llm-ollama :chat-model "llama3.2" :embedding-model "llama3.2"))
-  (ellama-providers liesnikov/ellama-providers-alist)
+  ;; doesn't work since ellama-providers-alist hasn't been evaluated yet
+  ;;(ellama-providers liesnikov/ellama-providers-alist)
   (ellama-naming-scheme 'ellama-generate-name-by-llm)
   (ellama-auto-scroll 't)
   (ellama-spinner-enabled 't)
   :defines
   ellama-command-map
-  liesnikov/ellama-model-strings
-  liesnikov/ellama-providers-alist
-  :autoload
+  liesnikov/ellama-model-strings liesnikov/ellama-providers-alist
+  :functions
   liesnikov/provider-openrouter
   :commands
   ellama--cancel-current-request
@@ -1815,6 +1815,7 @@ When there is ongoing compilation, nothing happens."
          ("M-e" . ellama)
          )
   :config
+
   (defun liesnikov/provider-openrouter (string-id)
     ;; choose STRING-ID from https://openrouter.ai/models
     ;; for example, top on programming for the last week:
@@ -1828,14 +1829,13 @@ When there is ongoing compilation, nothing happens."
     )
 
   ;; Define all model strings
-  (defconst liesnikov/ellama-model-strings
-    '("x-ai/grok-4.1-fast:free"
-      "x-ai/grok-4.1-fast"
-      "anthropic/claude-sonnet-4"
-      "google/gemini-2.5-flash"
-      "deepseek/deepseek-v3.2"
-      "deepseek/deepseek-v3.2-speciale"
-      ))
+  (defconst liesnikov/ellama-model-strings '("x-ai/grok-4.1-fast:free"
+                                             "x-ai/grok-4.1-fast"
+                                             "anthropic/claude-sonnet-4"
+                                             "google/gemini-2.5-flash"
+                                             "deepseek/deepseek-v3.2"
+                                             "deepseek/deepseek-v3.2-speciale")
+    )
 
   ;; Generate provider constants and build providers alist
   (defconst liesnikov/ellama-providers-alist
@@ -1845,6 +1845,7 @@ When there is ongoing compilation, nothing happens."
                 (cons model-string provider)))
             liesnikov/ellama-model-strings)
     )
+  (custom-set-variables '(ellama-providers liesnikov/ellama-providers-alist nil nil "Can't set it earlier since the alist is only evaluated during load-time"))
   )
 
 (use-package aider
