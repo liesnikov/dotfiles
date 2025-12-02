@@ -1787,18 +1787,21 @@ When there is ongoing compilation, nothing happens."
   (ellama-keymap-prefix "C-c e")
   (ellama-sessions-directory "~/.cache/emacs/ellama-sessions")
   ;;(ellama-provider (make-llm-ollama :chat-model "llama3.2" :embedding-model "llama3.2"))
-  (ellama-provider (make-llm-openai-compatible
-                    :url "https://openrouter.ai/api/v1"
-                    :key (secrets-get-secret "Login" "OPENROUTER_API_KEY")
-                    ;; choose from https://openrouter.ai/models?fmt=cards&input_modalities=text&order=top-weekly&output_modalities=text&categories=programming
-                    ;; :chat-model "anthropic/claude-sonnet-4"
-                    :chat-model "x-ai/grok-code-fast-1"
-                    ;; :chat-model "google/gemini-2.5-flash"
-                    ))
+  (ellama-provider liesnikov/ellama-grok-free)
+  (ellama-providers '(("grok". liesnikov/ellama-grok)
+                      ("grok-free" . liesnikov/ellama-grok-free)
+                      ("claude" . liesnikov/ellama-claude)
+                      ("gemini" . liesnikov/ellama-gemini)
+                      )
+                    )
   (ellama-auto-scroll 't)
   (ellama-naming-scheme 'ellama-generate-name-by-llm)
   (ellama-spinner-enabled 't)
-  :defines ellama-command-map
+  :defines
+  ellama-command-map
+  liesnikov/ellama-grok liesnikov/ellama-grok-free
+  liesnikov/ellama-claude liesnikov/ellama-gemini
+  :functions liesnikov/provider-openrouter
   :commands ellama--cancel-current-request
   :bind-keymap ("C-c e" . ellama-command-map)
   :bind ("C-c M-e" . ellama)
@@ -1807,6 +1810,26 @@ When there is ongoing compilation, nothing happens."
          ("q q" . ellama--cancel-current-request-and-quit)
          ("M-e" . ellama)
          )
+  :init
+  (defun liesnikov/provider-openrouter (string-id)
+    ;; choose STRING-ID from https://openrouter.ai/models
+    ;; for example, top on programming for the last week:
+    ;; https://openrouter.ai/models?fmt=cards&input_modalities=text&order=top-weekly&output_modalities=text&categories=programming
+    (require 'llm-openai)
+    (make-llm-openai-compatible
+       :url "https://openrouter.ai/api/v1"
+       :key (secrets-get-secret "Login" "OPENROUTER_API_KEY")
+       :chat-model string-id
+       )
+    )
+  (defconst liesnikov/ellama-grok-free
+    (liesnikov/provider-openrouter "x-ai/grok-4.1-fast:free"))
+  (defconst liesnikov/ellama-grok
+    (liesnikov/provider-openrouter "x-ai/grok-4.1-fast"))
+  (defconst liesnikov/ellama-claude
+    (liesnikov/provider-openrouter "anthropic/claude-sonnet-4"))
+  (defconst liesnikov/ellama-gemini
+    (liesnikov/provider-openrouter "google/gemini-2.5-flash"))
   )
 
 (use-package aider
