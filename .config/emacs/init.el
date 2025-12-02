@@ -1495,6 +1495,7 @@ When there is ongoing compilation, nothing happens."
   (defvar markdown-cite-format)
   ;; these are the only two formats available:
   ;; https://pandoc.org/MANUAL.html#extension-citations
+  ;; includes a leading "@" (in brackets) since reftex inserts only the id of a bibtex entry
   (setq markdown-cite-format
         '((?\C-m . "[@%l]")
           (?p    . "[@%l]")
@@ -1504,10 +1505,11 @@ When there is ongoing compilation, nothing happens."
     "Wrap reftex-citation with local variables for markdown format."
     (interactive)
     (let ((reftex-cite-format markdown-cite-format)
+          ;; the separator includes "@" since reftex simply insert bibtex entry identifiers
           (reftex-cite-key-separator "; @"))
       (reftex-citation))
     )
-  ;; bind modified reftex-citation to C-c[, without enabling reftex-mode
+  ;; bind modified reftex-citation to `C-c [', without enabling reftex-mode
   ;; https://www.gnu.org/software/auctex/manual/reftex/Citations-Outside-LaTeX.html#SEC31
   :bind (:map markdown-mode-map
               ("C-c [" . liesnikov/markdown-reftex-citation)))
