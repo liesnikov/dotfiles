@@ -1987,9 +1987,45 @@ When there is ongoing compilation, nothing happens."
 ;; don't load eagerly, wait till we drop into an appropriate file
 ;;(agda-load)
 (use-package agda2-mode
+  :defer t
   :mode ("\\.l?agda\\'")
   :load-path
   (lambda () (file-name-directory (shell-command-to-string "agda-mode locate")))
+  :defines
+  liesnikov/agda-default-name
+  :functions
+  liesnkov/agda-reload
+  :commands
+  liesnikov/agda-switch liesnikov/agda-reset
+  :bind (:map agda2-mode-map
+              (("C-x C-s C-w" . liesnikov/agda-switch)))
+  :config
+  (defvar liesnikov/agda-default-name nil)
+  (defun liesnikov/agda-reload ()
+    (require 'inheritenv)
+    (agda2-mode)
+    (unload-feature 'agda2 t)
+    (unload-feature 'agda2-mode t)
+    (let ((agda2-el (inheritenv (shell-command-to-string "agda-mode locate"))))
+      (add-to-list 'load-path (file-name-directory agda2-el))
+      (load-file agda2-el)
+      (bind-keys :package agda2-mode :map agda2-mode-map ("C-x C-s C-w" . liesnikov/agda-switch))
+      (add-to-list 'auto-mode-alist '("\\.l?agda\\'" . agda2-mode))
+      )
+    )
+  (defun liesnikov/agda-switch ()
+    (interactive)
+    (setq liesnikov/agda-default-name agda2-program-name)
+    (liesnikov/agda-reload)
+    ;; rebind the key
+    (custom-set-variables '(agda2-program-name (executable-find "agda")))
+    (agda2-mode)
+    )
+  (defun liesnikov/agda-reset ()
+    (interactive)
+    (liesnikov/agda-reload)
+    (custom-set-variables '(agda2-program-name liesnikov/agda-default-name))
+    )
   )
 
 ;;; Commentary:
