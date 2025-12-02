@@ -146,7 +146,7 @@
   compilation-find-buffer
   recompile
   liesnikov/compile-on-save-start
-  :defines
+  :commands
   liesnikov/compile-on-save-mode
   :hook
   (compilation-finish-functions . liesnikov/compile-bury-buffer-if-successful)
@@ -430,7 +430,7 @@ When there is ongoing compilation, nothing happens."
 (use-package sgml-mode
   :ensure nil
   :defer t
-  :functions sgml-pretty-print)
+  :autoload sgml-pretty-print)
 
 (use-package system-packages
   :ensure nil
@@ -736,8 +736,9 @@ When there is ongoing compilation, nothing happens."
   :functions
   auto-dark--dbus-xfce
   auto-dark--is-light-mode-xfce
-  auto-dark-mode
   auto-dark--set-theme
+  :commands
+  auto-dark-mode
   ;; auto-dark--set-theme ;; this is for me not to forget how to switch themes manually
   :custom
   (auto-dark-themes '((modus-vivendi-tinted) (modus-operandi-tinted)))
@@ -993,7 +994,6 @@ When there is ongoing compilation, nothing happens."
   ;; ...
   )
 
-
 (use-package avy
   ;; move around efficiently
   :disabled t
@@ -1006,10 +1006,12 @@ When there is ongoing compilation, nothing happens."
   )
 
 (use-package vertico
+  :defer nil
   ;; The `vertico' package applies a vertical layout to the minibuffer.
   ;; It also pops up the minibuffer eagerly so we can see the available
   ;; options without further interactions.
-  :functions vertico-mode
+  :commands
+  vertico-mode
   :custom
   (vertico-cycle t)
   (vertico-resize nil)
@@ -1019,7 +1021,8 @@ When there is ongoing compilation, nothing happens."
 
 (use-package marginalia
   ;; The `marginalia' package provides helpful annotations next to completion candidates in the minibuffer.
-  :functions marginalia-mode
+  :commands
+  marginalia-mode
   :config
   (marginalia-mode 1)
   )
@@ -1102,7 +1105,9 @@ When there is ongoing compilation, nothing happens."
   :hook (completion-list-mode . consult-preview-at-point-mode)
 
   :functions
-  consult-register-window consult-xref consult-customize
+  consult-register-window
+  :commands
+  consult-customize
   :defines
   consult-theme
   consult-ripgrep consult-git-grep consult-grep
@@ -1217,7 +1222,9 @@ When there is ongoing compilation, nothing happens."
    )
   )
 
-(use-package yasnippet-snippets)
+(use-package yasnippet-snippets
+  :defer t
+  )
 
 ;;;; Emacs functions
 
@@ -1271,7 +1278,7 @@ When there is ongoing compilation, nothing happens."
   :defer t
   ;:ensure-system-package elpa-pdf-tools
   :mode (("\\.pdf\\'" . pdf-view-mode))
-  :functions
+  :commands
   pdf-tools-install
   :config
   ; enable pdftools instead of docview
@@ -1327,7 +1334,7 @@ When there is ongoing compilation, nothing happens."
   :defer t
   ;; group ibuffer entries by the project
   :after project
-  :functions
+  :autoload
   ibuffer-project-generate-filter-groups
   ibuffer-do-sort-by-project-file-relative
   :hook
@@ -1617,7 +1624,7 @@ When there is ongoing compilation, nothing happens."
   (magit-diff-refine-hunk (quote all))
   :bind (;; magit open default window binding
          ("C-x g" .  magit-status))
-  :functions
+  :autoload
   magit-file-relative-name
   magit-project-status
   )
@@ -1641,6 +1648,7 @@ When there is ongoing compilation, nothing happens."
   :ensure nil
   :defines
   eglot-managed-mode-hook
+  eglot-server-programs
   :hook
   (sh-mode-hook . eglot-ensure)
   (bash-ts-mode-hook . eglot-ensure)
@@ -1806,7 +1814,7 @@ When there is ongoing compilation, nothing happens."
          ("q q" . ellama--cancel-current-request-and-quit)
          ("M-e" . ellama)
          )
-  :init
+  :config
   (defun liesnikov/provider-openrouter (string-id)
     ;; choose STRING-ID from https://openrouter.ai/models
     ;; for example, top on programming for the last week:
@@ -1908,12 +1916,12 @@ When there is ongoing compilation, nothing happens."
 ;;;;;; Nix
 
 (use-package nix-mode
+  :defer t
   ;; activate nix-mode in .nix files
   :mode "\\.nix\\'"
   :hook
   (nix-mode-hook . eglot-ensure)
-  :init
-  (require 'eglot)
+  :config
   (add-to-list 'eglot-server-programs '((nix-mode) . ("nixd")))
   )
 
