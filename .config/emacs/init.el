@@ -1807,6 +1807,32 @@ When there is ongoing compilation, nothing happens."
          )
   )
 
+(use-package aider
+  :custom
+  ;; Or chatgpt model
+  ;; (setq aider-args '("--model" "o4-mini"))
+  ;; (setenv "OPENAI_API_KEY" <your-openai-api-key>)
+  ;; Or use your personal config file
+  ;; (setq aider-args `("--config" ,(expand-file-name "~/.aider.conf.yml")))
+  ;;
+  ;; add --no-auto-commits if you don't want it
+  (aider-args '("--model" "openrouter/deepseek/deepseek-v3.2-exp"
+                "--no-auto-accept-architect"
+                "--no-auto-commits"))
+  :bind
+  ;; Optional: Set a key binding for the transient menu
+  ;; use aider-transient-menu is for wider screens
+  ;; use aider-transient-menu-2cols / aider-transient-menu-1col, for narrow screen
+  ("C-c M-a" . 'aider-transient-menu-2cols)
+  :config
+  (setenv "OPENROUTER_API_KEY" (secrets-get-secret "Login" "OPENROUTER_API_KEY"))
+  ;; add aider magit function to magit menu
+  ;;(aider-magit-setup-transients)
+  ;; auto revert buffer
+  ;;(global-auto-revert-mode 1)
+  ;;(auto-revert-mode 1)
+  )
+
 ;;;;; Programming language-specific
 
 ;;;;;; Rust

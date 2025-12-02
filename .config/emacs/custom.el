@@ -10,7 +10,7 @@
  '(custom-safe-themes '(default))
  '(custom-theme-allow-multiple-selections nil)
  '(package-selected-packages
-   '(auctex auto-dark
+   '(aider auctex auto-dark
      breadcrumb
      cape color-moccur consult copilot corfu
      dashboard dired-subtree dockerfile-mode doom-themes
