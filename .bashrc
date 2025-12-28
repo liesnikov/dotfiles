@@ -129,7 +129,8 @@ stty -ixon
 
 export LOCALE_ARCHIVE="/usr/lib/locale/locale-archive"
 
-export EDITOR="emacsclient -a 'emacs' -c"
+export EDITOR="emacsclient -c"
+export ALTERNATE_EDITOR="emacs --no-desktop"
 #export EDITOR="vim"
 
 # If not running interactively, do not do anything otherwise start tmux
