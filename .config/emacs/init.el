@@ -686,7 +686,7 @@ When there is ongoing compilation, nothing happens."
   (inhibit-startup-screen t)
   ;; If the value is nil and ‘inhibit-startup-screen’ is nil, show the startup screen.
   ;; If t, open the ‘*scratch*’ buffer.
-  (initial-buffer-choice t)
+  ;;(initial-buffer-choice t)
   ;; text present in the scratch buffer by default
   (initial-scratch-message nil)
 
@@ -889,6 +889,7 @@ When there is ongoing compilation, nothing happens."
   )
 
 (use-package dashboard
+  :functions dashboard-setup-startup-hook
   ;; show a welcome screen with recent projects
   :custom
   (dashboard-banner-logo-title "welcome back 👋")
@@ -907,9 +908,8 @@ When there is ongoing compilation, nothing happens."
                      (recents  . 5)
                      (bookmarks . 5)
                      (registers . 5)))
-  (initial-buffer-choice (lambda () (get-buffer-create dashboard-buffer-name)))
-  :hook
-  (after-init-hook . dashboard-setup-startup-hook)
+  :config
+  (dashboard-setup-startup-hook)
   )
 
 (use-package sideline
@@ -1612,7 +1612,7 @@ When there is ongoing compilation, nothing happens."
 
 (use-package flymake-collection
   :after flymake
-  :hook (after-init . flymake-collection-hook-setup)
+  :hook (after-init-hook . flymake-collection-hook-setup)
   )
 
 ;;;;; Version control
