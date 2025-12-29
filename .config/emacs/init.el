@@ -684,8 +684,9 @@ When there is ongoing compilation, nothing happens."
   (user-full-name "Dana Liesnikov")
   (user-mail-address "liesnikov@laptop")
 
+  ;; commented out inhibit-startup-screen and initial-buffer-choice due to a clash with the dashboard package
   ;; don't show startup emacs screen
-  (inhibit-startup-screen t)
+  ;;(inhibit-startup-screen t)
   ;; If the value is nil and ‘inhibit-startup-screen’ is nil, show the startup screen.
   ;; If t, open the ‘*scratch*’ buffer.
   ;;(initial-buffer-choice t)
@@ -877,6 +878,8 @@ When there is ongoing compilation, nothing happens."
                      (recents  . 5)
                      (bookmarks . 5)
                      (registers . 5)))
+  ;; enable dashboard as startup screen on client frames too
+  (initial-buffer-choice (lambda () (get-buffer-create dashboard-buffer-name)))
   :config
   (dashboard-setup-startup-hook)
   )
