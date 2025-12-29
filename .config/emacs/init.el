@@ -612,6 +612,7 @@ When there is ongoing compilation, nothing happens."
   )
 
 (use-package which-key
+  :disabled
   :ensure nil
   ;; provide a popup when you press a button with all bindings that follow
   :custom
@@ -982,13 +983,17 @@ When there is ongoing compilation, nothing happens."
   ;; The `vertico' package applies a vertical layout to the minibuffer.
   ;; It also pops up the minibuffer eagerly so we can see the available
   ;; options without further interactions.
-  :commands
-  vertico-mode
+  :commands vertico-mode
+  :functions vertico-multiform-mode
+  :defines vertico-multiform-categories
   :custom
   (vertico-cycle t)
   (vertico-resize nil)
   :config
   (vertico-mode 1)
+  ;; to achieve more which-key like behaviour, also possible to change locally with M-G
+  ;;(vertico-multiform-mode)
+  ;;(add-to-list 'vertico-multiform-categories '(embark-keybinding grid))
   )
 
 (use-package marginalia
@@ -1073,6 +1078,10 @@ When there is ongoing compilation, nothing happens."
          ("M-r"     . consult-history)             ;; orig. previous-matching-history-element
          )
 
+  :custom
+  ;; instead of which-key
+  ;; following https://www.matem.unam.mx/~omar/apropos-emacs.html#the-case-against-which-key-a-polemic
+  (prefix-help-command #'embark-prefix-help-command)
   ;; Enable automatic preview at point in the *Completions* buffer.
   ;; This is relevant when you use the default completion UI.
   :hook (completion-list-mode-hook . consult-preview-at-point-mode)
