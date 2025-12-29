@@ -111,14 +111,13 @@
                                       (desktop-read)))))
   :functions liesnikov/shutdown
   :config
-  ;; use this from M-x
   (defun liesnikov/shutdown ()
-    "Shut down and save desktop file."
+    "Shut down and (don't) save desktop file.
+     Use interactively, M-x ..."
     (interactive)
-    (progn
-      ;(desktop-save "~/.cache/emacs/desktop")
-      (desktop-clear)
-      (save-buffers-kill-emacs)))
+    ;(desktop-save "~/.cache/emacs/desktop")
+    (desktop-clear)
+    (save-buffers-kill-emacs))
   )
 
 (use-package auth-source
@@ -524,7 +523,7 @@ When there is ongoing compilation, nothing happens."
 (use-package reftex
   :ensure nil
   :hook
-  (LaTeX-mode . turn-on-reftex)
+  (LaTeX-mode-hook . turn-on-reftex)
   )
 
 (use-package savehist
@@ -533,7 +532,8 @@ When there is ongoing compilation, nothing happens."
   ;; Thus, the user will always see their latest choices closer to the top
   ;; (such as with M-x).
   :ensure nil ; it is built-in
-  :hook (after-init . savehist-mode)
+  :hook
+  (after-init-hook . savehist-mode)
   )
 
 (use-package scroll-bar
@@ -1072,9 +1072,10 @@ When there is ongoing compilation, nothing happens."
          ("M-s"     . consult-history)             ;; orig. next-matching-history-element
          ("M-r"     . consult-history)             ;; orig. previous-matching-history-element
          )
-  ;; Enable automatic preview at point in the *Completions* buffer. This is
-  ;; relevant when you use the default completion UI.
-  :hook (completion-list-mode . consult-preview-at-point-mode)
+
+  ;; Enable automatic preview at point in the *Completions* buffer.
+  ;; This is relevant when you use the default completion UI.
+  :hook (completion-list-mode-hook . consult-preview-at-point-mode)
 
   :functions
   consult-register-window
@@ -1155,7 +1156,7 @@ When there is ongoing compilation, nothing happens."
 ;; The `embark-consult' package is glue code to tie together `embark' and `consult'.
 (use-package embark-consult
   :hook
-  (embark-collect-mode . consult-preview-at-point-mode)
+  (embark-collect-mode-hook . consult-preview-at-point-mode)
   )
 
 ;; this takes quite a bit of time on load, consider switching to built-in abbrev
@@ -1516,8 +1517,7 @@ When there is ongoing compilation, nothing happens."
     (ol-bbdb ol-bibtex ol-docview ol-eww ol-gnus
      ol-info ol-irc ol-mhe ol-rmail org-tempo ol-w3m)))
   :hook
-  ;; activate org-indent-mode on org-indent
-  (org-mode-hook . org-indent-mode)
+  (org-mode-hook . org-indent-mode) ; activate org-indent-mode on org-indent
   )
 
 (use-package org-download
@@ -1537,9 +1537,9 @@ When there is ongoing compilation, nothing happens."
 (use-package org-modern-indent
   :defer t
   :functions omi/mode
-  :config ; add late to hook
-  ;; because of the depth argument can't use :hook
-  (add-hook 'org-mode-hook #'omi/mode 90))
+  :config
+  (add-hook 'org-mode-hook #'omi/mode 90) ; because of the depth argument can't use :hook
+  )
 
 ;;;; Programming
 
@@ -1577,8 +1577,7 @@ When there is ongoing compilation, nothing happens."
 (use-package highlight-parentheses
   ;; dynamically highlights the parentheses surrounding point based on nesting-level
   :defer t
-  :hook ((minibuffer-setup-hook
-          prog-mode-hook) . highlight-parentheses-mode)
+  :hook ((minibuffer-setup-hook prog-mode-hook) . highlight-parentheses-mode)
   )
 
 (use-package flymake-collection
