@@ -13,6 +13,7 @@
       direnv
       nix-direnv # support direnv for flakes
       nixfmt-rfc-style # format nix files
+      # nix-index # tool to find nixpkgs fields corresponding to paths
       nixd # language server for nix
 
       cachix # for better nix caches
@@ -33,6 +34,7 @@
       #agda
 
       pandoc
+      librsvg # for rsvg-convert
 
       ripgrep
       fd
