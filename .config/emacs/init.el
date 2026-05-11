@@ -1089,7 +1089,7 @@ When there is ongoing compilation, nothing happens."
 
   ;; Optionally configure preview.
   ;; The default value is 'any, such that any key triggers the preview.
-  (consult-preview-key (:debounce 0.4 any))
+  (consult-preview-key (:debounced 0.4 any))
   ;; For some commands and buffer sources it is useful to configure the
   ;; :preview-key on a per-command basis using the `consult-customize' macro.
 
