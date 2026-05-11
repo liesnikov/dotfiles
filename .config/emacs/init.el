@@ -1622,6 +1622,7 @@ When there is ongoing compilation, nothing happens."
 
 ;;;;; Language Server Protocol
 
+;; consider using dumb-jump either instead or in combination
 ;; built-in, but easier to configure here
 
 (use-package eglot
