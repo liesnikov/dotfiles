@@ -1761,8 +1761,7 @@ When there is ongoing compilation, nothing happens."
 
 (use-package llm
   :defer t
-  :custom
-  (llm-warn-on-nonfree nil)
+  :custom (llm-warn-on-nonfree nil)
   )
 (use-package llm-ollama
   :ensure nil
@@ -1781,6 +1780,7 @@ When there is ongoing compilation, nothing happens."
   (ellama-language "English")
   (ellama-keymap-prefix "C-c e")
   (ellama-sessions-directory "~/.cache/emacs/ellama-sessions")
+  (ellama-show-reasoning nil)
   ;;(ellama-provider (make-llm-ollama :chat-model "llama3.2" :embedding-model "llama3.2"))
   ;; doesn't work since ellama-providers-alist hasn't been evaluated yet
   ;;(ellama-providers liesnikov/ellama-providers-alist)
@@ -1816,12 +1816,10 @@ When there is ongoing compilation, nothing happens."
     )
 
   ;; Define all model strings
-  (defconst liesnikov/ellama-model-strings '("x-ai/grok-4.1-fast:free"
-                                             "x-ai/grok-4.1-fast"
-                                             "anthropic/claude-sonnet-4"
-                                             "google/gemini-2.5-flash"
-                                             "deepseek/deepseek-v3.2"
-                                             "deepseek/deepseek-v3.2-speciale")
+  (defconst liesnikov/ellama-model-strings
+    '("deepseek/deepseek-v4-flash"
+      "openrouter/auto"
+      )
     )
 
   ;; Generate provider constants and build providers alist
@@ -1832,7 +1830,12 @@ When there is ongoing compilation, nothing happens."
                 (cons model-string provider)))
             liesnikov/ellama-model-strings)
     )
-  (custom-set-variables '(ellama-providers liesnikov/ellama-providers-alist nil nil "Can't set it earlier since the alist is only evaluated during load-time"))
+
+  (custom-set-variables
+   '(ellama-providers liesnikov/ellama-providers-alist nil nil "Install a custom list of providers")
+   '(ellama-write-prompt-template (replace-regexp-in-string "</SYSTEM>" " Keep the formatting style like line breaks.</SYSTEM>" ellama-write-prompt-template 't) 't nil "Amend the write prompt to preserve line breaks")
+   '(ellama-improve-wording-prompt-template (concat ellama-improve-wording-prompt-template " Keep the formatting style like line breaks.") 't nil "Amend the improve wording prompt to preserve line breaks")
+   )
   )
 
 (use-package aider
