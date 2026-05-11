@@ -1643,6 +1643,7 @@ When there is ongoing compilation, nothing happens."
   :custom
   (eglot-autoshutdown t)  ;; shutdown language server after closing last file
   (eglot-confirm-server-initiated-edits nil)  ;; allow edits without confirmation
+  (eglot-extend-to-xref 't) ;; When jumping to a dependency make the under the same LSP server https://mastodon.social/@PuercoPop/116403622387083909
   :config
 ;;    (setq-default eglot-workspace-configuration
 ;;                '((haskell
