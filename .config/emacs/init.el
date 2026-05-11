@@ -1748,8 +1748,10 @@ When there is ongoing compilation, nothing happens."
     ;; check if copilot mode is active
     (if (not (bound-and-true-p copilot-mode))
         (progn
-          (message "Copilot mode wasn't active, activating now")
-          (copilot-mode 't))
+          (when (y-or-n-p "Copilot mode wasn't active. Activate copilot mode now? ")
+            (copilot-mode 1)
+            (message "Copilot mode activated, try again"))
+          )
       ;; check if the argument is provided
       (if (bound-and-true-p arg)
           (copilot-next-completion)
