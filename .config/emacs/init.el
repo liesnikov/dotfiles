@@ -1171,6 +1171,7 @@ When there is ongoing compilation, nothing happens."
 ;; this takes quite a bit of time on load, consider switching to built-in abbrev
 ;; https://www.rahuljuliato.com/posts/abbrev-mode
 (use-package yasnippet
+  :disabled
   :defines
   yas-minor-mode-map
   yas-maybe-expand
