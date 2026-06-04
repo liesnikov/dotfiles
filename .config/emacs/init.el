@@ -435,6 +435,7 @@ When there is ongoing compilation, nothing happens."
 (use-package system-packages
   :ensure nil
   :commands system-packages-install
+  :ensure-system-package elpa-system-packages
   )
 
 (use-package nxml-mode
