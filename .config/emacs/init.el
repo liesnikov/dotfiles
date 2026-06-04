@@ -1616,6 +1616,10 @@ When there is ongoing compilation, nothing happens."
   (sh-mode-hook . eglot-ensure)
   (bash-ts-mode-hook . eglot-ensure)
   (latex-mode-hook . eglot-ensure)
+  (typescript-ts-mode-hook . eglot-ensure)
+  (tsx-ts-mode-hook . eglot-ensure)
+  (js-ts-mode-hook . eglot-ensure)
+  (js-mode-hook . eglot-ensure)
   :bind (:map eglot-mode-map
               (("C-c q" . eglot-code-action-quickfix)
                ("C-c c" . eglot-code-actions)))
