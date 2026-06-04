@@ -1331,6 +1331,9 @@ When there is ongoing compilation, nothing happens."
   (trashed-date-format "%Y-%m-%d %H:%M:%S")
   )
 
+(use-package vterm
+  )
+
 ;;;;; External tool integration
 
 (use-package rg
