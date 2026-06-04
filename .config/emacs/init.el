@@ -433,6 +433,7 @@ When there is ongoing compilation, nothing happens."
   :autoload sgml-pretty-print)
 
 (use-package system-packages
+  :disabled
   :ensure nil
   :commands system-packages-install
   :ensure-system-package elpa-system-packages
