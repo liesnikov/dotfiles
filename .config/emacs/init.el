@@ -1667,7 +1667,6 @@ When there is ongoing compilation, nothing happens."
 
 ;; for breadcrumbs modeline
 (use-package breadcrumb
-  :commands breadcrumb-mode
   :config
   (breadcrumb-mode)
   )
