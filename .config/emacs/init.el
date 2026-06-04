@@ -815,50 +815,17 @@ When there is ongoing compilation, nothing happens."
   )
 
 (use-package unicode-whitespace
-  :defer t
+  :demand t
   :after whitespace
-  :custom
-  (unicode-whitespace-soft-space-mappings
-   ;; this is the default except for "Space", initially it's also Middle dot
-   '(("Space" ("Space"))
-     ("Em Quad"
-      ("Circled Bullet" "Middle Dot" "."))
-     ("Em Space"
-      ("Circled Bullet" "Middle Dot" "."))
-     ("En Quad"
-      ("Circled Bullet" "Middle Dot" "."))
-     ("En Space"
-      ("Circled Bullet" "Middle Dot" "."))
-     ("Figure Space"
-      ("Circled Bullet" "Middle Dot" "."))
-     ("Four-Per-Em Space"
-      ("Circled Bullet" "Middle Dot" "."))
-     ("Hair Space"
-      ("Circled Bullet" "Middle Dot" "."))
-     ("Ideographic Space"
-      ("Circled Bullet" "Middle Dot" "."))
-     ("Medium Mathematical Space"
-      ("Circled Bullet" "Middle Dot" "."))
-     ("Mongolian Vowel Separator"
-      ("Circled Bullet" "Middle Dot" "."))
-     ("Ogham Space Mark"
-      ("Circled Bullet" "Middle Dot" "."))
-     ("Punctuation Space"
-      ("Circled Bullet" "Middle Dot" "."))
-     ("Six-Per-Em Space"
-      ("Circled Bullet" "Middle Dot" "."))
-     ("Tag Space"
-      ("Circled Bullet" "Middle Dot" "."))
-     ("Thin Space"
-      ("Circled Bullet" "Middle Dot" "."))
-     ("Three-Per-Em Space"
-      ("Circled Bullet" "Middle Dot" "."))
-     ("Zero Width Space"
-      ("Circled Bullet" "Middle Dot" "."))))
   :functions
   unicode-whitespace-setup
+  liesnikov/blend-face-colors
   :config
   (unicode-whitespace-setup 'subdued-faces)
+  (set-face-attribute 'liesnikov/background-face nil
+                      :foreground (face-background 'default)
+                      :background (face-background 'default))
+  (apply #'set-face-attribute 'whitespace-space nil 'shadow)
   )
 
 (use-package emojify
