@@ -21,17 +21,17 @@
      git-link gnu-elpa-keyring-update
      haskell-ts-mode highlight-parentheses
      ibuffer-project idris-mode idris2-mode
+     llm llm-ollama llm-openai
      magit marginalia markdown-mode merlin minions moody
      nix-mode no-littering noxml-fold
      olivetti orderless org-download org-modern org-modern-indent org-present
      pdf-tools proof-general
-     rg rustic
+     rg rust-mode rustic
      sideline sideline-eglot sideline-flymake sort-words
      transpose-frame trashed treesit-auto treesit-fold treesit-ispell treesit-langs tuareg
      ultra-scroll undo-tree unfill unicode-whitespace use-package-ensure-system-package
-     vertico
-     wc-mode wgrep
-     yasnippet yasnippet-snippets))
+     vertico vterm
+     wc-mode wgrep yasnippet yasnippet-snippets))
  '(package-vc-selected-packages
    '((eglot-booster :vc-backend Git :url
                     "https://github.com/jdtsmith/eglot-booster")
