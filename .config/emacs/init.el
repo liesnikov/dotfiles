@@ -1751,10 +1751,12 @@ When there is ongoing compilation, nothing happens."
   (llm-warn-on-nonfree nil)
   )
 (use-package llm-ollama
+  :ensure nil
   :defer t
   :autoload make-llm-ollama
   )
 (use-package llm-openai
+  :ensure nil
   :defer a
   :autoload make-llm-openai-compatible
   )
