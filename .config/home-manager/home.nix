@@ -17,7 +17,6 @@
       nixd # language server for nix
 
       cachix # for better nix caches
-      gh # the github cli app
 
       vale # for writing
       vale-ls # lsp server for vale
@@ -43,9 +42,6 @@
       diffpdf
 
       bash-language-server
-
-      code2prompt # concat all files in a project for an llm
-      aider-chat
     ];
     # This value determines the Home Manager release that your
     # configuration is compatible with. This helps avoid breakage

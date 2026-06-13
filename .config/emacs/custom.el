@@ -21,7 +21,6 @@
      git-link gnu-elpa-keyring-update
      haskell-ts-mode highlight-parentheses
      ibuffer-project idris-mode idris2-mode
-     llm llm-ollama llm-openai
      magit marginalia markdown-mode merlin minions moody
      nix-mode no-littering noxml-fold
      olivetti orderless org-download org-modern org-modern-indent org-present
@@ -31,7 +30,8 @@
      transpose-frame trashed treesit-auto treesit-fold treesit-ispell treesit-langs tuareg
      ultra-scroll undo-tree unfill unicode-whitespace use-package-ensure-system-package
      vertico vterm
-     wc-mode wgrep yasnippet yasnippet-snippets))
+     wc-mode wgrep
+     yasnippet yasnippet-snippets))
  '(package-vc-selected-packages
    '((eglot-booster :vc-backend Git :url
                     "https://github.com/jdtsmith/eglot-booster")
@@ -40,7 +40,21 @@
      (ultra-scroll :vc-backend Git :url
                    "https://github.com/jdtsmith/ultra-scroll")))
  '(safe-local-variable-values
-   '((eval progn (olivetti-mode 't) (flyspell-buffer)
+   '((ispell-personal-dictionary
+      . "/home/bohdan/delft/thesis/my-thesis/utils/.aspell.en.pws")
+     (reftex-default-bibliography
+      "/home/bohdan/delft/extended-elab/extended-elab/paper/bib.bib")
+     (eval progn (olivetti-mode 't) (flyspell-mode 't)
+           (flyspell-buffer) (flycheck-buffer)
+           (ispell-change-dictionary "en_GB-w_accents"))
+     (eval progn (olivetti-mode 't) (flyspell-mode 't)
+           (flyspell-buffer) (flymake-mode)
+           (ispell-change-dictionary "en_GB-w_accents"))
+     (ispell-personal-dictionary
+      . "/home/bohdan/delft/thesis/.aspell.en.pws")
+     (ispell-personal-dictionary
+      . "/home/bohdan/delft/polarity/spec/.aspell.en.pws")
+     (eval progn (olivetti-mode 't) (flyspell-buffer)
            (ispell-change-dictionary "en_GB-w_accents"))
      (eval progn (olivetti-mode 't))
      (reftex-default-bibliography "./ref.bib"))))

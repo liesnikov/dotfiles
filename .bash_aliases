@@ -16,7 +16,7 @@ alias lock="dm-tool lock"
 alias suspend="systemctl suspend"
 
 alias kill-lockscreen="sudo systemctl restart lightdm"
-
+alias gemini="npx @google/gemini-cli"
 alias open-webui-create="docker run -d --gpus all --network=host -v open-webui:/app/backend/data -e OLLAMA_BASE_URL=http://127.0.0.1:1143 --name open-webui --restart on-failure:5 ghcr.io/open-webui/open-webui:cuda"
 alias open-webui-start="docker start open-webui; xdg-open http://localhost:8080"
 alias open-webui-pause="docker stop open-webui"
