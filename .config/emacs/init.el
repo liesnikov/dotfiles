@@ -828,10 +828,6 @@ When there is ongoing compilation, nothing happens."
   liesnikov/blend-face-colors
   :config
   (unicode-whitespace-setup 'subdued-faces)
-  (set-face-attribute 'liesnikov/background-face nil
-                      :foreground (face-background 'default)
-                      :background (face-background 'default))
-  (apply #'set-face-attribute 'whitespace-space nil 'shadow)
   )
 
 (use-package emojify
