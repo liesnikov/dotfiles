@@ -27,7 +27,7 @@
      pdf-tools proof-general
      rg rust-mode rustic
      sideline sideline-eglot sideline-flymake sort-words
-     transpose-frame trashed treesit-auto treesit-fold treesit-ispell treesit-langs tuareg
+     terminal-here transpose-frame trashed treesit-auto treesit-fold treesit-ispell treesit-langs tuareg
      ultra-scroll undo-tree unfill unicode-whitespace use-package-ensure-system-package
      vertico vterm
      wc-mode wgrep

@@ -1350,6 +1350,16 @@ When there is ongoing compilation, nothing happens."
 (use-package vterm
   )
 
+(use-package terminal-here
+  ;; rely on project.el functions instead of projectile
+  ;; need a function that doesn't take arguments and returns the project root as string
+  :custom
+  (terminal-here-project-root-function (lambda () (project-root (project-current t))))
+  :bind
+  ( :map project-prefix-map
+    ("t" . terminal-here-project-launch))
+  )
+
 ;;;;; External tool integration
 
 (use-package rg
