@@ -1,5 +1,5 @@
 {
-  description = "Home Manager configuration of bohdan";
+  description = "Home Manager configuration of dana";
 
   inputs = {
     # Specify the source of Home Manager and Nixpkgs.
@@ -18,7 +18,7 @@
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
-      emacs-lsp-booster = emacs-lsp-booster.pkgs.${system}.default;
+      emacs-lsp-booster-pkg = emacs-lsp-booster.packages.${system}.default;
     in {
       homeConfigurations."bohdan" = home-manager.lib.homeManagerConfiguration {
         inherit pkgs;
@@ -29,7 +29,7 @@
 
         # Optionally use extraSpecialArgs
         # to pass through arguments to home.nix
-        extraSpecialArgs = { inherit emacs-lsp-booster; };
+        extraSpecialArgs = { emacs-lsp-booster = emacs-lsp-booster-pkg; };
       };
     };
 }

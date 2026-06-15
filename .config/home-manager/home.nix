@@ -1,4 +1,4 @@
-{ config, pkgs, emasc-lsp-booster, ... }:
+{ config, pkgs, emacs-lsp-booster, ... }:
   let
     custom-agda = pkgs.agda.withPackages
       [ pkgs.agdaPackages.standard-library ];
