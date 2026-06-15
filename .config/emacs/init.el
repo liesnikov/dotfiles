@@ -1095,11 +1095,6 @@ When there is ongoing compilation, nothing happens."
   ;; following https://www.matem.unam.mx/~omar/apropos-emacs.html#the-case-against-which-key-a-polemic
   (prefix-help-command #'embark-prefix-help-command)
 
-  :hook
-  ;; Enable automatic preview at point in the *Completions* buffer.
-  ;; This is relevant when you use the default completion UI.
-  (completion-list-mode-hook . consult-preview-at-point-mode)
-
   :functions
   consult-register-window
   :commands
@@ -1162,8 +1157,6 @@ When there is ongoing compilation, nothing happens."
 
 ;; The `embark-consult' package is glue code to tie together `embark' and `consult'.
 (use-package embark-consult
-  :hook
-  (embark-collect-mode-hook . consult-preview-at-point-mode)
   )
 
 ;; this takes quite a bit of time on load, consider switching to built-in abbrev
