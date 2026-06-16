@@ -229,7 +229,6 @@ When there is ongoing compilation, nothing happens."
   ;; for some reason this errors out on master-81d7827
   (dired-make-directory-clickable nil)
   :bind (:map dired-mode-map
-         ("C-c o"   . dired-open-file)
          ("C-c C-o" . dired-open-file))
   :hook
   ((dired-mode . dired-hide-details-mode)
@@ -682,6 +681,12 @@ When there is ongoing compilation, nothing happens."
 (use-package emacs
   :ensure nil
   ;; catch-all package for all the things that don't have their own package
+  :bind
+  ;; find-file-at-point (ffap) globally on C-c C-o.  Major modes that bind
+  ;; C-c C-o locally (org -> org-open-at-point, markdown -> follow link,
+  ;; dired -> dired-open-file, agda -> module contents) shadow this, which is
+  ;; fine: they all do a compatible "act on the thing at point".
+  ("C-c C-o" . find-file-at-point)
   :custom
   ;; personal info
   (user-full-name "Dana Liesnikov")
