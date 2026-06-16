@@ -1636,6 +1636,13 @@ When there is ongoing compilation, nothing happens."
   :defines
   eglot-managed-mode-hook
   eglot-server-programs
+  liesnikov/eglot-actions-alist
+  :functions
+  liesnikov/eglot-actions
+  eglot-current-server
+  eglot-server-capable
+  eglot-code-actions
+  eglot-execute
   :hook
   (sh-mode-hook . eglot-ensure)
   (bash-ts-mode-hook . eglot-ensure)
@@ -1645,8 +1652,7 @@ When there is ongoing compilation, nothing happens."
   (js-ts-mode-hook . eglot-ensure)
   (js-mode-hook . eglot-ensure)
   :bind (:map eglot-mode-map
-              (("C-c q" . eglot-code-action-quickfix)
-               ("C-c c" . eglot-code-actions)))
+              (("C-c c" . liesnikov/eglot-actions)))
   :custom
   (eglot-autoshutdown t)  ;; shutdown language server after closing last file
   (eglot-confirm-server-initiated-edits nil)  ;; allow edits without confirmation
@@ -1657,6 +1663,59 @@ When there is ongoing compilation, nothing happens."
 ;;                   (plugin
 ;;                    (hlint
 ;;                     (globalOn . t))))))
+  (defcustom liesnikov/eglot-actions-alist
+    '(("Rename symbol"        eglot-rename              :renameProvider)
+      ("Format buffer"        eglot-format-buffer       :documentFormattingProvider)
+      ("Format region"        eglot-format              :documentRangeFormattingProvider)
+      ("Find declaration"     eglot-find-declaration    :declarationProvider)
+      ("Find implementation"  eglot-find-implementation :implementationProvider)
+      ("Find type definition" eglot-find-type           :typeDefinitionProvider)
+      ("Reconnect server"     eglot-reconnect           t)
+      ("Shutdown server"      eglot-shutdown            t))
+    "Extra Eglot commands offered by `liesnikov/eglot-actions'.
+Each entry is (LABEL COMMAND CAPABILITY); COMMAND is offered only when
+the current server advertises CAPABILITY, or when CAPABILITY is t
+\(always).  CAPABILITY is one of:
+  - t                          always offer COMMAND;
+  - a `:fooProvider' keyword   checked with `eglot-server-capable';
+  - a list of keywords         a nested capability path, e.g.
+                               (:experimental :runnables), applied to
+                               `eglot-server-capable'."
+    :type '(alist :key-type (string :tag "Label")
+                  :value-type
+                  ;; `symbol' not `function': the command may live in a package
+                  ;; (eglot-x, consult-eglot, ...) that is not loaded yet.
+                  (list (symbol :tag "Command")
+                        (choice :tag "Available when"
+                                (const :tag "Server connected (always)" t)
+                                (symbol :tag "Server capability, e.g. :renameProvider")
+                                (repeat :tag "Nested capability path" symbol))))
+    :group 'eglot)
+  (defun liesnikov/eglot-actions (beg end)
+    "Run an Eglot action picked from one flat menu.
+Merges the server's live code actions at point (or region BEG..END)
+with the capability-gated commands in `liesnikov/eglot-actions-alist'."
+    (interactive (if (use-region-p)
+                     (list (region-beginning) (region-end))
+                   (list (point) nil)))
+    (let* ((server (or (eglot-current-server) (user-error "No Eglot server here")))
+           ;; (LABEL . ACTION-PLIST) for live code actions, (LABEL . SYMBOL) for commands.
+           (entries
+            (append
+             (when (eglot-server-capable :codeActionProvider)
+               (mapcar (lambda (a) (cons (plist-get a :title) a))
+                       (append (eglot-code-actions beg end nil nil) nil)))
+             (seq-keep (pcase-lambda (`(,label ,cmd ,cap))
+                         ;; CAP is t, a `:fooProvider' keyword, or a nested
+                         ;; capability path like (:experimental :runnables).
+                         (when (or (eq cap t)
+                                   (apply #'eglot-server-capable (ensure-list cap)))
+                           (cons label cmd)))
+                       liesnikov/eglot-actions-alist)))
+           (sel (cdr (assoc (completing-read "Eglot action: " entries nil t) entries))))
+      ;; Commands are symbols, code actions are plists -- dispatch on that.
+      (cond ((symbolp sel) (call-interactively sel))
+            (sel (eglot-execute server sel)))))
   (add-to-list 'eglot-server-programs '((sh-mode bash-ts-mode) . ("bash-language-server" "start")))
   (add-to-list 'eglot-server-programs '((markdown-mode rst-mode html-mode org-mode) . ("vale-ls")))
   (add-to-list 'eglot-server-programs '((latex-mode LaTeX-mode tex-mode TeX-mode) . ("texlab")))
@@ -1665,7 +1724,12 @@ When there is ongoing compilation, nothing happens."
 (use-package consult-eglot
   ;; consult-powered workspace symbol search; surfaced in liesnikov/eglot-actions
   :after eglot
+  :defines liesnikov/eglot-actions-alist
   :commands consult-eglot-symbols
+  :config
+  (add-to-list 'liesnikov/eglot-actions-alist
+               '("Workspace symbols" consult-eglot-symbols :workspaceSymbolProvider)
+               t)
   )
 
 (use-package eglot-x
@@ -1673,6 +1737,7 @@ When there is ongoing compilation, nothing happens."
   ;; gated by experimental capabilities in liesnikov/eglot-actions-alist
   :vc (:url "https://github.com/nemethf/eglot-x")
   :after eglot
+  :defines liesnikov/eglot-actions-alist
   :functions eglot-x-setup
   :commands
   eglot-x-join-lines
@@ -1683,6 +1748,14 @@ When there is ongoing compilation, nothing happens."
   eglot-x-structural-search-replace
   :config
   (eglot-x-setup)
+  (dolist (entry '(("Join lines"     eglot-x-join-lines        (:experimental :joinLines))
+                   ("Move item up"   eglot-x-move-item-up      (:experimental :moveItem))
+                   ("Move item down" eglot-x-move-item-down    (:experimental :moveItem))
+                   ("Matching brace" eglot-x-matching-brace    (:experimental :matchingBrace))
+                   ("External docs"  eglot-x-open-external-documentation (:experimental :externalDocs))
+                   ("Runnables"      eglot-x-ask-runnables     (:experimental :runnables))
+                   ("Structural search/replace" eglot-x-structural-search-replace (:experimental :ssr))))
+    (add-to-list 'liesnikov/eglot-actions-alist entry t))
   )
 
 (use-package eldoc-box
