@@ -1657,6 +1657,29 @@ When there is ongoing compilation, nothing happens."
   (add-to-list 'eglot-server-programs '((latex-mode LaTeX-mode tex-mode TeX-mode) . ("texlab")))
   )
 
+(use-package consult-eglot
+  ;; consult-powered workspace symbol search; surfaced in liesnikov/eglot-actions
+  :after eglot
+  :commands consult-eglot-symbols
+  )
+
+(use-package eglot-x
+  ;; non-standard LSP extensions (mostly rust-analyzer); the commands are
+  ;; gated by experimental capabilities in liesnikov/eglot-actions-alist
+  :vc (:url "https://github.com/nemethf/eglot-x")
+  :after eglot
+  :functions eglot-x-setup
+  :commands
+  eglot-x-join-lines
+  eglot-x-move-item-up eglot-x-move-item-down
+  eglot-x-matching-brace
+  eglot-x-open-external-documentation
+  eglot-x-ask-runnables
+  eglot-x-structural-search-replace
+  :config
+  (eglot-x-setup)
+  )
+
 (use-package eldoc-box
   :custom
   (eldoc-box-cleanup-interval 1)
