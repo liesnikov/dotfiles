@@ -284,7 +284,7 @@ When there is ongoing compilation, nothing happens."
   :ensure nil
   :defer t
   :custom
-  (eldoc-documentation-strategy eldoc-documentation-compose)
+  (eldoc-documentation-strategy #'eldoc-documentation-compose)
   )
 
 (use-package eshell
@@ -1149,7 +1149,7 @@ When there is ongoing compilation, nothing happens."
          ("C-c C-e" . embark-export)))
   :custom
   ;; Optionally replace the key help with a completing-read interface
-  (prefix-help-command embark-prefix-help-command)
+  (prefix-help-command #'embark-prefix-help-command)
 
   :config
   ;; Hide the mode line of the Embark live/completions buffers
@@ -2043,7 +2043,7 @@ with the capability-gated commands in `liesnikov/eglot-actions-alist'."
 (use-package idris2-mode
   :commands idris2-mode idris2-ipkg-mode
   :mode "\\.idr$" ("\\.ipkg$" . idris2-ipkg-mode)
-  :vc (:url "https://idris-community/idris2-mode")
+  :vc (:url "https://github.com/idris-community/idris2-mode")
   )
 
 ;;;;; Rocq
