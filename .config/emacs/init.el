@@ -1,4 +1,4 @@
-;;; package -- summary
+;;; package --- summary  -*- lexical-binding: t; -*-
 ;; M-x occur ';;;' to look for headers
 
 (require 'package)
@@ -310,6 +310,10 @@ When there is ongoing compilation, nothing happens."
   :config
   (require 'em-tramp)
   (add-to-list 'eshell-modules-list 'eshell-tramp)
+  ;; declare special so the `let' below stays a dynamic binding under
+  ;; lexical-binding (otherwise byte-compilation makes it lexical and
+  ;; `eshell-truncate-buffer' never sees the value)
+  (defvar eshell-buffer-maximum-lines)
   (defun eshell/trueclear ()
     "True clear for eshell, instead of default scroll."
     (interactive)
@@ -1886,8 +1890,7 @@ with the capability-gated commands in `liesnikov/eglot-actions-alist'."
             (copilot-mode 1)
             (message "Copilot mode activated, try again"))
           )
-      ;; check if the argument is provided
-      (if (bound-and-true-p arg)
+      (if arg
           (copilot-next-completion)
         (or (copilot-accept-completion)
             (copilot-complete)))))

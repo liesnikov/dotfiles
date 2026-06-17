@@ -1,3 +1,5 @@
+;;; -*- lexical-binding: t; -*-
+
 ;;; Compilation
 
 (when (boundp 'native-comp-eln-load-path)
