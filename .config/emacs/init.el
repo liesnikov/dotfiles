@@ -897,18 +897,20 @@ When there is ongoing compilation, nothing happens."
 
 (use-package sideline-flymake
   ;; because there's no sideline for flymake by default
-  :commands sideline-flymake
+  :after sideline
+  ;; register this backend instead of setting the whole list, so flymake and
+  ;; eglot don't clobber each other
+  :init
+  (add-to-list 'sideline-backends-right 'sideline-flymake)
   :custom
   (sideline-flymake-display-mode 'line) ; 'point to show errors only on point
                                         ; 'line to show errors on the current line
-  (sideline-backends-right '(sideline-flymake))
   )
 
 (use-package sideline-eglot
-  :defer t
-  :commands sideline-eglot
-  :custom
-  (sideline-backends-right '(sideline-eglot))
+  :after sideline
+  :init
+  (add-to-list 'sideline-backends-right 'sideline-eglot)
   )
 
 (use-package ultra-scroll
