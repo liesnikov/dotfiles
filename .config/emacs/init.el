@@ -53,30 +53,35 @@
   :commands
   no-littering-theme-backups
   :init
+  ;; Only the directory variables may be set here: they must be set *before*
+  ;; the package loads, and they don't depend on any no-littering function.
+  ;; Anything that calls `no-littering-expand-var-file-name' has to wait for
+  ;; `:config', since that function only exists once the package is loaded -
+  ;; calling it in `:init' breaks the whole setq when the autoload isn't active
+  ;; yet (e.g. `emacs -q -l init.el', batch), silently reverting all theming.
   (setq no-littering-etc-directory
           (expand-file-name "etc/" "~/.config/emacs")
         no-littering-var-directory
           (expand-file-name "~/.cache/emacs/")
-
-        auto-save-file-name-transforms
+        create-lockfiles ; get rid of .# files, which are annoying
+          nil)
+  :config
+  (setq auto-save-file-name-transforms
           `((".*" ,(no-littering-expand-var-file-name "auto-save/") t))
         auto-save-list-file-prefix
           (no-littering-expand-var-file-name "auto-save-list/.saves-")
         backup-directory-alist
           `(("." . ,(no-littering-expand-var-file-name "backup")))
-        create-lockfiles ; get rid of .# files, which are annoying
-          nil
         eshell-directory-name
           (no-littering-expand-var-file-name "eshell")
         transient-history-file
-        (no-littering-expand-var-file-name "transient/history.el"))
+          (no-littering-expand-var-file-name "transient/history.el"))
   ;; don't include litter directories in recentf
   (require 'recentf)
   (add-to-list 'recentf-exclude
                (recentf-expand-file-name no-littering-var-directory))
   (add-to-list 'recentf-exclude
                (recentf-expand-file-name no-littering-etc-directory))
-  :config
   (no-littering-theme-backups)
   )
 
@@ -613,6 +618,26 @@ When there is ongoing compilation, nothing happens."
 
 (use-package treesit
   :ensure nil
+  :config
+  ;; no-littering adds ~/.cache/emacs/treesit/ to `treesit-extra-load-path' (the
+  ;; *load* path), but grammar *installation* is hardcoded to
+  ;; ~/.config/emacs/tree-sitter in both built-in treesit and treesit-langs.
+  ;; Redirect installs into the same no-littering dir so nothing lands in the
+  ;; config directory.
+  (defvar liesnikov/treesit-grammar-directory
+    (no-littering-expand-var-file-name "treesit/")
+    "Directory tree-sitter grammars are installed into, kept out of the config dir.")
+  ;; built-in installer: default the OUT-DIR argument (nil when called
+  ;; non-interactively, e.g. by treesit-auto) to our directory.
+  (advice-add 'treesit-install-language-grammar :filter-args
+              (lambda (args)
+                (if (cadr args)
+                    args
+                  (list (car args) liesnikov/treesit-grammar-directory))))
+  ;; treesit-langs computes its bundle directory in a function, not a variable.
+  (with-eval-after-load 'treesit-langs
+    (advice-add 'treesit-langs--bin-dir :override
+                (lambda () liesnikov/treesit-grammar-directory)))
   )
 
 (use-package which-key

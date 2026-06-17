@@ -1,0 +1,13 @@
+# Package manager state (installed packages, must live in the config dir)
+/elpa/
+
+# Generated / temp artifacts. These are normally redirected to ~/.cache/emacs
+# (see no-littering and early-init.el), but are ignored here as a safety net so
+# nothing that slips through clutters the repo.
+/eln-cache/
+/tree-sitter/
+/projects
+/var/
+/transient/
+/auto-save-list/
+/.cache/
