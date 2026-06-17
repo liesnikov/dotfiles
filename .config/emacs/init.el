@@ -327,6 +327,9 @@ When there is ongoing compilation, nothing happens."
   (variable-pitch ((t (:height 1.0
                        :foundry "ADBO"
                        :family "Source Sans 3"))))
+  ;; use a smaller font for the line numbers
+  (line-number ((t (:height 0.8 :foundry "ADBO" :family "Source Sans 3"))))
+  (line-number-current-line ((t (:inherit line-number))))
   )
 
 (use-package flymake
