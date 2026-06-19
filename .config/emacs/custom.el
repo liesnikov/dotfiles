@@ -34,7 +34,8 @@
      yasnippet yasnippet-snippets))
  '(package-vc-selected-packages
    '((eglot-booster :url "https://github.com/jdtsmith/eglot-booster")
-     (idris2-mode :url "https://github.com/idris-community/idris2-mode")
+     (idris2-mode :url
+                  "https://github.com/idris-community/idris2-mode")
      (ultra-scroll :vc-backend Git :url
                    "https://github.com/jdtsmith/ultra-scroll")))
  '(safe-local-variable-values
