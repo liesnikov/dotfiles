@@ -15,7 +15,7 @@
      breadcrumb
      cape color-moccur consult consult-eglot copilot corfu
      dashboard dired-subtree dockerfile-mode doom-themes
-     eglot-booster eldoc-box ellama embark embark-consult emojify envrc evil-numbers expand-region
+     edit-indirect eglot-booster eldoc-box ellama embark embark-consult emojify envrc evil-numbers expand-region
      flymake-collection forge
      git-link gnu-elpa-keyring-update
      haskell-ts-mode highlight-parentheses

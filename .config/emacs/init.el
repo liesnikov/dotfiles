@@ -1543,6 +1543,11 @@ When there is ongoing compilation, nothing happens."
   :bind (:map markdown-mode-map
               ("C-c [" . liesnikov/markdown-reftex-citation)))
 
+(use-package edit-indirect
+  ;; used by markdown-mode to edit code blocks in a dedicated buffer
+  :defer t
+  )
+
 ;;;;; Org
 
 (use-package org
