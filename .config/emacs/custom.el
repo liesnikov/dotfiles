@@ -16,7 +16,7 @@
      breadcrumb
      cape color-moccur consult consult-eglot copilot corfu
      dashboard dired-subtree dockerfile-mode doom-themes
-     edit-indirect eglot-booster eldoc-box ellama embark embark-consult emojify envrc evil-numbers expand-region
+     edit-indirect eglot-booster eglot-x eldoc-box ellama embark embark-consult emojify envrc evil-numbers expand-region
      flymake-collection forge
      git-link gnu-elpa-keyring-update
      haskell-ts-mode highlight-parentheses
@@ -34,7 +34,8 @@
      wc-mode wgrep
      yasnippet yasnippet-snippets))
  '(package-vc-selected-packages
-   '((eglot-booster :url "https://github.com/jdtsmith/eglot-booster")
+   '((eglot-x :url "https://github.com/nemethf/eglot-x")
+     (eglot-booster :url "https://github.com/jdtsmith/eglot-booster")
      (idris2-mode :url
                   "https://github.com/idris-community/idris2-mode")
      (ultra-scroll :vc-backend Git :url
