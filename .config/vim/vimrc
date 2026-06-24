@@ -3,6 +3,14 @@ filetype off                  " required
 
 " ===================================XDG====================================
 
+" Vim doesn't set the XDG base-dir vars, and they're often unset, so a bare
+" $XDG_DATA_HOME/vim/... would expand to /vim/... and fail (E739).  Default
+" them to the spec's standard locations before use.
+if empty($XDG_CONFIG_HOME) | let $XDG_CONFIG_HOME = $HOME . '/.config'      | endif
+if empty($XDG_DATA_HOME)   | let $XDG_DATA_HOME   = $HOME . '/.local/share' | endif
+if empty($XDG_STATE_HOME)  | let $XDG_STATE_HOME  = $HOME . '/.local/state' | endif
+if empty($XDG_CACHE_HOME)  | let $XDG_CACHE_HOME  = $HOME . '/.cache'       | endif
+
 set runtimepath^=$XDG_CONFIG_HOME/vim
 set runtimepath+=$XDG_DATA_HOME/vim
 set runtimepath+=$XDG_CONFIG_HOME/vim/after
@@ -13,10 +21,15 @@ set packpath+=$XDG_CONFIG_HOME/vim/after,$XDG_DATA_HOME/vim/after
 let g:netrw_home = $XDG_DATA_HOME."/vim"
 call mkdir($XDG_DATA_HOME."/vim/spell", 'p')
 
-set backupdir=$XDG_STATE_HOME/vim/backup | call mkdir(&backupdir, 'p')
-set directory=$XDG_STATE_HOME/vim/swap   | call mkdir(&directory, 'p')
-set undodir=$XDG_STATE_HOME/vim/undo     | call mkdir(&undodir,   'p')
-set viewdir=$XDG_STATE_HOME/vim/view     | call mkdir(&viewdir,   'p')
+" trailing // encodes the file's full path into the name (avoids collisions)
+set backupdir=$XDG_STATE_HOME/vim/backup//
+set directory=$XDG_STATE_HOME/vim/swap//
+set undodir=$XDG_STATE_HOME/vim/undo//
+set viewdir=$XDG_STATE_HOME/vim/view
+call mkdir($XDG_STATE_HOME . '/vim/backup', 'p')
+call mkdir($XDG_STATE_HOME . '/vim/swap',   'p')
+call mkdir($XDG_STATE_HOME . '/vim/undo',   'p')
+call mkdir($XDG_STATE_HOME . '/vim/view',   'p')
 
 if !has('nvim') | set viminfofile=$XDG_STATE_HOME/vim/viminfo | endif
 
@@ -26,9 +39,19 @@ runtime! debian.vim
 
 " ===================================Vundle=================================
 
-" install Vundle by running
-" git clone https://github.com/VundleVim/Vundle.vim.git $XDG_DATA_HOME/vim/bundle/Vundle.vim
+" Bootstrap Vundle on first run.  Guarded: if it's missing and can't be
+" cloned (e.g. no network), the whole plugin block below is skipped rather
+" than aborting the vimrc with E117/E492.
+let s:vundle_path = $XDG_DATA_HOME . '/vim/bundle/Vundle.vim'
+let s:vundle_bootstrap = 0
+if !isdirectory(s:vundle_path) && executable('git')
+  echo 'Installing Vundle...'
+  call mkdir($XDG_DATA_HOME . '/vim/bundle', 'p')
+  call system('git clone --depth 1 https://github.com/VundleVim/Vundle.vim.git ' . shellescape(s:vundle_path))
+  let s:vundle_bootstrap = isdirectory(s:vundle_path)
+endif
 
+if isdirectory(s:vundle_path)
 " set the runtime path to include Vundle and initialize
 set rtp+=$XDG_DATA_HOME/vim/bundle/Vundle.vim
 " call vundle#begin()
@@ -94,6 +117,12 @@ Plugin 'ukrainian-enhanced.vim'
 "
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
+
+" On the first bootstrap, fetch all plugins listed above.
+if s:vundle_bootstrap
+  PluginInstall
+endif
+endif " isdirectory(s:vundle_path)
 filetype plugin indent on    " required
 " To ignore plugin indent changes, instead use:
 "filetype plugin on
@@ -194,22 +223,10 @@ let g:syntastic_cpp_compiler_options = ' -std=c++11'
 let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [],'passive_filetypes': [] }
 
 " ===================================Files=================================
-" swap files (.swp) in a common location
-" // means use the file's full path
-set dir=~/.cache/vim/swap//
-
-" backup files (~) in a common location if possible
+" backup/swap/undo/view dirs are set under $XDG_STATE_HOME/vim in the XDG
+" section above; here we only enable the features.
 set backup
-set backupdir=~/.cache/vim/backup/,~/tmp,.
-
-" https://stackoverflow.com/questions/607435/why-does-vim-save-files-with-a-extension
-" move backup and swap files to respective dirs
-set backupdir=~/.cache/vim/backup//,.
-set directory=~/.cache/vim/swap//,.
-
-" turn on undo files, put them in a common location
 set undofile
-set undodir=~/.vim/_undo/
 
 " restore previous cursor position
 au BufReadPost *
@@ -220,11 +237,48 @@ au BufReadPost *
 
 " ===================================Visual=================================
 " colorscheme settings
-colorscheme gruvbox
-set background=dark
 let g:gruvbox_contrast_dark="hard"
 let g:gruvbox_contrast_light="hard"
 set t_Co=256
+
+" 24-bit (truecolor) for the full gruvbox palette, when supported.
+if has('termguicolors')
+      \ && ($COLORTERM ==# 'truecolor' || $COLORTERM ==# '24bit'
+      \     || &term =~# '^\%(tmux\|screen\)')
+  " tmux/screen terminfo lacks the RGB capability, so spell out the
+  " set-fg/bg sequences explicitly (pairs with `terminal-features *:RGB'
+  " in tmux.conf).
+  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+  set termguicolors
+endif
+
+" Follow the desktop light/dark preference (mirrors emacs auto-dark).
+" GNOME reports 'prefer-dark' via gsettings; anything else is treated light.
+function! s:AmbientBackground() abort
+  if executable('gsettings')
+        \ && system('gsettings get org.gnome.desktop.interface color-scheme') =~? 'dark'
+    return 'dark'
+  endif
+  return 'light'
+endfunction
+
+function! s:ApplyAmbientTheme() abort
+  let l:bg = s:AmbientBackground()
+  " Only reload when it actually changes, to avoid a flash on every focus.
+  if &background !=# l:bg || !exists('g:colors_name')
+    let &background = l:bg
+    silent! colorscheme gruvbox
+  endif
+endfunction
+
+call s:ApplyAmbientTheme()
+" Re-check when vim regains focus, so toggling the system theme updates vim
+" live (requires the terminal/tmux to forward focus events).
+augroup ambient_theme
+  autocmd!
+  autocmd FocusGained * call s:ApplyAmbientTheme()
+augroup END
 
 " don't display netrw header
 let g:netrw_banner = 0
