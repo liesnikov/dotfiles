@@ -2256,35 +2256,33 @@ If FULL-PATH is non-nil use full path, otherwise relative."
 
 (defun liesnikov/sort-split (&optional beg end)
   "Sort and split words per line.
-   This function sort words in alphabetical order in currently selected region
-   and inserts a newline before every new letter of the alphabet.
-   In the end each line has words starting with the same letter."
+This function sort words in alphabetical order in currently selected region and
+inserts a newline before every new letter of the alphabet.
+In the end each line has words starting with the same letter.
+BEG and END are optional arguments instead of currently selected region."
   (interactive)
   ;; if the region is not selected choose current line
-  (let* ((beg (or beg (if (region-active-p) (region-beginning) (line-beginning-position))))
-         (end (or end (if (region-active-p) (region-end) (line-end-position))))
+  (let* ((beg (or beg (if (use-region-p) (region-beginning) (line-beginning-position))))
+         (end (or end (if (use-region-p) (region-end) (line-end-position))))
          (text (buffer-substring-no-properties beg end))
          (words (split-string text "[ \t\n\r]+" t))
-         (clean-word (lambda (w) (replace-regexp-in-string "^[^a-zA-Z0-9]+" "" w)))
-         (sorted-words (sort words (lambda (a b) (string< (downcase (funcall clean-word a))
-                                                     (downcase (funcall clean-word b))))))
-         (ci (save-excursion (goto-char beg) (current-indentation)))
-         (current-char nil))
+         (clean (lambda (w) (replace-regexp-in-string "^[^[:alnum:]]+" "" w)))
+         (sort-key (lambda (w) (downcase (funcall clean w))))
+         (sorted-words (sort words (lambda (a b) (string< (funcall sort-key a) (funcall sort-key b)))))
+         (base-column (save-excursion (goto-char beg) (max (current-column) (current-indentation))))
+         (first-offset (if sorted-words (or (string-match "[[:alnum:]]" (car sorted-words)) 0) 0))
+         (rest-column (+ base-column first-offset))
+         (grouped (seq-group-by (lambda (w)
+                                  (let ((cw (funcall clean w)))
+                                    (if (> (length cw) 0) (aref (downcase cw) 0))))
+                                sorted-words))
+         (joined (mapconcat (lambda (g) (mapconcat #'identity (cdr g) " "))
+                            grouped
+                            (concat "\n" (make-string rest-column ?\s)))))
     (kill-new text)
     (delete-region beg end)
-    (indent-to ci)
-    (dolist (word sorted-words)
-      (let* ((cw (funcall clean-word word))
-             (first-char (if (> (length cw) 0) (downcase (aref cw 0)) nil)))
-        (if (not current-char)
-            (insert word)
-          (if (eq first-char current-char)
-              (insert " " word)
-            (insert "\n")
-            (indent-to ci)
-            (insert word)))
-        (when first-char
-          (setq current-char first-char)))))
+    (indent-to base-column)
+    (insert joined))
   )
 
 (defun liesnikov/format-custom-packages (&rest _)
@@ -2299,7 +2297,8 @@ If FULL-PATH is non-nil use full path, otherwise relative."
                (kill-ring kill-ring)
                (kill-ring-yank-pointer kill-ring-yank-pointer)
                (interprogram-cut-function nil))
-          (liesnikov/sort-split beg end))))))
+          (liesnikov/sort-split beg end)))))
+  )
 
 (advice-add 'custom-save-variables :after #'liesnikov/format-custom-packages)
 
