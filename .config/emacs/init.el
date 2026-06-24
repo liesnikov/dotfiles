@@ -93,7 +93,6 @@
   :ensure nil
   :custom
   (desktop-base-lock-name "lock")
-  (desktop-path '("~/.cache/emacs/desktop"))
   (desktop-auto-save-timeout 30)
   (desktop-load-locked-desktop t)
   (desktop-restore-forces-onscreen nil) ; from https://stackoverflow.com/questions/18612742/emacs-desktop-save-mode-error#comment47963002_26546872
@@ -621,9 +620,12 @@ When there is ongoing compilation, nothing happens."
                     args
                   (list (car args) liesnikov/treesit-grammar-directory))))
   ;; treesit-langs computes its bundle directory in a function, not a variable.
-  (with-eval-after-load 'treesit-langs
-    (advice-add 'treesit-langs--bin-dir :override
-                (lambda () liesnikov/treesit-grammar-directory)))
+  ;; We apply this advice globally *without* `with-eval-after-load` because
+  ;; treesit-langs invokes its grammar downloader at the bottom of its own
+  ;; source file during the loading process. If we wait until *after* load,
+  ;; it's already too late and the files have been dumped.
+  (advice-add 'treesit-langs--bin-dir :override
+              (lambda () liesnikov/treesit-grammar-directory))
   )
 
 (use-package which-key
@@ -1941,6 +1943,7 @@ with the capability-gated commands in `liesnikov/eglot-actions-alist'."
   (ellama-language "English")
   (ellama-keymap-prefix "C-c e")
   (ellama-sessions-directory "~/.cache/emacs/ellama-sessions")
+  (ellama-community-prompts-file "~/.cache/emacs/ellama/community-prompts.csv")
   (ellama-show-reasoning nil)
   ;;(ellama-provider (make-llm-ollama :chat-model "llama3.2" :embedding-model "llama3.2"))
   ;; doesn't work since ellama-providers-alist hasn't been evaluated yet
