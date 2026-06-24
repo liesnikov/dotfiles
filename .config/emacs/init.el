@@ -1713,10 +1713,17 @@ the directory on the buffer's full path (hashed) to isolate them."
   liesnikov/eglot-actions-alist
   :functions
   liesnikov/eglot-actions
+  liesnikov/eglot-server-vale-ls-p
+  liesnikov/eglot-shutdown-vale-ls
   eglot-current-server
   eglot-server-capable
   eglot-code-actions
   eglot-execute
+  eglot--shutdown-requested
+  jsonrpc--process
+  jsonrpc-notify
+  jsonrpc-shutdown
+  jsonrpc-events-buffer
   :hook
   (sh-mode-hook . eglot-ensure)
   (bash-ts-mode-hook . eglot-ensure)
@@ -1737,6 +1744,28 @@ the directory on the buffer's full path (hashed) to isolate them."
 ;;                   (plugin
 ;;                    (hlint
 ;;                     (globalOn . t))))))
+  (defun liesnikov/eglot-server-vale-ls-p (server)
+    "Return non-nil when eglot SERVER is the vale-ls language server."
+    (when-let* ((server)
+                (cmd (ignore-errors (process-command (jsonrpc--process server)))))
+      (seq-some (lambda (s) (string-match-p "vale-ls" s)) cmd)))
+  (defun liesnikov/eglot-shutdown-vale-ls
+      (orig server &optional interactive timeout preserve-buffers)
+    "Shut vale-ls down without the LSP `shutdown' request it rejects.
+vale-ls (tower-lsp) answers `shutdown' with -32602 \"Unexpected params:
+null\", which makes `eglot-shutdown' error out and SIGKILL it noisily.
+Replicate it minus the request: mark the shutdown (silences the sentinel),
+send only `exit', then tear the process down.  ORIG for other servers."
+    (if (liesnikov/eglot-server-vale-ls-p server)
+        (unwind-protect
+            (progn
+              (setf (eglot--shutdown-requested server) t)
+              (ignore-errors (jsonrpc-notify server :exit nil)))
+          (jsonrpc-shutdown server (not preserve-buffers))
+          (unless preserve-buffers
+            (kill-buffer (jsonrpc-events-buffer server))))
+      (funcall orig server interactive timeout preserve-buffers)))
+  (advice-add 'eglot-shutdown :around #'liesnikov/eglot-shutdown-vale-ls)
   (defcustom liesnikov/eglot-actions-alist
     '(("Rename symbol"        eglot-rename              :renameProvider)
       ("Format buffer"        eglot-format-buffer       :documentFormattingProvider)
