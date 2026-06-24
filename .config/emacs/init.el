@@ -180,10 +180,8 @@
 When there is ongoing compilation, nothing happens."
     :lighter " CoS"
     (if liesnikov/compile-on-save-mode
-        (progn  (make-local-variable 'after-save-hook)
-                (add-hook 'after-save-hook 'liesnikov/compile-on-save-start nil t))
-      (kill-local-variable 'after-save-hook))
-    )
+        (add-hook 'after-save-hook #'liesnikov/compile-on-save-start nil t)
+      (remove-hook 'after-save-hook #'liesnikov/compile-on-save-start t)))
   )
 
 (use-package completion-preview
