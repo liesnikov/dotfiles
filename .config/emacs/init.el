@@ -2254,15 +2254,15 @@ If FULL-PATH is non-nil use full path, otherwise relative."
   (kill-new (liesnikov/get-filename-line-column full-path))
   )
 
-(defun liesnikov/sort-split ()
+(defun liesnikov/sort-split (&optional beg end)
   "Sort and split words per line.
    This function sort words in alphabetical order in currently selected region
    and inserts a newline before every new letter of the alphabet.
    In the end each line has words starting with the same letter."
   (interactive)
   ;; if the region is not selected choose current line
-  (let* ((beg (if (region-active-p) (region-beginning) (line-beginning-position)))
-         (end (if (region-active-p) (region-end) (line-end-position)))
+  (let* ((beg (or beg (if (region-active-p) (region-beginning) (line-beginning-position))))
+         (end (or end (if (region-active-p) (region-end) (line-end-position))))
          (text (buffer-substring-no-properties beg end))
          (words (split-string text "[ \t\n\r]+" t))
          (clean-word (lambda (w) (replace-regexp-in-string "^[^a-zA-Z0-9]+" "" w)))
@@ -2286,6 +2286,22 @@ If FULL-PATH is non-nil use full path, otherwise relative."
         (when first-char
           (setq current-char first-char)))))
   )
+
+(defun liesnikov/format-custom-packages (&rest _)
+  "Sort and format `package-selected-packages` during custom save."
+  (save-excursion
+    (goto-char (point-min))
+    (when (search-forward "(package-selected-packages" nil t)
+      (when (search-forward "'" nil t)
+        (let* ((beg (point))
+               (end (progn (forward-sexp) (point)))
+               ;; Prevent kill-ring pollution during automated save
+               (kill-ring kill-ring)
+               (kill-ring-yank-pointer kill-ring-yank-pointer)
+               (interprogram-cut-function nil))
+          (liesnikov/sort-split beg end))))))
+
+(advice-add 'custom-save-variables :after #'liesnikov/format-custom-packages)
 
 ;; ## added by OPAM user-setup for emacs / base ## 56ab50dc8996d2bb95e7856a6eddb17b ## you can edit, but keep this line
 ;; (require 'opam-user-setup "~/.config/emacs/opam-user-setup.el")
