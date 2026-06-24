@@ -12,7 +12,7 @@
  '(eglot-confirm-server-edits nil nil nil "Customized with use-package eglot")
  '(ellama-providers liesnikov/ellama-providers-alist nil nil "Can't set it earlier since the alist is only evaluated during load-time")
  '(package-selected-packages
-   '(aider auctex auto-dark
+   '(aider auctex auto-dark avy
      breadcrumb
      cape color-moccur consult consult-eglot copilot corfu
      dashboard dired-subtree dockerfile-mode doom-themes

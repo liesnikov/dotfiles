@@ -1004,17 +1004,6 @@ When there is ongoing compilation, nothing happens."
   ;; ...
   )
 
-(use-package avy
-  ;; move around efficiently
-  :disabled t
-  :bind (("M-g c"   . avy-goto-char-timer)
-         ("M-g g"   . avy-goto-line)
-         ("M-g M-g" . avy-goto-line))
-  :functions avy-setup-default
-  :config
-  (avy-setup-default)
-  )
-
 (use-package vertico
   :defer nil
   ;; The `vertico' package applies a vertical layout to the minibuffer.
@@ -1083,10 +1072,10 @@ When there is ongoing compilation, nothing happens."
          ("M-y"     . consult-yank-pop)            ;; orig. yank-pop
          ;; M-g bindings in `goto-map'
          ("M-g e"   . consult-compile-error)
-         ("M-g r"   . consult-grep-match)
          ("M-g f"   . consult-flymake)             ;; Alternative: consult-flycheck
-         ("M-g g"   . consult-goto-line)           ;; orig. goto-line
-         ("M-g M-g" . consult-goto-line)           ;; orig. goto-line
+         ;; instead rely on avy-goto-line
+         ;;("M-g g"   . consult-goto-line)         ;; orig. goto-line
+         ;;("M-g M-g" . consult-goto-line)         ;; orig. goto-line
          ("M-g o"   . consult-outline)             ;; Alternative: consult-org-heading
          ("M-g m"   . consult-mark)
          ("M-g k"   . consult-global-mark)
@@ -1094,12 +1083,14 @@ When there is ongoing compilation, nothing happens."
          ("M-g I"   . consult-imenu-multi)
          ;; M-s bindings in `search-map'
          ("M-s d"   . consult-find)                ;; Alternative: consult-fd
-         ("M-s c"   . consult-locate)
+         ;; instead use this for avy-goto-char
+         ;;("M-s c"   . consult-locate)
          ("M-s g"   . consult-grep)
          ("M-s G"   . consult-git-grep)
          ("M-s r"   . consult-ripgrep)
          ("M-s l"   . consult-line)
-         ("M-s L"   . consult-line-multi)
+         ;; use this for avy-goto-line
+         ;;("M-s L"   . consult-line-multi)
          ("M-s k"   . consult-keep-lines)
          ("M-s u"   . consult-focus-lines)
          ;; Isearch integration
@@ -1168,6 +1159,17 @@ When there is ongoing compilation, nothing happens."
   ;; You may want to use `embark-prefix-help-command' or which-key instead.
   ;; (keymap-set consult-narrow-map (concat consult-narrow-key " ?") #'consult-narrow-help)
 )
+
+(use-package avy
+  ;; move around efficiently
+  :bind (("M-s c"   . avy-goto-char-timer)
+         ("M-s L"   . avy-goto-line)
+         ("M-g g"   . avy-goto-line)
+         ("M-g M-g" . avy-goto-line))
+  :functions avy-setup-default
+  :config
+  (avy-setup-default)
+  )
 
 
 (use-package embark
