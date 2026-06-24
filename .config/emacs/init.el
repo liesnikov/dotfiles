@@ -157,21 +157,16 @@
   (compilation-finish-functions . liesnikov/compile-bury-buffer-if-successful)
   :config
   (defun liesnikov/compile-bury-buffer-if-successful (buffer string)
-    "Bury a compilation BUFFER if succeeded without warnings (check STRING).
-     Source: https://stackoverflow.com/questions/11043004/emacs-compile-buffer-auto-close"
-    (if (and
-         (string-match "compilation" (buffer-name buffer))
-         (string-match "finished" string)
-         (not
-          (with-current-buffer buffer
-            (goto-char 1)
-            (search-forward "warning" nil t))))
-        (run-with-timer 0.5 nil
-                        (lambda (buf)
-                          (bury-buffer buf)
-                          (delete-window (get-buffer-window buf)))
-                        buffer))
-    )
+    "Bury a compilation BUFFER if succeeded without warnings (check STRING)."
+    (when (and (string-match "compilation" (buffer-name buffer))
+               (string-match "finished" string)
+               (with-current-buffer buffer (zerop compilation-num-warnings-found)))
+      (run-with-timer 0.5 nil
+                      (lambda (buf)
+                        (bury-buffer buf)
+                        (when-let ((win (get-buffer-window buf)))
+                          (delete-window win)))
+                      buffer)))
   ;; "Compile on save" in Emacs
   ;; from https://rtime.ciirc.cvut.cz/~sojka/blog/compile-on-save/
   (defun liesnikov/compile-on-save-start ()
