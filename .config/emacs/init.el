@@ -517,12 +517,12 @@ When there is ongoing compilation, nothing happens."
 (use-package recentf
   :ensure nil
   :custom
-  ;; ivy makes searching through long lists easy, bump these up some from the defaults.
   (recentf-max-saved-items 50)
   (recentf-max-menu-items 25)
   (recentf-save-file "~/.cache/emacs/recentf")
   :config
   (add-to-list 'recentf-exclude "-autoloads.el")
+  (recentf-mode 1)
   )
 
 (use-package reftex
@@ -561,7 +561,7 @@ When there is ongoing compilation, nothing happens."
   ;; Indentation can insert tabs if this is non-nil.
   (indent-tabs-mode nil)
   ;; Don't wrap lines by default
-  (toggle-truncate-lines 1)
+  (truncate-lines t)
   (kill-ring-max 500)
   (eval-expression-print-length nil)
   (eval-expression-print-level nil)
