@@ -235,8 +235,7 @@ When there is ongoing compilation, nothing happens."
   (defun dired-open-file ()
     "In dired, open the file named on this line."
     (interactive)
-    (let* ((file (dired-get-filename nil t)))
-      (call-process "xdg-open" nil 0 nil file)))
+    (call-process "xdg-open" nil 0 nil (dired-get-filename nil t)))
   )
 
 (use-package display-fill-column-indicator
