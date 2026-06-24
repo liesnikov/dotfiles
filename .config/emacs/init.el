@@ -1264,11 +1264,6 @@ When there is ongoing compilation, nothing happens."
       ))
   )
 
-(use-package color-moccur
-  ;; provide colours in occur mode
-  :bind (("M-s o" . moccur))
-  )
-
 (use-package transpose-frame
   ;; from emacs 31 it's built-in
   ;; https://p.bauherren.ovh/blog/tech/new_window_cmds

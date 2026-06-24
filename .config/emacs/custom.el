@@ -14,7 +14,7 @@
  '(package-selected-packages
    '(aider auctex auto-dark avy
      breadcrumb
-     cape color-moccur consult consult-eglot copilot corfu
+     cape consult consult-eglot copilot corfu
      dashboard dired-subtree dockerfile-mode doom-themes
      edit-indirect eglot-booster eglot-x eldoc-box ellama embark embark-consult emojify envrc evil-numbers expand-region
      flymake-collection forge
