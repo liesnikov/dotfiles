@@ -1239,31 +1239,6 @@ When there is ongoing compilation, nothing happens."
 
 ;;;; Emacs functions
 
-(use-package sort-words
-  :commands sort-words liesnikov/sort-split
-  :config
-  (defun liesnikov/sort-split ()
-    "Sort and split words per line.
-     This function sort words in alphabetical order in currently selected region
-     and inserts a newline before every new letter of the alphabet.
-     In the end each line has words starting with the same letter."
-    (interactive)
-    ;; if the region is not selected choose current line
-    (let* ((beg (if (region-active-p) (region-beginning) (line-beginning-position)))
-           (end (if (region-active-p) (region-end) (line-end-position)))
-           ;; don't insert newline after `a' (97), start with `b' (98).
-           (abc (number-sequence 98 122))
-           (ci (progn (goto-char beg) (current-indentation))))
-      (sort-words beg end)
-      (dolist (letter abc)
-        (when (re-search-forward (format " %c" letter) end t)
-          (backward-char 2) ; go back through the first letter and the space " %c"
-          (delete-char 1) ; remove the space
-          (newline-and-indent) ; insert a new line and go there
-          ))
-      ))
-  )
-
 (use-package transpose-frame
   ;; from emacs 31 it's built-in
   ;; https://p.bauherren.ovh/blog/tech/new_window_cmds
@@ -2273,6 +2248,38 @@ If FULL-PATH is non-nil use full path, otherwise relative."
 If FULL-PATH is non-nil use full path, otherwise relative."
   (interactive)
   (kill-new (liesnikov/get-filename-line-column full-path)))
+(defun liesnikov/sort-split ()
+  "Sort and split words per line.
+   This function sort words in alphabetical order in currently selected region
+   and inserts a newline before every new letter of the alphabet.
+   In the end each line has words starting with the same letter."
+  (interactive)
+  ;; if the region is not selected choose current line
+  (let* ((beg (if (region-active-p) (region-beginning) (line-beginning-position)))
+         (end (if (region-active-p) (region-end) (line-end-position)))
+         (text (buffer-substring-no-properties beg end))
+         (words (split-string text "[ \t\n\r]+" t))
+         (clean-word (lambda (w) (replace-regexp-in-string "^[^a-zA-Z0-9]+" "" w)))
+         (sorted-words (sort words (lambda (a b) (string< (downcase (funcall clean-word a))
+                                                     (downcase (funcall clean-word b))))))
+         (ci (save-excursion (goto-char beg) (current-indentation)))
+         (current-char nil))
+    (kill-new text)
+    (delete-region beg end)
+    (indent-to ci)
+    (dolist (word sorted-words)
+      (let* ((cw (funcall clean-word word))
+             (first-char (if (> (length cw) 0) (downcase (aref cw 0)) nil)))
+        (if (not current-char)
+            (insert word)
+          (if (eq first-char current-char)
+              (insert " " word)
+            (insert "\n")
+            (indent-to ci)
+            (insert word)))
+        (when first-char
+          (setq current-char first-char)))))
+  )
 
 ;; ## added by OPAM user-setup for emacs / base ## 56ab50dc8996d2bb95e7856a6eddb17b ## you can edit, but keep this line
 ;; (require 'opam-user-setup "~/.config/emacs/opam-user-setup.el")

@@ -27,7 +27,7 @@
      olivetti orderless org-download org-modern org-modern-indent org-present
      pdf-tools proof-general
      rg rust-mode rustic
-     sideline sideline-eglot sideline-flymake sort-words
+     sideline sideline-eglot sideline-flymake
      terminal-here texfrag transpose-frame trashed treesit-auto treesit-fold treesit-ispell treesit-langs tuareg
      ultra-scroll undo-tree unfill unicode-whitespace use-package-ensure-system-package
      vertico vterm
