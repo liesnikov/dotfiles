@@ -66,16 +66,6 @@
         create-lockfiles ; get rid of .# files, which are annoying
           nil)
   :config
-  (setq auto-save-file-name-transforms
-          `((".*" ,(no-littering-expand-var-file-name "auto-save/") t))
-        auto-save-list-file-prefix
-          (no-littering-expand-var-file-name "auto-save-list/.saves-")
-        backup-directory-alist
-          `(("." . ,(no-littering-expand-var-file-name "backup")))
-        eshell-directory-name
-          (no-littering-expand-var-file-name "eshell")
-        transient-history-file
-          (no-littering-expand-var-file-name "transient/history.el"))
   ;; don't include litter directories in recentf
   (require 'recentf)
   (add-to-list 'recentf-exclude
