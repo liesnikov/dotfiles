@@ -732,8 +732,6 @@ When there is ongoing compilation, nothing happens."
   ;; make mode-line line indicator be line-number:colon-number
   (mode-line-position (list "%3l:%2c"))
 
-  (indicate-empty-lines 't)
-
   ;; Enable indentation+completion using the TAB key.
   ;; `completion-at-point' is often bound to M-TAB.
   (tab-always-indent 'complete)
@@ -747,6 +745,8 @@ When there is ongoing compilation, nothing happens."
   ;; useful beyond Corfu.
   ;;(read-extended-command-predicate #'command-completion-default-include-p)
   (read-extended-command-predicate nil)
+  :config
+  (setq-default indicate-empty-lines t)
   )
 
 ;; end of built-in packages
@@ -829,12 +829,12 @@ When there is ongoing compilation, nothing happens."
 (use-package moody
   ;; modeline as tabs
   :custom
-  (x-underline-at-descent-line t)
   (moody-mode-line-height 20)
   :functions
   moody-replace-mode-line-buffer-identification
   moody-replace-vc-mode
   :config
+  (setq x-underline-at-descent-line t)
   (moody-replace-mode-line-buffer-identification)
   (moody-replace-vc-mode)
   )
