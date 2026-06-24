@@ -1548,6 +1548,41 @@ When there is ongoing compilation, nothing happens."
   :defer t
   )
 
+(use-package texfrag
+  ;; preview LaTeX fragments inline in markdown via AUCTeX's preview-latex.
+  ;; Commands under `C-c C-p': C-d whole buffer, C-p fragment at point.
+  :after auctex
+  :commands
+  texfrag-mode
+  texfrag-global-mode
+  texfrag-document
+  texfrag-region
+  :functions
+  liesnikov/texfrag-unique-subdir
+  :custom
+  ;; also render ![alt](img) image links as previews
+  (texfrag-markdown-preview-image-links t)
+  ;; Build under the temp dir: gs >= 10's `-dSAFER' refuses to write
+  ;; preview-latex's pdf2dsc output outside $TMPDIR, so the default
+  ;; <buffer-dir>/texfrag/ fails under $HOME.  Shared parent / fallback;
+  ;; `liesnikov/texfrag-unique-subdir' gives each buffer its own subdir.
+  (texfrag-subdir (expand-file-name "texfrag" temporary-file-directory))
+  :config
+  (defun liesnikov/texfrag-unique-subdir ()
+    "Point `texfrag-subdir' at a per-buffer subdir under the temp dir.
+texfrag names its LaTeX file after the buffer's file name, so same-named
+buffers in different directories would otherwise clobber each other.  Key
+the directory on the buffer's full path (hashed) to isolate them."
+    (let ((dir (expand-file-name
+                (md5 (or buffer-file-name (buffer-name)))
+                (expand-file-name "texfrag" temporary-file-directory))))
+      (make-directory dir t)
+      (setq-local texfrag-subdir dir)))
+  :hook
+  (markdown-mode-hook . texfrag-mode)
+  (texfrag-mode-hook . liesnikov/texfrag-unique-subdir)
+  )
+
 ;;;;; Org
 
 (use-package org

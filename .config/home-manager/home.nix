@@ -42,6 +42,18 @@
       diffpdf
 
       bash-language-server
+
+      # TeX for AUCTeX preview-latex / texfrag inline math previews
+      # (system ghostscript at /usr/bin/gs handles the PDF -> image step).
+      (texlive.withPackages (ps: with ps; [
+        scheme-basic # pdflatex and the core engine
+        preview      # preview.sty
+        mylatex      # mylatex.ltx, for preview-latex's preamble cache
+        dvipng       # DVI -> PNG
+        dvisvgm      # DVI/PDF -> SVG
+        amsmath      # align, gather, ...
+        amsfonts     # amssymb and friends
+      ]))
     ];
     # This value determines the Home Manager release that your
     # configuration is compatible with. This helps avoid breakage
