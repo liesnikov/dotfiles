@@ -237,26 +237,6 @@ When there is ongoing compilation, nothing happens."
 
 (use-package display-line-numbers
   :ensure nil
-  :defines
-  display-line-numbers-exempt-modes
-  :init
-  (defcustom display-line-numbers-exempt-modes '()
-    "Major modes on which to disable the display-line-numbers mode,
-     exempts them from global requirement"
-   :group 'display-line-numbers
-   :type '(list symbol)
-   :version "green")
-  (defun display-line-numbers--turn-on ()
-    "turn on line numbers but excempting certain majore modes
-     defined in `display-line-numbers-exempt-modes'"
-    (if (and
-         (not (member major-mode display-line-numbers-exempt-modes))
-         (not (minibufferp)))
-        (display-line-numbers-mode)))
-  :custom
-;; "Major modes on which to disable the display-line-numbers mode, exempts them from global requirement"
-  (display-line-numbers-exempt-modes
-   '(vterm-mode eshell-mode shell-mode term-mode ansi-term-mode pdf-view-mode))
   :hook (prog-mode-hook . display-line-numbers-mode)
   )
 
