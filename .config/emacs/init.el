@@ -1243,7 +1243,8 @@ When there is ongoing compilation, nothing happens."
   ;; from emacs 31 it's built-in
   ;; https://p.bauherren.ovh/blog/tech/new_window_cmds
   ;; turn frame around, somehow not available by default
-  :defer t)
+  :defer t
+  )
 
 (use-package expand-region
   :commands er/expand-region
@@ -2221,12 +2222,14 @@ Source: https://old.reddit.com/r/emacs/comments/idz35e/emacs_27_can_take_svg_scr
     (with-temp-file filename
       (insert data))
     (kill-new filename)
-    (message filename)))
+    (message filename))
+  )
 
 (defun liesnikov/kill-filename ()
   "Copy current buffer's file path to `kill-ring'."
   (interactive)
-  (kill-new buffer-file-name))
+  (kill-new buffer-file-name)
+  )
 
 (defun liesnikov/get-filename-line-column (&optional full-path)
   "Get current buffer's file path and line/column location.
@@ -2241,13 +2244,16 @@ If FULL-PATH is non-nil use full path, otherwise relative."
           ":"
           (number-to-string line)
           ":"
-          (number-to-string column))))
+          (number-to-string column)))
+  )
 
 (defun liesnikov/kill-filename-line-column (&optional full-path)
   "Copy current buffer's file path to kill ring.
 If FULL-PATH is non-nil use full path, otherwise relative."
   (interactive)
-  (kill-new (liesnikov/get-filename-line-column full-path)))
+  (kill-new (liesnikov/get-filename-line-column full-path))
+  )
+
 (defun liesnikov/sort-split ()
   "Sort and split words per line.
    This function sort words in alphabetical order in currently selected region
