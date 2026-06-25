@@ -722,6 +722,9 @@ When there is ongoing compilation, nothing happens."
   ;; Try `cape-dict' as an alternative.
   (text-mode-ispell-word-completion nil)
 
+
+  ;; Set fill-column to match the ruler
+  (fill-column display-fill-column-indicator-column)
   ;; Hide commands in M-x which do not apply to the current mode.  Corfu
   ;; commands are hidden, since they are not used via M-x. This setting is
   ;; useful beyond Corfu.
@@ -1390,7 +1393,7 @@ When there is ongoing compilation, nothing happens."
   ;; package for writing mode, introduces margins
   ;; for search purposes: org-mode
   :custom
-  (olivetti-body-width 90)
+  (olivetti-body-width display-fill-column-indicator-column)
   :commands
   olivetti
   olivetti-mode
