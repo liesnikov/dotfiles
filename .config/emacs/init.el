@@ -305,7 +305,7 @@ When there is ongoing compilation, nothing happens."
 (use-package flymake
   :ensure nil
   :custom (flymake-proc-compilation-prevents-syntax-check nil)
-  :hook ((prog-mode-hook latex-mode LaTeX-mode) . flymake-mode)
+  :hook ((prog-mode-hook latex-mode-hook LaTeX-mode-hook) . flymake-mode)
   :bind (:map flymake-mode-map
               ("M-g n" . flymake-goto-next-error)
               ("M-g p" . flymake-goto-prev-error))
@@ -1855,7 +1855,7 @@ with the capability-gated commands in `liesnikov/eglot-actions-alist'."
 (use-package treesit-fold
   :bind ("<backtab>" . treesit-fold-toggle)
   :hook
-  (treesit-fold-mode-hook treesit-fold-indicators-mode)
+  (treesit-fold-mode-hook . treesit-fold-indicators-mode)
   )
 
 ;; alternative to treesit built-in mode
@@ -1913,7 +1913,7 @@ with the capability-gated commands in `liesnikov/eglot-actions-alist'."
   )
 (use-package llm-openai
   :ensure nil
-  :defer a
+  :defer t
   :autoload make-llm-openai-compatible
   )
 
