@@ -1165,6 +1165,7 @@ When there is ongoing compilation, nothing happens."
 
 ;; The `embark-consult' package is glue code to tie together `embark' and `consult'.
 (use-package embark-consult
+  :after (embark consult)
   )
 
 ;; this takes quite a bit of time on load, consider switching to built-in abbrev
@@ -1316,6 +1317,8 @@ When there is ongoing compilation, nothing happens."
   )
 
 (use-package vterm
+  :defer t
+  :commands vterm
   )
 
 (use-package terminal-here
