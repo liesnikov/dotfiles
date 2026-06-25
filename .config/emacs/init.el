@@ -1404,7 +1404,8 @@ When there is ongoing compilation, nothing happens."
   (defun olivetti ()
     "Toggle olivetti mode, but interactively."
     (interactive)
-    (call-interactively #'olivetti-mode ))
+    (call-interactively #'olivetti-mode )
+    )
   )
 
 (use-package unfill
