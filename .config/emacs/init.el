@@ -1633,6 +1633,30 @@ the directory on the buffer's full path (hashed) to isolate them."
   magit-project-status
   )
 
+(use-package magit-todos
+  :after magit
+  :custom
+  (magit-todos-keywords (list "REVIEW" "FIXME" "TODO"))
+  ;; Also match colon-less comments (`// FIXME foo'); `word-boundary' avoids
+  ;; partial words like `FIXMEs'.
+  (magit-todos-keyword-suffix
+   (rx word-boundary
+       (optional (or "(" "[") (1+ (not (any ")" "]"))) (or ")" "]"))
+       (optional ":")))
+  :config
+  (magit-todos-mode 1)
+  ;; The branch-diff scanner hard-codes "+++ b/", so it finds nothing under
+  ;; `diff.mnemonicPrefix' (git emits "w/" etc.).  Force plain prefixes here.
+  (define-advice magit-todos--scan-with-git-diff
+      (:around (fn &rest args) magit-todos--force-plain-diff-prefix)
+    (let ((process-environment
+           (append '("GIT_CONFIG_COUNT=1"
+                     "GIT_CONFIG_KEY_0=diff.mnemonicPrefix"
+                     "GIT_CONFIG_VALUE_0=false")
+                   process-environment)))
+      (apply fn args)))
+  )
+
 (use-package git-link
   :bind ("C-c g l" . git-link-dispatch)
   :custom
