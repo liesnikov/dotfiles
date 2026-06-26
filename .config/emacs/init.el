@@ -473,7 +473,10 @@ When there is ongoing compilation, nothing happens."
     (interactive)
     (require 'magit)
     (condition-case err
-        (magit-project-status)
+        ;; open in the current window instead of splitting the frame in this case
+        (let ((magit-display-buffer-function
+               #'magit-display-buffer-same-window-except-diff-v1))
+          (magit-project-status))
       (error (progn
                (message "%s" (error-message-string err))
                (project-find-dir)
