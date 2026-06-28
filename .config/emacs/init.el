@@ -1722,10 +1722,8 @@ the directory on the buffer's full path (hashed) to isolate them."
   (defun liesnikov/eglot-shutdown-vale-ls
       (orig server &optional interactive timeout preserve-buffers)
     "Shut vale-ls down without the LSP `shutdown' request it rejects.
-vale-ls (tower-lsp) answers `shutdown' with -32602 \"Unexpected params:
-null\", which makes `eglot-shutdown' error out and SIGKILL it noisily.
 Replicate it minus the request: mark the shutdown (silences the sentinel),
-send only `exit', then tear the process down.  ORIG for other servers."
+send only `exit', then tear the process down."
     (if (liesnikov/eglot-server-vale-ls-p server)
         (unwind-protect
             (progn
