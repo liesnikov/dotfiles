@@ -109,8 +109,7 @@
     "Shut down and (don't) save desktop file.
      Use interactively, M-x ..."
     (interactive)
-    ;(desktop-save "~/.cache/emacs/desktop")
-    (desktop-clear)
+    (desktop-save "~/.cache/emacs/desktop")
     (save-buffers-kill-emacs))
   )
 
