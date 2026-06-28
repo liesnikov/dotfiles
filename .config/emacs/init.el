@@ -1681,13 +1681,72 @@ the directory on the buffer's full path (hashed) to isolate them."
 (use-package git-link
   :bind ("C-c g l" . git-link-dispatch)
   :custom
-  ;; Link to a particular revision of a file rather than using the branch name in the URL.
   (git-link-use-commit t)
+  (git-link-use-single-line-number t)
+  :config
+  ;; Checkers and Predicates
+  (defun liesnikov/git-link--file-p ()
+    "Return non-nil if point is on a file or in a file buffer."
+    (or buffer-file-name
+        (and (fboundp 'magit-file-at-point) (magit-file-at-point))
+        (ignore-errors (dired-get-filename nil t))))
+
+  (defun liesnikov/git-link--column-init-value (obj)
+    "Enable column toggle if a single-line region is active."
+    (when (and (use-region-p)
+               (= (line-number-at-pos (region-beginning))
+                  (line-number-at-pos (region-end))))
+      (oset obj value t)))
+
+  (transient-define-infix liesnikov/git-link-dispatch--relative ()
+    :class 'transient-switch
+    :argument "relative"
+    :description "Relative path"
+    :key "R"
+    :inapt-if-not #'liesnikov/git-link--file-p)
+
+  (transient-define-infix liesnikov/git-link-dispatch--column ()
+    :class 'transient-switch
+    :argument "column"
+    :description "Column number"
+    :key "C"
+    :inapt-if-not #'liesnikov/git-link--file-p
+    :init-value #'liesnikov/git-link--column-init-value)
+
+  (transient-define-suffix liesnikov/git-link-dispatch--copy-local ()
+    "Copy local path based on transient arguments."
+    :description "Copy local"
+    :key "W"
+    :inapt-if-not #'liesnikov/git-link--file-p
+    (interactive)
+    (let* ((args (transient-args 'git-link-dispatch))
+           (path-info (liesnikov/get-file-info (member "relative" args)
+                                               (member "line_number" args)
+                                               (member "column" args))))
+      (when path-info
+        (kill-new path-info)
+        (message "Copied: %s" path-info))))
+
+  (with-eval-after-load 'git-link-transient
+    (transient-suffix-put 'git-link-dispatch 'git-link-dispatch--line-number :inapt-if-not #'liesnikov/git-link--file-p)
+    (transient-append-suffix 'git-link-dispatch 'git-link-dispatch--line-number
+      '("R" liesnikov/git-link-dispatch--relative))
+    (transient-append-suffix 'git-link-dispatch 'git-link-dispatch--line-number
+      '("C" liesnikov/git-link-dispatch--column))
+    (transient-append-suffix 'git-link-dispatch 'git-link-dispatch--copy
+      '("W" liesnikov/git-link-dispatch--copy-local)))
   )
 
 (use-package forge
   :defer t
-  )
+  :bind (:map magit-mode-map
+              ("C-c g l" . liesnikov/magit-link-dispatch))
+  :config
+  (transient-define-prefix liesnikov/magit-link-dispatch ()
+    "Link menu for Magit buffers."
+    ["Actions"
+     ("w" "Copy URL at point" forge-copy-url-at-point-as-kill)
+     ("o" "Browse URL at point" forge-browse)]))
 
 ;;;;; Language Server Protocol
 
