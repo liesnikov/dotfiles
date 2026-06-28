@@ -1209,6 +1209,25 @@ When there is ongoing compilation, nothing happens."
 
 ;;;; Emacs functions
 
+(defun liesnikov/get-file-info (relative use-line use-col)
+  "Get the target file path and optional line/col info."
+  (let* ((file (or buffer-file-name
+                   (and (fboundp 'magit-file-at-point) (magit-file-at-point))
+                   (ignore-errors (dired-get-filename nil t))))
+         (root (or (vc-root-dir) default-directory))
+         (abs-file (when file (expand-file-name file root))))
+    (when abs-file
+      (let* ((path (if relative (file-relative-name abs-file root) abs-file))
+             (start (line-number-at-pos (if (use-region-p) (region-beginning) (point))))
+             (end   (line-number-at-pos (if (use-region-p) (region-end) (point)))))
+        (concat path
+                (when use-line
+                  (if (= start end)
+                      (format ":%d" start)
+                    (format ":%d-%d" start end)))
+                (when (and use-line use-col (= start end))
+                  (format ":%d" (current-column))))))))
+
 (use-package transpose-frame
   ;; from emacs 31 it's built-in
   ;; https://p.bauherren.ovh/blog/tech/new_window_cmds
@@ -2247,35 +2266,6 @@ Source: https://old.reddit.com/r/emacs/comments/idz35e/emacs_27_can_take_svg_scr
       (insert data))
     (kill-new filename)
     (message filename))
-  )
-
-(defun liesnikov/kill-filename ()
-  "Copy current buffer's file path to `kill-ring'."
-  (interactive)
-  (kill-new buffer-file-name)
-  )
-
-(defun liesnikov/get-filename-line-column (&optional full-path)
-  "Get current buffer's file path and line/column location.
-If FULL-PATH is non-nil use full path, otherwise relative."
-  (require 'magit)
-  (let ((line (line-number-at-pos))
-        (column (current-column))
-        (filename (if full-path
-                      (buffer-file-name)
-                      (magit-file-relative-name))))
-  (concat filename
-          ":"
-          (number-to-string line)
-          ":"
-          (number-to-string column)))
-  )
-
-(defun liesnikov/kill-filename-line-column (&optional full-path)
-  "Copy current buffer's file path to kill ring.
-If FULL-PATH is non-nil use full path, otherwise relative."
-  (interactive)
-  (kill-new (liesnikov/get-filename-line-column full-path))
   )
 
 (defun liesnikov/sort-split (&optional beg end)
