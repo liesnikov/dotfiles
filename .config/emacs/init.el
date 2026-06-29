@@ -2040,6 +2040,16 @@ with the capability-gated commands in `liesnikov/eglot-actions-alist'."
   ;;(auto-revert-mode 1)
   )
 
+(use-package agent-shell
+  :ensure-system-package
+  ((claude-agent-acp . "npm install -g @agentclientprotocol/claude-agent-acp"))
+  :bind ("C-c C-'" . agent-shell-anthropic-start-claude-code)
+  :config
+  ;; Use the Claude subscription login (default). For an API key or OAuth
+  ;; token instead, swap in :api-key / :oauth, see the agent-shell README.
+  (setq agent-shell-anthropic-authentication
+        (agent-shell-anthropic-make-authentication :login t))
+  )
 ;;;;; Programming language-specific
 
 ;;;;;; Rust
