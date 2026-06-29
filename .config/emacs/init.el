@@ -2043,12 +2043,30 @@ with the capability-gated commands in `liesnikov/eglot-actions-alist'."
 (use-package agent-shell
   :ensure-system-package
   ((claude-agent-acp . "npm install -g @agentclientprotocol/claude-agent-acp"))
-  :bind ("C-c C-'" . agent-shell-anthropic-start-claude-code)
-  :config
-  ;; Use the Claude subscription login (default). For an API key or OAuth
-  ;; token instead, swap in :api-key / :oauth, see the agent-shell README.
-  (setq agent-shell-anthropic-authentication
-        (agent-shell-anthropic-make-authentication :login t))
+  :bind
+  ;; Generic entry point: agent-agnostic, but starts Claude Code without
+  ;; prompting because of `agent-shell-preferred-agent-config' below.
+  ("C-c C-'" . agent-shell)
+  :defines
+  agent-shell-dot-subdir-function
+  :functions
+  agent-shell-cwd
+  :custom
+  (agent-shell-dot-subdir-function #'liesnikov/agent-shell--dot-subdir-in-cache)
+  :preface
+  ;; Keep transcripts/screenshots out of every project's working tree.
+  ;; By default agent-shell writes them to .agent-shell/ under the project
+  ;; root; instead stash them in the no-littering var dir
+  ;; (~/.cache/emacs/agent-shell/), namespaced per project.  The caller
+  ;; (`agent-shell--dot-subdir') creates the directory, so we just resolve it.
+  ;; Defined in `:preface' so the byte-compiler sees it before `:config'.
+  (defun liesnikov/agent-shell--dot-subdir-in-cache (subdir)
+    "Resolve agent-shell SUBDIR under the Emacs var dir, namespaced by project."
+    (let* ((root (agent-shell-cwd))
+           (key (concat (file-name-nondirectory (directory-file-name root))
+                        "-" (substring (secure-hash 'sha1 root) 0 8))))
+      (no-littering-expand-var-file-name
+       (file-name-concat "agent-shell" key subdir))))
   )
 ;;;;; Programming language-specific
 
