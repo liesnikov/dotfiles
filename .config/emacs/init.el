@@ -466,6 +466,28 @@ When there is ongoing compilation, nothing happens."
   :commands
   project-try-magit
   :init
+  (define-advice project--vc-list-files
+      (:around (orig dir backend extra-ignores) liesnikov/include-ignored)
+    "Also list gitignored files, shadowed, in `project-find-file' and friends.
+Tracked/untracked files keep their default look; advising this
+data-layer function feeds every consumer at once without a new command."
+    (let ((files (funcall orig dir backend extra-ignores)))
+      (if (eq backend 'Git)
+          (let* ((default-directory (expand-file-name (file-name-as-directory dir)))
+                 (ignored (split-string
+                           (with-output-to-string
+                             (vc-git-command standard-output 0 nil "ls-files"
+                                             "-z" "-o" "-i" "--exclude-standard"))
+                           "\0" t)))
+            (append files
+                    (mapcar
+                     (lambda (f)
+                       (propertize (if project-files-relative-names f
+                                     (concat default-directory f))
+                                   'face 'shadow))
+                     ignored)))
+        files)))
+
   (defun project-try-magit ()
     "Try to open magit status for the current project,
      or prompt for a project directory."
