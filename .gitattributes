@@ -1,0 +1,17 @@
+# Dotfile deployment control (consumed by install.sh via `git check-attr`).
+# Anything tracked is symlinked into $HOME by default; mark deploy=no to keep a
+# file in the repo but out of $HOME. Glob patterns are allowed.
+
+# repo tooling / not a home dotfile (leading "/" = repo root only, so this
+# does not also match nested files like .config/emacs/.gitignore)
+/.gitignore               deploy=no
+/.gitattributes           deploy=no
+/install.sh               deploy=no
+/custom-settings.desktop  deploy=no
+
+# git-config fragments: ~/.gitconfig pulls these in by absolute path via
+# include/includeIf, so symlinking them into ~/.config/git would ALSO auto-load
+# them as XDG global config (double-load). Keep repo-only.
+.config/git/config           deploy=no
+.config/git/config-personal  deploy=no
+.config/git/github           deploy=no
