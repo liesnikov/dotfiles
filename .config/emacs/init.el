@@ -1359,9 +1359,11 @@ data-layer function feeds every consumer at once without a new command."
   (trashed-date-format "%Y-%m-%d %H:%M:%S")
   )
 
-(use-package vterm
-  :defer t
-  :commands vterm
+(use-package ghostel
+  :ensure t
+  :vc (:url "https://github.com/dakra/ghostel"
+       :lisp-dir "lisp"
+       :rev :newest)
   )
 
 (use-package terminal-here

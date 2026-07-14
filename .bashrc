@@ -132,6 +132,11 @@ export LOCALE_ARCHIVE="/usr/lib/locale/locale-archive"
 export EDITOR="emacsclient -c"
 #export EDITOR="vim"
 
-# If not running interactively, do not do anything otherwise start tmux
+# If not running interactively, do not do anything otherwise start tmux.
+# Skip where tmux is redundant: inside Ghostty (its own splits/scrolling, see
+# ~/.config/ghostty/config; GHOSTTY_RESOURCES_DIR is set in every session), and
+# inside any Emacs subterminal (ghostel, term, vterm, ... all set INSIDE_EMACS),
+# where Emacs does the window management.
 [[ $- != *i* ]] && return
-[[ -z "$TMUX" ]] && [[ "$TERM" != "dumb" ]] && exec tmux
+[[ -z "$TMUX" ]] && [[ "$TERM" != "dumb" ]] \
+    && [[ -z "$GHOSTTY_RESOURCES_DIR" ]] && [[ -z "$INSIDE_EMACS" ]] && exec tmux

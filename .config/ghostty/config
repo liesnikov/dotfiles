@@ -1,0 +1,77 @@
+# Ghostty configuration
+# Deployed to ~/.config/ghostty/config by install.sh.
+# Docs: https://ghostty.org/docs/config
+# Reload after editing without restarting: ctrl+x > r  (see keybinds below),
+# or the default ctrl+shift+comma.
+
+# ---------------------------------------------------------------------------
+# Appearance
+# ---------------------------------------------------------------------------
+
+# Automatic light/dark theme switching. Ghostty follows the desktop
+# color-scheme (GNOME: org.gnome.desktop.interface color-scheme). No daemon or
+# helper needed - this is built in. Pick any names from `ghostty +list-themes`.
+theme = light:Atom One Light,dark:Atom One Dark
+
+# Carried over from the old alacritty config; adjust to taste.
+font-family = Source Code Pro
+font-size = 13
+
+# Large scrollback (alacritty used 100000 lines).
+scrollback-limit = 100000000
+
+# ---------------------------------------------------------------------------
+# Emacs-like split & scroll bindings, mirroring the old tmux config.
+#
+# tmux used a `C-x` prefix; Ghostty reproduces that with sequenced keybinds
+# ("ctrl+x>KEY" = press C-x, release, then KEY). As in tmux, this means a bare
+# C-x is captured as the leader, so to send a literal C-x to a program (e.g.
+# emacs, readline) press it twice: C-x C-x. To use a different leader, replace
+# `ctrl+x` everywhere below.
+# ---------------------------------------------------------------------------
+
+# C-x C-x -> send a literal C-x (0x18) to the program (tmux `send-prefix`).
+keybind = ctrl+x>ctrl+x=text:\x18
+
+# Reload config, echoing tmux's `prefix r`.
+keybind = ctrl+x>r=reload_config
+
+# Splits (tmux: `prefix 2` split below, `prefix 3` split right).
+keybind = ctrl+x>2=new_split:down
+keybind = ctrl+x>3=new_split:right
+
+# Kill panes (tmux: `prefix 0` kill pane, `prefix k` kill pane).
+keybind = ctrl+x>0=close_surface
+keybind = ctrl+x>k=close_surface
+
+# `prefix 1` had no exact Ghostty equivalent (close *other* panes); zoom the
+# current split to fill the window instead - the emacs `C-x 1` feel.
+keybind = ctrl+x>1=toggle_split_zoom
+
+# Move between panes. `C-x o` = other (next); arrows = directional, matching
+# tmux's default prefix+arrow select-pane.
+keybind = ctrl+x>o=goto_split:next
+keybind = ctrl+x>up=goto_split:up
+keybind = ctrl+x>down=goto_split:down
+keybind = ctrl+x>left=goto_split:left
+keybind = ctrl+x>right=goto_split:right
+
+# Resize, mirroring tmux's `prefix M-arrow` (resize by 5 there; 5 here too).
+keybind = ctrl+x>alt+up=resize_split:up,5
+keybind = ctrl+x>alt+down=resize_split:down,5
+keybind = ctrl+x>alt+left=resize_split:left,5
+keybind = ctrl+x>alt+right=resize_split:right,5
+
+# Balance splits, like emacs `C-x +` (balance-windows).
+keybind = ctrl+x>plus=equalize_splits
+
+# ---------------------------------------------------------------------------
+# Scrolling. tmux entered copy-mode (C-Space) then used emacs motion keys.
+# Ghostty scrolls the buffer directly, so these live behind the C-x leader to
+# avoid stealing C-v / M-v / M-< / M-> from programs running in the terminal.
+# The mouse wheel and the default shift+pageup/pagedown also still work.
+# ---------------------------------------------------------------------------
+keybind = ctrl+x>ctrl+v=scroll_page_down
+keybind = ctrl+x>alt+v=scroll_page_up
+keybind = ctrl+x>shift+comma=scroll_to_top
+keybind = ctrl+x>shift+period=scroll_to_bottom

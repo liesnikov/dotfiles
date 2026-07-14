@@ -18,7 +18,7 @@
      dashboard dired-subtree dockerfile-mode doom-themes
      edit-indirect eglot-booster eglot-x eldoc-box ellama embark embark-consult emojify envrc evil-numbers expand-region
      flymake-collection forge
-     git-link gnu-elpa-keyring-update
+     ghostel git-link gnu-elpa-keyring-update
      haskell-ts-mode highlight-parentheses
      ibuffer-project idris-mode idris2-mode
      llm llm-ollama llm-openai
@@ -34,7 +34,8 @@
      wc-mode wgrep
      yasnippet yasnippet-snippets))
  '(package-vc-selected-packages
-   '((eglot-x :url "https://github.com/nemethf/eglot-x")
+   '((ghostel :url "https://github.com/dakra/ghostel" :lisp-dir "lisp")
+     (eglot-x :url "https://github.com/nemethf/eglot-x")
      (eglot-booster :url "https://github.com/jdtsmith/eglot-booster")
      (idris2-mode :url
                   "https://github.com/idris-community/idris2-mode")
