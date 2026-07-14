@@ -1,5 +1,6 @@
 # Ghostty configuration
-# Deployed to ~/.config/ghostty/config by install.sh.
+# Deployed to ~/.config/ghostty/config.ghostty by install.sh (the .ghostty
+# extension makes editors syntax-highlight this file; Ghostty auto-loads it).
 # Docs: https://ghostty.org/docs/config
 # Reload after editing without restarting: ctrl+x > r  (see keybinds below),
 # or the default ctrl+shift+comma.
@@ -21,7 +22,7 @@ font-size = 13
 scrollback-limit = 100000000
 
 # ---------------------------------------------------------------------------
-# Emacs-like split & scroll bindings, mirroring the old tmux config.
+# Emacs-like split bindings, mirroring the old tmux config.
 #
 # tmux used a `C-x` prefix; Ghostty reproduces that with sequenced keybinds
 # ("ctrl+x>KEY" = press C-x, release, then KEY). As in tmux, this means a bare
@@ -66,12 +67,16 @@ keybind = ctrl+x>alt+right=resize_split:right,5
 keybind = ctrl+x>plus=equalize_splits
 
 # ---------------------------------------------------------------------------
-# Scrolling. tmux entered copy-mode (C-Space) then used emacs motion keys.
-# Ghostty scrolls the buffer directly, so these live behind the C-x leader to
-# avoid stealing C-v / M-v / M-< / M-> from programs running in the terminal.
-# The mouse wheel and the default shift+pageup/pagedown also still work.
+# Scrolling & copy-mode are delegated to tmux, which auto-starts inside every
+# Ghostty shell (see ~/personal/dotfiles/.bashrc). tmux is an alt-screen app,
+# so it owns the visible buffer - Ghostty's own scroll/scrollback/search actions
+# would see nothing and are therefore intentionally NOT bound here. Instead:
+#   - mouse wheel scrolls (tmux `mouse on`);
+#   - C-x SPC enters tmux copy-mode: an emacs-style keyboard cursor to move,
+#     mark and yank a region - the keyboard selection Ghostty itself lacks and
+#     the reason tmux is kept around at all.
+# The binding sends tmux's prefix + `[` (i.e. C-x then `[`, tmux's default
+# copy-mode key). Routing it through the Ghostty leader sidesteps GNOME/IBus
+# grabbing Ctrl+Space, which is tmux's own bare C-Space copy-mode key.
 # ---------------------------------------------------------------------------
-keybind = ctrl+x>ctrl+v=scroll_page_down
-keybind = ctrl+x>alt+v=scroll_page_up
-keybind = ctrl+x>shift+comma=scroll_to_top
-keybind = ctrl+x>shift+period=scroll_to_bottom
+keybind = ctrl+x>space=text:\x18[
