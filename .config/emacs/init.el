@@ -1722,6 +1722,22 @@ the directory on the buffer's full path (hashed) to isolate them."
       (apply fn args)))
   )
 
+(use-package ediff
+  :ensure nil
+  :custom
+  ;; one frame, no control popup, panes side-by-side
+  (ediff-window-setup-function 'ediff-setup-windows-plain)
+  (ediff-split-window-function 'split-window-horizontally)
+  :config
+  ;; Tame ediff's throwaway `file.~REV~' buffers: flymake pulls in sideline
+  ;; (whose render timer errors), and breadcrumb has no project so shows the
+  ;; full path.  Runs per comparison buffer after its mode is set up.
+  (defun liesnikov/ediff-tame-buffer ()
+    (flymake-mode -1)
+    (sideline-mode -1)
+    (setq-local breadcrumb-project-max-length 0.15))
+  (add-hook 'ediff-prepare-buffer-hook #'liesnikov/ediff-tame-buffer))
+
 (use-package git-link
   :bind ("C-c g l" . git-link-dispatch)
   :custom
