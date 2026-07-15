@@ -455,7 +455,7 @@ When there is ongoing compilation, nothing happens."
   (project-buffers-viewer        'project-list-buffers-ibuffer)
   (project-vc-extra-root-markers '(".projectile"))
   (project-switch-commands
-   '((project-find-file "Find file" "f")
+   '((liesnikov/project-find-file "Find file" "f")
      (project-find-dir "Find directory" "d")
      (project-try-magit "Magit" "m")
      (project-eshell "Eshell" "e")
@@ -465,28 +465,48 @@ When there is ongoing compilation, nothing happens."
    )
   :commands
   project-try-magit
+  :bind
+  ( :map project-prefix-map
+    ;; Replace the built-in `project-find-file' (C-x p f) with our toggling one.
+    ("f" . liesnikov/project-find-file))
   :init
-  (define-advice project--vc-list-files
-      (:around (orig dir backend extra-ignores) liesnikov/include-ignored)
-    "Also list gitignored files, shadowed, in `project-find-file' and friends.
-Tracked/untracked files keep their default look; advising this
-data-layer function feeds every consumer at once without a new command."
-    (let ((files (funcall orig dir backend extra-ignores)))
-      (if (eq backend 'Git)
-          (let* ((default-directory (expand-file-name (file-name-as-directory dir)))
-                 (ignored (split-string
-                           (with-output-to-string
-                             (vc-git-command standard-output 0 nil "ls-files"
-                                             "-z" "-o" "-i" "--exclude-standard"))
-                           "\0" t)))
-            (append files
-                    (mapcar
-                     (lambda (f)
-                       (propertize (if project-files-relative-names f
-                                     (concat default-directory f))
-                                   'face 'shadow))
-                     ignored)))
-        files)))
+  (declare-function vertico--exhibit "vertico")
+  (declare-function project--file-completion-table "project")
+  (defvar vertico--input)
+  (defun liesnikov/git-ignored-files ()
+    "Gitignored files in the current project, relative to its root.
+Returns nil outside a Git repository."
+    (let ((default-directory (project-root (project-current t))))
+      (ignore-errors
+        (process-lines "git" "ls-files" "-o" "-i" "--exclude-standard"))))
+
+  (defun liesnikov/project-find-file ()
+    "Like `project-find-file', but \\`C-c i' at the prompt toggles gitignored
+files in the completion (fetched lazily, so the default stays fast)."
+    (interactive)
+    (minibuffer-with-setup-hook
+        ;; :append -> run after `vertico--setup' so our key layers onto `vertico-map'.
+        (:append
+         (lambda ()
+           (let ((tracked minibuffer-completion-table)) ; the table project-find-file built
+             (use-local-map
+              (make-composed-keymap
+               (define-keymap "C-c i"
+                 (lambda ()
+                   (interactive)
+                   ;; Vertico reads `minibuffer-completion-table' on each update,
+                   ;; so swapping it live (then invalidating the cache) is enough.
+                   (setq minibuffer-completion-table
+                         (if (eq minibuffer-completion-table tracked)
+                             (completion-table-merge
+                              tracked (project--file-completion-table
+                                       (liesnikov/git-ignored-files)))
+                           tracked)
+                         vertico--input t)
+                   (vertico--exhibit)))
+               (current-local-map))))))
+      (project-find-file))
+    )
 
   (defun project-try-magit ()
     "Try to open magit status for the current project,
