@@ -1862,11 +1862,15 @@ the directory on the buffer's full path (hashed) to isolate them."
 ;;                   (plugin
 ;;                    (hlint
 ;;                     (globalOn . t))))))
+
+  ;; Silence vale on shutdown
   (defun liesnikov/eglot-server-vale-ls-p (server)
     "Return non-nil when eglot SERVER is the vale-ls language server."
     (when-let* ((server)
                 (cmd (ignore-errors (process-command (jsonrpc--process server)))))
       (seq-some (lambda (s) (string-match-p "vale-ls" s)) cmd)))
+
+  ;; Custom shutdown function to ignore errors
   (defun liesnikov/eglot-shutdown-vale-ls
       (orig server &optional interactive timeout preserve-buffers)
     "Shut vale-ls down without the LSP `shutdown' request it rejects.
@@ -1881,7 +1885,11 @@ send only `exit', then tear the process down."
           (unless preserve-buffers
             (kill-buffer (jsonrpc-events-buffer server))))
       (funcall orig server interactive timeout preserve-buffers)))
+
+  ;; advice to use the custom shutdown function
   (advice-add 'eglot-shutdown :around #'liesnikov/eglot-shutdown-vale-ls)
+
+  ;; Expose all eglot actions via commands interface
   (defcustom liesnikov/eglot-actions-alist
     '(("Rename symbol"        eglot-rename              :renameProvider)
       ("Format buffer"        eglot-format-buffer       :documentFormattingProvider)
@@ -1910,6 +1918,8 @@ the current server advertises CAPABILITY, or when CAPABILITY is t
                                 (symbol :tag "Server capability, e.g. :renameProvider")
                                 (repeat :tag "Nested capability path" symbol))))
     :group 'eglot)
+
+  ;; Run the actions from the command menu
   (defun liesnikov/eglot-actions (beg end)
     "Run an Eglot action picked from one flat menu.
 Merges the server's live code actions at point (or region BEG..END)
@@ -1934,7 +1944,10 @@ with the capability-gated commands in `liesnikov/eglot-actions-alist'."
            (sel (cdr (assoc (completing-read "Eglot action: " entries nil t) entries))))
       ;; Commands are symbols, code actions are plists -- dispatch on that.
       (cond ((symbolp sel) (call-interactively sel))
-            (sel (eglot-execute server sel)))))
+            (sel (eglot-execute server sel))))
+    )
+
+  ;; Add custom servers to modes
   (add-to-list 'eglot-server-programs '((sh-mode bash-ts-mode) . ("bash-language-server" "start")))
   (add-to-list 'eglot-server-programs '((markdown-mode rst-mode html-mode org-mode) . ("vale-ls")))
   (add-to-list 'eglot-server-programs '((latex-mode LaTeX-mode tex-mode TeX-mode) . ("texlab")))
