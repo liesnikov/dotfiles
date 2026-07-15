@@ -1810,8 +1810,18 @@ the directory on the buffer's full path (hashed) to isolate them."
 
 ;;;;; Language Server Protocol
 
-;; consider using dumb-jump either instead or in combination
-;; built-in, but easier to configure here
+(use-package dumb-jump
+  ;; grep/rg-based jump-to-definition.  Added to `xref-backend-functions'
+  ;; at high depth so it runs last: eglot registers its backend buffer-locally
+  ;; (buffer-local hooks run first), so dumb-jump only kicks in when no LSP
+  ;; backend claims the buffer.
+  :defer t
+  :functions dumb-jump-xref-activate
+  :custom
+  (dumb-jump-prefer-searcher 'rg)
+  :init
+  (add-hook 'xref-backend-functions #'dumb-jump-xref-activate 90)
+  )
 
 (use-package eglot
   :ensure nil
