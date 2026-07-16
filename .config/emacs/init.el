@@ -1380,10 +1380,12 @@ files in the completion (fetched lazily, so the default stays fast)."
   )
 
 (use-package ghostel
-  :ensure t
+  :defer t
   :vc (:url "https://github.com/dakra/ghostel"
        :lisp-dir "lisp"
        :rev :newest)
+  :bind ( :map project-prefix-map
+          ("T" . ghostel-project))
   )
 
 (use-package terminal-here
