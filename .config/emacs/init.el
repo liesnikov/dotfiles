@@ -1384,6 +1384,12 @@ files in the completion (fetched lazily, so the default stays fast)."
   :vc (:url "https://github.com/dakra/ghostel"
        :lisp-dir "lisp"
        :rev :newest)
+  :custom
+  ;; Scrollback in bytes (default 5MB).
+  (ghostel-max-scrollback (* 50 1024 1024))
+  :hook
+  ;; No fill-column ruler in a terminal.
+  (ghostel-mode . (lambda () (display-fill-column-indicator-mode -1)))
   :bind ( :map project-prefix-map
           ("T" . ghostel-project))
   )
