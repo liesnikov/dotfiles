@@ -1388,24 +1388,27 @@ files in the completion (fetched lazily, so the default stays fast)."
   :custom
   ;; Scrollback in bytes (default 5MB).
   (ghostel-max-scrollback (* 50 1024 1024))
-  :hook
   ;; No fill-column ruler in a terminal.
-  (ghostel-mode . (lambda () (display-fill-column-indicator-mode -1)))
+  :hook (ghostel-mode-hook . (lambda () (display-fill-column-indicator-mode -1)))
   :bind ( :map project-prefix-map
-          ("t" . ghostel-project) ; C-x p t (C-x p T is terminal-here, below)
+          ;; C-x p t (C-x p T is terminal-here, below)
+          ("t" . ghostel-project)
           ;; Walk shell history like eshell.
           :map ghostel-semi-char-mode-map
           ("M-p" . (lambda () (interactive) (ghostel-send-key "p" "ctrl")))
-          ("M-n" . (lambda () (interactive) (ghostel-send-key "n" "ctrl"))))
+          ("M-n" . (lambda () (interactive) (ghostel-send-key "n" "ctrl")))
+          )
   :config
   ;; Exposed to the shell via `gst' (.bashrc).
-  (add-to-list 'ghostel-eval-cmds '("magit-status-setup-buffer" magit-status-setup-buffer)))
+  (add-to-list 'ghostel-eval-cmds '("magit-status-setup-buffer" magit-status-setup-buffer))
+  )
 
 (use-package ghostel-eshell
   ;; Ships with ghostel; runs eshell visual commands in a Ghostel buffer.
   :ensure nil
   :after ghostel
-  :hook (eshell-load . ghostel-eshell-visual-command-mode))
+  :hook (eshell-load . ghostel-eshell-visual-command-mode)
+  )
 
 (use-package terminal-here
   ;; rely on project.el functions instead of projectile
