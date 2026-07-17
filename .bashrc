@@ -141,3 +141,10 @@ export EDITOR="emacsclient -c"
 [[ $- != *i* ]] && return
 [[ -z "$TMUX" ]] && [[ "$TERM" != "dumb" ]] \
     && [[ -z "$INSIDE_EMACS" ]] && exec tmux
+
+# Delegate commands to the running Emacs from a Ghostel buffer.
+if [[ "${INSIDE_EMACS%%,*}" == 'ghostel' ]]; then
+    e()   { ghostel_cmd find-file-other-window "$@"; }
+    dow() { ghostel_cmd dired-other-window "$@"; }
+    gst() { ghostel_cmd magit-status-setup-buffer "$(pwd)"; }
+fi
