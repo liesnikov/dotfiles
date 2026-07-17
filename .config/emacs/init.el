@@ -1385,6 +1385,12 @@ files in the completion (fetched lazily, so the default stays fast)."
   :vc (:url "https://github.com/dakra/ghostel"
        :lisp-dir "lisp"
        :rev :newest)
+  :defines
+  ghostel-eval-cmds
+  ghostel-mode-hook
+  ghostel-semi-char-mode-map
+  :functions
+  ghostel-send-key
   :custom
   ;; Scrollback in bytes (default 5MB).
   (ghostel-max-scrollback (* 50 1024 1024))
