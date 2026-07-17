@@ -459,6 +459,7 @@ When there is ongoing compilation, nothing happens."
      (project-find-dir "Find directory" "d")
      (project-try-magit "Magit" "m")
      (project-eshell "Eshell" "e")
+     (ghostel-project "Ghostel" "t")
      (project-switch-to-buffer "Buffers" "b")
      (keyboard-quit "Quit" "C-g")
      )
@@ -1391,7 +1392,7 @@ files in the completion (fetched lazily, so the default stays fast)."
   ;; No fill-column ruler in a terminal.
   (ghostel-mode . (lambda () (display-fill-column-indicator-mode -1)))
   :bind ( :map project-prefix-map
-          ("T" . ghostel-project)
+          ("t" . ghostel-project) ; C-x p t (C-x p T is terminal-here, below)
           ;; Walk shell history like eshell.
           :map ghostel-semi-char-mode-map
           ("M-p" . (lambda () (interactive) (ghostel-send-key "p" "ctrl")))
@@ -1411,9 +1412,19 @@ files in the completion (fetched lazily, so the default stays fast)."
   ;; need a function that doesn't take arguments and returns the project root as string
   :custom
   (terminal-here-project-root-function (lambda () (project-root (project-current t))))
-  :bind
-  ( :map project-prefix-map
-    ("t" . terminal-here-project-launch))
+  ;; Name the terminal explicitly; autodetection misses "ubuntu:GNOME".
+  (terminal-here-linux-terminal-command 'ghostty)
+  :bind ( :map project-prefix-map
+          ("T" . terminal-here-project-launch)) ; C-x p T (C-x p t is Ghostel)
+  :defines terminal-here-terminal-command-table
+  :config
+  ;; Ghostty is single-instance, so a bare `ghostty' opens the new window in the
+  ;; running instance's CWD; pass --working-directory to open in the project root.
+  (customize-set-variable
+   'terminal-here-terminal-command-table
+   (cons (cons 'ghostty
+               (lambda (dir) (list "ghostty" (concat "--working-directory=" (expand-file-name dir)))))
+         (assq-delete-all 'ghostty (copy-alist terminal-here-terminal-command-table))))
   )
 
 ;;;;; External tool integration
