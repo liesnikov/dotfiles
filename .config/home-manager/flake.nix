@@ -12,13 +12,9 @@
       url = "github:slotThe/emacs-lsp-booster-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixgl = {
-      url = "github:nix-community/nixGL";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
-  outputs = { nixpkgs, home-manager, emacs-lsp-booster, nixgl, ... }:
+  outputs = { nixpkgs, home-manager, emacs-lsp-booster, ... }:
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
@@ -35,7 +31,6 @@
         # to pass through arguments to home.nix
         extraSpecialArgs = {
           emacs-lsp-booster = emacs-lsp-booster-pkg;
-          nixgl = nixgl.packages.${system}.nixGLIntel;
         };
       };
     };
