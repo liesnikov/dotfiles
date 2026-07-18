@@ -12,7 +12,7 @@
 # Automatic light/dark theme switching. Ghostty follows the desktop
 # color-scheme (GNOME: org.gnome.desktop.interface color-scheme). No daemon or
 # helper needed - this is built in. Pick any names from `ghostty +list-themes`.
-theme = light:Atom One Light,dark:Atom One Dark
+theme = light:AtomOneLight,dark:Atom
 
 # Carried over from the old alacritty config; adjust to taste.
 font-family = Source Code Pro
