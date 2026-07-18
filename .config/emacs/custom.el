@@ -37,29 +37,21 @@
    '((ghostel :url "https://github.com/dakra/ghostel" :lisp-dir "lisp")
      (eglot-x :url "https://github.com/nemethf/eglot-x")
      (eglot-booster :url "https://github.com/jdtsmith/eglot-booster")
-     (idris2-mode :url
-                  "https://github.com/idris-community/idris2-mode")
-     (ultra-scroll :vc-backend Git :url
-                   "https://github.com/jdtsmith/ultra-scroll")))
+     (idris2-mode :url "https://github.com/idris-community/idris2-mode")
+     (ultra-scroll :vc-backend Git :url "https://github.com/jdtsmith/ultra-scroll")))
  '(safe-local-variable-values
-   '((ispell-personal-dictionary
-      . "/home/bohdan/delft/thesis/my-thesis/utils/.aspell.en.pws")
+   '((ispell-personal-dictionary . "/home/bohdan/delft/thesis/my-thesis/utils/.aspell.en.pws")
      (reftex-default-bibliography
       "/home/bohdan/delft/extended-elab/extended-elab/paper/bib.bib")
-     (eval progn (olivetti-mode 't) (flyspell-mode 't)
-           (flyspell-buffer) (flycheck-buffer)
+     (eval progn (olivetti-mode 't) (flyspell-mode 't) (flyspell-buffer) (flycheck-buffer)
            (ispell-change-dictionary "en_GB-w_accents"))
-     (eval progn (olivetti-mode 't) (flyspell-mode 't)
-           (flyspell-buffer) (flymake-mode)
+     (eval progn (olivetti-mode 't) (flyspell-mode 't) (flyspell-buffer) (flymake-mode)
            (ispell-change-dictionary "en_GB-w_accents"))
-     (ispell-personal-dictionary
-      . "/home/bohdan/delft/thesis/.aspell.en.pws")
-     (ispell-personal-dictionary
-      . "/home/bohdan/delft/polarity/spec/.aspell.en.pws")
+     (ispell-personal-dictionary . "/home/bohdan/delft/thesis/.aspell.en.pws")
+     (ispell-personal-dictionary . "/home/bohdan/delft/polarity/spec/.aspell.en.pws")
      (eval progn (olivetti-mode 't) (flyspell-buffer)
            (ispell-change-dictionary "en_GB-w_accents"))
-     (eval progn (olivetti-mode 't))
-     (reftex-default-bibliography "./ref.bib"))))
+     (eval progn (olivetti-mode 't)) (reftex-default-bibliography "./ref.bib"))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
