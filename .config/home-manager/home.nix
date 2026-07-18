@@ -1,4 +1,4 @@
-{ config, pkgs, emacs-lsp-booster, ... }:
+{ config, pkgs, emacs-lsp-booster, lib, ... }:
   let
     custom-agda = pkgs.agda.withPackages
       [ pkgs.agdaPackages.standard-library ];
@@ -67,6 +67,13 @@
 
     # Let Home Manager install and manage itself.
     programs.home-manager.enable = true;
+
+    dconf.settings = {
+      "org/gnome/Console" = {
+        restore-window-size = true;
+        last-window-size = lib.hm.gvariant.mkTuple [ 1000 700 ];
+      };
+    };
 
     # Don't use nix-provided man but rather host system one
     programs.man.enable = false;
