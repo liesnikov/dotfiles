@@ -1,7 +1,18 @@
-{ config, pkgs, emacs-lsp-booster, ... }:
+{ config, pkgs, emacs-lsp-booster, nixgl, ... }:
   let
     custom-agda = pkgs.agda.withPackages
       [ pkgs.agdaPackages.standard-library ];
+
+    ghostty-nixgl = pkgs.symlinkJoin {
+      name = "ghostty-nixgl";
+      paths = [ pkgs.ghostty ];
+      buildInputs = [ pkgs.makeWrapper ];
+      postBuild = ''
+        rm $out/bin/ghostty
+        makeWrapper ${nixgl}/bin/nixGLIntel $out/bin/ghostty \
+          --add-flags "${pkgs.ghostty}/bin/ghostty"
+      '';
+    };
   in {
     # Home Manager needs a bit of information about you and the
     # paths it should manage.
@@ -42,6 +53,8 @@
       diffpdf
 
       bash-language-server
+
+      ghostty-nixgl
 
       # TeX for AUCTeX preview-latex / texfrag inline math previews
       # (system ghostscript at /usr/bin/gs handles the PDF -> image step).
