@@ -1416,6 +1416,13 @@ files in the completion (fetched lazily, so the default stays fast)."
   :hook (eshell-load . ghostel-eshell-visual-command-mode)
   )
 
+(use-package ghostel-comint
+  ;; Replace comint's built-in ansi-color-process-output with Ghostel's VT parser.
+  :ensure nil
+  :after ghostel
+  :hook (after-init . ghostel-comint-global-mode)
+  )
+
 (use-package terminal-here
   ;; rely on project.el functions instead of projectile
   ;; need a function that doesn't take arguments and returns the project root as string
