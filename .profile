@@ -49,8 +49,8 @@ if [ -x "$(command -v vim)" ]; then
         export VIMINIT="set nocp | source ${XDG_CONFIG_HOME:-$HOME/.config}/vim/vimrc"
 fi
 
-# make vale use xdg directory
-alias vale='vale --config "$XDG_CONFIG_HOME/vale/config.ini"'
+# Vale configuration is natively loaded from ~/.config/vale/.vale.ini (links to casual.ini).
+# To switch to academic style in a project, set VALE_CONFIG_PATH in its .envrc.
 
 export NPM_CONFIG_INIT_MODULE="$XDG_CONFIG_HOME"/npm/config/npm-init.js
 export NPM_CONFIG_CACHE="$XDG_CACHE_HOME"/npm
