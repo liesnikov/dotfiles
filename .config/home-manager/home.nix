@@ -40,6 +40,10 @@
       jq
 
       diffpdf
+      pdfsandwich
+      tesseract
+
+      tmux
 
       bash-language-server
 
