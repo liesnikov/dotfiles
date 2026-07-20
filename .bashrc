@@ -136,13 +136,14 @@ export EDITOR="emacsclient -c"
 # Ghostty renders and owns splits/tabs; tmux runs (near-invisibly - status bar
 # off) inside it to provide keyboard copy-mode/selection and session
 # persistence, which Ghostty deliberately lacks. Still skipped inside any Emacs
-# subterminal (ghostel, term, vterm, ... all set INSIDE_EMACS), where Emacs does
+# subterminal (ghostel, term, ... all set INSIDE_EMACS), where Emacs does
 # the window management.
 [[ $- != *i* ]] && return
 [[ -z "$TMUX" ]] && [[ "$TERM" != "dumb" ]] \
     && [[ -z "$INSIDE_EMACS" ]] && exec tmux
 
-# Delegate commands to the running Emacs from a Ghostel buffer.
+# Delegate commands to the running Emacs from inside a Ghostel buffer.
+# https://dakra.github.io/ghostel/#shell-integration
 if [[ "${INSIDE_EMACS%%,*}" == 'ghostel' ]]; then
     e()   { ghostel_cmd find-file-other-window "$@"; }
     dow() { ghostel_cmd dired-other-window "$@"; }
