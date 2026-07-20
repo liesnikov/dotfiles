@@ -3,6 +3,22 @@
     custom-agda = pkgs.agda.withPackages
       [ pkgs.agdaPackages.standard-library ];
 
+    usbeehive = pkgs.rustPlatform.buildRustPackage rec {
+      pname = "usbeehive";
+      version = "0.11.0";
+      src = pkgs.fetchFromGitHub {
+        owner = "abrauchli";
+        repo = "usbeehive";
+        rev = "v${version}";
+        hash = "sha256-5aqEqt0zwzG4O+roq0p4vs59z7s2ERPE+FzyW9waegw=";
+      };
+      cargoHash = "sha256-YX72/E1N59U6EU54SWpL8Ew/eMelAjnBF7xqpLYCNIo=";
+      buildInputs = [ pkgs.udev ];
+      nativeBuildInputs = [ pkgs.pkg-config ];
+      buildNoDefaultFeatures = true;
+      buildFeatures = [ "cli" "dbus" "sysfs" "watch" ];
+    };
+
     repoRoot = ../..;
 
     # List files under dir, skipping paths (or prefixes) in exclude.
@@ -83,6 +99,7 @@
 
       custom-agda
       #agda
+      usbeehive
 
       pandoc
       librsvg # for rsvg-convert
@@ -174,4 +191,17 @@
     # Don't use nix-provided man but rather host system one
     programs.man.enable = false;
     home.extraOutputsToInstall = [ "man" ];
+
+    systemd.user.services.usbeehived = {
+      Unit = {
+        Description = "USBeehived D-Bus Daemon";
+      };
+      Service = {
+        ExecStart = "${usbeehive}/bin/usbeehived";
+        Restart = "on-failure";
+      };
+      Install = {
+        WantedBy = [ "default.target" ];
+      };
+    };
   }
