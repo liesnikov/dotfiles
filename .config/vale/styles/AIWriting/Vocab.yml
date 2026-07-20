@@ -1,0 +1,94 @@
+# Overused LLM buzzwords -- weak alone, but a cluster is the top AI tell. Skips Tier 3 words
+# (significant/innovative/etc.) since those are too common in ordinary technical prose.
+# Sources: Wikipedia "Signs of AI writing"; conorbronsdon/avoid-ai-writing.
+extends: existence
+message: "'%s' is an overused AI-writing buzzword -- see if a plainer word says the same thing."
+link: https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing
+ignorecase: true
+level: suggestion # weak alone; just a nudge
+tokens:
+  - delves?
+  - delving
+  - boast(s|ed|ing)? # "boasts a vibrant..." construction, not "brag"
+  - bolster(s|ed|ing)?
+  - garner(s|ed|ing)?
+  - intricate
+  - intricacies
+  - interplay
+  - meticulous(ly)?
+  - pivotal
+  - underscore[sd]?
+  - underscoring
+  - tapestry
+  - testament
+  - vibrant
+  - foster(s|ed|ing)?
+  - showcase[sd]?
+  - showcasing
+  - leverage[sd]?
+  - leveraging
+  - utili[sz](e|es|ed|ing) # LLM tic beyond the usual formal-writing nit
+  - streamline[sd]?
+  - streamlining
+  - seamless(ly)?
+  - cutting-edge
+  - multifaceted
+  - robust
+  - realm
+  - landscape # figurative use is the tell; ignore rare literal-terrain false positives
+  - synerg(y|ies)
+  - underpinnings
+  - holistic(ally)?
+  - paramount
+  - myriad
+  - plethora
+  - unprecedented
+  - game-chang(er|ing)
+  - revolutioni[sz](e|es|ed|ing)
+  - ever-evolving
+  - ever-changing
+  - unlock the (?:power|potential|possibilities) of
+  - elevate
+  - embark(s|ed|ing)? on
+  - invaluable
+  - indispensable
+  - transformative
+  - treasure trove
+  - cornerstone
+  - linchpin
+  - navigate the complex(ity|ities) of
+  - moreover
+  - furthermore
+  - (?:push(?:es|ing|ed)?|redefin(?:e|es|ing|ed)|blur(?:s|ring|red)?) the boundaries # cliche sense, not literal "boundaries"
+  - watershed moment
+  - paradigm
+  - beacon
+  - nestled
+  - thriving
+  - bustling
+  - daunting
+  - actionable
+  - impactful
+  - learnings
+  - thought leader(?:ship)?
+  - best practices
+  - quintessential
+  - poised to
+  - burgeoning
+  - nascent
+  - overarching
+  - catalyz(?:e|es|ed|ing)
+  - reimagin(?:e|es|ed|ing)
+  - galvani[sz](?:e|es|ed|ing)
+  - cultivat(?:e|es|ed|ing)
+  - illuminat(?:e|es|ed|ing)
+  - elucidat(?:e|es|ed|ing)
+  - juxtapos(?:e|es|ed|ing)
+  - spearhead(?:s|ed|ing)?
+  - resonat(?:e|es|ed|ing)
+  - facilitat(?:e|es|ed|ing)
+  - underpin(?:s|ned|ning)?
+  - encompass(?:es|ed|ing)?
+  - unleash(?:es|ed|ing)?
+  - empower(?:s|ed|ing)?
+  - load-bearing # metaphorical use is the tell

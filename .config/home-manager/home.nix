@@ -115,6 +115,7 @@
         exclude = [
           "home-manager" # the flake itself
           "git" # not wired into home-manager yet
+          "vale/styles" # -> xdg.dataFile instead
           # emacs runtime state
           "emacs/elpa" "emacs/eln-cache" "emacs/tree-sitter" "emacs/var"
           "emacs/transient" "emacs/auto-save-list" "emacs/.cache" "emacs/projects"
@@ -123,6 +124,14 @@
       // {
         "vale/.vale.ini".source = link "${dotfiles}/vale/casual.ini";
       };
+
+    # StylesPath is one dir; custom styles must sit alongside vale-sync's packages.
+    xdg.dataFile = linkTree {
+      link = config.lib.file.mkOutOfStoreSymlink;
+      repoDir = repoRoot + "/.config/vale/styles/AIWriting";
+      liveDir = "${config.home.homeDirectory}/dotfiles/.config/vale/styles/AIWriting";
+      keyPrefix = "vale/styles/AIWriting";
+    };
 
     dconf.settings = {
       "org/gnome/Console" = {
