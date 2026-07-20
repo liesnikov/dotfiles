@@ -1,0 +1,10 @@
+# Hashtag stuffing (6+ tags) is a LinkedIn/marketing-copy AI tell. Scoped to the whole text,
+# since hashtags cluster at the end of a post rather than spreading out.
+# Sources: Wikipedia "Signs of AI writing"; conorbronsdon/avoid-ai-writing.
+extends: occurrence
+message: "%d hashtags in this document -- LLM-generated social copy over-tags; a handful of relevant ones is plenty."
+link: https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing
+level: suggestion
+scope: text
+max: 5
+token: '#\w+'

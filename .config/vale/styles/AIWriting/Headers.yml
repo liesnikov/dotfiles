@@ -1,0 +1,26 @@
+# LLMs default to Title-Casing Every Heading. Overlaps Microsoft.Headings when Microsoft is
+# enabled (academic.ini, harmless double-report) but is the only catch in casual.ini.
+extends: capitalization
+message: "'%s' -- use sentence-style capitalization for headings, not title case (an AI-writing default)."
+link: https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing
+level: suggestion
+scope: heading
+match: $sentence
+indicators:
+  - ':'
+exceptions: # same allowlist as Microsoft.Headings, so the two rules don't disagree when both are active
+  - Azure
+  - CLI
+  - Code
+  - Cosmos
+  - Docker
+  - I
+  - Kubernetes
+  - Linux
+  - macOS
+  - MongoDB
+  - REPL
+  - TypeScript
+  - URLs
+  - VS
+  - Windows

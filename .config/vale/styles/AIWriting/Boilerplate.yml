@@ -1,0 +1,40 @@
+# Boilerplate scene-setters ("in today's fast-paced world"), conclusions ("in conclusion"),
+# and signposting ("let's dive in") that a human writer would just cut.
+# Sources: Wikipedia "Signs of AI writing"; willfrancis.com banned-phrases list; conorbronsdon/avoid-ai-writing.
+extends: existence
+message: "'%s' is boilerplate scene-setting/signposting -- readers don't need the preamble, get to the point."
+link: https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing
+ignorecase: true
+nonword: true # tokens ending in punctuation need this -- Vale's \b...\b wrap won't match otherwise
+level: suggestion # fine in some registers (casual blog "let's dive in"), just a nudge
+tokens:
+  - 'in today''?s (?:fast-paced|rapidly evolving|ever-evolving|digital) world'
+  - 'in (?:the|this) (?:ever-evolving|rapidly changing) landscape of'
+  - 'in the realm of'
+  - 'let''?s (?:dive in|explore|break (?:it|this) down|take a closer look)'
+  - 'without further ado'
+  - 'this is where .{1,30} comes in'
+  - 'when it comes to'
+  - 'at the end of the day'
+  - 'at its core,'
+  - 'in conclusion,'
+  - 'in summary,'
+  - 'to sum (?:up|it up),'
+  - 'overall, (?:it''?s|this) (?:clear|evident)'
+  - 'plays a (?:crucial|vital|pivotal|key) role in'
+  - 'one of the most (?:important|significant|crucial) (?:aspects|factors|things)'
+  - 'in an era where'
+  - '(?:imagine|picture|envision) a (?:world|future) (?:where|in which)'
+  - 'the (?:catch|kicker|result|best part)\?' # infomercial engagement hook
+  - 'here''?s the thing\.'
+  - 'but here''?s the kicker:'
+  - 'plot twist:'
+  - '(?:this one(?:''?s| is)|i highly recommend|do yourself a favor|you won''?t want to miss|save this for later|bookmark this|don''?t sleep on this):' # social-media endorsement closer
+  - 'thank me later'
+  - 'here are (?:the )?(?:top )?\d+ (?:reasons|ways|tips|things|takeaways)' # numbered-list inflation
+  - 'but what does this mean for'
+  - 'so why should you care\?'
+  - 'what''?s next\?'
+  - 'coined the phrase'
+  - 'introduced a term (?:i|we|you) hadn''?t heard'
+  - 'nobody(?:''?s| is) (?:naming|talking about)'

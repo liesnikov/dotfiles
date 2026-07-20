@@ -1,0 +1,23 @@
+# Byte-garbage copy-paste leftovers (citation IDs, unfilled placeholders, tracking params) --
+# split from Artifacts.yml as carelessness, not voice, but same "warning" rationale applies.
+# Sources: Wikipedia "Signs of AI writing"; conorbronsdon/avoid-ai-writing.
+extends: existence
+message: "'%s' is leftover AI-tool markup/tracking cruft -- strip it before publishing."
+link: https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing
+level: warning # unambiguous copy-paste debris, not a style judgment call
+nonword: true # bracket-delimited tokens need this to match (see Boilerplate.yml)
+tokens:
+  - 'cite(?:turn|Turn)\d+search\d+' # ChatGPT/Perplexity-style citation IDs
+  - 'contentReference\[oaicite:\d+\]'
+  - 'oai_citation'
+  - '\[attached_file:\d+\]'
+  - 'grok_card'
+  - 'grok_render_citation_card_json'
+  - '\[span_\d+\]' # Gemini citation markup
+  - '\[cite:\s*\d+\]'
+  - 'ppl-ai-file-upload'
+  - 'utm_source=(?:chatgpt|copilot|openai|perplexity)(?:\.com|\.ai)?'
+  - 'utm_source=claude\.ai'
+  - 'referrer=grok\.com'
+  - '\[(?:Your|Insert|Add|Enter|Describe|Specify|Choose)[^\]]{0,60}\]' # unfilled template bracket
+  - '\d{4}-XX-XX' # unfilled date placeholder

@@ -1,0 +1,32 @@
+# Copy-pasted chatbot voice/disclaimers left unedited in a doc -- unambiguous, hence "warning".
+# Byte-garbage leftovers (citation IDs, placeholders) live in Leftovers.yml instead.
+# Sources: Wikipedia "Signs of AI writing"; conorbronsdon/avoid-ai-writing.
+extends: existence
+message: "'%s' is a leftover AI-assistant disclaimer -- looks like unedited chatbot output."
+link: https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing
+ignorecase: true
+nonword: true # some tokens end in "!", needs nonword to match (see Boilerplate.yml)
+level: warning # unambiguous, near-zero false-positive risk
+tokens:
+  - 'as an AI (?:language model|assistant)'
+  - 'as a large language model'
+  - 'I''?m (?:just |only )?an AI'
+  - 'I do not have (?:personal opinions|real-time access|the ability to browse)'
+  - 'I (?:don''?t|do not) have access to (?:real-time|the internet|real time)'
+  - 'I cannot browse the internet'
+  - 'as of my (?:last )?(?:knowledge cutoff|training data|training cutoff)'
+  - 'up to my last training update'
+  - 'I''?m sorry,? but (?:as an AI )?I (?:cannot|can''?t|don''?t)'
+  - 'I hope this helps!?\s*(?:let me know|feel free)'
+  - 'feel free to reach out (?:if you have any|with any)'
+  - 'in this article,? we will explore'
+  - '(?:great|excellent) question!' # sycophantic chatbot tone
+  - 'you''?re absolutely right!'
+  - 'that''?s a really insightful observation'
+  - 'you''?re asking about'
+  - 'to answer your question,'
+  - 'that''?s a great question\. the'
+  - 'let me think step by step'
+  - 'here''?s my thought process'
+  - 'working through this logically'
+  - 'first, let''?s consider' # reasoning-chain artifact, not write-good.So's style nit

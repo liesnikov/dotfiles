@@ -1,0 +1,21 @@
+# Formulaic LLM sentence templates ("it's not just X, it's Y", "no X, no Y, just Z") -- near
+# verbatim phrasing, so higher-signal than Vocab.yml's single words.
+# Sources: Wikipedia "Signs of AI writing"; willfrancis.com banned-phrases list; conorbronsdon/avoid-ai-writing.
+#
+# NB: Vale's "raw" concatenates list entries into ONE regex (not alternation like "tokens"),
+# so each pattern below ends in "|" to keep them as separate alternation branches.
+extends: existence
+message: "'%s' is a formulaic contrastive construction LLMs overuse -- say the thing plainly instead."
+link: https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing
+ignorecase: true
+level: suggestion # not rare enough in genuine rhetoric to warrant warning
+raw:
+  - '(?:(?:it''?s not|\w+ isn''?t) (?:just|only) .{1,40}[,;.]?\s*it''?s )|' # "it's not just a tool, it's a companion"
+  - '(?:not only .{1,40}[,;]? (?:but|it))|' # "not only saves time, but also..."
+  - '(?:this isn''?t (?:just )?about .{1,40}[.;]\s*it''?s about)|' # "this isn't about speed. it's about..."
+  - '(?:\bno\s+(?:\w+\s+){0,2}\w+[,.]?\s+no\s+(?:\w+\s+){0,2}\w+[,.]?\s+just\s+\w+)|' # "no fuss, no delay, just results"
+  - '(?:whether you''?re an? \w+(?: \w+){0,3} or an? \w+(?: \w+){0,3},)|' # "whether you're a beginner or a pro,"
+  - '(?:despite (?:these |its |the )?challenges,.{1,40}continues to (?:thrive|grow|evolve|innovate))|'
+  - '(?:while .{1,40} (?:is|are|has|have) (?:impressive|remarkable|noteworthy),.{1,40} remains (?:a|an) (?:challenge|concern|issue))|' # false concession without specifics
+  - '(?:\ba \w+ step (?:towards|forward for) \w+)|' # "a bold step towards smarter infrastructure"
+  - '(?:i recently had the pleasure of \w+ing)' # stock LinkedIn-post opener

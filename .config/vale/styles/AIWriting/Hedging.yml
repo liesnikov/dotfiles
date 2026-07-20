@@ -1,0 +1,38 @@
+# Whole-clause hedging filler ("it's important to note that...") -- distinct from
+# write-good.Weasel's single vague words. Suggestion, not warning: less unambiguous than
+# Artifacts.yml's literal AI disclaimers.
+# Sources: Wikipedia "Signs of AI writing"; conorbronsdon/avoid-ai-writing.
+extends: existence
+message: "'%s' is hedging filler -- either commit to the claim or cut the sentence."
+link: https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing
+ignorecase: true
+nonword: true # some tokens end in a comma (see Boilerplate.yml)
+level: suggestion # legitimate in genuinely uncertain claims
+tokens:
+  - 'it''?s (?:important|worth) (?:to note|noting) that'
+  - 'it (?:cannot|can''?t) be overstated'
+  - 'it (?:should|must) be noted that'
+  - 'it (?:is|''?s) important to (?:note|remember|understand) that'
+  - 'one (?:might|could) argue that'
+  - 'it (?:could|can) be argued that'
+  - 'some (?:might|would) say'
+  - 'needless to say'
+  - 'to (?:be fair|be clear|put it (?:simply|another way))'
+  - 'i should note that'
+  - 'it''?s worth acknowledging'
+  - 'suffice it to say'
+  - 'the reality is that'
+  - 'as we move forward'
+  - 'one thing is certain'
+  - '(?:experts|studies|research|industry leaders) (?:believe|shows?|suggests?|agree)' # vague attribution, no named source
+  - 'could potentially'
+  - 'may eventually'
+  - '(?:interestingly|surprisingly|notably|undoubtedly|importantly|significantly),' # ordinary words, moderate false-positive risk
+  - 'without a doubt,'
+  - 'maintains? a (?:relatively )?low(?:er)? public profile'
+  - '(?:is|are) believed to have'
+  - 'likely (?:began|started) (?:his|her|their) career'
+  - 'appears? to have studied'
+  - 'while specific details are limited'
+  - '(?:what|which) (?:surprised|struck) (?:me|us) (?:most|the most)'
+  - 'i was (?:fascinated|excited) to (?:discover|learn)'
