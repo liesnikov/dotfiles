@@ -192,6 +192,18 @@
     programs.man.enable = false;
     home.extraOutputsToInstall = [ "man" ];
 
+    services.emacs = let
+      sysEmacs = pkgs.runCommand "system-emacs" {} ''
+        mkdir -p $out/bin
+        ln -s /usr/bin/emacs $out/bin/emacs
+        ln -s /usr/bin/emacsclient $out/bin/emacsclient
+      '';
+    in {
+      enable = true;
+      client.enable = true;
+      package = sysEmacs;
+    };
+
     systemd.user.services.usbeehived = {
       Unit = {
         Description = "USBeehived D-Bus Daemon";
