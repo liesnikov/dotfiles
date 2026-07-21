@@ -200,8 +200,25 @@
       '';
     in {
       enable = true;
-      client.enable = true;
       package = sysEmacs;
+      # client.enable stays off — we already have our own emacsclient
+      # desktop entries and don't want the module's duplicate.
+      # Start only once the Wayland compositor is up and has imported
+      # WAYLAND_DISPLAY etc. into the systemd user environment. Otherwise the
+      # daemon races ahead with no display and emacsclient -c frames fail.
+      startWithUserSession = "graphical";
+    };
+
+    # emacs-pgtk 30.2 crashes on graphical-frame teardown under Wayland with
+    #   gdk_wayland_seat_get_wl_seat: assertion 'GDK_IS_WAYLAND_SEAT (seat)' failed
+    # whenever DISPLAY is also set: GDK builds a stray X11 seat via Xwayland and
+    # trips the assertion when a frame is closed, killing the whole daemon. Pin
+    # the GTK backend to Wayland and drop DISPLAY so the daemon stays alive
+    # across emacsclient -c open/close cycles. (Keys merge into the module's
+    # Service section.)
+    systemd.user.services.emacs.Service = {
+      Environment = [ "GDK_BACKEND=wayland" ];
+      UnsetEnvironment = [ "DISPLAY" ];
     };
 
     systemd.user.services.usbeehived = {
