@@ -80,3 +80,27 @@ keybind = ctrl+x>plus=equalize_splits
 # grabbing Ctrl+Space, which is tmux's own bare C-Space copy-mode key.
 # ---------------------------------------------------------------------------
 keybind = ctrl+x>space=text:\x18[
+
+# ---------------------------------------------------------------------------
+# Emacs-like tab bindings, mirroring emacs' `C-x t` tab-bar prefix:
+# https://www.gnu.org/software/emacs/manual/html_node/emacs/Tab-Bars.html
+# Sequenced as "ctrl+x>t>KEY" (C-x, then t, then KEY). Only the bindings that
+# map cleanly onto a real Ghostty action are here:
+#   - `C-x t 1` (close *other* tabs) has no Ghostty equivalent, so it's omitted;
+#   - next/prev tab are Ghostty's built-in C-TAB / S-C-TAB, so not rebound.
+# ---------------------------------------------------------------------------
+
+# `C-x t 2` -> new tab (tab-new).
+keybind = ctrl+x>t>2=new_tab
+
+# `C-x t 0` -> close the selected tab (tab-close).
+keybind = ctrl+x>t>0=close_tab
+
+# `C-x t o` -> switch to the next/other tab (tab-next).
+keybind = ctrl+x>t>o=next_tab
+
+# `C-x t m` -> move the current tab one position right (tab-move).
+keybind = ctrl+x>t>m=move_tab:1
+
+# `C-x t r` -> rename the current tab (tab-rename).
+keybind = ctrl+x>t>r=prompt_tab_title
