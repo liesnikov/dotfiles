@@ -1419,11 +1419,8 @@ files in the completion (fetched lazily, so the default stays fast)."
 (use-package ghostel-comint
   ;; Replace comint's built-in ansi-color-process-output with Ghostel's VT parser.
   :ensure nil
-  ;; Enable from :config, not an `after-init-hook': under an Emacs daemon,
-  ;; `after-init-hook' has already fired by the time this `:after ghostel'
-  ;; package loads, so the hook never runs and the global mode stays off
-  ;; (leaving OSC 7 / SGR to leak into shell buffers). `:demand' loads us as
-  ;; soon as ghostel is available; `:config' then enables the global mode.
+  ;; Enable from :config: under a daemon `after-init-hook' fires before this
+  ;; `:after ghostel' package loads, so a hook trigger would never run.
   :after ghostel
   :demand t
   :config
