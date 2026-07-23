@@ -1902,6 +1902,16 @@ the directory on the buffer's full path (hashed) to isolate them."
   (dumb-jump-prefer-searcher 'rg)
   :init
   (add-hook 'xref-backend-functions #'dumb-jump-xref-activate 90)
+  :config
+  ;; Revision buffers (`foo.ts.~REV~') have no `buffer-file-name', so dumb-jump
+  ;; can't detect the language; feed it the buffer name with `.~REV~' stripped.
+  (defun liesnikov/dumb-jump-recover-file (args)
+    "Filter-args advice for `dumb-jump-get-language': see through revision buffers."
+    (if (and (car args) (not (string-empty-p (car args))))
+        args
+      (cons (replace-regexp-in-string "\\.~[^/~]+~\\'" "" (buffer-name))
+            (cdr args))))
+  (advice-add 'dumb-jump-get-language :filter-args #'liesnikov/dumb-jump-recover-file)
   )
 
 (use-package eglot
