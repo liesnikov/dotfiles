@@ -1897,7 +1897,9 @@ the directory on the buffer's full path (hashed) to isolate them."
   ;; (buffer-local hooks run first), so dumb-jump only kicks in when no LSP
   ;; backend claims the buffer.
   :defer t
-  :functions dumb-jump-xref-activate
+  :functions
+  dumb-jump-xref-activate
+  liesnikov/dumb-jump-recover-file
   :custom
   (dumb-jump-prefer-searcher 'rg)
   :init
