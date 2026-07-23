@@ -715,6 +715,36 @@ files in the completion (fetched lazily, so the default stays fast)."
   :config
   (add-to-list 'xref-search-program-alist
                '(ripgrepz . "xargs -0 rg <C> --null -nH --no-heading --no-messages -g '!*/' -z -e <R>"))
+
+  ;; When the active xref backend finds nothing, fall back to imenu on the
+  ;; current buffer -- recovers in-buffer jumps in revision/diff/non-file buffers
+  ;; that dumb-jump (disk grep) can't see. Advises the lookup since xref uses a
+  ;; single backend and won't chain.
+  (defun liesnikov/imenu-xref-definitions (identifier)
+    "Return xref items for IDENTIFIER from the current buffer's imenu index."
+    (when (and (stringp identifier) (not (string-empty-p identifier)))
+      (ignore-errors
+        (let ((items nil))
+          (letrec ((walk (lambda (alist)
+                           (dolist (entry alist)
+                             (when (consp entry)
+                               (if (imenu--subalist-p entry)
+                                   (funcall walk (cdr entry))
+                                 (when (string= (car entry) identifier)
+                                   (let ((pos (cdr entry)))
+                                     (push (xref-make
+                                            (car entry)
+                                            (xref-make-buffer-location
+                                             (current-buffer)
+                                             (if (markerp pos) (marker-position pos) pos)))
+                                           items)))))))))
+            (funcall walk (imenu--make-index-alist t)))
+          (nreverse items)))))
+  (defun liesnikov/xref-imenu-fallback (orig backend identifier)
+    "Around advice for `xref-backend-definitions': try imenu if nothing found."
+    (or (funcall orig backend identifier)
+        (liesnikov/imenu-xref-definitions identifier)))
+  (advice-add 'xref-backend-definitions :around #'liesnikov/xref-imenu-fallback)
   )
 
 ;; re-evaluate this on restart if emacs gets stuck with wrong colours
