@@ -1943,6 +1943,9 @@ the directory on the buffer's full path (hashed) to isolate them."
   (tsx-ts-mode-hook . eglot-ensure)
   (js-ts-mode-hook . eglot-ensure)
   (js-mode-hook . eglot-ensure)
+  ;; rust-mode-hook also covers rustic-mode, which derives from it
+  (rust-ts-mode-hook . eglot-ensure)
+  (rust-mode-hook . eglot-ensure)
   :bind (:map eglot-mode-map
               (("C-c c" . liesnikov/eglot-actions)))
   :custom
@@ -2323,17 +2326,25 @@ with the capability-gated commands in `liesnikov/eglot-actions-alist'."
 
 ;;;;;; Rust
 
+;; rustic-mode owns `.rs': it's the only claimant treesit-auto doesn't remap
+;; away, and its cargo/rustfmt keep working when rust-analyzer doesn't.
 (use-package rust-mode
+  ;; rustic-mode's parent; :init so it lands before rust-mode.el picks a parent
   :defer t
   :defines rust-mode-treesitter-derive
   :init
-  (setq rust-mode-treesitter-derive t)
+  (setq rust-mode-treesitter-derive t) ; rustic -> rust-mode -> rust-ts-mode
   )
 
 (use-package rustic
-  :mode ("\\.rs\\'" . rustic-mode)
-  :after (rust-mode)
-  :custom (rustic-lsp-client 'eglot))
+  ;; Remap, not `:mode': rustic's autoloads already hold that `auto-mode-alist'
+  ;; entry, so `add-to-list' won't move it ahead of treesit-auto's rust-ts-mode.
+  ;; No `:after (rust-mode)' -- it's deferred, so the block would never run.
+  :init
+  (add-to-list 'major-mode-remap-alist '(rust-ts-mode . rustic-mode))
+  :custom
+  (rustic-lsp-client nil) ; eglot comes from rust-mode-hook, like every other language
+  )
 
 ;;;;;; Ocaml
 
