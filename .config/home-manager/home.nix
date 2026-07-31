@@ -193,7 +193,12 @@
     home.extraOutputsToInstall = [ "man" ];
 
     services.emacs = let
-      sysEmacs = pkgs.runCommand "system-emacs" {} ''
+      # The version in the name is what lib.getVersion reads, and the module
+      # gates its pre-28 socket workaround (RefuseManualStart, chmod -w on the
+      # socket dir) on it. An unversioned name parses as "", which compares as
+      # older than 28 and would saddle Emacs 30 with that workaround. Only the
+      # >=28 floor matters here, not the exact figure.
+      sysEmacs = pkgs.runCommand "system-emacs-30.2" { version = "30.2"; } ''
         mkdir -p $out/bin
         ln -s /usr/bin/emacs $out/bin/emacs
         ln -s /usr/bin/emacsclient $out/bin/emacsclient
@@ -207,6 +212,10 @@
       # WAYLAND_DISPLAY etc. into the systemd user environment. Otherwise the
       # daemon races ahead with no display and emacsclient -c frames fail.
       startWithUserSession = "graphical";
+      # Hand /run/user/*/emacs/server to systemd, so an emacsclient that would
+      # otherwise fall back to --alternate-editor= and fork its own daemon
+      # outside the unit instead starts this service on connect.
+      socketActivation.enable = true;
     };
 
     # emacs-pgtk 30.2 crashes on graphical-frame teardown under Wayland with

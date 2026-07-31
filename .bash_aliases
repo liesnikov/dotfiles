@@ -10,7 +10,11 @@ alias CAPS-UNLOCK="caps-unlock"
 #alias KEYBOARD-SET="keyboard-set"
 
 alias untar-gz="tar -xvzf"
-alias emacso="emacsclient -n -c -a \"\""
+# No -a "" here: an empty alternate editor makes emacsclient fork its own
+# `emacs --daemon` outside emacs.service, which then owns the server socket and
+# blocks the unit. Socket activation starts the unit instead; if that ever
+# fails, ALTERNATE_EDITOR from .bashrc gives a plain non-daemon emacs.
+alias emacso="emacsclient -n -c"
 alias i3lock="i3lock -c 000000"
 alias lock="dm-tool lock"
 alias suspend="systemctl suspend"
