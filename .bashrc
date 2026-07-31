@@ -4,6 +4,9 @@ case $- in
       *) return;;
 esac
 
+# Added by Antigravity CLI installer
+export PATH="/home/bohdan/.local/bin:$PATH"
+
 # a bunch of bullshit variables to move them to xdg
 export ANDROID_HOME="$XDG_DATA_HOME"/android
 
