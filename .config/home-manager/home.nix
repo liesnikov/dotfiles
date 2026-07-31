@@ -228,6 +228,7 @@
     systemd.user.services.emacs.Service = {
       Environment = [ "GDK_BACKEND=wayland" ];
       UnsetEnvironment = [ "DISPLAY" ];
+      ExecStart = lib.mkForce "${pkgs.bash}/bin/bash -l -c \"${config.services.emacs.package}/bin/emacs --fg-daemon\"";
     };
 
     systemd.user.services.usbeehived = {
