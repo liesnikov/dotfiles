@@ -9,18 +9,38 @@ match: $sentence
 indicators:
   - ':'
 exceptions: # same allowlist as Microsoft.Headings, so the two rules don't disagree when both are active
+  - AC
+  - ACPI
   - Azure
+  - BlueZ
+  - Bluetooth
+  - Bookworm
   - CLI
   - Code
   - Cosmos
+  - DKMS
+  - Debian
+  - Dell
   - Docker
+  - GNOME
   - I
   - Kubernetes
   - Linux
-  - macOS
+  - MAC
   - MongoDB
+  - PCI
+  - PCIe
+  - QCA
+  - QCA6390
   - REPL
+  - S5
+  - Systemd
+  - Trixie
   - TypeScript
+  - UART
+  - USB
   - URLs
+  - Udev
   - VS
   - Windows
+  - XPS
