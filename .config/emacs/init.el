@@ -1424,6 +1424,7 @@ files in the completion (fetched lazily, so the default stays fast)."
   :custom
   ;; Scrollback in bytes (default 5MB).
   (ghostel-max-scrollback (* 50 1024 1024))
+  (ghostel-enable-osc52 t)
   ;; No fill-column ruler in a terminal.
   :hook (ghostel-mode-hook . (lambda () (display-fill-column-indicator-mode -1)))
   :bind ( :map project-prefix-map
