@@ -104,3 +104,6 @@ keybind = ctrl+x>t>m=move_tab:1
 
 # `C-x t r` -> rename the current tab (tab-rename).
 keybind = ctrl+x>t>r=prompt_tab_title
+
+# Unbind ctrl+enter
+keybind = ctrl+enter=unbind
