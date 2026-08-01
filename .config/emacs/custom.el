@@ -7,7 +7,7 @@
    [default default default italic underline success warning error])
  '(auto-save-default nil)
  '(custom-enabled-themes '(doom-one))
- '(custom-safe-themes '(default))
+ '(custom-safe-themes t)
  '(custom-theme-allow-multiple-selections nil)
  '(eglot-confirm-server-edits nil nil nil "Customized with use-package eglot")
  '(ellama-providers liesnikov/ellama-providers-alist nil nil "Can't set it earlier since the alist is only evaluated during load-time")
