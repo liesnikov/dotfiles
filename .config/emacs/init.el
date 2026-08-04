@@ -28,6 +28,10 @@
   )
 (eval-when-compile
   (require 'use-package)
+  ;; Macro providers: needed at compile time so the macros expand rather than
+  ;; compiling into bogus function calls.
+  (require 'transient)  ; transient-define-prefix/-suffix/-infix
+  (require 'inheritenv) ; inheritenv
   )
 
 (use-package use-package
@@ -65,6 +69,8 @@
           (expand-file-name "~/.cache/emacs/")
         create-lockfiles ; get rid of .# files, which are annoying
           nil)
+  :defines recentf-exclude
+  :functions recentf-expand-file-name
   :config
   ;; don't include litter directories in recentf
   (require 'recentf)
@@ -137,13 +143,12 @@
   :autoload
   compilation-find-buffer
   recompile
-  liesnikov/compile-on-save-start
-  liesnikov/compile-bury-buffer-if-successful
-  :commands
-  liesnikov/compile-on-save-mode
+  :defines compilation-num-warnings-found
+  :functions liesnikov/compile-on-save-start
   :hook
   (compilation-finish-functions . liesnikov/compile-bury-buffer-if-successful)
-  :config
+  ;; :init, not :config: these only need `compile' at call time (autoloaded above).
+  :init
   (defun liesnikov/compile-bury-buffer-if-successful (buffer string)
     "Bury a compilation BUFFER if succeeded without warnings (check STRING)."
     (when (and (string-match "compilation" (buffer-name buffer))
@@ -466,6 +471,7 @@
   :init
   (declare-function vertico--exhibit "vertico")
   (declare-function project--file-completion-table "project")
+  (declare-function liesnikov/git-ignored-files "init")
   (defvar vertico--input)
   (defun liesnikov/git-ignored-files ()
     "Gitignored files in the current project, relative to its root.
@@ -705,6 +711,9 @@ files in the completion (fetched lazily, so the default stays fast)."
   :defer t
   :custom
   (xref-search-program 'ripgrepz)
+  :functions
+  xref-make imenu--subalist-p imenu--make-index-alist
+  liesnikov/imenu-xref-definitions liesnikov/xref-imenu-fallback
   :config
   (add-to-list 'xref-search-program-alist
                '(ripgrepz . "xargs -0 rg <C> --null -nH --no-heading --no-messages -g '!*/' -z -e <R>"))
@@ -826,7 +835,7 @@ files in the completion (fetched lazily, so the default stays fast)."
   :config
   ;; setup for xfce
   (defconst xfce-light-theme "Arc")
-  (defun auto-dark--dbus-xfce (servname setpath themename)
+  (defun auto-dark--dbus-xfce (_servname setpath themename)
     (if (string= setpath "/Net/ThemeName")
         (let ((appearance (if (string= themename xfce-light-theme)
                               'light 'dark)))
@@ -1641,9 +1650,7 @@ files in the completion (fetched lazily, so the default stays fast)."
   :hook
   (TeX-mode-hook . (lambda () (flyspell-mode t)))
   (LaTeX-mode-hook . LaTeX-math-mode)
-  (LaTeX-mode-hook .
-              (lambda () (set (make-variable-buffer-local 'TeX-electric-math)
-                          (cons "$" "$"))))
+  (LaTeX-mode-hook . (lambda () (setq-local TeX-electric-math (cons "$" "$"))))
   ;; Turn on RefTeX with AUCTeX LaTeX mode and Emacs latex mode
   ((LaTeX-mode-hook latex-mode-hook). turn-on-reftex)
   ((LaTeX-mode-hook latex-mode-hook). flymake-mode)
@@ -1841,6 +1848,9 @@ the directory on the buffer's full path (hashed) to isolate them."
    (rx word-boundary
        (optional (or "(" "[") (1+ (not (any ")" "]"))) (or ")" "]"))
        (optional ":")))
+  ;; `define-advice' names its defun this; declared so the `advice-add' it
+  ;; expands into doesn't look like a forward reference.
+  :functions magit-todos--scan-with-git-diff@magit-todos--force-plain-diff-prefix
   :config
   (magit-todos-mode 1)
   ;; The branch-diff scanner hard-codes "+++ b/", so it finds nothing under
@@ -1861,6 +1871,7 @@ the directory on the buffer's full path (hashed) to isolate them."
   ;; one frame, no control popup, panes side-by-side
   (ediff-window-setup-function 'ediff-setup-windows-plain)
   (ediff-split-window-function 'split-window-horizontally)
+  :functions liesnikov/ediff-tame-buffer
   :config
   ;; Tame ediff's throwaway `file.~REV~' buffers: flymake pulls in sideline
   ;; (whose render timer errors), and breadcrumb has no project so shows the
@@ -1876,6 +1887,12 @@ the directory on the buffer's full path (hashed) to isolate them."
   :custom
   (git-link-use-commit t)
   (git-link-use-single-line-number t)
+  :functions liesnikov/git-link--file-p liesnikov/git-link--column-init-value
+  ;; Referenced by the `transient-define-*' expansions here and in `forge'
+  ;; below; transient is loaded at runtime as a magit/git-link dependency.
+  transient-setup transient-prefix transient-suffix transient-switch
+  transient-args transient-suffix-put transient--set-layout
+  transient--suffix-only transient--default-infix-command
   :config
   ;; Checkers and Predicates
   (defun liesnikov/git-link--file-p ()
@@ -2505,7 +2522,9 @@ with the capability-gated commands in `liesnikov/eglot-actions-alist'."
   liesnikov/agda-default-name
   agda2-mode-map
   :functions
-  liesnkov/agda-reload
+  liesnikov/agda-reload
+  :defines
+  agda2-program-name
   :commands
   liesnikov/agda-switch liesnikov/agda-reset
   :bind (:map agda2-mode-map
@@ -2514,7 +2533,7 @@ with the capability-gated commands in `liesnikov/eglot-actions-alist'."
   (defvar liesnikov/agda-default-name "agda")
   (defun liesnikov/agda-reload ()
     (unload-feature 'agda2 t)
-    (unless (fboundp 'inheritenv) (autoload #'inheritenv "inheritenv" nil 'macro))
+    (unless (fboundp 'inheritenv) (autoload 'inheritenv "inheritenv" nil 'macro))
     (let ((agda2-el (inheritenv (shell-command-to-string "agda-mode locate"))))
       (add-to-list 'load-path (file-name-directory agda2-el))
       (load-file agda2-el)
