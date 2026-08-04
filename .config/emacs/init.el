@@ -1418,9 +1418,11 @@ files in the completion (fetched lazily, so the default stays fast)."
   :defines
   ghostel-eval-cmds
   ghostel-mode-hook
+  ghostel-mode-map
   ghostel-semi-char-mode-map
   :functions
   ghostel-send-key
+  ghostel-sync-theme
   :custom
   ;; Scrollback in bytes (default 5MB).
   (ghostel-max-scrollback (* 50 1024 1024))
@@ -1434,7 +1436,17 @@ files in the completion (fetched lazily, so the default stays fast)."
           :map ghostel-semi-char-mode-map
           ("M-p" . (lambda () (interactive) (ghostel-send-key "p" "ctrl")))
           ("M-n" . (lambda () (interactive) (ghostel-send-key "n" "ctrl")))
+          :map ghostel-mode-map
+          ;; C-c M-l is clear-scrollback
+          ("C-c l" . ghostel-clear)
+          ;; global C-c C-o is ffap; here, OSC 8 links
+          ("C-c C-o" . ghostel-open-link-at-point)
           )
+  :init
+  ;; Palettes are baked in at spawn; re-apply on theme change.
+  (add-hook 'enable-theme-functions
+            (lambda (_theme)
+              (when (fboundp 'ghostel-sync-theme) (ghostel-sync-theme))))
   :config
   ;; Exposed to the shell via `gst' (.bashrc).
   (add-to-list 'ghostel-eval-cmds '("magit-status-setup-buffer" magit-status-setup-buffer))
@@ -1454,8 +1466,54 @@ files in the completion (fetched lazily, so the default stays fast)."
   ;; `:after ghostel' package loads, so a hook trigger would never run.
   :after ghostel
   :demand t
+  :functions ghostel-comint-global-mode
   :config
   (ghostel-comint-global-mode 1)
+  )
+
+(use-package ghostel-compile
+  ;; Ships with ghostel; runs `compilation-start' in a real TTY.
+  ;; Keeps `compilation-finish-functions' and `next-error'; excludes `grep-mode'.
+  :ensure nil
+  ;; :config for the same daemon-ordering reason as ghostel-comint.
+  :after ghostel
+  :demand t
+  :functions ghostel-compile-global-mode
+  :config
+  (ghostel-compile-global-mode 1)
+  )
+
+(use-package ghostel-consult
+  ;; Terminals in C-x b / C-x p b under narrow key `t' (`< t' here).
+  ;; `:hidden' so they don't also show up in the default view.
+  ;; Hand-rolled because no package ships it; `consult-source-buffer' is the template.
+  :ensure nil :no-require t
+  :after (ghostel consult)
+  :demand t
+  :defines consult-buffer-sources consult-project-buffer-sources
+  :functions consult--buffer-query consult--buffer-pair consult--buffer-state
+  :init
+  (defvar liesnikov/consult-source-ghostel
+    `( :name "Ghostel" :narrow ?t :hidden t
+       :category buffer :face consult-buffer
+       :history buffer-name-history
+       :state ,#'consult--buffer-state
+       :items ,(lambda () (consult--buffer-query :sort 'visibility
+                                                 :mode 'ghostel-mode
+                                                 :as #'consult--buffer-pair)))
+    "Ghostel buffer source for `consult-buffer'.")
+
+  ;; Leading `:items' shadows the spliced one, as consult does for its own sources.
+  (defvar liesnikov/consult-source-ghostel-project
+    `( :items ,(lambda () (consult--buffer-query :sort 'visibility
+                                                 :mode 'ghostel-mode
+                                                 :directory 'project
+                                                 :as #'consult--buffer-pair))
+       ,@liesnikov/consult-source-ghostel)
+    "Like `liesnikov/consult-source-ghostel', scoped to the current project.")
+  :config
+  (add-to-list 'consult-buffer-sources 'liesnikov/consult-source-ghostel t)
+  (add-to-list 'consult-project-buffer-sources 'liesnikov/consult-source-ghostel-project t)
   )
 
 (use-package terminal-here
