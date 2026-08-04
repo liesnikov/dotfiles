@@ -163,13 +163,6 @@
       (unless (get-buffer-process buffer)
         (recompile)))
     )
-  (define-minor-mode liesnikov/compile-on-save-mode
-    "Minor mode to automatically call `recompile' when the current buffer is saved.
-When there is ongoing compilation, nothing happens."
-    :lighter " CoS"
-    (if liesnikov/compile-on-save-mode
-        (add-hook 'after-save-hook #'liesnikov/compile-on-save-start nil t)
-      (remove-hook 'after-save-hook #'liesnikov/compile-on-save-start t)))
   )
 
 (use-package completion-preview
