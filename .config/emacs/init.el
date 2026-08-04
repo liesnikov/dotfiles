@@ -462,8 +462,6 @@
      (keyboard-quit "Quit" "C-g")
      )
    )
-  :commands
-  project-try-magit
   :bind
   ( :map project-prefix-map
     ;; Replace the built-in `project-find-file' (C-x p f) with our toggling one.
@@ -506,24 +504,6 @@ files in the completion (fetched lazily, so the default stays fast)."
                    (vertico--exhibit)))
                (current-local-map))))))
       (project-find-file))
-    )
-
-  (defun project-try-magit ()
-    "Try to open magit status for the current project,
-     or prompt for a project directory."
-    (interactive)
-    (require 'magit)
-    (condition-case err
-        ;; open in the current window instead of splitting the frame in this case
-        (let ((magit-display-buffer-function
-               #'magit-display-buffer-same-window-except-diff-v1))
-          (magit-project-status))
-      (error (progn
-               (message "%s" (error-message-string err))
-               (project-find-dir)
-               )
-             )
-      )
     )
   )
 
@@ -1836,6 +1816,26 @@ the directory on the buffer's full path (hashed) to isolate them."
   :autoload
   magit-file-relative-name
   magit-project-status
+  :defines magit-display-buffer-function
+  :commands project-try-magit
+  :config
+  (defun project-try-magit ()
+    "Try to open magit status for the current project,
+     or prompt for a project directory."
+    (interactive)
+    (condition-case err
+        ;; open in the current window instead of splitting the frame in this case
+        ;; Plain quote: magit `funcall's this, so the symbol resolves at call time.
+        (let ((magit-display-buffer-function
+               'magit-display-buffer-same-window-except-diff-v1))
+          (magit-project-status))
+      (error (progn
+               (message "%s" (error-message-string err))
+               (project-find-dir)
+               )
+             )
+      )
+    )
   )
 
 (use-package magit-todos
