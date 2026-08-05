@@ -126,6 +126,7 @@
         dvisvgm      # DVI/PDF -> SVG
         amsmath      # align, gather, ...
         amsfonts     # amssymb and friends
+        ulem         # org puts it in every preamble it builds, previews included
       ]))
     ];
     # This value determines the Home Manager release that your
