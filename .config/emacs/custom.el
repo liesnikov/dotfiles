@@ -12,11 +12,11 @@
  '(eglot-confirm-server-edits nil nil nil "Customized with use-package eglot")
  '(ellama-providers liesnikov/ellama-providers-alist nil nil "Can't set it earlier since the alist is only evaluated during load-time")
  '(package-selected-packages
-   '(agent-shell aider auctex auto-dark avy
+   '(auctex auto-dark avy
      breadcrumb
-     cape consult consult-eglot copilot corfu
+     cape consult consult-eglot corfu
      dashboard dired-subtree dockerfile-mode doom-themes dumb-jump
-     edit-indirect eglot-booster eglot-x eldoc-box ellama embark embark-consult emojify envrc evil-numbers expand-region
+     edit-indirect eglot-booster eglot-x eldoc-box embark embark-consult emojify envrc evil-numbers expand-region
      flymake-collection forge
      ghostel git-link gnu-elpa-keyring-update
      haskell-ts-mode highlight-parentheses
