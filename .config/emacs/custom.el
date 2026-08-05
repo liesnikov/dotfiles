@@ -20,7 +20,7 @@
      flymake-collection forge
      ghostel git-link gnu-elpa-keyring-update
      haskell-ts-mode highlight-parentheses
-     ibuffer-project idris-mode idris2-mode
+     ibuffer-project
      magit magit-todos marginalia markdown-mode merlin minions moody
      nix-mode no-littering noxml-fold
      olivetti orderless org-download org-modern org-modern-indent org-present
