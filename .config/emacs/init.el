@@ -1743,10 +1743,11 @@ the directory on the buffer's full path (hashed) to isolate them."
   :defer t
   :after org
   )
+
 (use-package org-present
   :defer t
-
   )
+
 (use-package org-modern
   :defer t
   :after org
