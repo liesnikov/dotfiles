@@ -1741,13 +1741,15 @@ the directory on the buffer's full path (hashed) to isolate them."
 
 (use-package org-download
   :defer t
-  :requires org)
+  :after org
+  )
 (use-package org-present
   :defer t
-  :requires org)
+
+  )
 (use-package org-modern
   :defer t
-  :requires org
+  :after org
   :hook
   ((org-mode-hook . org-modern-mode)
    (org-agenda-finalize-hook . org-modern-agenda))
@@ -2185,7 +2187,7 @@ with the capability-gated commands in `liesnikov/eglot-actions-alist'."
   )
 
 (use-package treesit-langs
-  :requires treesit
+  :if (and (fboundp 'treesit-available-p) (treesit-available-p))
   :demand 't
   :commands treesit-langs-major-mode-setup
   :config
@@ -2194,7 +2196,7 @@ with the capability-gated commands in `liesnikov/eglot-actions-alist'."
 
 (use-package treesit-auto
   :demand 't
-  :requires treesit
+  :if (and (fboundp 'treesit-available-p) (treesit-available-p))
   :commands global-treesit-auto-mode
   :functions treesit-auto-add-to-auto-mode-alist
   :custom
@@ -2206,7 +2208,7 @@ with the capability-gated commands in `liesnikov/eglot-actions-alist'."
 
 (use-package treesit-ispell
   :defer t
-  :requires treesit
+  :if (and (fboundp 'treesit-available-p) (treesit-available-p))
   )
 
 (use-package treesit-fold
@@ -2420,10 +2422,11 @@ with the capability-gated commands in `liesnikov/eglot-actions-alist'."
 (use-package tuareg
   ;; activate tuareg (ocaml) mode in ml4 files
   ;; (syntax extensions for coq)
-  :mode "\\.ml4\\'")
+  :mode "\\.ml4\\'"
+  )
 
 (use-package merlin
-  :requires tuareg
+  :after tuareg
   :hook
    ;; from https://github.com/ocaml/merlin/wiki/emacs-from-scratch
   (tuareg-mode-hook . merlin-mode)
