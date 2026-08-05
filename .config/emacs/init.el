@@ -1722,6 +1722,8 @@ the directory on the buffer's full path (hashed) to isolate them."
           ;; * to store a link to an org heading use C-c l
           ("C-c l" . org-store-link))
   :custom
+  (org-pretty-entities t) ;\alpha as an alpha, H_2O with a subscript
+  (org-fontify-quote-and-verse-blocks t) ;else a quote reads as prose
   (org-export-headline-levels 1)
   (org-agenda-files nil)
   (org-cycle-include-plain-lists (quote integrate))
@@ -1745,7 +1747,53 @@ the directory on the buffer's full path (hashed) to isolate them."
   )
 
 (use-package org-present
-  :defer t
+  ;; Present a throwaway copy of the deck in a frame of its own: deleting the
+  ;; frame undoes everything below.  A copy and not an indirect buffer, whose
+  ;; shared text properties would leak these settings back into the deck.
+  :preface
+  (defvar liesnikov/org-present-frame '((fullscreen . fullboth)
+                                        (font . "Source Sans 3-30")
+                                        (cursor-type . nil)
+                                        (internal-border-width . 150)
+                                        (line-spacing . 0.3))
+    )
+  (defvar liesnikov/org-present-locals
+    '((buffer-read-only . t)
+      (mode-line-format . nil)
+      (truncate-lines . nil)
+      (org-modern-star . nil)
+      (indicate-empty-lines . nil) ;dashes past the slide
+      (display-fill-column-indicator . nil)
+      (org-hide-emphasis-markers . t)
+      (org-format-latex-options . (:foreground default :background default :scale 2.8
+                                   :matchers ("begin" "$1" "$" "$$" "\\(" "\\[")))
+      (face-remapping-alist
+       . ((org-block fixed-pitch)
+          (org-table org-table fixed-pitch) ;mono, and unboxed
+          (org-code org-code fixed-pitch)
+          (org-verbatim org-verbatim fixed-pitch)
+          (org-level-1 (:height 1.3) org-level-1) ;the slide title, a third bigger
+          (org-quote (:slant italic) variable-pitch org-quote) ;inherits org-block
+          )
+       )))
+  (defun liesnikov/org-present-in-frame (present)
+    (let ((text (buffer-substring-no-properties (point-min) (point-max)))
+          (copy (generate-new-buffer (format "%s<present>" (buffer-name)))))
+      (select-frame (make-frame `((liesnikov/org-present . ,copy) ,@liesnikov/org-present-frame)))
+      (modify-frame-parameters nil liesnikov/org-present-frame) ;the desktop resets them
+      (switch-to-buffer copy)
+      (insert text) (goto-char (point-min)) (org-mode)
+      (pcase-dolist (`(,v . ,x) liesnikov/org-present-locals) ;after `org-mode',
+        (set (make-local-variable v) x))                      ;before fontification
+      (org-hide-drawer-all) (org-display-inline-images) ;while still unnarrowed
+      (with-demoted-errors "org-present: %S" (org-latex-preview '(16)))
+      (funcall present)))
+  :init
+  (advice-add 'org-present :around #'liesnikov/org-present-in-frame)
+  :hook
+  ((org-present-mode-quit-hook . delete-frame)
+   (delete-frame-functions
+    . (lambda (f) (when-let* ((b (frame-parameter f 'liesnikov/org-present))) (kill-buffer b)))))
   )
 
 (use-package org-modern
