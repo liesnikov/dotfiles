@@ -900,9 +900,21 @@ files in the completion (fetched lazily, so the default stays fast)."
   :after whitespace
   :functions
   unicode-whitespace-setup
-  liesnikov/blend-face-colors
+  liesnikov/whitespace-fade-marks
+  ;; subdued-faces paints trailing space and the lines at eob in
+  ;; LightGoldenrod2; the theme's grey band is calmer (trailing inherits this)
+  :custom-face
+  (unicode-whitespace-subdued-empty ((t (:inherit whitespace-empty))))
   :config
   (unicode-whitespace-setup 'subdued-faces)
+  ;; subdued-faces hardcodes Gray30/Gray70 and the theme's own whitespace grey
+  ;; (base4) is heavier still, so keep the space and eol marks at a small
+  ;; fraction of the fg/bg contrast.  The eol face inherits this one.
+  (defun liesnikov/whitespace-fade-marks (&rest _)
+    (when-let* ((colour (doom-blend 'fg 'bg 0.15)))
+      (set-face-foreground 'unicode-whitespace-subdued-space colour)))
+  (liesnikov/whitespace-fade-marks)
+  (add-hook 'enable-theme-functions #'liesnikov/whitespace-fade-marks)
   )
 
 (use-package emojify
