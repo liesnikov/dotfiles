@@ -901,17 +901,18 @@ files in the completion (fetched lazily, so the default stays fast)."
   :functions
   unicode-whitespace-setup
   liesnikov/whitespace-fade-marks
-  ;; subdued-faces paints trailing space and the lines at eob in
-  ;; LightGoldenrod2; the theme's grey band is calmer (trailing inherits this)
-  :custom-face
-  (unicode-whitespace-subdued-empty ((t (:inherit whitespace-empty))))
   :config
   (unicode-whitespace-setup 'subdued-faces)
-  ;; subdued-faces hardcodes Gray30/Gray70 and the theme's own whitespace grey
-  ;; (base4) is heavier still, so keep the space and eol marks at a small
-  ;; fraction of the fg/bg contrast.  The eol face inherits this one.
+  ;; theme's grey band instead of subdued-faces' LightYellow (trailing inherits
+  ;; it).  Not `:custom-face': its override spec layers under the defface colours.
+  (custom-set-faces '(unicode-whitespace-subdued-empty ((t (:inherit whitespace-empty)))))
+  ;; space and eol marks at a fraction of the fg/bg contrast, below the theme's
+  ;; own whitespace grey.  Frame colours, not `doom-color': that goes stale when
+  ;; an already-loaded theme is re-enabled.
   (defun liesnikov/whitespace-fade-marks (&rest _)
-    (when-let* ((colour (doom-blend 'fg 'bg 0.15)))
+    (when-let* ((colour (doom-blend (face-foreground 'default nil t)
+                                    (face-background 'default nil t)
+                                    0.15)))
       (set-face-foreground 'unicode-whitespace-subdued-space colour)))
   (liesnikov/whitespace-fade-marks)
   (add-hook 'enable-theme-functions #'liesnikov/whitespace-fade-marks)
