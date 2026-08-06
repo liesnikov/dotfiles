@@ -663,6 +663,20 @@ files in the completion (fetched lazily, so the default stays fast)."
   ;; * for magit it breaks commit flow
   ;; * for tex mode -- it breaks org-mode tex export
   (whitespace-global-modes '(not magit-mode tex-mode org-mode agda2-mode))
+  :config
+  ;; whitespace's OVERRIDE=t faces wipe the background of spaces in md code.
+  ;; Drop once the `prepend' fix reaches `spaces'/`tabs' upstream:
+  ;; https://debbugs.gnu.org/cgi/bugreport.cgi?bug=73332
+  (defun liesnikov/whitespace-merge-faces (&rest _)
+    "Layer whitespace.el faces over existing faces instead of replacing them."
+    (font-lock-remove-keywords nil whitespace-font-lock-keywords)
+    (setq whitespace-font-lock-keywords
+          (mapcar (lambda (kw)
+                    (if (eq (car (last kw)) t) (append (butlast kw) '(prepend)) kw))
+                  whitespace-font-lock-keywords))
+    (font-lock-add-keywords nil whitespace-font-lock-keywords 'append)
+    (font-lock-flush))
+  (advice-add 'whitespace-color-on :after #'liesnikov/whitespace-merge-faces)
   )
 
 (use-package windmove
