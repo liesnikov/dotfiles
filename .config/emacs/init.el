@@ -912,10 +912,13 @@ files in the completion (fetched lazily, so the default stays fast)."
   (defun liesnikov/whitespace-fade-marks (&rest _)
     (when-let* ((colour (doom-blend (face-foreground 'default nil t)
                                     (face-background 'default nil t)
-                                    0.15)))
+                                    0.15))
+                ((color-defined-p colour)))
       (set-face-foreground 'unicode-whitespace-subdued-space colour)))
   (liesnikov/whitespace-fade-marks)
   (add-hook 'enable-theme-functions #'liesnikov/whitespace-fade-marks)
+  ;; the daemon's startup frame has no colours to blend, so redo it per frame
+  (add-hook 'server-after-make-frame-hook #'liesnikov/whitespace-fade-marks)
   )
 
 (use-package emojify
