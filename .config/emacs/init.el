@@ -340,6 +340,16 @@
   (gdb-many-windows t)
   )
 
+(use-package glyphless-mode
+  :ensure nil
+  ;; boxes Cf invisibles (ZWSP, joiners, BOM, bidi overrides) in the display engine, no regexp
+  :custom
+  ;; not `all': that also boxes the VS-16 inside every emoji, plus the C0 controls
+  (glyphless-mode-types '(format-control))
+  :hook
+  ((text-mode prog-mode) . glyphless-display-mode)
+  )
+
 (use-package grep
   :ensure nil
   :defer t
@@ -663,6 +673,38 @@ files in the completion (fetched lazily, so the default stays fast)."
   ;; * for magit it breaks commit flow
   ;; * for tex mode -- it breaks org-mode tex export
   (whitespace-global-modes '(not magit-mode tex-mode org-mode agda2-mode))
+  ;; one class per regexp: unicode-whitespace's `[X]+\f*[X\f]*$' backtracks catastrophically
+  ;; Cf invisibles (ZWSP, joiners, BOM) belong to `glyphless-display-mode', not here
+  (whitespace-space-regexp
+   (concat "\\(["
+           " "             ; SPACE
+           "\u1680"        ; OGHAM SPACE MARK
+           "\u2000-\u2006" ; EN QUAD .. SIX-PER-EM SPACE
+           "\u2008"        ; PUNCTUATION SPACE
+           "\u2009"        ; THIN SPACE
+           "\u200A"        ; HAIR SPACE
+           "\u205F"        ; MEDIUM MATHEMATICAL SPACE
+           "\u3000"        ; IDEOGRAPHIC SPACE
+           "]+\\)"))
+  (whitespace-hspace-regexp
+   (concat "\\(["
+           "\u00A0" ; NO-BREAK SPACE
+           "\u2007" ; FIGURE SPACE, non-breaking
+           "\u202F" ; NARROW NO-BREAK SPACE
+           "]+\\)"))
+  (whitespace-trailing-regexp
+   (concat "\\(["
+           "\t"            ; TAB
+           " "             ; SPACE
+           "\u00A0"        ; NO-BREAK SPACE
+           "\u1680"        ; OGHAM SPACE MARK
+           "\u2000-\u200A" ; EN QUAD .. HAIR SPACE
+           "\u202F"        ; NARROW NO-BREAK SPACE
+           "\u205F"        ; MEDIUM MATHEMATICAL SPACE
+           "\u3000"        ; IDEOGRAPHIC SPACE
+           "\f"            ; FORM FEED
+           "]+\\)$"))
+  :functions liesnikov/whitespace-fade-marks
   :config
   ;; whitespace's OVERRIDE=t faces wipe the background of spaces in md code.
   ;; Drop once the `prepend' fix reaches `spaces'/`tabs' upstream:
@@ -677,6 +719,19 @@ files in the completion (fetched lazily, so the default stays fast)."
     (font-lock-add-keywords nil whitespace-font-lock-keywords 'append)
     (font-lock-flush))
   (advice-add 'whitespace-color-on :after #'liesnikov/whitespace-merge-faces)
+  ;; space marks fainter than the theme's own whitespace grey (#9ca0a4)
+  (defun liesnikov/whitespace-fade-marks (&rest _)
+    (when-let* ((colour (doom-blend (face-foreground 'default nil t)
+                                    (face-background 'default nil t)
+                                    0.15))
+                ((color-defined-p colour)))
+      (dolist (face '(whitespace-space whitespace-hspace))
+        (set-face-foreground face colour))))
+  (liesnikov/whitespace-fade-marks)
+  ;; frame colours, not `doom-color': that goes stale when a theme is re-enabled
+  (add-hook 'enable-theme-functions #'liesnikov/whitespace-fade-marks)
+  ;; the daemon's startup frame has no colours to blend, so redo it per frame
+  (add-hook 'server-after-make-frame-hook #'liesnikov/whitespace-fade-marks)
   )
 
 (use-package windmove
@@ -893,32 +948,6 @@ files in the completion (fetched lazily, so the default stays fast)."
   (setq x-underline-at-descent-line t)
   (moody-replace-mode-line-buffer-identification)
   (moody-replace-vc-mode)
-  )
-
-(use-package unicode-whitespace
-  :demand t
-  :after whitespace
-  :functions
-  unicode-whitespace-setup
-  liesnikov/whitespace-fade-marks
-  :config
-  (unicode-whitespace-setup 'subdued-faces)
-  ;; theme's grey band instead of subdued-faces' LightYellow (trailing inherits
-  ;; it).  Not `:custom-face': its override spec layers under the defface colours.
-  (custom-set-faces '(unicode-whitespace-subdued-empty ((t (:inherit whitespace-empty)))))
-  ;; space and eol marks at a fraction of the fg/bg contrast, below the theme's
-  ;; own whitespace grey.  Frame colours, not `doom-color': that goes stale when
-  ;; an already-loaded theme is re-enabled.
-  (defun liesnikov/whitespace-fade-marks (&rest _)
-    (when-let* ((colour (doom-blend (face-foreground 'default nil t)
-                                    (face-background 'default nil t)
-                                    0.15))
-                ((color-defined-p colour)))
-      (set-face-foreground 'unicode-whitespace-subdued-space colour)))
-  (liesnikov/whitespace-fade-marks)
-  (add-hook 'enable-theme-functions #'liesnikov/whitespace-fade-marks)
-  ;; the daemon's startup frame has no colours to blend, so redo it per frame
-  (add-hook 'server-after-make-frame-hook #'liesnikov/whitespace-fade-marks)
   )
 
 (use-package emojify
