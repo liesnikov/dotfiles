@@ -163,6 +163,10 @@
         ulem         # org puts it in every preamble it builds, previews included
       ]))
     ];
+    home.sessionVariables = {
+      QT_QPA_PLATFORMTHEME = "qgnomeplatform";
+    };
+
     # This value determines the Home Manager release that your
     # configuration is compatible with. This helps avoid breakage
     # when a new Home Manager release introduces backwards

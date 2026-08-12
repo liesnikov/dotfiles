@@ -70,3 +70,4 @@ fi
 
 # Added by Antigravity CLI installer
 export PATH="/home/bohdan/.local/bin:$PATH"
+export QT_QPA_PLATFORMTHEME=qgnomeplatform
