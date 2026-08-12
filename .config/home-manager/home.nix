@@ -106,6 +106,7 @@
 
       direnv
       nix-direnv # support direnv for flakes
+      angrr # auto nix gc root retention
       nixfmt # format nix files
       # nix-index # tool to find nixpkgs fields corresponding to paths
       nixd # language server for nix
