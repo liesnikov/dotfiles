@@ -124,6 +124,8 @@
       alex
       happy
 
+      mcp-language-server
+
       custom-agda
       #agda
       usbeehive
