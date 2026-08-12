@@ -19,6 +19,32 @@
       buildFeatures = [ "cli" "dbus" "sysfs" "watch" ];
     };
 
+    lastfm-to-sqlite = pkgs.python3Packages.buildPythonApplication rec {
+      pname = "lastfm-to-sqlite";
+      version = "0.2.3";
+
+      src = pkgs.python3Packages.fetchPypi {
+        inherit pname version;
+        sha256 = "04i8r3m3vkg0s1inddhalvvl1zwlzl8506v81kdl2lf10fw3jmrl";
+      };
+
+      pyproject = true;
+
+      build-system = with pkgs.python3Packages; [
+        setuptools
+      ];
+
+      propagatedBuildInputs = with pkgs.python3Packages; [
+        pylast
+        sqlite-utils
+        click
+        python-dateutil
+        requests
+      ];
+
+      doCheck = false;
+    };
+
     repoRoot = ../..;
 
     # List files under dir, skipping paths (or prefixes) in exclude.
@@ -107,6 +133,11 @@
       ripgrep
       fd
       jq
+
+      kid3-cli
+      beets
+      lastfm-to-sqlite
+      puddletag
 
       diffpdf
       pdfsandwich
