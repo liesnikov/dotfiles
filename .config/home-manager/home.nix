@@ -137,7 +137,15 @@
       fd
       jq
 
-      kid3-cli
+      (symlinkJoin {
+        name = "kid3-cli-wrapped";
+        paths = [ kid3-cli ];
+        buildInputs = [ makeWrapper ];
+        postBuild = ''
+          wrapProgram $out/bin/kid3-cli \
+            --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "${lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" (with gst_all_1; [ gstreamer gst-plugins-base gst-plugins-good ])}"
+        '';
+      })
       beets
       lastfm-to-sqlite
       puddletag
