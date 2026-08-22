@@ -73,11 +73,11 @@
   :functions recentf-expand-file-name
   :config
   ;; don't include litter directories in recentf
-  (require 'recentf)
-  (add-to-list 'recentf-exclude
-               (recentf-expand-file-name no-littering-var-directory))
-  (add-to-list 'recentf-exclude
-               (recentf-expand-file-name no-littering-etc-directory))
+  (with-eval-after-load 'recentf
+    (add-to-list 'recentf-exclude
+                 (recentf-expand-file-name no-littering-var-directory))
+    (add-to-list 'recentf-exclude
+                 (recentf-expand-file-name no-littering-etc-directory)))
   (no-littering-theme-backups)
   )
 
