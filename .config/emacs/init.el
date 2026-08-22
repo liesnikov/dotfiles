@@ -204,7 +204,6 @@
   :functions
   dired-get-filename
   :custom
-  (dired-async-mode t)
   (dired-listing-switches "-al")
   (dired-recursive-copies 'always)
   (dired-recursive-deletes 'always)
@@ -215,9 +214,10 @@
   :bind (:map dired-mode-map
          ("C-c C-o" . dired-open-file))
   :hook
-  ((dired-mode . dired-hide-details-mode)
-   (dired-mode . hl-line-mode))
+  ((dired-mode-hook . dired-hide-details-mode)
+   (dired-mode-hook . hl-line-mode))
   :config
+  (dired-async-mode t)
   (defun dired-open-file ()
     "In dired, open the file named on this line."
     (interactive)
@@ -347,7 +347,7 @@
   ;; not `all': that also boxes the VS-16 inside every emoji, plus the C0 controls
   (glyphless-mode-types '(format-control))
   :hook
-  ((text-mode prog-mode) . glyphless-display-mode)
+  ((text-mode-hook prog-mode-hook) . glyphless-display-mode)
   )
 
 (use-package grep
@@ -531,7 +531,7 @@ files in the completion (fetched lazily, so the default stays fast)."
 (use-package reftex
   :ensure nil
   :hook
-  (LaTeX-mode-hook . turn-on-reftex)
+  ((LaTeX-mode-hook latex-mode-hook) . turn-on-reftex)
   )
 
 (use-package savehist
@@ -826,7 +826,7 @@ files in the completion (fetched lazily, so the default stays fast)."
   ;; If the value is greater than 100, redisplay will never recenter point,
   ;; but will always scroll just enough text to bring point into view,
   ;; even if you move far away.
-  (scroll-conservatively 10000)
+  (scroll-conservatively 101)
 
   ;; The number of lines to try scrolling a window by when point moves out.
   (scroll-step 1)
@@ -1007,7 +1007,7 @@ files in the completion (fetched lazily, so the default stays fast)."
   ;; a minor mode to enable errors appearing next to the code
   :hook
   (flymake-mode-hook . sideline-mode)
-  (eglot-mode-hook . sideline-mode)
+  (eglot-managed-mode-hook . sideline-mode)
   )
 
 (use-package sideline-flymake
@@ -1497,7 +1497,7 @@ files in the completion (fetched lazily, so the default stays fast)."
   ;; Ships with ghostel; runs eshell visual commands in a Ghostel buffer.
   :ensure nil
   :after ghostel
-  :hook (eshell-load . ghostel-eshell-visual-command-mode)
+  :hook (eshell-load-hook . ghostel-eshell-visual-command-mode)
   )
 
 (use-package ghostel-comint
@@ -1680,7 +1680,7 @@ files in the completion (fetched lazily, so the default stays fast)."
   :after auctex
   :custom
   (reftex-plug-into-AUCTeX t)
- '(TeX-view-program-selection
+  (TeX-view-program-selection
    '((output-pdf "xdg-open")
      (output-html "xdg-open")
      ((output-dvi has-no-display-manager) "dvi2tty")
@@ -1690,8 +1690,6 @@ files in the completion (fetched lazily, so the default stays fast)."
   (TeX-mode-hook . (lambda () (flyspell-mode t)))
   (LaTeX-mode-hook . LaTeX-math-mode)
   (LaTeX-mode-hook . (lambda () (setq-local TeX-electric-math (cons "$" "$"))))
-  ;; Turn on RefTeX with AUCTeX LaTeX mode and Emacs latex mode
-  ((LaTeX-mode-hook latex-mode-hook). turn-on-reftex)
   ((LaTeX-mode-hook latex-mode-hook). flymake-mode)
   ((LaTeX-mode-hook latex-mode-hook). eglot-ensure)
   )
@@ -1976,6 +1974,7 @@ the directory on the buffer's full path (hashed) to isolate them."
   )
 
 (use-package ediff
+  :defer t
   :ensure nil
   :custom
   ;; one frame, no control popup, panes side-by-side
@@ -2385,6 +2384,7 @@ with the capability-gated commands in `liesnikov/eglot-actions-alist'."
   )
 
 (use-package rustic
+  :defer t
   ;; Remap, not `:mode': rustic's autoloads already hold that `auto-mode-alist'
   ;; entry, so `add-to-list' won't move it ahead of treesit-auto's rust-ts-mode.
   ;; No `:after (rust-mode)' -- it's deferred, so the block would never run.
