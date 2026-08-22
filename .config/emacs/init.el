@@ -2397,12 +2397,14 @@ with the capability-gated commands in `liesnikov/eglot-actions-alist'."
 ;;;;;; Ocaml
 
 (use-package tuareg
+  :disabled
   ;; activate tuareg (ocaml) mode in ml4 files
   ;; (syntax extensions for coq)
   :mode "\\.ml4\\'"
   )
 
 (use-package merlin
+  :disabled
   :after tuareg
   :hook
    ;; from https://github.com/ocaml/merlin/wiki/emacs-from-scratch
@@ -2451,9 +2453,12 @@ with the capability-gated commands in `liesnikov/eglot-actions-alist'."
 ;;;; Proof Assistants
 
 (use-package idris-mode
+  :disabled
   :mode "\\.idr$" "\\.lidr$"
   )
+
 (use-package idris2-mode
+  :disabled
   :commands idris2-mode idris2-ipkg-mode
   :mode "\\.idr$" ("\\.ipkg$" . idris2-ipkg-mode)
   :vc (:url "https://github.com/idris-community/idris2-mode")
@@ -2462,6 +2467,7 @@ with the capability-gated commands in `liesnikov/eglot-actions-alist'."
 ;;;;; Rocq
 
 (use-package proof-general
+  :disabled
   :commands coq-mode
   :mode ("\\.v\\'" . coq-mode)
   :custom
