@@ -1604,30 +1604,11 @@ files in the completion (fetched lazily, so the default stays fast)."
   ;; package for direnv, usefull when working with nix
   :custom
   (envrc-global-mode t)
+  ;; Let direnv run in the background; big trees make a synchronous reload
+  ;; noticeable.  A number would cap how long to block instead.
+  (envrc-async t)
   :commands
   envrc-allow envrc-reload
-  liesnikov/envrc-reload-or-clear
-  :autoload
-  envrc--clear
-  envrc--with-required-current-env
-  envrc--find-env-dir
-  envrc--update
-  :defines
-  env-dir
-  :config
-  (defun liesnikov/envrc-reload-or-clear ()
-   "Clear the direnv environment and reload, if there's another one."
-    (interactive)
-    (envrc--clear (current-buffer))
-    (condition-case nil
-        (envrc--with-required-current-env env-dir
-          (when (string= (envrc--find-env-dir) env-dir)
-            (envrc--update)
-            (message "Refreshed %s in env %s" (buffer-name) env-dir)))
-      (user-error
-       (message "Unloaded env for %s" (buffer-name)))))
-  :hook
-  (eshell-directory-change-hook . liesnikov/envrc-reload-or-clear)
   )
 
 ;;;; Writing & reading
