@@ -8,31 +8,6 @@ let
   custom-agda = pkgs.agda.withPackages
     [ pkgs.agdaPackages.standard-library ];
 
-  lastfm-to-sqlite = pkgs.python3Packages.buildPythonApplication rec {
-    pname = "lastfm-to-sqlite";
-    version = "0.2.3";
-
-    src = pkgs.python3Packages.fetchPypi {
-      inherit pname version;
-      sha256 = "04i8r3m3vkg0s1inddhalvvl1zwlzl8506v81kdl2lf10fw3jmrl";
-    };
-
-    pyproject = true;
-
-    build-system = with pkgs.python3Packages; [
-      setuptools
-    ];
-
-    propagatedBuildInputs = with pkgs.python3Packages; [
-      pylast
-      sqlite-utils
-      click
-      python-dateutil
-      requests
-    ];
-
-    doCheck = false;
-  };
 in {
   imports = [
     ../modules/usbeehive.nix
@@ -93,17 +68,6 @@ in {
     fd
     jq
 
-    (symlinkJoin {
-      name = "kid3-cli-wrapped";
-      paths = [ kid3-cli ];
-      buildInputs = [ makeWrapper ];
-      postBuild = ''
-        wrapProgram $out/bin/kid3-cli \
-          --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "${lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" (with gst_all_1; [ gstreamer gst-plugins-base gst-plugins-good ])}"
-      '';
-    })
-    beets
-    lastfm-to-sqlite
     puddletag
 
     diffpdf
