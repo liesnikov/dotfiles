@@ -1,5 +1,5 @@
 {
-  description = "Home Manager configuration of dana";
+  description = "Home Manager configuration";
 
   inputs = {
     # Specify the source of Home Manager and Nixpkgs.
@@ -17,21 +17,24 @@
   outputs = { nixpkgs, home-manager, emacs-lsp-booster, ... }:
     let
       system = "x86_64-linux";
+      lib = nixpkgs.lib;
       pkgs = nixpkgs.legacyPackages.${system};
       emacs-lsp-booster-pkg = emacs-lsp-booster.packages.${system}.default;
+
+      # One output per name, from profiles/<name>.nix.
+      profileNames = [ "bohdan" ];
     in {
-      homeConfigurations."bohdan" = home-manager.lib.homeManagerConfiguration {
-        inherit pkgs;
+      homeConfigurations = lib.genAttrs profileNames (name:
+        home-manager.lib.homeManagerConfiguration {
+          inherit pkgs;
 
-        # Specify your home configuration modules here, for example,
-        # the path to your home.nix.
-        modules = [ ./home.nix ];
+          # home.nix holds everything shared; the profile supplies the
+          # machine's identity and whatever only that machine wants.
+          modules = [ ./home.nix (./profiles + "/${name}.nix") ];
 
-        # Optionally use extraSpecialArgs
-        # to pass through arguments to home.nix
-        extraSpecialArgs = {
-          emacs-lsp-booster = emacs-lsp-booster-pkg;
-        };
-      };
+          extraSpecialArgs = {
+            emacs-lsp-booster = emacs-lsp-booster-pkg;
+          };
+        });
     };
 }

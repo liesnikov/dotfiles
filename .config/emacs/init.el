@@ -2623,5 +2623,13 @@ BEG and END are optional arguments instead of currently selected region."
 ;; (require 'opam-user-setup "~/.config/emacs/opam-user-setup.el")
 ;; ## end of OPAM user-setup addition for emacs / base ## keep this line
 
+;;;; Machine-specific configuration
+;; profile.el is deployed by the active home-manager profile
+;; (.config/home-manager/profiles/) and holds whatever belongs to this machine
+;; alone -- work forge/tracker URLs, extra language servers, font size.
+;; Loaded last so it can override anything above.  Missing on a machine whose
+;; profile ships none, hence NOERROR; NOMESSAGE keeps startup quiet.
+(load (expand-file-name "profile.el" user-emacs-directory) :noerror :nomessage)
+
 (provide 'init.el)
 ;;; init.el ends here
