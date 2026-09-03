@@ -1,8 +1,4 @@
-# USBeehive: a CLI and D-Bus daemon for USBeehive-style USB hubs.
-#
-# Not in nixpkgs, so the derivation lives here. Importing this module makes the
-# package available to a profile's home.packages as `usbeehive`; the daemon is
-# separate, behind dotfiles.usbeehive.enable.
+# USBeehive: a CLI and D-Bus daemon for USB hubs.
 { config, lib, pkgs, ... }:
 let
   usbeehive = pkgs.rustPlatform.buildRustPackage rec {
@@ -25,8 +21,7 @@ in {
     lib.mkEnableOption "the USBeehived D-Bus daemon as a user service";
 
   config = {
-    # Passed as a module argument rather than added to home.packages here, so a
-    # profile decides where in its own list it sits.
+    # A module argument, not home.packages, so the profile places it in its own list.
     _module.args.usbeehive = usbeehive;
 
     systemd.user.services.usbeehived = lib.mkIf config.dotfiles.usbeehive.enable {

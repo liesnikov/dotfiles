@@ -27,8 +27,7 @@
   in {
     imports = [ ./options.nix ];
 
-    # The repo's own deployment helpers, for profiles and for the modules
-    # under ./modules that link trees of their own.
+    # The repo's deployment helpers, for profiles and modules that link their own trees.
     _module.args.dotfilesLib = { inherit walk linkTree; };
 
     # home.username / home.homeDirectory come from the profile.
@@ -37,17 +36,9 @@
       QT_QPA_PLATFORMTHEME = "qgnomeplatform";
     };
 
-    # This value determines the Home Manager release that your
-    # configuration is compatible with. This helps avoid breakage
-    # when a new Home Manager release introduces backwards
-    # incompatible changes.
-    #
-    # You can update Home Manager without changing this value. See
-    # the Home Manager release notes for a list of state version
-    # changes in each release.
+    # Do not bump this on a Home Manager update.
     home.stateVersion = "25.05";
 
-    # Let Home Manager install and manage itself.
     programs.home-manager.enable = true;
 
     home.file = linkTree {
@@ -83,7 +74,7 @@
       };
     };
 
-    # Don't use nix-provided man but rather host system one
+    # Use the host system man, not the nix-provided one.
     programs.man.enable = false;
     home.extraOutputsToInstall = [ "man" ];
 

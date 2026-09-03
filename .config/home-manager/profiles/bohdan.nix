@@ -1,8 +1,4 @@
-# Personal machine.
-#
-# Anything here is deliberately *not* in home.nix: it is wanted on this machine
-# only, so another profile does not have to delete it. Shared configuration
-# lives in ../home.nix; see ../options.nix for what a profile must set.
+# Personal machine. Only what this machine wants. Shared config is in ../home.nix.
 { config, pkgs, lib, emacs-lsp-booster, usbeehive, dotfilesLib, ... }:
 let
   custom-agda = pkgs.agda.withPackages
@@ -78,8 +74,7 @@ in {
 
     bash-language-server
 
-    # TeX for AUCTeX preview-latex / texfrag inline math previews
-    # (system ghostscript at /usr/bin/gs handles the PDF -> image step).
+    # TeX for AUCTeX preview-latex / texfrag. System ghostscript does PDF -> image.
     (texlive.withPackages (ps: with ps; [
       scheme-basic # pdflatex and the core engine
       preview      # preview.sty

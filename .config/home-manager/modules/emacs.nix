@@ -1,5 +1,4 @@
-# Emacs as a user service, running the host system's Emacs rather than a
-# nix-built one.
+# Emacs as a user service, running the host system's Emacs, not a nix-built one.
 { config, lib, pkgs, ... }:
 let
   cfg = config.dotfiles.emacs;
@@ -38,34 +37,21 @@ in {
     in {
       enable = true;
       package = sysEmacs;
-      # client.enable stays off — we already have our own emacsclient
-      # desktop entries and don't want the module's duplicate.
-      # Start only once the Wayland compositor is up and has imported
-      # WAYLAND_DISPLAY etc. into the systemd user environment. Otherwise the
-      # daemon races ahead with no display and emacsclient -c frames fail.
+      # Start after the compositor exports WAYLAND_DISPLAY, or -c frames fail.
       startWithUserSession = "graphical";
-      # Hand /run/user/*/emacs/server to systemd, so an emacsclient that would
-      # otherwise fall back to --alternate-editor= and fork its own daemon
-      # outside the unit instead starts this service on connect.
+      # Give the socket to systemd, so emacsclient starts this service instead of forking.
       socketActivation.enable = true;
+      # client.enable stays off: we have our own emacsclient desktop entries.
     };
 
-    # emacs-pgtk 30.2 crashes on graphical-frame teardown under Wayland with
-    #   gdk_wayland_seat_get_wl_seat: assertion 'GDK_IS_WAYLAND_SEAT (seat)' failed
-    # whenever DISPLAY is also set: GDK builds a stray X11 seat via Xwayland and
-    # trips the assertion when a frame is closed, killing the whole daemon. Pin
-    # the GTK backend to Wayland and drop DISPLAY so the daemon stays alive
-    # across emacsclient -c open/close cycles. (Keys merge into the module's
-    # Service section.)
+    # emacs-pgtk 30.2 crashes on frame close when DISPLAY is set (stray GDK X11 seat).
     systemd.user.services.emacs.Service = {
       Environment = [ "GDK_BACKEND=wayland" ];
       UnsetEnvironment = [ "DISPLAY" ];
       ExecStart = lib.mkForce "${pkgs.bash}/bin/bash -l -c \"${config.services.emacs.package}/bin/emacs --fg-daemon\"";
     };
 
-    # What the sandbox could not do at build time, done here instead: ask the
-    # real binary. Only reports -- a wrong version is a latent misconfiguration,
-    # not a reason to fail the switch.
+    # Ask the real binary, which the build sandbox cannot. Reports only, never fails.
     home.activation.checkSystemEmacsVersion =
       lib.hm.dag.entryAfter [ "writeBoundary" ] ''
         real=$(/usr/bin/emacs --version 2>/dev/null | sed -n '1s/^GNU Emacs //p')

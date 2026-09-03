@@ -1,5 +1,4 @@
-# Options that the shared home.nix reads and every profile is expected to set.
-# Keeping them in their own module lets home.nix stay a plain config attrset.
+# Options home.nix reads and every profile must set. Kept apart so home.nix stays plain.
 { lib, ... }:
 {
   options.dotfiles.repoPath = lib.mkOption {
