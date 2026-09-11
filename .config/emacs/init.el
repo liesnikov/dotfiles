@@ -451,6 +451,10 @@
   ;; When enabled, this minor mode allows to scroll the display
   ;; precisely, according to the turning of the mouse wheel.
   (pixel-scroll-precision-mode 't)
+  :config
+  ;; This map outranks a terminal buffer's local map, so the page keys never reach it.
+  (keymap-unset pixel-scroll-precision-mode-map "<prior>" t)
+  (keymap-unset pixel-scroll-precision-mode-map "<next>" t)
   )
 
 (use-package prog-mode
