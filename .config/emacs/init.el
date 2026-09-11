@@ -68,6 +68,8 @@
         no-littering-var-directory
           (expand-file-name "~/.cache/emacs/")
         create-lockfiles ; get rid of .# files, which are annoying
+          nil
+        auto-save-default ; and #file# ones; was in custom.el for no reason
           nil)
   :defines recentf-exclude
   :functions recentf-expand-file-name
@@ -847,6 +849,9 @@ files in the completion (fetched lazily, so the default stays fast)."
   ;; Emacs 30 and newer: Disable Ispell completion function.
   ;; Try `cape-dict' as an alternative.
   (text-mode-ispell-word-completion nil)
+
+  ;; Theme hashes change on every elpa install, so the trust prompt asks nothing useful.
+  (custom-safe-themes t)
 
 
   ;; Set fill-column to match the ruler
