@@ -811,6 +811,15 @@ files in the completion (fetched lazily, so the default stays fast)."
 (use-package emacs
   :ensure nil
   ;; catch-all package for all the things that don't have their own package
+  :init
+  ;; Declare the functions safe, not each combination: dir-locals needs `eval' for modes.
+  (dolist (f '(olivetti-mode flyspell-mode flyspell-buffer
+               flycheck-buffer flymake-mode ispell-change-dictionary))
+    (put f 'safe-local-eval-function t))
+
+  ;; A `progn' is safe exactly when every form in it is; one bad call poisons the whole.
+  (put 'progn 'safe-local-eval-function
+       (lambda (form) (seq-every-p #'hack-one-local-variable-eval-safep (cdr form))))
   :bind
   ;; find-file-at-point (ffap) globally on C-c C-o.  Major modes that bind
   ;; C-c C-o locally (org -> org-open-at-point, markdown -> follow link,
