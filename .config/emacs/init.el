@@ -374,6 +374,9 @@
   :ensure nil
   :custom
   (ispell-dictionary "en_GB-w_accents")
+  :init
+  ;; Every project keeps its own; listing each path only grows custom.el.
+  (put 'ispell-personal-dictionary 'safe-local-variable #'stringp)
   )
 
 (use-package menu-bar
@@ -534,6 +537,9 @@ files in the completion (fetched lazily, so the default stays fast)."
   :ensure nil
   :hook
   ((LaTeX-mode-hook latex-mode-hook) . turn-on-reftex)
+  :init
+  ;; Every paper keeps its own; listing each path only grows custom.el.
+  (put 'reftex-default-bibliography 'safe-local-variable #'listp)
   )
 
 (use-package savehist
