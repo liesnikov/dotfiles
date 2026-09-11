@@ -42,6 +42,22 @@
   ;;(use-package-compute-statistics 't)
   ;; disable :hook suffix to use abnormal hooks with the same syntax
   (use-package-hook-name-suffix nil)
+  ;; Track the branch head.  The default, the last release tag, detaches HEAD.
+  (use-package-vc-prefer-newest t)
+  )
+
+(use-package package-vc
+  :ensure nil
+  :defer t
+  :config
+  ;; Upgrade to the newest release tag when the repo has tags, else pull the branch.
+  (define-advice package-vc-upgrade (:around (orig desc) latest-tag)
+    "Fast-forward DESC to its newest release tag, else fall back to ORIG."
+    (let ((default-directory (package-desc-dir desc)))
+      (if (eq 0 (call-process-shell-command
+                 "git fetch --tags && git merge --ff-only \"$(git describe --tags --abbrev=0 origin/HEAD)\""))
+          (package-vc-rebuild desc)
+        (funcall orig desc))))
   )
 
 ;; load no-littering as the very first package
@@ -1478,8 +1494,7 @@ files in the completion (fetched lazily, so the default stays fast)."
 (use-package ghostel
   :defer t
   :vc (:url "https://github.com/dakra/ghostel"
-       :lisp-dir "lisp"
-       :rev :newest)
+       :lisp-dir "lisp")
   :defines
   ghostel-eval-cmds
   ghostel-mode-hook
