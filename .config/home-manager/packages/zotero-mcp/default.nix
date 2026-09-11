@@ -1,8 +1,4 @@
-# zotero-mcp (github.com/54yyyu/zotero-mcp), an MCP server over the local
-# Zotero library. Packaged from its PyPI distribution `zotero-mcp-server`: the
-# name `zotero-mcp` there belongs to an unrelated project (kujenga/zotero-mcp),
-# so upstream publishes under the longer name while keeping `zotero-mcp` as the
-# command and `zotero_mcp` as the module.
+# zotero-mcp (github.com/54yyyu/zotero-mcp), an MCP server over the local Zotero library.
 { lib
 , python3Packages
 , rustPlatform
@@ -13,11 +9,8 @@
 }:
 
 let
-  # nixpkgs 26.05 has 1.11.0, below the >=1.13.3 zotero-mcp asks for: 1.13.3
-  # is where upload step 0 started sending Path(filename).name rather than the
-  # caller's whole path (urschrei/pyzotero#341), which the API rejects with a
-  # 400 that pyzotero reports under `failure` instead of raising. Dependencies
-  # are unchanged between the two versions, so only src moves.
+  # nixpkgs has 1.11.0, below the >=1.13.3 asked for. Only src moves: the deps match.
+  # https://github.com/urschrei/pyzotero/issues/341
   pyzotero = python3Packages.pyzotero.overridePythonAttrs (_: rec {
     version = "1.14.0";
     src = python3Packages.fetchPypi {
@@ -25,15 +18,11 @@ let
       inherit version;
       hash = "sha256-fNszx6WSuGUCZg7R71GIavcqI/XUZ7cRKUUiBE9B14s=";
     };
-    # The nixpkgs build rewrites a "uv_build>=0.8.14,<0.9.0" build-system pin
-    # that 1.14.0 has already widened to <0.12.0 -- satisfied by the uv-build
-    # in nixpkgs -- so the substitution now finds no match and fails the build.
+    # 1.14.0 already widened the uv_build pin, so the nixpkgs substitution finds no match.
     postPatch = "";
   });
 
-  # PDF text extraction: PyO3 bindings over Firecrawl's Rust library, not in
-  # nixpkgs. zotero-mcp pins it exactly (==0.2.6) while it is pre-1.0 because
-  # the extraction output is user-visible, so don't drift off that pin.
+  # PDF text extraction. zotero-mcp pins it exactly while pre-1.0, so do not drift off it.
   pdf-inspector = python3Packages.buildPythonPackage rec {
     pname = "pdf-inspector";
     version = "0.2.6";
@@ -57,18 +46,13 @@ let
       rustc
     ];
 
-    # tounicode.rs reads pdf.js's binary CMaps off disk at runtime, defaulting
-    # to CARGO_MANIFEST_DIR -- the build sandbox, long gone by then. Keep them
-    # in the output and point PDF_INSPECTOR_BCMAPS_DIR (set on the wrapper
-    # below) at them, so CJK CMap PDFs still extract. Without it the lookup
-    # returns nothing and only those PDFs come out garbled.
+    # tounicode.rs reads CMaps at runtime, so keep them or CJK PDFs come out garbled.
     postInstall = ''
       mkdir -p $out/share/pdf-inspector
       cp -r external/bcmaps $out/share/pdf-inspector/bcmaps
     '';
 
-    # The sdist ships no fixtures: crates.io caps uploads at 10 MiB and the
-    # test corpus alone is over it, so upstream excludes tests/ entirely.
+    # The sdist ships no fixtures: the test corpus alone is over the crates.io 10 MiB cap.
     doCheck = false;
     pythonImportsCheck = [ "pdf_inspector" ];
 
@@ -93,17 +77,9 @@ python3Packages.buildPythonApplication rec {
 
   build-system = [ python3Packages.hatchling ];
 
-  # `zotero-mcp update` shells out to pip/uv to overwrite its own install,
-  # which here either fails against the read-only store or, worse, succeeds
-  # into ~/.local and shadows this package with a copy Nix no longer tracks.
-  # Cut it at the one function that runs the installer rather than at the
-  # subcommand: the version check above it still works -- that is how a due
-  # bump gets noticed -- and the refusal travels back through upstream's own
-  # (success, message) path, so `update` reports it and exits cleanly. The rest
-  # of update_via_method is unreachable by design. --replace-fail means a
-  # reworded upstream breaks the build instead of quietly restoring
-  # self-update.
+  # `zotero-mcp update` would install into ~/.local and shadow this package.
   postPatch = ''
+    # Cut at the installer, not the subcommand, so the version check still runs.
     substituteInPlace src/zotero_mcp/updater.py \
       --replace-fail 'package_name = "zotero-mcp-server"' \
         'return (False, "Self-update is disabled: this zotero-mcp comes from Nix. Bump the version and hash in .config/home-manager/packages/zotero-mcp/default.nix, then run: home-manager switch")'
@@ -130,9 +106,7 @@ python3Packages.buildPythonApplication rec {
     tiktoken
   ]);
 
-  # Default to the local library, so the wrapped `zotero-mcp` and `zotero-cli`
-  # talk to the running Zotero without per-client env plumbing. --set-default
-  # keeps ZOTERO_API_KEY/ZOTERO_LIBRARY_ID usable for the web API instead.
+  # Default to the local library. --set-default keeps the web API env vars usable.
   makeWrapperArgs = [
     "--set-default"
     "ZOTERO_LOCAL"
@@ -142,8 +116,7 @@ python3Packages.buildPythonApplication rec {
     "${pdf-inspector}/share/pdf-inspector/bcmaps"
   ];
 
-  # Upstream's suite drives a live Zotero on port 23119; nothing to run in the
-  # sandbox.
+  # Upstream's suite drives a live Zotero, so there is nothing to run in the sandbox.
   doCheck = false;
   pythonImportsCheck = [ "zotero_mcp" ];
 
