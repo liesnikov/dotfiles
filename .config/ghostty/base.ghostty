@@ -1,0 +1,6 @@
+# Shared Ghostty baseline configuration
+theme = light:Atom One Light,dark:Atom
+font-family = Source Code Pro
+font-size = 13
+scrollback-limit = 100000000
+window-theme = system

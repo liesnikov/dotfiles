@@ -1,0 +1,86 @@
+# ---------------------------------------------------------------------------
+# Emacs-like split bindings, mirroring the old tmux config.
+#
+# tmux used a `C-x` prefix; Ghostty reproduces that with sequenced keybinds
+# ("ctrl+x>KEY" = press C-x, release, then KEY). As in tmux, this means a bare
+# C-x is captured as the leader, so to send a literal C-x to a program (e.g.
+# emacs, readline) press it twice: C-x C-x. To use a different leader, replace
+# `ctrl+x` everywhere below.
+# ---------------------------------------------------------------------------
+
+# C-x C-x -> send a literal C-x (0x18) to the program (tmux `send-prefix`).
+keybind = ctrl+x>ctrl+x=text:\x18
+
+# Reload config, echoing tmux's `prefix r`.
+keybind = ctrl+x>r=reload_config
+
+# Splits (tmux: `prefix 2` split below, `prefix 3` split right).
+keybind = ctrl+x>2=new_split:down
+keybind = ctrl+x>3=new_split:right
+
+# Kill panes (tmux: `prefix 0` kill pane, `prefix k` kill pane).
+keybind = ctrl+x>0=close_surface
+keybind = ctrl+x>k=close_surface
+
+# `prefix 1` had no exact Ghostty equivalent (close *other* panes); zoom the
+# current split to fill the window instead - the emacs `C-x 1` feel.
+keybind = ctrl+x>1=toggle_split_zoom
+
+# Move between panes. `C-x o` = other (next); arrows = directional, matching
+# tmux's default prefix+arrow select-pane.
+keybind = ctrl+x>o=goto_split:next
+keybind = ctrl+x>up=goto_split:up
+keybind = ctrl+x>down=goto_split:down
+keybind = ctrl+x>left=goto_split:left
+keybind = ctrl+x>right=goto_split:right
+
+# Resize, mirroring tmux's `prefix M-arrow` (resize by 5 there; 5 here too).
+keybind = ctrl+x>alt+up=resize_split:up,5
+keybind = ctrl+x>alt+down=resize_split:down,5
+keybind = ctrl+x>alt+left=resize_split:left,5
+keybind = ctrl+x>alt+right=resize_split:right,5
+
+# Balance splits, like emacs `C-x +` (balance-windows).
+keybind = ctrl+x>plus=equalize_splits
+
+# ---------------------------------------------------------------------------
+# Scrolling & copy-mode are delegated to tmux, which auto-starts inside every
+# Ghostty shell (see ~/personal/dotfiles/.bashrc). tmux is an alt-screen app,
+# so it owns the visible buffer - Ghostty's own scroll/scrollback/search actions
+# would see nothing and are therefore intentionally NOT bound here. Instead:
+#   - mouse wheel scrolls (tmux `mouse on`);
+#   - C-x SPC enters tmux copy-mode: an emacs-style keyboard cursor to move,
+#     mark and yank a region - the keyboard selection Ghostty itself lacks and
+#     the reason tmux is kept around at all.
+# The binding sends tmux's prefix + `[` (i.e. C-x then `[`, tmux's default
+# copy-mode key). Routing it through the Ghostty leader sidesteps GNOME/IBus
+# grabbing Ctrl+Space, which is tmux's own bare C-Space copy-mode key.
+# ---------------------------------------------------------------------------
+keybind = ctrl+x>space=text:\x18[
+
+# ---------------------------------------------------------------------------
+# Emacs-like tab bindings, mirroring emacs' `C-x t` tab-bar prefix:
+# https://www.gnu.org/software/emacs/manual/html_node/emacs/Tab-Bars.html
+# Sequenced as "ctrl+x>t>KEY" (C-x, then t, then KEY). Only the bindings that
+# map cleanly onto a real Ghostty action are here:
+#   - `C-x t 1` (close *other* tabs) has no Ghostty equivalent, so it's omitted;
+#   - next/prev tab are Ghostty's built-in C-TAB / S-C-TAB, so not rebound.
+# ---------------------------------------------------------------------------
+
+# `C-x t 2` -> new tab (tab-new).
+keybind = ctrl+x>t>2=new_tab
+
+# `C-x t 0` -> close the selected tab (tab-close).
+keybind = ctrl+x>t>0=close_tab
+
+# `C-x t o` -> switch to the next/other tab (tab-next).
+keybind = ctrl+x>t>o=next_tab
+
+# `C-x t m` -> move the current tab one position right (tab-move).
+keybind = ctrl+x>t>m=move_tab:1
+
+# `C-x t r` -> rename the current tab (tab-rename).
+keybind = ctrl+x>t>r=prompt_tab_title
+
+# Unbind ctrl+enter
+keybind = ctrl+enter=unbind

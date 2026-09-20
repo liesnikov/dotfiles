@@ -1,0 +1,16 @@
+# Ghostty configuration for dedicated GNU Emacs terminal client
+# Docs: https://ghostty.org/docs/config
+
+# Inherit baseline appearance, font, and window settings
+config-file = base.ghostty
+
+# Distinct window class for Wayland/GNOME Shell window grouping & icons
+class = emacs-ghostty
+
+# Clear all Ghostty default and custom keybindings so Emacs receives every key verbatim
+keybind = clear
+
+# Standard desktop clipboard shortcuts
+keybind = ctrl+shift+c=copy_to_clipboard:mixed
+keybind = ctrl+shift+v=paste_from_clipboard
+
