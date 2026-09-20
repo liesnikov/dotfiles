@@ -1528,8 +1528,13 @@ files in the completion (fetched lazily, so the default stays fast)."
             (lambda (_theme)
               (when (fboundp 'ghostel-sync-theme) (ghostel-sync-theme))))
   :config
-  ;; Exposed to the shell via `gst' (.bashrc).
-  (add-to-list 'ghostel-eval-cmds '("magit-status-setup-buffer" magit-status-setup-buffer))
+  ;; Exposed to the shell via `ghostel_cmd' (.bashrc).
+  (dolist (cmd '(("magit-status-setup-buffer" magit-status-setup-buffer)
+                 ("man" man)
+                 ("info" info)
+                 ("view-file-other-window" view-file-other-window)
+                 ("ediff-files" ediff-files)))
+    (add-to-list 'ghostel-eval-cmds cmd))
   )
 
 (use-package ghostel-eshell

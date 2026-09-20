@@ -148,7 +148,11 @@ export EDITOR="emacsclient -c"
 # Delegate commands to the running Emacs from inside a Ghostel buffer.
 # https://dakra.github.io/ghostel/#shell-integration
 if [[ "${INSIDE_EMACS%%,*}" == 'ghostel' ]]; then
-    e()   { ghostel_cmd find-file-other-window "$@"; }
-    dow() { ghostel_cmd dired-other-window "$@"; }
-    gst() { ghostel_cmd magit-status-setup-buffer "$(pwd)"; }
+    e()     { ghostel_cmd find-file-other-window "$@"; }
+    dow()   { ghostel_cmd dired-other-window "${1:-$PWD}"; }
+    gst()   { ghostel_cmd magit-status-setup-buffer "$PWD"; }
+    man()   { ghostel_cmd man "$*"; }
+    info()  { ghostel_cmd info "$1"; }
+    view()  { ghostel_cmd view-file-other-window "$1"; }
+    ediff() { ghostel_cmd ediff-files "$1" "$2"; }
 fi
