@@ -1,0 +1,9 @@
+[temporary-root-policies.direnv]
+enable = true
+path-regex = '/\.direnv/'
+period = "30d"
+
+[temporary-root-policies.result]
+enable = true
+path-regex = '/result[^/]*$'
+period = "7d"

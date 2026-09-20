@@ -29,3 +29,6 @@ alias open-webui-log="docker logs --follow open-webui"
 
 alias sound-hdmi="pactl set-card-profile 0 output:hdmi-stereo+input:analog-stereo"
 alias sound-laptop="pactl set-card-profile 0 output:analog-stereo+input:analog-stereo"
+
+alias angrr="angrr -c ~/.config/angrr/angrr.toml"
+
