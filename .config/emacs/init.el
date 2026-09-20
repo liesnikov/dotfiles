@@ -334,10 +334,13 @@
   (prog-mode-hook . flyspell-prog-mode)
   :custom
   (flyspell-issue-welcome-flag nil)
+  (flyspell-issue-message-flag nil)
+  (flyspell-delay 0.5)
   (flyspell-use-global-abbrev-table-p t)
   :bind (:map flyspell-mode-map
               ("C-c k" . compile))
   )
+
 
 (use-package frame
   :ensure nil
@@ -687,7 +690,6 @@ files in the completion (fetched lazily, so the default stays fast)."
   (global-whitespace-mode t)
   (whitespace-style '(face
                       trailing
-                      space-mark spaces
                       tab-mark tabs
                       empty
                       ;;indentation::space
@@ -695,6 +697,7 @@ files in the completion (fetched lazily, so the default stays fast)."
                       ;;newline newline-mark
                       space-after-tab::tab space-after-tab::space
                       space-before-tab::tab space-before-tab::space))
+
   ;; * in agda it's simply annoying, but for magit it's causing errors
   ;;   see https://github.com/magit/magit/issues/4766 and
   ;;   https://emacs.stackexchange.com/questions/38771/magit-status-does-not-open-when-using-global-whitespace-mode-1/38778#38778
@@ -1528,6 +1531,9 @@ files in the completion (fetched lazily, so the default stays fast)."
             (lambda (_theme)
               (when (fboundp 'ghostel-sync-theme) (ghostel-sync-theme))))
   :config
+  ;; Fall back to line-count anchoring instead of window-text-pixel-size.
+  ;; Exact for uniform terminal grids and eliminates ~12ms layout delay per key.
+  (setq ghostel--pixel-anchor-supported-p nil)
   ;; Exposed to the shell via `ghostel_cmd' (.bashrc).
   (dolist (cmd '(("magit-status-setup-buffer" magit-status-setup-buffer)
                  ("man" man)
@@ -1536,6 +1542,7 @@ files in the completion (fetched lazily, so the default stays fast)."
                  ("ediff-files" ediff-files)))
     (add-to-list 'ghostel-eval-cmds cmd))
   )
+
 
 (use-package ghostel-eshell
   ;; Ships with ghostel; runs eshell visual commands in a Ghostel buffer.
@@ -2317,6 +2324,7 @@ with the capability-gated commands in `liesnikov/eglot-actions-alist'."
   :config
   (breadcrumb-mode)
   )
+
 
 (use-package treesit-langs
   :if (and (fboundp 'treesit-available-p) (treesit-available-p))
