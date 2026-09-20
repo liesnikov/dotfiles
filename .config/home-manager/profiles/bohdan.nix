@@ -52,6 +52,7 @@ in {
     happy
 
     mcp-language-server
+    (callPackage ../packages/zotero-mcp { withSemantic = true; })
 
     custom-agda
     #agda
