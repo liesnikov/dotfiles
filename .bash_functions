@@ -184,3 +184,20 @@ screen_set() {
 touchpad-on () {
     synclient TouchpadOff=0;
 }
+
+remacs() {
+    if [ $# -lt 1 ]; then
+        echo "Usage: remacs [user@]host [file...]" >&2
+        return 1
+    fi
+    local host="$1"
+    shift
+    local cmd="emacsclient -t"
+    if [ $# -gt 0 ]; then
+        cmd="emacsclient -t $*"
+    fi
+
+    ghostty --config-default-files=false \
+            --config-file="$HOME/.config/ghostty/config-emacs.ghostty" \
+            -e ssh -t "$host" "XDG_RUNTIME_DIR=/run/user/\$(id -u) script -q -e -c \"$cmd\" /dev/null" &
+}
