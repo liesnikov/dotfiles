@@ -5,7 +5,7 @@
 config-file = base.ghostty
 
 # Distinct window class for Wayland/GNOME Shell window grouping & icons
-class = emacs-ghostty
+class = org.gnu.emacs
 
 # Clear all Ghostty default and custom keybindings so Emacs receives every key verbatim
 keybind = clear
