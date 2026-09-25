@@ -903,6 +903,15 @@ files in the completion (fetched lazily, so the default stays fast)."
   (setq-default indicate-empty-lines t)
   )
 
+(use-package term/xterm
+  :ensure nil
+  :init
+  ;; Enable OSC 52 clipboard integration in terminal frames
+  (setq xterm-extra-capabilities '(setSelection modifyOtherKeys reportBackground))
+  :hook
+  (terminal-init-xterm . (lambda ()
+                           (set-terminal-parameter nil 'xterm--set-selection t))))
+
 ;; end of built-in packages
 
 ;;; Installed packages
