@@ -97,6 +97,7 @@ python3Packages.buildPythonApplication rec {
     pyzotero
   ] ++ (with python3Packages; [
     bibtexparser
+    ebooklib
     fastmcp
     httpx
     markdownify
@@ -111,13 +112,21 @@ python3Packages.buildPythonApplication rec {
   ]);
 
   # Default to the local library. --set-default keeps the web API env vars usable.
+  # Prepend PYTHONPATH so child processes spawned by sys.executable find PyMuPDF.
   makeWrapperArgs = [
     "--set-default"
     "ZOTERO_LOCAL"
     "true"
     "--set-default"
+    "ZOTERO_MCP_TOOLSETS"
+    "all,-feeds"
+    "--set-default"
     "PDF_INSPECTOR_BCMAPS_DIR"
     "${pdf-inspector}/share/pdf-inspector/bcmaps"
+    "--prefix"
+    "PYTHONPATH"
+    ":"
+    "${python3Packages.makePythonPath dependencies}"
   ];
 
   # Upstream's suite drives a live Zotero, so there is nothing to run in the sandbox.
