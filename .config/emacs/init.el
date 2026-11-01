@@ -1376,7 +1376,8 @@ files in the completion (fetched lazily, so the default stays fast)."
 ;;;; Emacs functions
 
 (defun liesnikov/get-file-info (relative use-line use-col)
-  "Get the target file path and optional line/col info."
+  "Get the target file path and optional line/col info.
+RELATIVE, USE-LINE, USE-COL are boolean flags configuring output path."
   (let* ((file (or buffer-file-name
                    (and (fboundp 'magit-file-at-point) (magit-file-at-point))
                    (ignore-errors (dired-get-filename nil t))))
@@ -2401,7 +2402,7 @@ with the capability-gated commands in `liesnikov/eglot-actions-alist'."
     ;; check if copilot mode is active
     (if (not (bound-and-true-p copilot-mode))
         (progn
-          (when (y-or-n-p "Copilot mode wasn't active. Activate copilot mode now? ")
+          (when (y-or-n-p "Copilot mode wasn't active.  Activate copilot mode now? ")
             (copilot-mode 1)
             (message "Copilot mode activated, try again"))
           )
