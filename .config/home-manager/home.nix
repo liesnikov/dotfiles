@@ -43,6 +43,32 @@
     fonts.fontconfig.enable = true;
     programs.home-manager.enable = true;
 
+    # Symlink all desktop entries from the Nix profile into ~/.local/share/applications
+    # so GNOME Shell and other desktop environments on non-NixOS discover them immediately.
+    home.activation.linkDesktopApplications = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+      appsDir="$HOME/.local/share/applications"
+      nixAppsDir="$HOME/.local/state/nix/profile/share/applications"
+      mkdir -p "$appsDir"
+      if [ -d "$nixAppsDir" ]; then
+        for link in "$appsDir"/*.desktop; do
+          if [ -L "$link" ] && ! [ -e "$link" ]; then
+            target=$(readlink "$link" || true)
+            case "$target" in
+              *"$nixAppsDir"*|*"/nix/store"*)
+                $DRY_RUN_CMD rm -f "$link"
+                ;;
+            esac
+          fi
+        done
+        for file in "$nixAppsDir"/*.desktop; do
+          if [ -f "$file" ]; then
+            $DRY_RUN_CMD ln -sf "$file" "$appsDir/$(basename "$file")"
+          fi
+        done
+        $DRY_RUN_CMD /usr/bin/update-desktop-database "$appsDir" 2>/dev/null || true
+      fi
+    '';
+
     home.file = linkTree {
       link = config.lib.file.mkOutOfStoreSymlink;
       repoDir = repoRoot;
