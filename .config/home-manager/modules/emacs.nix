@@ -19,11 +19,11 @@ in {
     services.emacs = {
       enable = true;
       package = cfg.package;
+      client.enable = true;
       # Start after the compositor exports WAYLAND_DISPLAY, or -c frames fail.
       startWithUserSession = "graphical";
       # Give the socket to systemd, so emacsclient starts this service instead of forking.
       socketActivation.enable = true;
-      # client.enable stays off: we have our own emacsclient desktop entries.
     };
 
     # emacs-pgtk crashes on frame close when DISPLAY is set (stray GDK X11 seat).
