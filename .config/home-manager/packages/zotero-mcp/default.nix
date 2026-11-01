@@ -9,7 +9,7 @@
 }:
 
 let
-  # nixpkgs has 1.11.0, below the >=1.13.3 asked for. Only src moves: the deps match.
+  # nixpkgs has 1.13.0, below the >=1.13.3 asked for. Only src moves: the deps match.
   # https://github.com/urschrei/pyzotero/issues/341
   pyzotero = python3Packages.pyzotero.overridePythonAttrs (_: rec {
     version = "1.14.0";
@@ -18,8 +18,11 @@ let
       inherit version;
       hash = "sha256-fNszx6WSuGUCZg7R71GIavcqI/XUZ7cRKUUiBE9B14s=";
     };
-    # 1.14.0 already widened the uv_build pin, so the nixpkgs substitution finds no match.
-    postPatch = "";
+    # 1.14.0 capped uv_build at <0.12.0, which rejects nixpkgs's uv-build 0.12.5.
+    postPatch = ''
+      substituteInPlace pyproject.toml \
+        --replace-fail "uv_build>=0.8.14,<0.12.0" "uv-build"
+    '';
   });
 
   # PDF text extraction. zotero-mcp pins it exactly while pre-1.0, so do not drift off it.
@@ -98,6 +101,7 @@ python3Packages.buildPythonApplication rec {
     httpx
     markdownify
     pydantic
+    pymupdf
     python-dotenv
     requests
     unidecode

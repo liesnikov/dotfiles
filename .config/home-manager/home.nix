@@ -39,6 +39,8 @@
     # Do not bump this on a Home Manager update.
     home.stateVersion = "25.05";
 
+    targets.genericLinux.enable = true;
+    fonts.fontconfig.enable = true;
     programs.home-manager.enable = true;
 
     home.file = linkTree {

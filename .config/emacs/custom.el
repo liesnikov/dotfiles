@@ -19,7 +19,7 @@
      pdf-tools proof-general
      rg rust-mode rustic
      sideline sideline-eglot sideline-flymake
-     terminal-here texfrag transpose-frame trashed treesit-auto treesit-fold treesit-ispell treesit-langs tuareg
+     terminal-here texfrag trashed treesit-auto treesit-fold treesit-ispell treesit-langs tuareg
      ultra-scroll undo-tree unfill use-package-ensure-system-package
      vertico
      wc-mode wgrep

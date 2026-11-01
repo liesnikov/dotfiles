@@ -1395,6 +1395,7 @@ files in the completion (fetched lazily, so the default stays fast)."
                   (format ":%d" (current-column))))))))
 
 (use-package transpose-frame
+  :if (< emacs-major-version 31)
   ;; from emacs 31 it's built-in
   ;; https://p.bauherren.ovh/blog/tech/new_window_cmds
   ;; turn frame around, somehow not available by default
