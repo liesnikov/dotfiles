@@ -1739,15 +1739,23 @@ RELATIVE, USE-LINE, USE-COL are boolean flags configuring output path."
 
 ;;;;; Markdown
 
-(use-package markdown-mode
+(use-package markdown-ts-mode
+  :ensure nil
   :mode "\\.\\(?:md\\|markdown\\|mkd\\|mdown\\|mkdn\\|mdwn\\)\\'"
   :hook
-  (markdown-mode-hook . flymake-mode)
-  (markdown-mode-hook . eglot-ensure)
-  :custom (markdown-inline-image-overlays 't)
+  (markdown-ts-mode-hook . flymake-mode)
+  (markdown-ts-mode-hook . eglot-ensure)
   :defines
-  markdown-mode-map
+  markdown-ts-mode-map
+  :init
+  (add-to-list 'major-mode-remap-alist '(markdown-mode . markdown-ts-mode))
   :config
+  (dolist (spec '((markdown-ts-heading-1 . 1.35)
+                  (markdown-ts-heading-2 . 1.25)
+                  (markdown-ts-heading-3 . 1.15)
+                  (markdown-ts-heading-4 . 1.05)))
+    (set-face-attribute (car spec) nil :height (cdr spec)))
+
   ;; from https://gist.github.com/kleinschmidt/5ab0d3c423a7ee013a2c01b3919b009a
   ;; define markdown citation formats
   (defvar markdown-cite-format)
@@ -1762,6 +1770,7 @@ RELATIVE, USE-LINE, USE-COL are boolean flags configuring output path."
   (defun liesnikov/markdown-reftex-citation ()
     "Wrap reftex-citation with local variables for markdown format."
     (interactive)
+    (require 'reftex-cite)
     (let ((reftex-cite-format markdown-cite-format)
           ;; the separator includes "@" since reftex simply insert bibtex entry identifiers
           (reftex-cite-key-separator "; @"))
@@ -1769,8 +1778,17 @@ RELATIVE, USE-LINE, USE-COL are boolean flags configuring output path."
     )
   ;; bind modified reftex-citation to `C-c [', without enabling reftex-mode
   ;; https://www.gnu.org/software/auctex/manual/reftex/Citations-Outside-LaTeX.html#SEC31
-  :bind (:map markdown-mode-map
-              ("C-c [" . liesnikov/markdown-reftex-citation)))
+  :bind (:map markdown-ts-mode-map
+              ("C-c [" . liesnikov/markdown-reftex-citation))
+  )
+
+(use-package markdown-ts-appear
+  :hook
+  (markdown-ts-mode-hook . markdown-ts-appear-mode)
+  :custom
+  (markdown-ts-appear-link-icon "↗")
+  (markdown-ts-appear-image-icon "▣")
+  )
 
 (use-package edit-indirect
   ;; used by markdown-mode to edit code blocks in a dedicated buffer
@@ -1807,8 +1825,9 @@ the directory on the buffer's full path (hashed) to isolate them."
                 (expand-file-name "texfrag" temporary-file-directory))))
       (make-directory dir t)
       (setq-local texfrag-subdir dir)))
+  (add-to-list 'texfrag-setup-alist '(texfrag-markdown markdown-mode markdown-ts-mode))
   :hook
-  (markdown-mode-hook . texfrag-mode)
+  ((markdown-mode-hook markdown-ts-mode-hook) . texfrag-mode)
   (texfrag-mode-hook . liesnikov/texfrag-unique-subdir)
   )
 
@@ -2266,7 +2285,7 @@ with the capability-gated commands in `liesnikov/eglot-actions-alist'."
 
   ;; Add custom servers to modes
   (add-to-list 'eglot-server-programs '((sh-mode bash-ts-mode) . ("bash-language-server" "start")))
-  (add-to-list 'eglot-server-programs '((markdown-mode rst-mode html-mode org-mode) . ("vale-ls")))
+  (add-to-list 'eglot-server-programs '((markdown-mode markdown-ts-mode rst-mode html-mode org-mode) . ("vale-ls")))
   (add-to-list 'eglot-server-programs '((latex-mode LaTeX-mode tex-mode TeX-mode) . ("texlab")))
   )
 
