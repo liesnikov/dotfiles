@@ -102,6 +102,7 @@
 (use-package use-package-ensure-system-package
   ;; The :ensure-system-package keyword allows
   ;; to ensure system binaries exist alongside package declarations.
+  :ensure nil ; is a built-in, but not recognised as such
   :after use-package
   :demand t
   :autoload use-package-ensure-system-package-exists?
@@ -1370,6 +1371,7 @@ files in the completion (fetched lazily, so the default stays fast)."
   )
 
 (use-package yasnippet-snippets
+  :disabled
   :defer t
   )
 
@@ -1396,6 +1398,7 @@ RELATIVE, USE-LINE, USE-COL are boolean flags configuring output path."
                   (format ":%d" (current-column))))))))
 
 (use-package transpose-frame
+  :disabled
   :if (< emacs-major-version 31)
   ;; from emacs 31 it's built-in
   ;; https://p.bauherren.ovh/blog/tech/new_window_cmds
@@ -2397,6 +2400,7 @@ with the capability-gated commands in `liesnikov/eglot-actions-alist'."
 ;;;;; LLMs
 
 (use-package copilot
+  :disabled
   :defines
   copilot-mode-map
   :commands
@@ -2563,6 +2567,7 @@ with the capability-gated commands in `liesnikov/eglot-actions-alist'."
 ;; don't load eagerly, wait till we drop into an appropriate file
 ;;(agda-load)
 (use-package agda2-mode
+  :ensure nil
   :defer t
   :mode ("\\.l?agda\\'")
   :load-path

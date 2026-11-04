@@ -7,29 +7,27 @@
  '(package-selected-packages
    '(auctex auto-dark avy
      breadcrumb
-     cape consult consult-eglot copilot corfu
+     cape consult consult-eglot corfu
      dashboard dired-subtree dockerfile-mode doom-themes dumb-jump
      edit-indirect eglot-booster eglot-x eldoc-box embark embark-consult emojify envrc evil-numbers expand-region
      flymake-collection forge
      ghostel git-link gnu-elpa-keyring-update
      haskell-ts-mode highlight-parentheses
      ibuffer-project
-     magit magit-todos marginalia markdown-ts-appear merlin minions moody
+     magit magit-todos marginalia markdown-ts-appear minions moody
      nix-mode no-littering noxml-fold
      olivetti orderless org-download org-modern org-modern-indent org-present
-     pdf-tools proof-general
+     pdf-tools
      rg rust-mode rustic
      sideline sideline-eglot sideline-flymake
-     terminal-here texfrag trashed treesit-auto treesit-fold treesit-ispell treesit-langs tuareg
-     ultra-scroll undo-tree unfill use-package-ensure-system-package
+     terminal-here texfrag trashed treesit-auto treesit-fold treesit-ispell treesit-langs
+     ultra-scroll undo-tree unfill
      vertico
-     wc-mode wgrep
-     yasnippet yasnippet-snippets))
+     wc-mode wgrep))
  '(package-vc-selected-packages
    '((ghostel :url "https://github.com/dakra/ghostel" :lisp-dir "lisp")
      (eglot-x :url "https://github.com/nemethf/eglot-x")
      (eglot-booster :url "https://github.com/jdtsmith/eglot-booster")
-     (idris2-mode :url "https://github.com/idris-community/idris2-mode")
      (ultra-scroll :vc-backend Git :url "https://github.com/jdtsmith/ultra-scroll"))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
