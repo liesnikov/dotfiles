@@ -1723,6 +1723,7 @@ RELATIVE, USE-LINE, USE-COL are boolean flags configuring output path."
   )
 
 (use-package tex-mode
+  :ensure nil
   :after auctex
   :custom
   (reftex-plug-into-AUCTeX t)
@@ -1837,6 +1838,7 @@ the directory on the buffer's full path (hashed) to isolate them."
 ;;;;; Org
 
 (use-package org
+  :ensure nil
   :bind (:map org-mode-map
           ;; some default and non-default mappings
           ;; * to insert current date use org-time-stamp bound to C-c .
